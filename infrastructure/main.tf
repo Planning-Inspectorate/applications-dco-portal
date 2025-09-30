@@ -26,29 +26,29 @@ resource "azurerm_key_vault" "main" {
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days  = 7
   purge_protection_enabled    = true
-  enable_rbac_authorization   = true
+  rbac_authorization_enabled  = true
   sku_name                    = "standard"
 
   tags = local.tags
 }
 
 # secrets to be manually populated
-# resource "azurerm_key_vault_secret" "manual_secrets" {
+resource "azurerm_key_vault_secret" "manual_secrets" {
 
-#   #checkov:skip=CKV_AZURE_41: expiration not valid
+  #checkov:skip=CKV_AZURE_41: expiration not valid
 
-#   for_each = toset(local.secrets)
+  for_each = toset(local.secrets)
 
-#   key_vault_id = azurerm_key_vault.main.id
-#   name         = each.value
-#   value        = "<terraform_placeholder>"
-#   content_type = "plaintext"
+  key_vault_id = azurerm_key_vault.main.id
+  name         = each.value
+  value        = "<terraform_placeholder>"
+  content_type = "plaintext"
 
-#   tags = local.tags
+  tags = local.tags
 
-#   lifecycle {
-#     ignore_changes = [
-#       value
-#     ]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [
+      value
+    ]
+  }
+}
