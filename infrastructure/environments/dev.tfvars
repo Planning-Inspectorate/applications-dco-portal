@@ -19,6 +19,13 @@ apps_config = {
     family   = "C"
     sku_name = "Basic"
   }
+
+  gov_notify = {
+    disabled = false
+    templates = {
+      otp_template_id = "88eb5326-aa5a-4dc4-9a91-9a06953fb45a"
+    }
+  }
 }
 
 common_config = {

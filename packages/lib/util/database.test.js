@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import { optionalWhere, wrapPrismaError } from './database.js';
 import assert from 'node:assert';
-import { Prisma } from '@pins/service-name-database/src/client/index.js';
+import { Prisma } from '@pins/dco-portal-database/src/client/index.js';
 import { mockLogger } from '../testing/mock-logger.js';
 
 describe('database', () => {

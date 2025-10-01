@@ -1,4 +1,4 @@
-import { Prisma } from '@pins/service-name-database/src/client/index.js';
+import { Prisma } from '@pins/dco-portal-database/src/client/index.js';
 
 /**
  * @param {string} [id]

@@ -29,6 +29,13 @@ variable "apps_config" {
       family   = string
       sku_name = string
     })
+
+    gov_notify = object({
+      disabled = bool
+      templates = object({
+        otp_template_id = string
+      })
+    })
   })
 }
 
