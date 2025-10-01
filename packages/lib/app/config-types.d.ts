@@ -1,4 +1,5 @@
-import { Prisma } from '@pins/service-name-database/src/client';
+import { Prisma } from '@pins/dco-portal-database/src/client';
+import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types';
 
 interface BaseConfig {
 	appHostname: string;
@@ -7,6 +8,7 @@ interface BaseConfig {
 	};
 	database: Prisma.PrismaClientOptions;
 	gitSha?: string;
+	govNotify: NotifyConfig;
 	httpPort: number;
 	logLevel: string;
 	NODE_ENV: string;

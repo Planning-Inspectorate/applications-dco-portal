@@ -63,6 +63,11 @@ module "app_web" {
     # sessions
     REDIS_CONNECTION_STRING = local.key_vault_refs["redis-connection-string"]
     SESSION_SECRET          = local.key_vault_refs["session-secret-web"]
+
+    # gov notify
+    GOV_NOTIFY_DISABLED        = var.apps_config.gov_notify.disabled
+    GOV_NOTIFY_API_KEY         = local.key_vault_refs["dcop-gov-notify-api-key"]
+    GOV_NOTIFY_OTP_TEMPLATE_ID = var.apps_config.gov_notify.templates.otp_template_id
   }
 
   providers = {
