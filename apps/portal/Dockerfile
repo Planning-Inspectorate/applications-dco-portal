@@ -11,7 +11,7 @@ COPY package.json .
 COPY package-lock.json .
 
 COPY packages ./packages
-COPY apps/dco-portal ./apps/dco-portal
+COPY apps/portal ./apps/portal
 
 RUN npm ci --loglevel notice --workspace=dco-portal --ignore-scripts
 
@@ -28,7 +28,7 @@ FROM base
 
 ARG GIT_SHA
 
-WORKDIR /usr/src/app/apps/dco-portal
+WORKDIR /usr/src/app/apps/portal
 
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
