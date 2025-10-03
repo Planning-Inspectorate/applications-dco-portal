@@ -47,7 +47,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@jest/globals": "^30.2.0",
     "@microsoft/microsoft-graph-types": "^2.40.0",
     "cookie-parser": "^1.4.7",
     "eslint": "^9.36.0",

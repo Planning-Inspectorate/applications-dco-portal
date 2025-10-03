@@ -8,11 +8,7 @@
     "dev": "npm run build && nodemon --watch src --ext js,scss,html,njk --exec \"npm run start\"",
     "build": "node src/util/build.js",
     "start": "node src/server.js",
-    "test": "npx jest",
-    "test:web": "npx jest src/app/web",
-    "test:api": "npx jest src/app/api",
-    "test:nocov": "npx jest --coverage=false",
-    "test:util": "npx jest src/app/util"
+    "test": "node --test"
   },
   "license": "MIT",
   "dependencies": {
