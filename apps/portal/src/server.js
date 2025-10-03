@@ -1,9 +1,9 @@
 import { createApp } from './app/app.js';
 import { loadConfig } from './app/config.js';
-import { App1Service } from '#service';
+import { PortalService } from '#service';
 
 const config = loadConfig();
-const service = new App1Service(config);
+const service = new PortalService(config);
 
 const app = createApp(service);
 // Trust proxy, because our application is behind Front Door

@@ -1,5 +1,5 @@
 /**
- * @param {import('#service').App1Service} service
+ * @param {import('#service').PortalService} service
  * @returns {import('express').Handler}
  */
 export function firewallErrorPage(service) {

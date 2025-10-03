@@ -5,7 +5,7 @@ import { createErrorRoutes } from './views/static/error/index.js';
 import { cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.js';
 
 /**
- * @param {import('#service').App1Service} service
+ * @param {import('#service').PortalService} service
  * @returns {import('express').Router}
  */
 export function buildRouter(service) {
