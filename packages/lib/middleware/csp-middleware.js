@@ -2,10 +2,9 @@ import helmet from 'helmet';
 import crypto from 'node:crypto';
 
 /**
- * @param {import('helmet').ContentSecurityPolicyOptions['directives']} directives
  * @returns {import('express').Handler[]}
  */
-export function initContentSecurityPolicyMiddlewares(directives) {
+export function initContentSecurityPolicyMiddlewares() {
 	/** @type {import('express').Handler[]} */
 	const middlewares = [];
 
@@ -20,7 +19,12 @@ export function initContentSecurityPolicyMiddlewares(directives) {
 
 	middlewares.push(
 		helmet.contentSecurityPolicy({
-			directives
+			scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
+			defaultSrc: ["'self'"],
+			connectSrc: ["'self'"],
+			fontSrc: ["'self'"],
+			imgSrc: ["'self'"],
+			styleSrc: ["'self'"]
 		})
 	);
 

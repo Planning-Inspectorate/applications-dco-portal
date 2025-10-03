@@ -1,0 +1,21 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate>
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                <h2 class="govuk-heading-l">{{ questionText }}</h2>
+                <p class="govuk-body">Emails sometimes take a few minutes to arrive. If you do not receive the code, you can request a new one.</p>
+
+                {{ govukButton({
+                    text: "Request a new code",
+                    type: "submit",
+                    attributes: { "data-cy":"button-save-and-continue"}
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
