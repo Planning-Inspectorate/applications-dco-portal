@@ -1,6 +1,7 @@
 import { initDatabaseClient } from '@pins/dco-portal-database';
 import { initLogger } from '../util/logger.js';
 import { initRedis } from '../redis/index.js';
+import { initGovNotify } from '../govnotify/index.js';
 
 /**
  * This class encapsulates all the services and clients for the application
@@ -23,6 +24,10 @@ export class BaseService {
 	 * @type {import('../redis/redis-client.js').RedisClient|null}
 	 */
 	redisClient;
+	/**
+	 * @type {import('@pins/crowndev-lib/govnotify/gov-notify-client.js').GovNotifyClient|null}
+	 */
+	notifyClient;
 
 	/**
 	 * @param {import('./config-types.js').BaseConfig} config
@@ -33,6 +38,7 @@ export class BaseService {
 		this.logger = logger;
 		this.dbClient = initDatabaseClient(config, logger);
 		this.redisClient = initRedis(config.session, logger);
+		this.notifyClient = initGovNotify(config.govNotify, logger);
 	}
 
 	get cacheControl() {

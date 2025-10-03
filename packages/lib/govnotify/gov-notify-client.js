@@ -24,8 +24,8 @@ export class GovNotifyClient {
 	 * @param {import('./types.js').CommonNotificationPersonalisation} personalisation
 	 * @returns {Promise<void>}
 	 */
-	async sendOneTimePasswordLoginNotification(email, personalisation) {
-		await this.sendEmail(this.#templateIds.oneTimePasswordLoginNotification, email, {
+	async sendOneTimePasswordNotification(email, personalisation) {
+		await this.sendEmail(this.#templateIds.oneTimePasswordNotification, email, {
 			personalisation: personalisation
 		});
 	}
