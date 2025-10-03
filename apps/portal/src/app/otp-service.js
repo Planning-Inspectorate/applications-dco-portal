@@ -1,7 +1,7 @@
 // OTP Service for generating, sending, and validating one-time passwords (OTPs)
 
 import prisma from './prisma.js';
-import govNotifyClient from '../../../../packages/lib/govnotify/gov-notify-client.js';
+import { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.js';
 
 const OTP_LENGTH = 5;
 const OTP_EXPIRY_MINUTES = 30;
@@ -17,10 +17,21 @@ function generateOtp() {
 	return otp;
 }
 
+// Dependency injection for testing
+let _prisma = prisma;
+let _GovNotifyClient = GovNotifyClient;
+
+export function __setPrisma(mock) {
+	_prisma = mock;
+}
+export function __setGovNotifyClient(mock) {
+	_GovNotifyClient = mock;
+}
+
 // Save OTP to database
 async function saveOtp(email, otp, expiresAt) {
 	// Remove any existing unused/expired OTPs for this email
-	await prisma.otp.deleteMany({
+	await _prisma.otp.deleteMany({
 		where: {
 			email,
 			used: false,
@@ -28,7 +39,7 @@ async function saveOtp(email, otp, expiresAt) {
 		}
 	});
 	// Create new OTP record
-	await prisma.otp.create({
+	await _prisma.otp.create({
 		data: {
 			email,
 			code: otp,
@@ -41,7 +52,7 @@ async function saveOtp(email, otp, expiresAt) {
 
 // Retrieve OTP record by email
 async function getOtpRecord(email) {
-	return prisma.otp.findFirst({
+	return _prisma.otp.findFirst({
 		where: { email },
 		orderBy: { createdAt: 'desc' }
 	});
@@ -49,7 +60,7 @@ async function getOtpRecord(email) {
 
 // Mark OTP as used
 async function markOtpUsed(email) {
-	await prisma.otp.updateMany({
+	await _prisma.otp.updateMany({
 		where: { email, used: false },
 		data: { used: true }
 	});
@@ -57,7 +68,7 @@ async function markOtpUsed(email) {
 
 // Increment OTP attempt count
 async function incrementOtpAttempts(email) {
-	await prisma.otp.updateMany({
+	await _prisma.otp.updateMany({
 		where: { email, used: false },
 		data: { attempts: { increment: 1 } }
 	});
@@ -65,7 +76,7 @@ async function incrementOtpAttempts(email) {
 
 // Send OTP email using GovNotify
 async function sendOtpEmail(email, otp) {
-	return govNotifyClient.sendEmail({
+	return _GovNotifyClient.sendEmail({
 		emailAddress: email,
 		templateId: 'YOUR_OTP_TEMPLATE_ID', // i need to add templeate id here
 		personalisation: { code: otp }
