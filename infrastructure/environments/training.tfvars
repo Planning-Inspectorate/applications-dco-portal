@@ -26,6 +26,15 @@ apps_config = {
   }
 }
 
+environment = "training"
+
+front_door_config = {
+  name        = "pins-fd-common-tooling"
+  rg          = "pins-rg-common-tooling"
+  ep_name     = "pins-fde-applications"
+  use_tooling = true
+} 
+
 sql_config = {
   admin = {
     login_username = "pins-dcop-sql-training"
@@ -43,8 +52,6 @@ sql_config = {
   }
 }
 
-environment = "training"
-
 vnet_config = {
   address_space                       = "10.31.8.0/22"
   apps_subnet_address_space           = "10.31.8.0/24"
@@ -55,5 +62,5 @@ vnet_config = {
 }
 
 # web_domains = {
-#   web = "https://dco-portal-training.planninginspectorate.gov.uk"
+#   web = "dco-portal-training.planninginspectorate.gov.uk"
 # }

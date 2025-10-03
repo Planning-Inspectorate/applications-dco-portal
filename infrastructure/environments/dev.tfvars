@@ -39,6 +39,13 @@ common_config = {
 
 environment = "dev"
 
+front_door_config = {
+  name        = "pins-fd-common-tooling"
+  rg          = "pins-rg-common-tooling"
+  ep_name     = "pins-fde-applications"
+  use_tooling = true
+}
+
 monitoring_config = {
   app_insights_web_test_enabled = false
 }
@@ -69,6 +76,12 @@ vnet_config = {
   secondary_subnet_address_space      = "10.31.17.0/24"
 }
 
-# web_domains = {
-#   web = "https://dco-portal-dev.planninginspectorate.gov.uk"
-# }
+waf_rate_limits = {
+  enabled             = true
+  duration_in_minutes = 5
+  threshold           = 1500
+}
+
+web_domains = {
+  portal = "dco-portal-dev.planninginspectorate.gov.uk"
+}
