@@ -3,7 +3,7 @@ import { buildHomePage } from './controller.js';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.js';
 
 /**
- * @param {import('#service').App1Service} service
+ * @param {import('#service').PortalService} service
  * @returns {import('express').Router}
  */
 export function createRoutes(service) {

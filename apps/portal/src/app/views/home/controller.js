@@ -1,23 +1,18 @@
 /**
- * @param {import('#service').App1Service} service
+ * @param {import('#service').PortalService} service
  * @returns {import('express').Handler}
  */
 export function buildHomePage({ db, logger }) {
 	return async (req, res) => {
-		let connected = false;
 		try {
 			await db.$queryRaw`SELECT 1`;
-			connected = true;
-			logger.info(`connected to database: ${connected}`);
+			logger.info('connected to database: true');
 		} catch (error) {
-			logger.error('Database connection failed', error);
+			logger.error({ error }, 'Database connection failed');
 		}
 
-		req.session.visits = (req.session.visits || 0) + 1;
-		logger.info('DCO Portal: rendering home page');
 		return res.render('views/home/view.njk', {
-			pageTitle: 'DCO Portal home page',
-			visitCount: req.session.visits
+			pageTitle: 'DCO Portal home page'
 		});
 	};
 }

@@ -4,7 +4,7 @@ import { addLocalsConfiguration } from '#util/config-middleware.js';
 import { createBaseApp } from '@pins/dco-portal-lib/app/app.js';
 
 /**
- * @param {import('#service').App1Service} service
+ * @param {import('#service').PortalService} service
  * @returns {Express}
  */
 export function createApp(service) {
