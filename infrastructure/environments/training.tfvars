@@ -33,7 +33,7 @@ front_door_config = {
   rg          = "pins-rg-common-tooling"
   ep_name     = "pins-fde-applications"
   use_tooling = true
-} 
+}
 
 sql_config = {
   admin = {
