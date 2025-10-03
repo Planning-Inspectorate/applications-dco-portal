@@ -19,7 +19,7 @@ export function addLocalsConfiguration() {
 
 		res.locals.config = {
 			cspNonce: res.locals.cspNonce,
-			headerTitle: 'DCO Portal',
+			headerTitle: 'Apply for a Development Consent Order',
 			footerLinks: [
 				{
 					text: 'Terms and conditions',
