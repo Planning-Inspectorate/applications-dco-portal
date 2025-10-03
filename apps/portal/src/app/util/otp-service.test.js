@@ -1,13 +1,14 @@
 /* eslint-env jest */
-const otpService = require('../otp-service.js');
+import * as otpService from '../otp-service.js';
+import { jest } from '@jest/globals';
 
-// Mock dependencies
-jest.mock('../../../../../packages/lib/govnotify/gov-notify-client', () => ({
+// Mock dependencies (ESM)
+jest.unstable_mockModule('../../../../../packages/lib/govnotify/gov-notify-client', () => ({
 	sendEmail: jest.fn(() => Promise.resolve('email sent'))
 }));
 
-// Mock Prisma client
-jest.mock('../prisma', () => ({
+// Mock Prisma client (ESM)
+jest.unstable_mockModule('../prisma', () => ({
 	otp: {
 		create: jest.fn(),
 		findFirst: jest.fn(),
@@ -15,9 +16,7 @@ jest.mock('../prisma', () => ({
 		deleteMany: jest.fn()
 	}
 }));
-const prisma = require('../prisma');
-
-// ...existing test code (same as before) ...
+const prisma = (await import('../prisma')).otp;
 
 describe('OTP Service', () => {
 	beforeEach(() => {
@@ -128,3 +127,5 @@ describe('OTP Service', () => {
 		});
 	});
 });
+
+export {};
