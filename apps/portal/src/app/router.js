@@ -3,7 +3,7 @@ import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitor
 import { createRoutes as appRoutes } from './views/home/index.js';
 import { createErrorRoutes } from './views/static/error/index.js';
 import { cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.js';
-import otpController from './otp-controller.js';
+import * as otpController from './otp-controller.js';
 
 /**
  * @param {import('#service').App1Service} service

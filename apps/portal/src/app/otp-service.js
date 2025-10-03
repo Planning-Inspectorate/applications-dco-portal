@@ -1,7 +1,7 @@
 // OTP Service for generating, sending, and validating one-time passwords (OTPs)
 
-const prisma = require('./prisma');
-const govNotifyClient = require('../../../../packages/lib/govnotify/gov-notify-client');
+import prisma from './prisma.js';
+import govNotifyClient from '../../../../packages/lib/govnotify/gov-notify-client.js';
 
 const OTP_LENGTH = 5;
 const OTP_EXPIRY_MINUTES = 30;
@@ -99,11 +99,4 @@ async function validateOtp(email, otp) {
 	return { valid: true };
 }
 
-module.exports = {
-	generateOtp,
-	createAndSendOtp,
-	validateOtp,
-	OTP_LENGTH,
-	OTP_EXPIRY_MINUTES,
-	MAX_ATTEMPTS
-};
+export { generateOtp, createAndSendOtp, validateOtp, OTP_LENGTH, OTP_EXPIRY_MINUTES, MAX_ATTEMPTS };

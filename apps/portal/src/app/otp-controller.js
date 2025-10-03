@@ -1,12 +1,11 @@
-// OTP Controller: handles OTP-related routes
-const otpService = require('./otp-service');
+import * as otpService from './otp-service.js';
 
 /**
  * Request OTP controller
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-async function requestOtp(req, res) {
+export async function requestOtp(req, res) {
 	const { email } = req.body;
 	if (!email) {
 		return res.status(400).json({ error: 'Email is required.' });
@@ -24,7 +23,7 @@ async function requestOtp(req, res) {
  * @param {import('express').Request} req
  * @param {import('express').Response} res
  */
-async function validateOtp(req, res) {
+export async function validateOtp(req, res) {
 	const { email, otp } = req.body;
 	if (!email || !otp) {
 		return res.status(400).json({ error: 'Email and OTP are required.' });
@@ -34,7 +33,6 @@ async function validateOtp(req, res) {
 		if (result.valid) {
 			return res.status(200).json({ message: 'OTP valid.' });
 		}
-		// Map reasons to error messages
 		const errorMap = {
 			not_found: 'No OTP found for this email.',
 			used: 'OTP has already been used.',
@@ -47,8 +45,3 @@ async function validateOtp(req, res) {
 		return res.status(500).json({ error: 'Failed to validate OTP.' });
 	}
 }
-
-module.exports = {
-	requestOtp,
-	validateOtp
-};

@@ -1,4 +1,3 @@
-// Prisma client singleton for OTP service
-const { PrismaClient } = require('../../../packages/database/src/client');
+import { PrismaClient } from '../../../packages/database/src/client/index.js';
 const prisma = new PrismaClient();
-module.exports = prisma;
+export default prisma;
