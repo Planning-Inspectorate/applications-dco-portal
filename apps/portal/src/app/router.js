@@ -3,6 +3,7 @@ import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitor
 import { createRoutes as appRoutes } from './views/home/index.js';
 import { createErrorRoutes } from './views/static/error/index.js';
 import { cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.js';
+import otpController from './otp-controller.js';
 
 /**
  * @param {import('#service').App1Service} service
@@ -21,6 +22,8 @@ export function buildRouter(service) {
 
 	router.use('/', appRoutes(service));
 	router.use('/error', createErrorRoutes(service));
+	router.post('/request-otp', otpController.requestOtp);
+	router.post('/validate-otp', otpController.validateOtp);
 
 	return router;
 }

@@ -13,9 +13,19 @@ export default [
 			ecmaVersion: 2025,
 			sourceType: 'module',
 			globals: {
-				...globals.node
+				...globals.node,
+				...globals.jest
 			}
 		}
 	},
-	eslintConfigPrettier
+	eslintConfigPrettier,
+
+	{
+		files: ['**/*.test.js', '**/*.spec.js'],
+		languageOptions: {
+			globals: {
+				...globals.jest
+			}
+		}
+	}
 ];
