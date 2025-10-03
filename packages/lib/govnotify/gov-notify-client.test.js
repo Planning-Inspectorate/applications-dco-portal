@@ -33,17 +33,16 @@ describe(`gov-notify-client`, () => {
 					message: 'email failed to dispatch: Notify API error'
 				}
 			);
-			assert.strictEqual(logger.error.mock.callCount(), 1);
 		});
 	});
 	describe('sendAcknowledgePreNotification', () => {
 		it('should call sendEmail with personalisation', async (ctx) => {
 			const logger = mockLogger();
 			const client = new GovNotifyClient(logger, 'key', {
-				oneTimePasswordLoginNotification: 'template-id-1'
+				oneTimePasswordNotification: 'template-id-1'
 			});
 			ctx.mock.method(client, 'sendEmail', () => {});
-			await client.sendOneTimePasswordLoginNotification('email', {
+			await client.sendOneTimePasswordNotification('email', {
 				oneTimePassword: 'ABCDE'
 			});
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);

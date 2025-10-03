@@ -24,8 +24,8 @@ export class GovNotifyClient {
 	 * @param {import('./types.js').CommonNotificationPersonalisation} personalisation
 	 * @returns {Promise<void>}
 	 */
-	async sendOneTimePasswordLoginNotification(email, personalisation) {
-		await this.sendEmail(this.#templateIds.oneTimePasswordLoginNotification, email, {
+	async sendOneTimePasswordNotification(email, personalisation) {
+		await this.sendEmail(this.#templateIds.oneTimePasswordNotification, email, {
 			personalisation: personalisation
 		});
 	}
@@ -40,7 +40,6 @@ export class GovNotifyClient {
 			this.logger.info(`dispatching email template: ${templateId}`);
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);
 		} catch (e) {
-			this.logger.error({ error: e, templateId, message: e.response?.data?.errors }, 'failed to dispatch email');
 			throw new Error(`email failed to dispatch: ${e.message}`);
 		}
 	}

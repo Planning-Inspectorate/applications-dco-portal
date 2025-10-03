@@ -20,12 +20,12 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 model OneTimePassword {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  hashed_otp_code String
-  createdAt       DateTime @default(now())
-  expiresAt       DateTime
-  attempts        Int      @default(0)
+  id            String   @id @default(uuid())
+  email         String   @unique
+  hashedOtpCode String
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+  attempts      Int      @default(0)
 
   @@index([email])
 }
