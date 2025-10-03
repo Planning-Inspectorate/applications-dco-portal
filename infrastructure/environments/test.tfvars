@@ -8,6 +8,8 @@ apps_config = {
   node_environment         = "production"
   private_endpoint_enabled = true
 
+  functions_node_version = 22
+
   logging = {
     level = "info"
   }
@@ -19,6 +21,15 @@ apps_config = {
   }
 }
 
+common_config = {
+  resource_group_name = "pins-rg-common-test-ukw-001"
+  action_group_names = {
+    iap      = "pins-ag-odt-iap-test"
+    its      = "pins-ag-odt-its-test"
+    info_sec = "pins-ag-odt-info-sec-test"
+  }
+}
+
 environment = "test"
 
 front_door_config = {
@@ -26,6 +37,10 @@ front_door_config = {
   rg          = "pins-rg-common-tooling"
   ep_name     = "pins-fde-applications"
   use_tooling = true
+}
+
+monitoring_config = {
+  app_insights_web_test_enabled = false
 }
 
 sql_config = {
@@ -54,6 +69,12 @@ vnet_config = {
   secondary_subnet_address_space      = "10.31.21.0/24"
 }
 
-# web_domains = {
-#   web = "dco-portal-test.planninginspectorate.gov.uk"
-# }
+waf_rate_limits = {
+  enabled             = true
+  duration_in_minutes = 5
+  threshold           = 1500
+}
+
+web_domains = {
+  web = "dco-portal-test.planninginspectorate.gov.uk"
+}
