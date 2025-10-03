@@ -1,5 +1,12 @@
 environment = "prod"
 
+front_door_config = {
+  name        = "pins-fd-common-tooling"
+  rg          = "pins-rg-common-tooling"
+  ep_name     = "pins-fde-applications"
+  use_tooling = false
+}
+
 sql_config = {
   admin = {
     login_username = "pins-dcop-sql-prod"
@@ -27,5 +34,5 @@ vnet_config = {
 }
 
 # web_domains = {
-#   web = "https://<TBC>.planninginspectorate.gov.uk"
+#   web = "<TBC>.planninginspectorate.gov.uk"
 # }
