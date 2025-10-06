@@ -14,6 +14,7 @@
   "dependencies": {
     "@pins/dco-portal-database": "^0.0.0",
     "@pins/dco-portal-lib": "^0.0.0",
+    "bcrypt": "*",
     "body-parser": "*",
     "connect-redis": "*",
     "dotenv": "*",
