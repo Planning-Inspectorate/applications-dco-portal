@@ -83,5 +83,5 @@ waf_rate_limits = {
 }
 
 web_domains = {
-  web = "dco-portal-test.planninginspectorate.gov.uk"
+  portal = "dco-portal-test.planninginspectorate.gov.uk"
 }
