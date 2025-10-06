@@ -34,5 +34,5 @@ vnet_config = {
 }
 
 # web_domains = {
-#   web = "<TBC>.planninginspectorate.gov.uk"
+#   portal = "<TBC>.planninginspectorate.gov.uk"
 # }

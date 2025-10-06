@@ -68,6 +68,11 @@ resource "azurerm_mssql_database" "primary" {
     week_of_year      = var.sql_config.retention.long_term_week_of_year
   }
 
+  # prevent the possibility of accidental data loss
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = local.tags
 }
 
