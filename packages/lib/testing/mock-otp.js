@@ -1,7 +1,0 @@
-import bcrypt from 'bcrypt';
-
-const SALT_ROUNDS = 10;
-
-export async function mockOtpCode(code) {
-	return await bcrypt.hash(code, SALT_ROUNDS);
-}

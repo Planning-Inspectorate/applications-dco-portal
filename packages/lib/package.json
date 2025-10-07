@@ -2,7 +2,7 @@
   "name": "@pins/dco-portal-lib",
   "version": "0.0.0",
   "private": true,
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
     "test": "node --test"
