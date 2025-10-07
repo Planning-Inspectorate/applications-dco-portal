@@ -2,7 +2,7 @@ import { Prisma } from '@pins/dco-portal-database/src/client';
 import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types';
 
 interface Config {
-	appHostname: string;
+	appHostname?: string;
 	cacheControl: {
 		maxAge: string;
 	};

@@ -1,0 +1,61 @@
+import { describe, it } from 'node:test';
+import { GovNotifyClient } from './gov-notify-client.ts';
+import { mockLogger } from '../testing/mock-logger.ts';
+import assert from 'node:assert';
+
+describe(`gov-notify-client`, () => {
+	describe('sendEmail', () => {
+		it('should call NotifyClient', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {});
+			ctx.mock.method(client.notifyClient, 'sendEmail', () => {});
+
+			await client.sendEmail('templateId', 'emailAddress', { personalisation: {} });
+			assert.strictEqual(client.notifyClient.sendEmail.mock.callCount(), 1);
+			assert.strictEqual(logger.info.mock.callCount(), 1);
+			assert.strictEqual(logger.error.mock.callCount(), 0);
+			const args = client.notifyClient.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, ['templateId', 'emailAddress', { personalisation: {} }]);
+		});
+		it('should log an error if NotifyClient fails', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {});
+			ctx.mock.method(client.notifyClient, 'sendEmail', () => {
+				const error = new Error('Notify API error');
+				error.response = { data: { errors: ['Error 1', 'Error 2'] } };
+				throw error;
+			});
+			await assert.rejects(
+				async () => {
+					await client.sendEmail('templateId', 'emailAddress', { personalisation: {} });
+				},
+				{
+					message: 'email failed to dispatch: Notify API error'
+				}
+			);
+		});
+	});
+	describe('sendAcknowledgePreNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				oneTimePasswordNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendOneTimePasswordNotification('email', {
+				oneTimePassword: 'ABCDE'
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						oneTimePassword: 'ABCDE'
+					}
+				}
+			]);
+		});
+	});
+});
