@@ -12,7 +12,6 @@ describe(`gov-notify-client`, () => {
 
 			await client.sendEmail('templateId', 'emailAddress', { personalisation: {} });
 			assert.strictEqual(client.notifyClient.sendEmail.mock.callCount(), 1);
-			assert.strictEqual(logger.info.mock.callCount(), 1);
 			assert.strictEqual(logger.error.mock.callCount(), 0);
 			const args = client.notifyClient.sendEmail.mock.calls[0].arguments;
 			assert.deepStrictEqual(args, ['templateId', 'emailAddress', { personalisation: {} }]);

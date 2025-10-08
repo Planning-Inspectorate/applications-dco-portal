@@ -38,8 +38,6 @@ export function buildSubmitEmailController({ db, notifyClient, logger }: PortalS
 		await saveOtp(db, emailAddress, oneTimePassword);
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 
-		logger.info('OTP email dispatched');
-
 		req.session.emailAddress = emailAddress;
 
 		return res.redirect(`${req.baseUrl}/enter-code`);
@@ -118,8 +116,6 @@ export function buildSubmitNewCodeRequestController({ db, notifyClient, logger }
 
 		await saveOtp(db, req.session.emailAddress, oneTimePassword);
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
-
-		logger.info('OTP email dispatched');
 
 		return res.redirect(`${req.baseUrl}/enter-code`);
 	};
