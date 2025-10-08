@@ -21,7 +21,7 @@ export class GovNotifyClient {
 
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {
 		try {
-			this.logger.info(`dispatching email template: ${templateId}`);
+			this.logger.info({ templateId }, `Dispatching email template`);
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);
 		} catch (e: any) {
 			throw new Error(`email failed to dispatch: ${e.message}`);

@@ -111,13 +111,15 @@ export function buildRequestNewCodePage(): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitNewCodeRequestController({ db, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSubmitNewCodeRequestController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const emailAddress = req.session.emailAddress;
 		const oneTimePassword = generateOtp();
 
 		await saveOtp(db, req.session.emailAddress, oneTimePassword);
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
+
+		logger.info('OTP email dispatched');
 
 		return res.redirect(`${req.baseUrl}/enter-code`);
 	};

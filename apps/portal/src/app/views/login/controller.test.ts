@@ -493,7 +493,11 @@ describe('login controllers', () => {
 			};
 			const mockRes = { redirect: mock.fn() };
 
-			const controller = buildSubmitNewCodeRequestController({ db: mockDb, notifyClient: mockNotifyClient });
+			const controller = buildSubmitNewCodeRequestController({
+				db: mockDb,
+				notifyClient: mockNotifyClient,
+				logger: mockLogger()
+			});
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
