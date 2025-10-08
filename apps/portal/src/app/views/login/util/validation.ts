@@ -1,3 +1,5 @@
+import type { OtpRecord } from './types.d.ts';
+
 export function isValidEmailAddress(emailAddress: string): boolean {
 	return Boolean(emailAddress) && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailAddress);
 }
@@ -8,7 +10,7 @@ export function isValidOtpCode(otpCode: string): boolean {
 	);
 }
 
-export function isValidOtpRecord(otpRecord: OtpRecord): boolean {
+export function isValidOtpRecord(otpRecord: OtpRecord | undefined | null): boolean {
 	const MAX_ATTEMPTS = 4;
 	if (!otpRecord) return false;
 	if (otpRecord.attempts >= MAX_ATTEMPTS) return false;

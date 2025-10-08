@@ -1,4 +1,4 @@
-interface OtpRecord {
+export interface OtpRecord {
 	id: string;
 	email: string;
 	hashedOtpCode: String;

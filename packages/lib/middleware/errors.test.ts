@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { test, describe, mock } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler, wrapPrismaErrors } from './errors.ts';

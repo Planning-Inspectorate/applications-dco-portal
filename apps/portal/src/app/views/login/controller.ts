@@ -1,7 +1,9 @@
+// @ts-expect-error - due to not having @types
+import bcrypt from 'bcrypt';
+// @ts-expect-error - due to not having @types
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord } from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
-import bcrypt from 'bcrypt';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
 
@@ -15,7 +17,7 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { emailAddress } = req.body;
 
@@ -83,13 +85,13 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 			return handleOtpError('Provided OTP failed validation');
 		}
 
-		const isMatch = await bcrypt.compare(otpCode.trim().toUpperCase(), otpRecord.hashedOtpCode);
+		const isMatch = await bcrypt.compare(otpCode.trim().toUpperCase(), otpRecord?.hashedOtpCode);
 		if (!isMatch) {
 			await incrementOtpAttempts(db, emailAddress);
 			return handleOtpError('Provided OTP does not match stored OTP');
 		}
 
-		await deleteOtp(db, req.session.emailAddress);
+		await deleteOtp(db, emailAddress);
 		delete req.session.emailAddress;
 
 		req.session.isAuthenticated = true;
@@ -109,15 +111,17 @@ export function buildRequestNewCodePage(): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitNewCodeRequestController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitNewCodeRequestController({ db, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const emailAddress = req.session.emailAddress;
 		const oneTimePassword = generateOtp();
 
-		await saveOtp(db, req.session.emailAddress, oneTimePassword);
-		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
-
-		return res.redirect(`${req.baseUrl}/enter-code`);
+		if (emailAddress) {
+			await saveOtp(db, emailAddress, oneTimePassword);
+			await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
+			return res.redirect(`${req.baseUrl}/enter-code`);
+		}
+		res.redirect(`${req.baseUrl}/email-address`);
 	};
 }
 

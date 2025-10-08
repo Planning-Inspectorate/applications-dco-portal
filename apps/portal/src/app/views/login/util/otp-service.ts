@@ -1,6 +1,8 @@
+// @ts-expect-error - due to not having @types
 import bcrypt from 'bcrypt';
 import { addMinutes } from 'date-fns';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { OtpRecord } from './types.d.ts';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const OTP_LENGTH = 5;
@@ -28,19 +30,19 @@ export async function saveOtp(db: PrismaClient, email: string, otp: string): Pro
 	});
 }
 
-export async function getOtpRecord(db: PrismaClient, email: string): Promise<OtpRecord | null> {
+export async function getOtpRecord(db: PrismaClient, email: string | undefined): Promise<OtpRecord | null> {
 	return db.oneTimePassword.findUnique({
 		where: { email }
 	});
 }
 
-export async function deleteOtp(db: PrismaClient, email: string): Promise<void> {
+export async function deleteOtp(db: PrismaClient, email: string | undefined): Promise<void> {
 	await db.oneTimePassword.delete({
 		where: { email }
 	});
 }
 
-export async function incrementOtpAttempts(db: PrismaClient, email: string): Promise<void> {
+export async function incrementOtpAttempts(db: PrismaClient, email: string | undefined): Promise<void> {
 	await db.oneTimePassword.update({
 		where: { email },
 		data: { attempts: { increment: 1 } }
