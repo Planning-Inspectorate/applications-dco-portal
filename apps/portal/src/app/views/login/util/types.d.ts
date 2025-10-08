@@ -1,7 +1,7 @@
 export interface OtpRecord {
 	id: string;
 	email: string;
-	hashedOtpCode: String;
+	hashedOtpCode: string;
 	createdAt: Date;
 	expiresAt: Date;
 	attempts: number;
