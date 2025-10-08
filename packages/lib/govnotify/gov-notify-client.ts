@@ -14,14 +14,15 @@ export class GovNotifyClient {
 	}
 
 	async sendOneTimePasswordNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+		this.logger.info('Dispatching OTP email template');
 		await this.sendEmail(this.#templateIds.oneTimePasswordNotification, email, {
 			personalisation: personalisation
 		});
+		this.logger.info('OTP email template successfully dispatched');
 	}
 
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {
 		try {
-			this.logger.info({ templateId }, `Dispatching email template`);
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);
 		} catch (e: any) {
 			throw new Error(`email failed to dispatch: ${e.message}`);
