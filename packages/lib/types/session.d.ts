@@ -6,8 +6,8 @@ declare module 'express-session' {
 	// extend SessionData to include custom values
 	// using [declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html)
 	interface SessionData {
-		visits?: number;
 		[key: string]: any;
+
 		emailAddress?: string;
 		otp?: string;
 		isAuthenticated?: boolean;
