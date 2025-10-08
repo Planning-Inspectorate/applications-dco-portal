@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './otp-service.ts';
