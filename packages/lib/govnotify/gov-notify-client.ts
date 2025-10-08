@@ -1,3 +1,4 @@
+// @ts-expect-error - due to not having @types
 import { NotifyClient } from 'notifications-node-client';
 import type { Logger } from 'pino';
 import type { GovNotifyOptions, TemplateIds } from './types.d.ts';
@@ -24,8 +25,9 @@ export class GovNotifyClient {
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {
 		try {
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);
-		} catch (e: any) {
-			throw new Error(`email failed to dispatch: ${e.message}`);
+		} catch (e) {
+			this.logger.error({ e }, 'Error dispatching email');
+			throw new Error('Email failed to dispatch');
 		}
 	}
 }

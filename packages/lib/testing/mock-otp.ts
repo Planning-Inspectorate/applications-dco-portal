@@ -1,3 +1,4 @@
+// @ts-expect-error - due to not having @types
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;

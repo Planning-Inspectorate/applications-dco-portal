@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it } from 'node:test';
 import { MapCache } from './map-cache.ts';
 import assert from 'node:assert';

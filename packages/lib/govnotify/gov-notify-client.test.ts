@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it } from 'node:test';
 import { GovNotifyClient } from './gov-notify-client.ts';
 import { mockLogger } from '../testing/mock-logger.ts';
@@ -29,9 +31,10 @@ describe(`gov-notify-client`, () => {
 					await client.sendEmail('templateId', 'emailAddress', { personalisation: {} });
 				},
 				{
-					message: 'email failed to dispatch: Notify API error'
+					message: 'Email failed to dispatch'
 				}
 			);
+			assert.strictEqual(logger.error.mock.callCount(), 1);
 		});
 	});
 	describe('sendAcknowledgePreNotification', () => {

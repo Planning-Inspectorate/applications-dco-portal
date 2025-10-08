@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { assertRenders404Page } from '@pins/dco-portal-lib/testing/custom-asserts.ts';

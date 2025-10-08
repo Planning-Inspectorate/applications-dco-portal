@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it } from 'node:test';
 import { addSessionData, clearSessionData, readSessionData } from './session.ts';
 import assert from 'node:assert';

@@ -13,7 +13,7 @@ describe('async-handler helper', () => {
 				throw error;
 			});
 
-			// @ts-ignore
+			// @ts-expect-error - due to mock req
 			route(req, res, next);
 
 			assert.strictEqual(next.mock.callCount(), 1);
@@ -25,7 +25,7 @@ describe('async-handler helper', () => {
 			const next = mock.fn();
 			const route = asyncHandler(() => {});
 
-			// @ts-ignore
+			// @ts-expect-error - due to mock req
 			route(req, res, next);
 
 			assert.strictEqual(next.mock.callCount(), 0);
@@ -39,7 +39,7 @@ describe('async-handler helper', () => {
 				throw error;
 			});
 
-			// @ts-ignore
+			// @ts-expect-error - due to mock req
 			await route(req, res, next);
 
 			assert.strictEqual(next.mock.callCount(), 1);
@@ -49,7 +49,7 @@ describe('async-handler helper', () => {
 			const next = mock.fn();
 			const route = asyncHandler(async () => {});
 
-			// @ts-ignore
+			// @ts-expect-error - due to mock req
 			await route(req, res, next);
 
 			assert.strictEqual(next.mock.callCount(), 0);
