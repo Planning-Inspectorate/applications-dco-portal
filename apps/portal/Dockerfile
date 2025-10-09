@@ -13,12 +13,12 @@ COPY package-lock.json .
 COPY packages ./packages
 COPY apps/portal ./apps/portal
 
-RUN npm ci --loglevel notice --workspace=dco-portal --ignore-scripts
+RUN npm ci --loglevel notice --workspace=portal --ignore-scripts
 
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
 
-RUN npm run build --workspace=dco-portal
+RUN npm run build --workspace=portal
 RUN npm run db-generate
 
 # --------------------------------
