@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@azure/storage-blob": "*",
     "@azure/msal-node": "*",
     "@pins/dco-portal-database": "*",
     "@planning-inspectorate/dynamic-forms": "*",

@@ -28,7 +28,9 @@ export function loadConfig(): Config {
 		SQL_CONNECTION_STRING,
 		GOV_NOTIFY_DISABLED,
 		GOV_NOTIFY_API_KEY,
-		GOV_NOTIFY_OTP_TEMPLATE_ID
+		GOV_NOTIFY_OTP_TEMPLATE_ID,
+		BLOB_STORE_HOST,
+		BLOB_STORE_CONTAINER
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -60,6 +62,10 @@ export function loadConfig(): Config {
 	}
 
 	config = {
+		blobStore: {
+			host: BLOB_STORE_HOST,
+			container: BLOB_STORE_CONTAINER
+		},
 		cacheControl: {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
 		},
