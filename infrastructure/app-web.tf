@@ -6,9 +6,9 @@ module "app_portal" {
   location            = module.primary_region.location
 
   # naming
-  app_name        = "app"
+  app_name        = "portal"
   resource_suffix = var.environment
-  service_name    = local.service_name
+  service_name    = "dco"
   tags            = local.tags
 
   # service plan & scaling
