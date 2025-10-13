@@ -10,7 +10,9 @@ locals {
   secrets = [
     "dcop-client-secret",
     "dcop-gov-notify-api-key",
-    "microsoft-provider-authentication-secret"
+    "microsoft-provider-authentication-secret",
+    "dcop-blob-store-host",
+    "dcop-blob-store-container"
   ]
 
   key_vault_refs = merge(
