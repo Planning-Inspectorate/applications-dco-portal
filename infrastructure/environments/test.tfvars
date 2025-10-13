@@ -26,6 +26,10 @@ apps_config = {
       otp_template_id = "88eb5326-aa5a-4dc4-9a91-9a06953fb45a"
     }
   }
+
+  blob_store = {
+    disabled = true
+  }
 }
 
 common_config = {

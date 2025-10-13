@@ -36,6 +36,10 @@ variable "apps_config" {
         otp_template_id = string
       })
     })
+
+    blob_store = object({
+      disabled = bool
+    })
   })
 }
 

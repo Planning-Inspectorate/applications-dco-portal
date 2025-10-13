@@ -3,6 +3,10 @@ import { BlobStorageClient } from './blob-store-client.ts';
 import type { BlobStoreConfig } from './types.d.ts';
 
 export function initBlobStore(config: BlobStoreConfig, logger: Logger) {
+	if (config.disabled) {
+		return null;
+	}
+
 	if (!config.host) {
 		return null;
 	}
