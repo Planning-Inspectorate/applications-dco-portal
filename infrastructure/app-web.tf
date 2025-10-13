@@ -57,7 +57,7 @@ module "app_portal" {
     RETRY_STATUS_CODES = "408,413,429,500,502,503,504,521,522,524"
 
     #Auth
-    WEBSITE_AUTH_AAD_ALLOWED_TENANTS         = data.azurerm_client_config.current.tenant_id
+    WEBSITE_AUTH_AAD_ALLOWED_TENANTS = data.azurerm_client_config.current.tenant_id
 
     # sessions
     REDIS_CONNECTION_STRING = local.key_vault_refs["redis-connection-string"]
