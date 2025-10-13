@@ -57,7 +57,6 @@ module "app_portal" {
     RETRY_STATUS_CODES = "408,413,429,500,502,503,504,521,522,524"
 
     #Auth
-    MICROSOFT_PROVIDER_AUTHENTICATION_SECRET = local.key_vault_refs["microsoft-provider-authentication-secret"]
     WEBSITE_AUTH_AAD_ALLOWED_TENANTS         = data.azurerm_client_config.current.tenant_id
 
     # sessions
