@@ -29,6 +29,7 @@ export function loadConfig(): Config {
 		GOV_NOTIFY_DISABLED,
 		GOV_NOTIFY_API_KEY,
 		GOV_NOTIFY_OTP_TEMPLATE_ID,
+		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER
 	} = process.env;
@@ -63,6 +64,7 @@ export function loadConfig(): Config {
 
 	config = {
 		blobStore: {
+			disabled: BLOB_STORE_DISABLED,
 			host: BLOB_STORE_HOST,
 			container: BLOB_STORE_CONTAINER
 		},

@@ -70,6 +70,7 @@ module "app_portal" {
     GOV_NOTIFY_OTP_TEMPLATE_ID = var.apps_config.gov_notify.templates.otp_template_id
 
     # blob store
+    BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled
     BLOB_STORE_HOST      = local.key_vault_refs["dcop-blob-store-host"]
     BLOB_STORE_CONTAINER = local.key_vault_refs["dcop-blob-store-container"]
   }
