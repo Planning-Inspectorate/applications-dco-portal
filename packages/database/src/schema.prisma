@@ -61,3 +61,9 @@ model DocumentSubCategory {
   categoryId String
   category   DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+model ApfpRegulation {
+  /// unique identifier for the regulation, e.g. "5-1", "5-2-a"
+  id          String @id
+  displayName String
+}
