@@ -382,6 +382,37 @@ export const DOCUMENT_SUB_CATEGORY = [
 	}
 ];
 
+export const APFP_REGULATION = [
+	{ id: '5-1', displayName: '5(1)' },
+	{ id: '5-2-a', displayName: '5(2)(a)' },
+	{ id: '5-2-b', displayName: '5(2)(b)' },
+	{ id: '5-2-c', displayName: '5(2)(c)' },
+	{ id: '5-2-d', displayName: '5(2)(d)' },
+	{ id: '5-2-e', displayName: '5(2)(e)' },
+	{ id: '5-2-f', displayName: '5(2)(f)' },
+	{ id: '5-2-g', displayName: '5(2)(g)' },
+	{ id: '5-2-h', displayName: '5(2)(h)' },
+	{ id: '5-2-i', displayName: '5(2)(i)' },
+	{ id: '5-2-j', displayName: '5(2)(j)' },
+	{ id: '5-2-k', displayName: '5(2)(k)' },
+	{ id: '5-2-l', displayName: '5(2)(l)' },
+	{ id: '5-2-m', displayName: '5(2)(m)' },
+	{ id: '5-2-n', displayName: '5(2)(n)' },
+	{ id: '5-2-o', displayName: '5(2)(o)' },
+	{ id: '5-2-p', displayName: '5(2)(p)' },
+	{ id: '5-2-q', displayName: '5(2)(q)' },
+	{ id: '6-1-a-i', displayName: '6(1)(a)(i)' },
+	{ id: '6-1-a-ii', displayName: '6(1)(a)(ii)' },
+	{ id: '6-1-b-i', displayName: '6(1)(b)(i)' },
+	{ id: '6-1-b-ii', displayName: '6(1)(b)(ii)' },
+	{ id: '6-2-a', displayName: '6(2)(a)' },
+	{ id: '6-2-b', displayName: '6(2)(b)' },
+	{ id: '6-3-a', displayName: '6(3)(a)' },
+	{ id: '6-4', displayName: '6(4)' },
+	{ id: '6-5', displayName: '6(5)' },
+	{ id: '6-6', displayName: '6(6)' }
+];
+
 async function upsertReferenceData<TDelegate extends { upsert: (args: any) => any }, TInput extends { id: string }>({
 	delegate,
 	input
@@ -404,6 +435,8 @@ export async function seedStaticData(dbClient: PrismaClient) {
 	await Promise.all(
 		DOCUMENT_SUB_CATEGORY.map((input) => upsertReferenceData({ delegate: dbClient.documentSubCategory, input }))
 	);
+
+	await Promise.all(APFP_REGULATION.map((input) => upsertReferenceData({ delegate: dbClient.apfpRegulation, input })));
 
 	await dbClient.$queryRaw`SELECT 1`;
 	console.log('static data seed complete');
