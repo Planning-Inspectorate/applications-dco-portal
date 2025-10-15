@@ -26,7 +26,7 @@ export function initSessionMiddleware({ redis, secure, secret }: InitSessionOpti
 		unset: 'destroy',
 		cookie: {
 			secure,
-			maxAge: 86_400_000
+			maxAge: 30 * 60 * 1000 // 30 minutes
 		}
 	});
 }

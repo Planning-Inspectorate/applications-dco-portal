@@ -94,11 +94,22 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 		await deleteOtp(db, emailAddress);
 		delete req.session.emailAddress;
 
-		req.session.isAuthenticated = true;
+		req.session.regenerate((error) => {
+			if (error) {
+				throw error;
+			}
 
-		logger.info('User authenticated, redirecting to the landing page');
+			req.session.isAuthenticated = true;
+			req.session.emailAddress = emailAddress;
+			// TODO: add case reference to session once we have it
+			// TODO: once the user logs into the service
+			//  - check if a case in DCO portal DB exists
+			//  - if not create a blank case with the email and case reference
 
-		return res.redirect('/');
+			logger.info('User authenticated, redirecting to the landing page');
+
+			return res.redirect('/');
+		});
 	};
 }
 

@@ -175,7 +175,10 @@ describe('login controllers', () => {
 					otpCode: 'ABCDE'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -183,6 +186,7 @@ describe('login controllers', () => {
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
 
