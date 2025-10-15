@@ -5,7 +5,7 @@ import type { PrismaClient } from '@pins/dco-portal-database/src/client';
  * @type {Readonly<{CONSULTEES: string, INTERESTED_PARTIES: string}>}
  */
 export const DOCUMENT_CATEGORY_ID = Object.freeze({
-	RELATED_INFORMATION: 'related-information',
+	APPLICATION_FORM_RELATED_INFORMATION: 'application-form-related-information',
 	PLANS_AND_DRAWINGS: 'plans-and-drawings',
 	DRAFT_DCO: 'draft-dco',
 	COMPULSORY_ACQUISITION_INFORMATION: 'compulsory-acquisition-information',
@@ -18,7 +18,7 @@ export const DOCUMENT_CATEGORY_ID = Object.freeze({
 
 export const DOCUMENT_CATEGORY = [
 	{
-		id: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION,
+		id: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION,
 		displayName: 'Application form related information'
 	},
 	{
@@ -115,27 +115,27 @@ export const DOCUMENT_SUB_CATEGORY = [
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.APPLICATION_COVER_LETTER,
 		displayName: 'Application Cover Letter',
-		categoryId: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION
+		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.GUIDE_TO_THE_APPLICATION,
 		displayName: 'Guide to the Application',
-		categoryId: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION
+		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.PRE_APPLICATION_PROGRAMME_DOCUMENT,
 		displayName: 'Pre-application Programme Document',
-		categoryId: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION
+		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.APPLICANTS_SECTION_55_CHECKLIST,
 		displayName: 'Applicant’s section 55 checklist',
-		categoryId: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION
+		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.FAST_TRACK_ADMISSION_DOCUMENT,
 		displayName: 'Fast Track Admission Document',
-		categoryId: DOCUMENT_CATEGORY_ID.RELATED_INFORMATION
+		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS,
