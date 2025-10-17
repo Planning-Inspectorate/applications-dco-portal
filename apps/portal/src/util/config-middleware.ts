@@ -19,6 +19,7 @@ export function addLocalsConfiguration(): Handler {
 		];
 
 		res.locals.config = {
+			styleFile: 'style-411ffebc.css',
 			cspNonce: res.locals.cspNonce,
 			headerTitle: 'Apply for a Development Consent Order',
 			footerLinks: [
