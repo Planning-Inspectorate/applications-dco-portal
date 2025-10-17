@@ -32,38 +32,33 @@ model OneTimePassword {
 
 model Document {
   // internal identifier
-  id String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-
-  fileName String
-
-  categoryId String
-  Category   DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  subCategoryId String
-  SubCategory   DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               String              @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  fileName         String
+  subCategoryId    String
+  SubCategory      DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  apfpRegulationId String
+  ApfpRegulation   ApfpRegulation      @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model DocumentCategory {
   /// unique machine-readable name, not generated, e.g. "application-form-related-information"
-  id          String     @id
-  displayName String?
-  Document    Document[]
-
+  id            String                @id
+  displayName   String?
   subCategories DocumentSubCategory[]
 }
 
 model DocumentSubCategory {
   /// unique machine-readable name, not generated, e.g. "application-cover-letter"
-  id          String     @id
+  id          String           @id
   displayName String?
   Document    Document[]
-
-  categoryId String
-  category   DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categoryId  String
+  category    DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ApfpRegulation {
   /// unique identifier for the regulation, e.g. "5-1", "5-2-a"
-  id          String @id
+  id          String     @id
   displayName String
+  Document    Document[]
 }
