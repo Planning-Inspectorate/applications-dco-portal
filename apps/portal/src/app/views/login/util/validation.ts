@@ -1,3 +1,4 @@
+import { differenceInSeconds } from 'date-fns';
 import type { OtpRecord } from './types.d.ts';
 
 export function isValidEmailAddress(emailAddress: string): boolean {
@@ -11,8 +12,13 @@ export function isValidOtpCode(otpCode: string): boolean {
 }
 
 export function isValidOtpRecord(otpRecord: OtpRecord | undefined | null): boolean {
-	const MAX_ATTEMPTS = 4;
+	const MAX_ATTEMPTS = 3;
 	if (!otpRecord) return false;
 	if (otpRecord.attempts >= MAX_ATTEMPTS) return false;
 	return new Date() <= new Date(otpRecord.expiresAt);
+}
+
+export function sentInLastTenSeconds(otpRecord: OtpRecord) {
+	const diff = differenceInSeconds(new Date(), otpRecord.createdAt);
+	return diff >= 0 && diff <= 10;
 }

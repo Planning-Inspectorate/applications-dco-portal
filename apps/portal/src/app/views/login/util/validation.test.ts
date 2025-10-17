@@ -36,7 +36,7 @@ describe('login validation', () => {
 			assert.strictEqual(isValidOtpRecord({ attempts: 4 }), false);
 			assert.strictEqual(isValidOtpRecord({ attempts: 5 }), false);
 			assert.strictEqual(isValidOtpRecord({ attempts: 3, expiresAt: new Date('2025-01-29T23:35:00.000Z') }), false);
-			assert.strictEqual(isValidOtpRecord({ attempts: 3, expiresAt: new Date('2025-01-30T00:02:00.000Z') }), true);
+			assert.strictEqual(isValidOtpRecord({ attempts: 2, expiresAt: new Date('2025-01-30T00:02:00.000Z') }), true);
 		});
 	});
 });
