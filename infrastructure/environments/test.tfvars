@@ -34,7 +34,7 @@ apps_config = {
 
 auth_config = {
   auth_enabled   = true
-  auth_client_id = "8e64dbf3-99f8-4b31-94ee-b621ad68c56f" # App Registration for Auth registration
+  auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
   application_id = "b40aea38-d056-41d4-973e-8e8c1807ec76" # App Registration for DCO deployment Test
 }
 
