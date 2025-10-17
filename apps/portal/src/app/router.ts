@@ -1,6 +1,6 @@
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
-import { createRoutes as appRoutes } from './views/home/index.ts';
+import { createRoutes as appRoutes } from './views/index.ts';
 import { createRoutes as loginRoutes } from './views/login/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/auth.ts';

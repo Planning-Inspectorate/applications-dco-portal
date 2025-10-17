@@ -19,8 +19,16 @@ datasource db {
 // while we don't rely on that for security, it adds an extra layer
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
+model Case {
+  id         String     @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference  String
+  createdAt  DateTime   @default(now())
+  modifiedAt DateTime   @updatedAt
+  Documents  Document[]
+}
+
 model OneTimePassword {
-  id            String   @id @default(uuid())
+  id            String   @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
   email         String   @unique
   hashedOtpCode String
   createdAt     DateTime @default(now())
@@ -34,17 +42,21 @@ model Document {
   // internal identifier
   id               String              @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
   fileName         String
+  uploadedDate     DateTime            @default(now())
+  isCertified      Boolean
   subCategoryId    String
   SubCategory      DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   apfpRegulationId String
   ApfpRegulation   ApfpRegulation      @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  caseId           String              @db.UniqueIdentifier
+  Case             Case?               @relation(fields: [caseId], references: [id])
 }
 
 model DocumentCategory {
   /// unique machine-readable name, not generated, e.g. "application-form-related-information"
   id            String                @id
   displayName   String?
-  subCategories DocumentSubCategory[]
+  SubCategories DocumentSubCategory[]
 }
 
 model DocumentSubCategory {
@@ -53,7 +65,7 @@ model DocumentSubCategory {
   displayName String?
   Document    Document[]
   categoryId  String
-  category    DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Category    DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ApfpRegulation {

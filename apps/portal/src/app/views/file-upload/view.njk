@@ -1,0 +1,92 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block pageHeading %}{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-full">
+                    <h2 class="govuk-heading-l">
+                        {{ pageTitle }}
+                    </h2>
+                    <h3 class="govuk-heading-m">Documents uploaded</h3>
+                    {% if documents.length > 0 %}
+                        {% set headers = [
+                            {
+                                text: 'Document'
+                            },
+                            {
+                                text: 'Document type'
+                            },
+                            {
+                                text: 'APFP regulation'
+                            },
+                            {
+                                text: 'Certification'
+                            },
+                            {
+                                text: 'Date uploaded'
+                            },
+                            {
+                                text: 'Remove'
+                            }
+                        ] %}
+                        {{ govukTable({
+                            head: headers,
+                            rows: documents
+                        }) }}
+                    {% else %}
+                        <p class="govuk-body">This category contains 0 document(s).</p>
+                    {% endif %}
+
+                    {{ govukButton({
+                        text: "Upload documents",
+                        href: uploadButtonUrl,
+                        classes: "govuk-button--secondary"
+                    }) }}
+
+                    {% if documents.length > 0 %}
+                        <form action="" method="post" novalidate>
+                            <input type="hidden" name="_csrf" value="{{ _csrf }}">
+
+                            {% set fieldKey = documentCategory + "IsCompleted" %}
+                            {% set fieldError = errors[fieldKey] %}
+
+                            {{ govukRadios({
+                                name: documentCategory + "IsCompleted",
+                                fieldset: {
+                                    legend: {
+                                        text: "Have you completed this section?",
+                                        isPageHeading: false,
+                                        classes: "govuk-fieldset__legend--m"
+                                    }
+                                },
+                                items: [
+                                    {
+                                        value: "yes",
+                                        text: "Yes, I've completed this section"
+                                    },
+                                    {
+                                        value: "no",
+                                        text: "No, I'll come back to it later"
+                                    }
+                                ],
+                                errorMessage: fieldError and {
+                                    text: fieldError.msg
+                                }
+                            }) }}
+                            {{ govukButton({
+                                text: "Continue"
+                            }) }}
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
