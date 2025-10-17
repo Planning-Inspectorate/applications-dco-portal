@@ -31,7 +31,7 @@ export function buildFileUploadHomePage({ db }: PortalService, documentTypeId: s
 
 		return res.render('views/file-upload/view.njk', {
 			pageTitle: documentCategory?.displayName,
-			documents: caseWithFilteredDocuments?.Documents || [],
+			documents: caseWithFilteredDocuments?.Documents || [], //TODO: map documents returned to govuk table format
 			uploadButtonUrl: `${req.baseUrl}/upload/document-type`,
 			backLinkUrl: '/'
 		});

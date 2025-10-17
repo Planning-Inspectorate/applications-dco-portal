@@ -9,11 +9,6 @@ import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { APFP_REGULATION, DOCUMENT_SUB_CATEGORY } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
-const apfpRegulations = [
-	{ text: '', value: '' }, // ensure there is a 'null' option so the first APFP regulation isn't selected by default
-	...APFP_REGULATION.map((t) => ({ text: t.displayName, value: t.id }))
-];
-
 export function getQuestions(documentTypeId: string) {
 	const questions = {
 		documentType: {
@@ -35,7 +30,7 @@ export function getQuestions(documentTypeId: string) {
 			fieldName: 'apfpRegulation',
 			url: 'regulation',
 			validators: [new RequiredValidator()],
-			options: apfpRegulations
+			options: [{ text: '', value: '' }, ...APFP_REGULATION.map((t) => ({ text: t.displayName, value: t.id }))]
 		},
 		isCertified: {
 			type: COMPONENT_TYPES.BOOLEAN,
