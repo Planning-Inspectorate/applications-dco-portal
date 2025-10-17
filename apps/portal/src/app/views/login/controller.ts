@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 // @ts-expect-error - due to not having @types
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord } from './util/validation.ts';
+import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord, sentInLastTenSeconds } from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
@@ -17,23 +17,32 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { emailAddress } = req.body;
 
-		if (!isValidEmailAddress(emailAddress)) {
+		const handleEmailError = async (message: string) => {
 			req.body.errors = {
-				emailAddress: {
-					msg: 'Error message'
-				}
+				emailAddress: { msg: message }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+
+			logger.info({ emailAddress }, message);
 
 			const enterEmailPage = buildEnterEmailPage({
 				errors: req.body.errors,
 				errorSummary: req.body.errorSummary
 			});
 			return enterEmailPage(req, res);
+		};
+
+		if (!isValidEmailAddress(emailAddress)) {
+			return handleEmailError('Invalid email address');
+		}
+
+		const otpRecord = await getOtpRecord(db, emailAddress);
+		if (otpRecord && sentInLastTenSeconds(otpRecord)) {
+			return handleEmailError('Code already requested');
 		}
 
 		const oneTimePassword = generateOtp();
@@ -66,7 +75,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		const handleOtpError = async (message: string) => {
 			req.body.errors = {
-				otpCode: { msg: 'Error message' }
+				otpCode: { msg: message }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
@@ -81,8 +90,12 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		const otpRecord = await getOtpRecord(db, emailAddress);
 
-		if (!isValidOtpCode(otpCode) || !isValidOtpRecord(otpRecord)) {
+		if (!isValidOtpCode(otpCode)) {
 			return handleOtpError('Provided OTP failed validation');
+		}
+
+		if (!isValidOtpRecord(otpRecord)) {
+			return res.redirect(`${req.baseUrl}/request-new-code`);
 		}
 
 		const isMatch = await bcrypt.compare(otpCode.trim().toUpperCase(), otpRecord?.hashedOtpCode);
@@ -92,7 +105,6 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 		}
 
 		await deleteOtp(db, emailAddress);
-		delete req.session.emailAddress;
 
 		req.session.regenerate((error) => {
 			if (error) {
