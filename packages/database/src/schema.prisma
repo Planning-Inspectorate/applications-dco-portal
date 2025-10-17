@@ -19,8 +19,16 @@ datasource db {
 // while we don't rely on that for security, it adds an extra layer
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
+model Case {
+  id         Int        @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference  String
+  createdAt  DateTime   @default(now())
+  modifiedAt DateTime   @updatedAt
+  document   Document[]
+}
+
 model OneTimePassword {
-  id            String   @id @default(uuid())
+  id            String   @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
   email         String   @unique
   hashedOtpCode String
   createdAt     DateTime @default(now())
@@ -38,6 +46,8 @@ model Document {
   SubCategory      DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   apfpRegulationId String
   ApfpRegulation   ApfpRegulation      @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Case             Case?               @relation(fields: [caseId], references: [id])
+  caseId           Int?                @db.UniqueIdentifier
 }
 
 model DocumentCategory {
