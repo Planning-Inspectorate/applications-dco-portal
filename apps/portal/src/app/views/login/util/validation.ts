@@ -19,6 +19,7 @@ export function isValidOtpRecord(otpRecord: OtpRecord | undefined | null): boole
 }
 
 export function sentInLastTenSeconds(otpRecord: OtpRecord) {
+	if (!otpRecord) return false;
 	const diff = differenceInSeconds(new Date(), otpRecord.createdAt);
 	return diff >= 0 && diff <= 10;
 }

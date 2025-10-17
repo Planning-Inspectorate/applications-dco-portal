@@ -2,7 +2,7 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord } from './validation.ts';
+import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord, sentInLastTenSeconds } from './validation.ts';
 
 describe('login validation', () => {
 	describe('isValidEmailAddress', () => {
@@ -37,6 +37,20 @@ describe('login validation', () => {
 			assert.strictEqual(isValidOtpRecord({ attempts: 5 }), false);
 			assert.strictEqual(isValidOtpRecord({ attempts: 3, expiresAt: new Date('2025-01-29T23:35:00.000Z') }), false);
 			assert.strictEqual(isValidOtpRecord({ attempts: 2, expiresAt: new Date('2025-01-30T00:02:00.000Z') }), true);
+		});
+	});
+	describe('sentInLastTenSeconds', () => {
+		it('should validate OTP record provided', async (ctx) => {
+			const now = new Date('2025-01-30T00:01:00.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			assert.strictEqual(sentInLastTenSeconds({}), false);
+			assert.strictEqual(sentInLastTenSeconds(null), false);
+			assert.strictEqual(sentInLastTenSeconds(undefined), false);
+			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-30T00:00:50.000Z') }), true);
+			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-30T00:00:51.000Z') }), true);
+			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-30T00:00:00.000Z') }), false);
+			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-29T00:01:00.000Z') }), false);
 		});
 	});
 });
