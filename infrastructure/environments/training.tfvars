@@ -32,6 +32,12 @@ apps_config = {
   }
 }
 
+auth_config = {
+  auth_enabled   = true
+  auth_client_id = "8e64dbf3-99f8-4b31-94ee-b621ad68c56f" # App Registration for Auth registration
+  application_id = "89a3813c-357c-4c7b-aced-9d4e6ff5b2f1" # App Registration for DCO deployment Training
+}
+
 common_config = {
   resource_group_name = "pins-rg-common-training-ukw-001"
   action_group_names = {

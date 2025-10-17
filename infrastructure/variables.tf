@@ -43,6 +43,15 @@ variable "apps_config" {
   })
 }
 
+variable "auth_config" {
+  description = "Config for the azure authentication dco portal"
+  type = object({
+    auth_enabled   = bool
+    auth_client_id = string
+    application_id = string
+  })
+}
+
 variable "common_config" {
   description = "Config for the common resources, such as action groups"
   type = object({
