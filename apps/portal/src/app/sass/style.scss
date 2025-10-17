@@ -1,3 +1,4 @@
+$font-family: arial, helvetica, sans-serif;
 @use 'node_modules/govuk-frontend/dist/govuk/index' as govuk with (
 	$govuk-font-family: (
 		Arial,
@@ -9,3 +10,8 @@
 @use './components/pins-header.scss';
 @use './components/pins-navigation.scss';
 @use './components/pins-footer.scss';
+
+// set font-family for any autocomplete menu items
+.autocomplete__menu {
+	font-family: $font-family;
+}
