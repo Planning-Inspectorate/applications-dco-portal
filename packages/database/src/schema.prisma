@@ -49,7 +49,7 @@ model Document {
   apfpRegulationId String
   ApfpRegulation   ApfpRegulation      @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   caseId           String              @db.UniqueIdentifier
-  Case             Case?               @relation(fields: [caseId], references: [id])
+  Case             Case                @relation(fields: [caseId], references: [id])
 }
 
 model DocumentCategory {
