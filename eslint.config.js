@@ -25,7 +25,16 @@ export default defineConfig([
 	},
 	// Cypress-specific configuration
 	{
-		files: ['cypress/**/*.js', 'cypress/**/*.ts', '**/*.cy.js', '**/*.cy.ts'],
+		files: [
+			'cypress/**/*.js',
+			'cypress/**/*.ts',
+			'cypress/support/**/*.js',
+			'cypress/support/**/*.ts',
+			'e2e/cypress/**/*.js',
+			'e2e/cypress/**/*.ts',
+			'**/*.cy.js',
+			'**/*.cy.ts'
+		],
 		plugins: {
 			cypress
 		},
@@ -46,7 +55,8 @@ export default defineConfig([
 				localStorage: 'readonly',
 				sessionStorage: 'readonly',
 				setTimeout: 'readonly',
-				require: 'readonly'
+				require: 'readonly',
+				process: 'readonly'
 			}
 		},
 		rules: {

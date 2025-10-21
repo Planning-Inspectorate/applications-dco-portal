@@ -1,0 +1,33 @@
+{
+  "name": "@pins/e2e",
+  "version": "1.0.0",
+  "description": "E2E testing for the DCO Portal",
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "npx cypress open --browser chrome --e2e --config-file cypress.config.local.env.js",
+    "cy:open:dev": "npx cypress open --browser chrome --e2e --config-file cypress.config.dev.env.js",
+    "cy:open:test": "npx cypress open --browser chrome --e2e --config-file cypress.config.test.env.js",
+    "cy:run": "npx cypress run --config-file cypress.config.local.env.js",
+    "cy:run:dev": "npx cypress run --config-file cypress.config.dev.env.js",
+    "cy:run:test": "npx cypress run --config-file cypress.config.test.env.js",
+    "cy:open-smoke": "npx cypress open --browser chrome --e2e --env grepTags='smoke'",
+    "cy:run-smoke": "npx cypress run --env grepTags='smoke'",
+    "cy:ci": "npx cypress run --env isCI=true",
+    "cy:ci:local": "npx cypress run --env isCI=true --config-file cypress.config.local.env.js",
+    "cy:ci:dev": "npx cypress run --env isCI=true --config-file cypress.config.dev.env.js",
+    "cy:ci:test": "npx cypress run --env isCI=true --config-file cypress.config.test.env.js"
+  },
+  "devDependencies": {
+    "@cypress/grep": "^4.1.0",
+    "cypress": "^15.5.0",
+    "dotenv": "^17.2.3",
+    "eslint-plugin-cypress": "^5.2.0",
+    "fs-extra": "^11.3.2",
+    "puppeteer": "^24.26.0"
+  },
+  "dependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
