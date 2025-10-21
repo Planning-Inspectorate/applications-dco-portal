@@ -1,23 +1,23 @@
-%{% extends "views/layouts/main.njk" %}
- {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/task-list/macro.njk" import govukTaskList %}
 
- {% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
 
- {% block content %}
-   <div class="govuk-grid-row">
-     <div class="govuk-grid-column-two-thirds">
-       <h1 class="govuk-heading-l govuk-!-margin-top-6">
-         {{ pageTitle }}
-       </h1>
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">
+        {{ pageTitle }}
+      </h1>
 
-       <h2 class="govuk-heading-m">
-         1. Your documents
-       </h2>
+      <h2 class="govuk-heading-m">
+        1. Your documents
+      </h2>
 
-       {{ govukTaskList({
-         idPrefix: "document-categories",
-         items: taskListItems
-       }) }}
-     </div>
-   </div>
- {% endblock %}
+      {{ govukTaskList({
+        idPrefix: "document-categories",
+        items: taskListItems
+      }) }}
+    </div>
+  </div>
+{% endblock %}
