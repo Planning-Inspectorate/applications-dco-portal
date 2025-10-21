@@ -48,7 +48,9 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 	);
 
 	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
-		list(req, res, getDocumentCategoryDisplayName(documentTypeId), {})
+		list(req, res, getDocumentCategoryDisplayName(documentTypeId), {
+			pageHeading: 'Check your answers before uploading your document(s)'
+		})
 	);
 	// router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
 

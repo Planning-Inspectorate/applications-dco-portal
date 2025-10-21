@@ -8,8 +8,8 @@
     {% if pageCaption %}
         <div class="govuk-grid-row">
             <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-l govuk-!-margin-top-6">
-                    {{pageCaption}}
+                <span class="govuk-caption-l govuk-!-margin-top-8">
+                    {{ pageCaption }}
                  </span>
             </div>
         </div>
@@ -18,9 +18,9 @@
 
 {% block beforeTaskList %}
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
+        <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-3">
             <h1 class="govuk-heading-l">
-                Check your answers
+                {{ pageHeading | default('Check your answers') }}
             </h1>
         </div>
     </div>
