@@ -1,25 +1,24 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { DOCUMENT_CATEGORY, CategoryStatus } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import {
+	DOCUMENT_CATEGORY,
+	CATEGORY_STATUS,
+	CATEGORY_STATUS_ID
+} from '@pins/dco-portal-database/src/seed/data-static.ts';
 
-function getCategoryStatus(status: CategoryStatus): { text: string; classes: string } {
-	switch (status) {
-		case 'IN_PROGRESS':
-			return {
-				text: 'In progress',
-				classes: 'govuk-tag--yellow'
-			};
-		case 'COMPLETED':
-			return {
-				text: 'Completed',
-				classes: 'govuk-tag--blue'
-			};
-		default:
-			return {
-				text: 'Not yet started',
-				classes: 'govuk-tag--grey'
-			};
-	}
+function getCategoryStatus(statusId: string): { text: string; classes: string } {
+	const status = CATEGORY_STATUS.find((s) => s.id === statusId);
+
+	const classMap: Record<string, string> = {
+		[CATEGORY_STATUS_ID.NOT_STARTED]: 'govuk-tag--grey',
+		[CATEGORY_STATUS_ID.IN_PROGRESS]: 'govuk-tag--yellow',
+		[CATEGORY_STATUS_ID.COMPLETED]: 'govuk-tag--blue'
+	};
+
+	return {
+		text: status?.displayName || 'Not yet started',
+		classes: classMap[statusId] || 'govuk-tag--grey'
+	};
 }
 
 export function buildHomePage({ db, logger }: PortalService): AsyncRequestHandler {
@@ -37,7 +36,7 @@ export function buildHomePage({ db, logger }: PortalService): AsyncRequestHandle
 			},
 			href: `/${category.id}`,
 			status: {
-				tag: getCategoryStatus('NOT_STARTED')
+				tag: getCategoryStatus(CATEGORY_STATUS_ID.NOT_STARTED)
 			}
 		}));
 
