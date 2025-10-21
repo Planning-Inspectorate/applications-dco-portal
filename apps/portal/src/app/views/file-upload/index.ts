@@ -20,6 +20,7 @@ import validate from '@planning-inspectorate/dynamic-forms/src/validator/validat
 // @ts-expect-error - due to not having @types
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import type { Handler, Request } from 'express';
+import { getDocumentCategoryDisplayName } from './util.ts';
 
 export function createRoutes(service: PortalService, documentTypeId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -46,7 +47,9 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 		buildSave(saveDataToSession)
 	);
 
-	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) => list(req, res, '', {}));
+	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
+		list(req, res, getDocumentCategoryDisplayName(documentTypeId), {})
+	);
 	// router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
 
 	return router;

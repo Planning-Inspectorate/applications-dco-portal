@@ -23,7 +23,7 @@ export function buildRouter(service: PortalService): IRouter {
 
 	// all subsequent routes will require user to be authenticated
 	// place any routes that do not require user auth above here
-	router.use(isUserAuthenticated);
+	// router.use(isUserAuthenticated);
 
 	router.use('/', appRoutes(service));
 	router.use('/error', createErrorRoutes(service));
