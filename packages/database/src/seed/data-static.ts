@@ -47,7 +47,7 @@ export const DOCUMENT_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION,
-		displayName: 'Additional prescribed information for specific types of projects'
+		displayName: 'Additional prescribed information'
 	},
 	{
 		id: DOCUMENT_CATEGORY_ID.OTHER,
