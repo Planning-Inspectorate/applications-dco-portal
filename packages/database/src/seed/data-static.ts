@@ -15,7 +15,7 @@ export const DOCUMENT_CATEGORY_ID = Object.freeze({
 	ADDITIONAL_PRESCRIBED_INFORMATION: 'additional-prescribed-information',
 	OTHER: 'other-documents'
 });
-
+export type CategoryStatus = 'NOT_STARTED' | 'IN_PROGRESS' | 'COMPLETED';
 export const DOCUMENT_CATEGORY = [
 	{
 		id: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION,
