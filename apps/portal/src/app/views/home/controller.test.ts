@@ -24,6 +24,6 @@ describe('home page', () => {
 		assert.strictEqual(mockRes.render.mock.callCount(), 1);
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments.length, 2);
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
-		assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].pageTitle, 'DCO Portal home page');
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].pageTitle, 'Application reference number');
 	});
 });
