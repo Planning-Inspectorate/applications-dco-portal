@@ -1,0 +1,14 @@
+{
+	"common": {
+		"continueButton": "[data-cy='button-save-and-continue']",
+		"email": "neil.frost@planninginspectorate.gov.uk",
+		"wrongEmail": "neil.frostplanninginspectorate.gov.uk",
+		"emailAddress": "#email-address",
+		"emailAddressById": "#email",
+		"emailAddressByName": "input[name='email']",
+		"emailAddressByDataCy": "[data-cy='email-input']",
+		"emailAddressError": "neil.frost@gmail.com",
+		"existingApplicationLink": "#existing-application",
+		"helpLink": "#help-link"
+	}
+}
