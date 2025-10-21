@@ -4,6 +4,18 @@
 
 {% set title = "Check your Answers - " + journeyTitle + " - DCO Portal" %}
 
+{% block beforeContent %}
+    {% if pageCaption %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds">
+                <span class="govuk-caption-l govuk-!-margin-top-6">
+                    {{pageCaption}}
+                 </span>
+            </div>
+        </div>
+    {% endif %}
+{% endblock beforeContent %}
+
 {% block beforeTaskList %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full govuk-!-margin-bottom-3">
