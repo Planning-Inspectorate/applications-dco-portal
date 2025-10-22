@@ -10,8 +10,6 @@ locals {
   secrets = [
     "dcop-client-secret",
     "dcop-gov-notify-api-key",
-    "dcop-blob-store-host",
-    "dcop-blob-store-container",
     "microsoft-provider-authentication-secret"
   ]
 

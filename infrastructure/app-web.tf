@@ -84,8 +84,8 @@ module "app_portal" {
 
     # blob store
     BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled
-    BLOB_STORE_HOST      = local.key_vault_refs["dcop-blob-store-host"]
-    BLOB_STORE_CONTAINER = local.key_vault_refs["dcop-blob-store-container"]
+    BLOB_STORE_HOST      = data.azurerm_storage_account.back_office.primary_blob_endpoint
+    BLOB_STORE_CONTAINER = azurerm_storage_container.documents.name
   }
 
   providers = {
