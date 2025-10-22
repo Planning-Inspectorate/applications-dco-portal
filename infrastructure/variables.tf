@@ -52,6 +52,14 @@ variable "auth_config" {
   })
 }
 
+variable "back_office_config" {
+  description = "config for the applications back-office resources"
+  type = object({
+    resource_group_name  = string
+    storage_account_name = string
+  })
+}
+
 variable "common_config" {
   description = "Config for the common resources, such as action groups"
   type = object({

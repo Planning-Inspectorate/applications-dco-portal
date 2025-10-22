@@ -38,6 +38,11 @@ auth_config = {
   application_id = "eef9a9e5-6726-442b-912a-fb7479d93e12" # App Registration for DCO deployment Dev
 }
 
+back_office_config = {
+  resource_group_name  = "pins-rg-back-office-dev-ukw-001"
+  storage_account_name = "pinsstdocsbodevukw001"
+}
+
 common_config = {
   resource_group_name = "pins-rg-common-dev-ukw-001"
   action_group_names = {
