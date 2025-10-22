@@ -9,6 +9,7 @@ declare module 'express-session' {
 		[key: string]: any;
 
 		emailAddress?: string;
+		caseReference?: string;
 		otp?: string;
 		isAuthenticated?: boolean;
 	}

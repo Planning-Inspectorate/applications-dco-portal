@@ -10,8 +10,9 @@ import { PortalService } from '#service';
 export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
 		return res.render('views/login/email.njk', {
-			questionText: 'What is your email address?',
-			hintText: 'If we recognise this address, we will send you a code.',
+			emailQuestionText: 'What is your email address?',
+			emailHintText: 'If we recognise this address, we will send you a code.',
+			caseReferenceQuestionText: 'What is your case reference?',
 			...viewData
 		});
 	};
@@ -19,15 +20,15 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 
 export function buildSubmitEmailController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
-		const { emailAddress } = req.body;
+		const { emailAddress, caseReference } = req.body;
 
-		const handleEmailError = async (message: string) => {
+		const handleError = async (field: string, message: string) => {
 			req.body.errors = {
-				emailAddress: { msg: message }
+				[field]: { msg: message }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
-			logger.info({ emailAddress }, message);
+			logger.info({ emailAddress, caseReference }, message);
 
 			const enterEmailPage = buildEnterEmailPage({
 				errors: req.body.errors,
@@ -37,12 +38,16 @@ export function buildSubmitEmailController({ db, notifyClient, logger }: PortalS
 		};
 
 		if (!isValidEmailAddress(emailAddress)) {
-			return handleEmailError('Invalid email address');
+			return handleError('emailAddress', 'Invalid email address');
+		}
+
+		if (!caseReference || caseReference.length > 8) {
+			return handleError('caseReference', 'You must provide a valid case reference');
 		}
 
 		const otpRecord = await getOtpRecord(db, emailAddress);
 		if (otpRecord && sentInLastTenSeconds(otpRecord)) {
-			return handleEmailError('Code already requested');
+			return handleError('emailAddress', 'Code already requested');
 		}
 
 		const oneTimePassword = generateOtp();
@@ -50,6 +55,7 @@ export function buildSubmitEmailController({ db, notifyClient, logger }: PortalS
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 
 		req.session.emailAddress = emailAddress;
+		req.session.caseReference = caseReference;
 
 		return res.redirect(`${req.baseUrl}/enter-code`);
 	};
@@ -71,6 +77,7 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const emailAddress = req.session.emailAddress;
+		const caseReference = req.session.caseReference;
 		const { otpCode } = req.body;
 
 		const handleOtpError = async (message: string) => {
@@ -113,7 +120,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 			req.session.isAuthenticated = true;
 			req.session.emailAddress = emailAddress;
-			// TODO: add case reference to session once we have it
+			req.session.caseReference = caseReference;
 			// TODO: once the user logs into the service
 			//  - check if a case in DCO portal DB exists
 			//  - if not create a blank case with the email and case reference

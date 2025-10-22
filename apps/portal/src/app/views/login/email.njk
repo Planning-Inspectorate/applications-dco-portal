@@ -13,15 +13,28 @@
                     id: "email-address",
                     name: "emailAddress",
                     label: {
-                        text: questionText,
+                        text: emailQuestionText,
                         classes: "govuk-label--l",
                         isPageHeading: true
                     },
                     hint: {
-                        text: hintText
+                        text: emailHintText
                     },
                     errorMessage: errors.emailAddress and {
                         text: errors.emailAddress.msg
+                    }
+                }) }}
+
+                {{ govukInput({
+                    id: "case-reference",
+                    name: "caseReference",
+                    label: {
+                        text: caseReferenceQuestionText,
+                        classes: "govuk-label--l",
+                        isPageHeading: true
+                    },
+                    errorMessage: errors.caseReference and {
+                        text: errors.caseReference.msg
                     }
                 }) }}
 

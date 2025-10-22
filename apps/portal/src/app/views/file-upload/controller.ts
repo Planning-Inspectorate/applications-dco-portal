@@ -5,6 +5,11 @@ import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { statusIdRadioButtonValue } from './util.ts';
+import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -16,7 +21,7 @@ export function buildFileUploadHomePage(
 			where: { id: documentTypeId }
 		});
 
-		const caseWithFilteredDocuments = await db.case.findFirst({
+		const caseData = await db.case.findUnique({
 			where: { reference: req.session?.caseReference },
 			include: {
 				Documents: {
@@ -39,18 +44,21 @@ export function buildFileUploadHomePage(
 			}
 		});
 
-		const documentRows =
-			caseWithFilteredDocuments?.Documents.map((document) => {
-				const { fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
-				return [
-					{ html: `<a class="govuk-link" href="#">${fileName}</a>` },
-					{ text: SubCategory?.displayName },
-					{ text: ApfpRegulation?.displayName },
-					{ text: isCertified ? 'Certified' : 'Not certified' },
-					{ text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) },
-					{ html: '<a class="govuk-link" href="#">Remove</a>' }
-				];
-			}) || [];
+		if (!caseData) {
+			return notFoundHandler(req, res);
+		}
+
+		const documentRows = caseData.Documents.map((document) => {
+			const { fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
+			return [
+				{ html: `<a class="govuk-link" href="#">${fileName}</a>` },
+				{ text: SubCategory?.displayName },
+				{ text: ApfpRegulation?.displayName },
+				{ text: isCertified ? 'Certified' : 'Not certified' },
+				{ text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) },
+				{ html: '<a class="govuk-link" href="#">Remove</a>' }
+			];
+		});
 
 		return res.render('views/file-upload/view.njk', {
 			pageTitle: documentCategory?.displayName,
@@ -58,6 +66,7 @@ export function buildFileUploadHomePage(
 			documents: documentRows,
 			uploadButtonUrl: `${req.baseUrl}/upload/document-type`,
 			backLinkUrl: '/',
+			isCompletedValue: statusIdRadioButtonValue((caseData as any)[`${kebabCaseToCamelCase(documentTypeId)}StatusId`]),
 			...viewData
 		});
 	};
@@ -65,8 +74,11 @@ export function buildFileUploadHomePage(
 
 export function buildIsFileUploadSectionCompleted(service: PortalService, documentTypeId: string): AsyncRequestHandler {
 	return async (req, res) => {
+		const { db } = service;
+
 		const documentCompletedFieldName = `${kebabCaseToCamelCase(documentTypeId)}IsCompleted`;
 		const isFileUploadCompleted = req.body[documentCompletedFieldName];
+
 		if (!isFileUploadCompleted) {
 			req.body.errors = {
 				[documentCompletedFieldName]: { msg: 'You must select an answer' }
@@ -80,7 +92,15 @@ export function buildIsFileUploadSectionCompleted(service: PortalService, docume
 			return fileUploadHomePage(req, res);
 		}
 
-		//TODO: save isSectionComplete value to DB for provided documentTypeId / documentCompletedFieldName
+		const statusId: string =
+			isFileUploadCompleted === BOOLEAN_OPTIONS.YES
+				? DOCUMENT_CATEGORY_STATUS_ID.COMPLETED
+				: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS;
+
+		await db.case.update({
+			where: { reference: req.session.caseReference },
+			data: { [`${kebabCaseToCamelCase(documentTypeId)}StatusId`]: statusId }
+		});
 
 		res.redirect('/');
 	};
