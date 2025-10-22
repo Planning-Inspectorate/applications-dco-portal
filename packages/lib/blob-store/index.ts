@@ -15,5 +15,5 @@ export function initBlobStore(config: BlobStoreConfig, logger: Logger) {
 		return null;
 	}
 
-	return new BlobStorageClient(logger, config.host, config.container);
+	return new BlobStorageClient(logger, config.host, config.container, config.connectionString);
 }

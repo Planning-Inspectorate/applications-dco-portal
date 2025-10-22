@@ -31,7 +31,8 @@ export function loadConfig(): Config {
 		GOV_NOTIFY_OTP_TEMPLATE_ID,
 		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
-		BLOB_STORE_CONTAINER
+		BLOB_STORE_CONTAINER,
+		BLOB_STORE_CONNECTION_STRING
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -64,9 +65,10 @@ export function loadConfig(): Config {
 
 	config = {
 		blobStore: {
-			disabled: BLOB_STORE_DISABLED,
+			disabled: BLOB_STORE_DISABLED === 'true',
 			host: BLOB_STORE_HOST,
-			container: BLOB_STORE_CONTAINER
+			container: BLOB_STORE_CONTAINER,
+			connectionString: BLOB_STORE_CONNECTION_STRING // used locally with blob emulator
 		},
 		cacheControl: {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
