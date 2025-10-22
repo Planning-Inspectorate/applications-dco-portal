@@ -21,10 +21,30 @@ datasource db {
 
 model Case {
   id         String     @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  reference  String
+  reference  String     @unique
+  email      String
   createdAt  DateTime   @default(now())
   modifiedAt DateTime   @updatedAt
   Documents  Document[]
+
+  applicationFormRelatedInformationStatusId String                 @default("not-started")
+  applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  plansAndDrawingsStatusId                  String                 @default("not-started")
+  plansAndDrawingsStatus                    DocumentCategoryStatus @relation(name: "PlanningAndDrawingsStatus", fields: [plansAndDrawingsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  draftDcoStatusId                          String                 @default("not-started")
+  draftDcoStatus                            DocumentCategoryStatus @relation(name: "DraftDcoStatus", fields: [draftDcoStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  compulsoryAcquisitionInformationStatusId  String                 @default("not-started")
+  compulsoryAcquisitionInformationStatus    DocumentCategoryStatus @relation(name: "CompulsoryAcquisitionStatus", fields: [compulsoryAcquisitionInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consultationReportStatusId                String                 @default("not-started")
+  consultationReportStatus                  DocumentCategoryStatus @relation(name: "ConsultationReportStatus", fields: [consultationReportStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  reportsAndStatementsStatusId              String                 @default("not-started")
+  reportsAndStatementsStatus                DocumentCategoryStatus @relation(name: "ReportsAndStatementsStatus", fields: [reportsAndStatementsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  environmentalStatementStatusId            String                 @default("not-started")
+  environmentalStatementStatus              DocumentCategoryStatus @relation(name: "EnvironmentalStatementStatus", fields: [environmentalStatementStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  additionalPrescribedInformationStatusId   String                 @default("not-started")
+  additionalPrescribedInformationStatus     DocumentCategoryStatus @relation(name: "AdditionalPrescribedInformationStatus", fields: [additionalPrescribedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  otherDocumentsStatusId                    String                 @default("not-started")
+  otherDocumentsStatus                      DocumentCategoryStatus @relation(name: "OtherDocumentsStatus", fields: [otherDocumentsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -69,8 +89,24 @@ model DocumentSubCategory {
 }
 
 model ApfpRegulation {
-  /// unique identifier for the regulation, e.g. "5-1", "5-2-a"
+  /// unique machine-readable name, not generated, e.g. "5-1"
   id          String     @id
   displayName String
   Document    Document[]
+}
+
+model DocumentCategoryStatus {
+  /// unique machine-readable name, not generated, e.g. "not-started"
+  id          String @id
+  displayName String
+
+  ApplicationFormCases                 Case[] @relation("ApplicationFormStatus")
+  PlanningAndDrawingCases              Case[] @relation("PlanningAndDrawingsStatus")
+  DraftDcoCases                        Case[] @relation("DraftDcoStatus")
+  CompulsoryAquisitionCases            Case[] @relation("CompulsoryAcquisitionStatus")
+  ConsultationReportCases              Case[] @relation("ConsultationReportStatus")
+  ReportsAndStatementsCases            Case[] @relation("ReportsAndStatementsStatus")
+  EnvironmentalStatementCases          Case[] @relation("EnvironmentalStatementStatus")
+  AdditionalPrescribedInformationCases Case[] @relation("AdditionalPrescribedInformationStatus")
+  OtherDocumentsCases                  Case[] @relation("OtherDocumentsStatus")
 }

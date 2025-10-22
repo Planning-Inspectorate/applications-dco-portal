@@ -1,9 +1,26 @@
 import type { PrismaClient } from '@pins/dco-portal-database/src/client';
 
-/**
- *
- * @type {Readonly<{CONSULTEES: string, INTERESTED_PARTIES: string}>}
- */
+export const DOCUMENT_CATEGORY_STATUS_ID = Object.freeze({
+	NOT_STARTED: 'not-started',
+	IN_PROGRESS: 'in-progress',
+	COMPLETED: 'completed'
+});
+
+export const DOCUMENT_CATEGORY_STATUS = [
+	{
+		id: DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED,
+		displayName: 'Not yet started'
+	},
+	{
+		id: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS,
+		displayName: 'In progress'
+	},
+	{
+		id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
+		displayName: 'Completed'
+	}
+];
+
 export const DOCUMENT_CATEGORY_ID = Object.freeze({
 	APPLICATION_FORM_RELATED_INFORMATION: 'application-form-related-information',
 	PLANS_AND_DRAWINGS: 'plans-and-drawings',
@@ -15,26 +32,6 @@ export const DOCUMENT_CATEGORY_ID = Object.freeze({
 	ADDITIONAL_PRESCRIBED_INFORMATION: 'additional-prescribed-information',
 	OTHER: 'other-documents'
 });
-export const CATEGORY_STATUS_ID = Object.freeze({
-	NOT_STARTED: 'not-started',
-	IN_PROGRESS: 'in-progress',
-	COMPLETED: 'completed'
-});
-
-export const CATEGORY_STATUS = [
-	{
-		id: CATEGORY_STATUS_ID.NOT_STARTED,
-		displayName: 'Not yet started'
-	},
-	{
-		id: CATEGORY_STATUS_ID.IN_PROGRESS,
-		displayName: 'In progress'
-	},
-	{
-		id: CATEGORY_STATUS_ID.COMPLETED,
-		displayName: 'Completed'
-	}
-];
 
 export const DOCUMENT_CATEGORY = [
 	{
@@ -448,6 +445,10 @@ async function upsertReferenceData<TDelegate extends { upsert: (args: any) => an
 }
 
 export async function seedStaticData(dbClient: PrismaClient) {
+	await Promise.all(
+		DOCUMENT_CATEGORY_STATUS.map((input) => upsertReferenceData({ delegate: dbClient.documentCategoryStatus, input }))
+	);
+
 	await Promise.all(
 		DOCUMENT_CATEGORY.map((input) => upsertReferenceData({ delegate: dbClient.documentCategory, input }))
 	);

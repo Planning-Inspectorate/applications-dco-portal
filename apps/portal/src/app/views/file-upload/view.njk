@@ -69,11 +69,13 @@
                                 items: [
                                     {
                                         value: "yes",
-                                        text: "Yes, I've completed this section"
+                                        text: "Yes, I've completed this section",
+                                        checked: isCompletedValue == 'yes'
                                     },
                                     {
                                         value: "no",
-                                        text: "No, I'll come back to it later"
+                                        text: "No, I'll come back to it later",
+                                        checked: isCompletedValue == 'no'
                                     }
                                 ],
                                 errorMessage: fieldError and {

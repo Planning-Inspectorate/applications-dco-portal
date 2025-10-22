@@ -25,8 +25,9 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				questionText: 'What is your email address?',
-				hintText: 'If we recognise this address, we will send you a code.'
+				caseReferenceQuestionText: 'What is your case reference?',
+				emailHintText: 'If we recognise this address, we will send you a code.',
+				emailQuestionText: 'What is your email address?'
 			});
 		});
 		it('should render enter email address page with errors if in view data', async () => {
@@ -42,15 +43,16 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				questionText: 'What is your email address?',
-				hintText: 'If we recognise this address, we will send you a code.',
+				caseReferenceQuestionText: 'What is your case reference?',
+				emailHintText: 'If we recognise this address, we will send you a code.',
+				emailQuestionText: 'What is your email address?',
 				errors: { emailAddress: { msg: 'Error message' } },
 				errorSummary: [{ text: 'Error message', href: '#emailAddress' }]
 			});
 		});
 	});
 	describe('buildSubmitEmailController', () => {
-		it('should dispatch otp code email and redirect to enter code page if valid email address entered', async () => {
+		it('should dispatch otp code email and redirect to enter code page if valid email address and case reference entered', async () => {
 			const mockDb = {
 				oneTimePassword: {
 					deleteMany: mock.fn(),
@@ -64,7 +66,8 @@ describe('login controllers', () => {
 			const mockReq = {
 				baseUrl: '/login',
 				body: {
-					emailAddress: 'valid@email.com'
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
 				},
 				session: {}
 			};
@@ -109,7 +112,8 @@ describe('login controllers', () => {
 			const mockReq = {
 				baseUrl: '/login',
 				body: {
-					emailAddress: 'valid@email.com'
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
 				},
 				session: {}
 			};
@@ -125,8 +129,9 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				questionText: 'What is your email address?',
-				hintText: 'If we recognise this address, we will send you a code.',
+				caseReferenceQuestionText: 'What is your case reference?',
+				emailHintText: 'If we recognise this address, we will send you a code.',
+				emailQuestionText: 'What is your email address?',
 				errors: { emailAddress: { msg: 'Code already requested' } },
 				errorSummary: [{ text: 'Code already requested', href: '#emailAddress' }]
 			});
@@ -150,8 +155,9 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				questionText: 'What is your email address?',
-				hintText: 'If we recognise this address, we will send you a code.',
+				caseReferenceQuestionText: 'What is your case reference?',
+				emailHintText: 'If we recognise this address, we will send you a code.',
+				emailQuestionText: 'What is your email address?',
 				errors: { emailAddress: { msg: 'Invalid email address' } },
 				errorSummary: [{ text: 'Invalid email address', href: '#emailAddress' }]
 			});
