@@ -4,6 +4,11 @@ auth_config = {
   application_id = "d597841a-bf3a-491f-908f-d581d1999b17" # App Registration for DCO deployment Prod
 }
 
+back_office_config = {
+  resource_group_name  = "pins-rg-back-office-prod-ukw-001"
+  storage_account_name = "pinsstdocsboprodukw001"
+}
+
 environment = "prod"
 
 front_door_config = {

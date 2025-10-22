@@ -38,6 +38,11 @@ auth_config = {
   application_id = "b40aea38-d056-41d4-973e-8e8c1807ec76" # App Registration for DCO deployment Test
 }
 
+back_office_config = {
+  resource_group_name  = "pins-rg-back-office-test-ukw-001"
+  storage_account_name = "pinsstdocsbotestukw001"
+}
+
 common_config = {
   resource_group_name = "pins-rg-common-test-ukw-001"
   action_group_names = {
