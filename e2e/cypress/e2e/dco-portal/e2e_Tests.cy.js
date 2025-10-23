@@ -1,39 +1,28 @@
 /// <reference types="cypress" />
-import common from '../../page_object/PageLocators/Common.json';
 
 // Initialize but comment out for now if not using
 // const homePageActions = new HomePageActions();
 
 describe('DCO Portal Home Page Test', () => {
-	it('Verify that user enters valid email', () => {
+	it('Answering "yes" that you have an application number takes you to the sign in page', () => {
 		//homePageActions.navigateToPage();
 		cy.visit('/');
-		cy.get('label').contains('What is your email address?');
-		cy.get('h1').should('be.visible');
-		cy.get(common.common.emailAddress).type(common.common.email);
-		cy.get(common.common.continueButton).click();
-		cy.get('h1').should('be.visible').contains('Enter the code we sent to your email address');
+		cy.get('h1').should('be.visible').contains('Do you have an application reference number?');
+		cy.get('input[name="hasReferenceNumber"][value="yes"]').check();
+		cy.get("[data-cy='button-save-and-continue']").click();
+		cy.get('h1').should('be.visible').contains('Sign-in');
+		cy.get('label').should('be.visible').contains('Email address');
+		cy.get('label').should('be.visible').contains('Application reference number');
 	});
 
-	it('Verify that user enters invalid email', () => {
+	it('Answering "no" that you have an application number takes you to an access denied page', () => {
 		//homePageActions.navigateToPage();
 		cy.visit('/');
-		cy.get('h1').should('be.visible');
-		cy.get(common.common.emailAddress).type(common.common.wrongEmail);
-		cy.get(common.common.continueButton).click();
-		cy.get('.govuk-error-summary').should('be.visible');
-		cy.get('h2').should('be.visible').contains('There is a problem');
-		cy.get('a').should('be.visible').contains('Invalid email address');
+		cy.get('h1').should('be.visible').contains('Do you have an application reference number?');
+		cy.get('input[name="hasReferenceNumber"][value="no"]').check();
+		cy.get("[data-cy='button-save-and-continue']").click();
+		cy.get('h2').should('be.visible').contains('You do not have access to this service');
+		cy.get('.govuk-link').should('be.visible').contains('NIEnquiries@planninginspectorate.gov.uk'); //support email address
+		cy.get('.govuk-link').should('be.visible').contains('0303 444 5000'); //support telephone number
 	});
-
-	/*
-	it('Verify that user enters email unlisted email', () => {
-		//homePageActions.navigateToPage();
-		cy.visit('/');
-		cy.get('h1').should('be.visible');
-		cy.get(common.common.emailAddress).type(common.common.emailAddressError);
-		cy.get(common.common.continueButton).click();
-		cy.get('h1').should('be.visible').contains('Sorry, there was an error');
-	});
-	*/
 });
