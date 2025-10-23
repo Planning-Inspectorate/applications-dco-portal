@@ -24,7 +24,7 @@ services:
       - '10001:10001' # Queue
       - '10002:10002' # Table
     volumes:
-      - ./data:/data
+      - ./tmp/azurite:/data
     command: >
       azurite
       --silent
