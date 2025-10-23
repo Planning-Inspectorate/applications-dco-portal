@@ -3,6 +3,7 @@
 	"exclude": ["node_modules", "packages/database/src/client/**"],
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
+		"types": ["cypress", "node"],
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",

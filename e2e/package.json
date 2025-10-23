@@ -21,7 +21,6 @@
   },
   "devDependencies": {
     "@cypress/grep": "^4.1.0",
-    "cypress": "^15.5.0",
     "dotenv": "^17.2.3",
     "eslint-plugin-cypress": "^5.2.0",
     "fs-extra": "^11.3.2",
