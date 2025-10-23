@@ -31,9 +31,8 @@ export class BlobStorageClient {
 		}
 	}
 
-	async #getBlockBlobClient(blobPath: string): Promise<BlockBlobClient> {
+	#getBlockBlobClient(blobPath: string): BlockBlobClient {
 		const containerClient = this.blobServiceClient.getContainerClient(this.container);
-		await containerClient.createIfNotExists();
 		return containerClient.getBlockBlobClient(blobPath);
 	}
 
@@ -43,7 +42,9 @@ export class BlobStorageClient {
 
 	async upload(buffer: Buffer, mimeType: string, path: string): Promise<BlobUploadCommonResponse> {
 		try {
-			const blockBlobClient = await this.#getBlockBlobClient(path);
+			const containerClient = this.blobServiceClient.getContainerClient(this.container);
+			await containerClient.createIfNotExists();
+			const blockBlobClient = containerClient.getBlockBlobClient(path);
 			return await blockBlobClient.uploadData(buffer, this.#getFileUploadOptions(mimeType));
 		} catch (e) {
 			this.logger.error('Error uploading file to Blob Storage');
@@ -59,7 +60,9 @@ export class BlobStorageClient {
 		maxConcurrency?: number
 	) {
 		try {
-			const blockBlobClient = await this.#getBlockBlobClient(path);
+			const containerClient = this.blobServiceClient.getContainerClient(this.container);
+			await containerClient.createIfNotExists();
+			const blockBlobClient = containerClient.getBlockBlobClient(path);
 			await blockBlobClient.uploadStream(fileStream, bufferSize, maxConcurrency, this.#getFileUploadOptions(mimeType));
 		} catch (e) {
 			this.logger.error('Error uploading stream to Blob Storage');
@@ -68,17 +71,20 @@ export class BlobStorageClient {
 	}
 
 	async getBlobUrl(path: string) {
-		const blobClient = await this.#getBlockBlobClient(path);
-		return blobClient.url;
+		const blockBlobClient = this.#getBlockBlobClient(path);
+		await this.checkBlobExists(blockBlobClient, path);
+		return blockBlobClient.url;
 	}
 
 	async downloadStream(path: string): Promise<BlobDownloadResponseParsed> {
-		const blockBlobClient = await this.#getBlockBlobClient(path);
+		const blockBlobClient = this.#getBlockBlobClient(path);
+		await this.checkBlobExists(blockBlobClient, path);
 		return blockBlobClient.download();
 	}
 
 	async deleteBlobIfExists(path: string): Promise<BlobDeleteIfExistsResponse> {
-		const blockBlobClient = await this.#getBlockBlobClient(path);
+		const blockBlobClient = this.#getBlockBlobClient(path);
+		await this.checkBlobExists(blockBlobClient, path);
 		return blockBlobClient.deleteIfExists();
 	}
 
@@ -93,5 +99,12 @@ export class BlobStorageClient {
 			createdAt: blob.properties.createdOn,
 			lastModified: blob.properties.lastModified
 		}));
+	}
+
+	async checkBlobExists(blockBlobClient: BlockBlobClient, path: string) {
+		if (!(await blockBlobClient.exists())) {
+			this.logger.error(`blob ${path} does not exist`);
+			throw new Error('blob does not exist');
+		}
 	}
 }

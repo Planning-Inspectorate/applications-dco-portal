@@ -63,12 +63,29 @@ export function loadConfig(): Config {
 		}
 	}
 
+	const blobStoreDisabled = BLOB_STORE_DISABLED === 'true';
+	if (!blobStoreDisabled) {
+		const props = {
+			BLOB_STORE_HOST,
+			BLOB_STORE_CONTAINER
+		};
+		for (const [k, v] of Object.entries(props)) {
+			if (v === undefined || v === '') {
+				throw new Error(k + ' must be a non-empty string');
+			}
+		}
+
+		if (NODE_ENV === 'production' && BLOB_STORE_CONNECTION_STRING) {
+			throw new Error(BLOB_STORE_CONNECTION_STRING + ' must only be used for local development');
+		}
+	}
+
 	config = {
 		blobStore: {
 			disabled: BLOB_STORE_DISABLED === 'true',
 			host: BLOB_STORE_HOST,
 			container: BLOB_STORE_CONTAINER,
-			connectionString: BLOB_STORE_CONNECTION_STRING // used locally with blob emulator
+			connectionString: BLOB_STORE_CONNECTION_STRING
 		},
 		cacheControl: {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
