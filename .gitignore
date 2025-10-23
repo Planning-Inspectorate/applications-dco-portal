@@ -97,6 +97,3 @@ workspace.json
 
 # generated Prisma client
 packages/database/src/client
-
-# data
-/data
