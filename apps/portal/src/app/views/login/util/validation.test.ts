@@ -2,7 +2,13 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord, sentInLastTenSeconds } from './validation.ts';
+import {
+	isValidCaseReference,
+	isValidEmailAddress,
+	isValidOtpCode,
+	isValidOtpRecord,
+	sentInLastTenSeconds
+} from './validation.ts';
 
 describe('login validation', () => {
 	describe('isValidEmailAddress', () => {
@@ -51,6 +57,24 @@ describe('login validation', () => {
 			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-30T00:00:51.000Z') }), true);
 			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-30T00:00:00.000Z') }), false);
 			assert.strictEqual(sentInLastTenSeconds({ createdAt: new Date('2025-01-29T00:01:00.000Z') }), false);
+		});
+	});
+	describe('isValidCaseReference', () => {
+		it('should validate case reference provided', async () => {
+			assert.strictEqual(isValidCaseReference('en123456'), true);
+			assert.strictEqual(isValidCaseReference('EN123456'), true);
+			assert.strictEqual(isValidCaseReference('En123456'), true);
+			assert.strictEqual(isValidCaseReference('eN123456'), true);
+			assert.strictEqual(isValidCaseReference('E123456'), false);
+			assert.strictEqual(isValidCaseReference('E123456'), false);
+			assert.strictEqual(isValidCaseReference('E123456'), false);
+			assert.strictEqual(isValidCaseReference('E123456'), false);
+			assert.strictEqual(isValidCaseReference('EN12345'), false);
+			assert.strictEqual(isValidCaseReference('EN12345.'), false);
+			assert.strictEqual(isValidCaseReference('EN12345.'), false);
+			assert.strictEqual(isValidCaseReference('EN1234567'), false);
+			assert.strictEqual(isValidCaseReference('EN12A456'), false);
+			assert.strictEqual(isValidCaseReference('123456EN'), false);
 		});
 	});
 });

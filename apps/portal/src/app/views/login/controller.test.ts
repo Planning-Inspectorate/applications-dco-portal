@@ -55,7 +55,7 @@ describe('login controllers', () => {
 		it('should dispatch otp code email and redirect to enter code page if valid email address and case reference entered', async () => {
 			const mockDb = {
 				oneTimePassword: {
-					deleteMany: mock.fn(),
+					delete: mock.fn(),
 					create: mock.fn(),
 					findUnique: mock.fn()
 				}
@@ -83,7 +83,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
 
-			assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 1);
@@ -99,7 +99,7 @@ describe('login controllers', () => {
 
 			const mockDb = {
 				oneTimePassword: {
-					deleteMany: mock.fn(),
+					delete: mock.fn(),
 					create: mock.fn(),
 					findUnique: mock.fn(() => ({
 						createdAt: new Date('2025-01-30T00:00:00.000Z')
@@ -160,6 +160,33 @@ describe('login controllers', () => {
 				emailQuestionText: 'What is your email address?',
 				errors: { emailAddress: { msg: 'Invalid email address' } },
 				errorSummary: [{ text: 'Invalid email address', href: '#emailAddress' }]
+			});
+
+			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+		});
+		it('should redirect back to email page and render errors if an invalid case reference is provided', async () => {
+			const mockNotifyClient = {
+				sendOneTimePasswordNotification: mock.fn()
+			};
+			const mockReq = {
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN1234567'
+				}
+			};
+			const mockRes = { render: mock.fn() };
+
+			const controller = buildSubmitEmailController({ logger: mockLogger(), notifyClient: mockNotifyClient });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				caseReferenceQuestionText: 'What is your case reference?',
+				emailHintText: 'If we recognise this address, we will send you a code.',
+				emailQuestionText: 'What is your email address?',
+				errors: { caseReference: { msg: 'You must provide a valid case reference' } },
+				errorSummary: [{ text: 'You must provide a valid case reference', href: '#caseReference' }]
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
@@ -226,6 +253,7 @@ describe('login controllers', () => {
 				},
 				session: {
 					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
 					regenerate: mock.fn((callback) => {
 						callback(null);
 					})
@@ -262,7 +290,8 @@ describe('login controllers', () => {
 					otpCode: 'EDCBA'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { render: mock.fn() };
@@ -278,6 +307,35 @@ describe('login controllers', () => {
 				errors: { otpCode: { msg: 'Provided OTP does not match stored OTP' } },
 				errorSummary: [{ text: 'Provided OTP does not match stored OTP', href: '#otpCode' }]
 			});
+		});
+		it('should redirect back to enter email page if email address and case reference not in session', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:00.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockHashedOtpCode = await mockOtpCode('ABCDE');
+			const mockDb = {
+				oneTimePassword: {
+					findUnique: mock.fn(() => ({
+						hashedOtpCode: mockHashedOtpCode,
+						expiresAt: new Date('2025-01-30T00:02:00.000Z')
+					})),
+					update: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'EDCBA'
+				},
+				session: {}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/email-address');
 		});
 		it('should redirect to request new code number of attempts exceeds 4', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
@@ -300,7 +358,8 @@ describe('login controllers', () => {
 					otpCode: 'ABCDE'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -332,7 +391,8 @@ describe('login controllers', () => {
 					otpCode: 'ABCDE'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -355,7 +415,8 @@ describe('login controllers', () => {
 					otpCode: 'ABCDE'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -386,7 +447,8 @@ describe('login controllers', () => {
 					otpCode: 'ABCDE'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -410,7 +472,8 @@ describe('login controllers', () => {
 					otpCode: 'ABC12'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { render: mock.fn() };
@@ -439,7 +502,8 @@ describe('login controllers', () => {
 					otpCode: ''
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { render: mock.fn() };
@@ -468,7 +532,8 @@ describe('login controllers', () => {
 					otpCode: 'ABCDEF'
 				},
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { render: mock.fn() };
@@ -508,7 +573,7 @@ describe('login controllers', () => {
 		it('should redirect back to enter code page', async () => {
 			const mockDb = {
 				oneTimePassword: {
-					deleteMany: mock.fn(),
+					delete: mock.fn(),
 					create: mock.fn()
 				}
 			};
@@ -518,7 +583,8 @@ describe('login controllers', () => {
 			const mockReq = {
 				baseUrl: '/login',
 				session: {
-					emailAddress: 'test@email.com'
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -533,12 +599,43 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
 
-			assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 1);
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.calls[0].arguments[0], 'test@email.com');
 			assert.ok(mockNotifyClient.sendOneTimePasswordNotification.mock.calls[0].arguments[1].oneTimePassword);
+		});
+		it('should redirect back to enter email page if email address and case reference not in session', async () => {
+			const mockDb = {
+				oneTimePassword: {
+					delete: mock.fn(),
+					create: mock.fn()
+				}
+			};
+			const mockNotifyClient = {
+				sendOneTimePasswordNotification: mock.fn()
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				session: {}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitNewCodeRequestController({
+				db: mockDb,
+				notifyClient: mockNotifyClient,
+				logger: mockLogger()
+			});
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/email-address');
+
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 0);
+			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 0);
+
+			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
 		});
 	});
 	describe('buildNoAccessPage', () => {

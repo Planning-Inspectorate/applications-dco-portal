@@ -49,12 +49,14 @@ model Case {
 
 model OneTimePassword {
   id            String   @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  email         String   @unique
+  email         String
+  caseReference String
   hashedOtpCode String
   createdAt     DateTime @default(now())
   expiresAt     DateTime
   attempts      Int      @default(0)
 
+  @@unique([email, caseReference])
   @@index([email])
 }
 
