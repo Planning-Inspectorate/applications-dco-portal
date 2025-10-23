@@ -121,9 +121,6 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 			req.session.isAuthenticated = true;
 			req.session.emailAddress = emailAddress;
 			req.session.caseReference = caseReference;
-			// TODO: once the user logs into the service
-			//  - check if a case in DCO portal DB exists
-			//  - if not create a blank case with the email and case reference
 
 			logger.info('User authenticated, redirecting to the landing page');
 
