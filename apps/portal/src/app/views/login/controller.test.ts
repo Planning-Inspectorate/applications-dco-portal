@@ -55,7 +55,7 @@ describe('login controllers', () => {
 		it('should dispatch otp code email and redirect to enter code page if valid email address and case reference entered', async () => {
 			const mockDb = {
 				oneTimePassword: {
-					delete: mock.fn(),
+					deleteMany: mock.fn(),
 					create: mock.fn(),
 					findUnique: mock.fn()
 				}
@@ -83,7 +83,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
 
-			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+			assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 1);
@@ -573,7 +573,7 @@ describe('login controllers', () => {
 		it('should redirect back to enter code page', async () => {
 			const mockDb = {
 				oneTimePassword: {
-					delete: mock.fn(),
+					deleteMany: mock.fn(),
 					create: mock.fn()
 				}
 			};
@@ -599,7 +599,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
 
-			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+			assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 1);

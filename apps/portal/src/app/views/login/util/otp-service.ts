@@ -17,12 +17,10 @@ export function generateOtp(): string {
 
 export async function saveOtp(db: PrismaClient, email: string, caseReference: string, otp: string): Promise<void> {
 	const hashedOtp = await bcrypt.hash(otp, SALT_ROUNDS);
-	await db.oneTimePassword.delete({
+	await db.oneTimePassword.deleteMany({
 		where: {
-			email_caseReference: {
-				email,
-				caseReference
-			}
+			email,
+			caseReference
 		}
 	});
 	await db.oneTimePassword.create({
