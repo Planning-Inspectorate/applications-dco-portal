@@ -2,7 +2,13 @@
 import bcrypt from 'bcrypt';
 // @ts-expect-error - due to not having @types
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-import { isValidEmailAddress, isValidOtpCode, isValidOtpRecord, sentInLastTenSeconds } from './util/validation.ts';
+import {
+	isValidCaseReference,
+	isValidEmailAddress,
+	isValidOtpCode,
+	isValidOtpRecord,
+	sentInLastTenSeconds
+} from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
@@ -41,17 +47,17 @@ export function buildSubmitEmailController({ db, notifyClient, logger }: PortalS
 			return handleError('emailAddress', 'Invalid email address');
 		}
 
-		if (!caseReference || caseReference.length > 8) {
+		if (!isValidCaseReference(caseReference)) {
 			return handleError('caseReference', 'You must provide a valid case reference');
 		}
 
-		const otpRecord = await getOtpRecord(db, emailAddress);
+		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);
 		if (otpRecord && sentInLastTenSeconds(otpRecord)) {
 			return handleError('emailAddress', 'Code already requested');
 		}
 
 		const oneTimePassword = generateOtp();
-		await saveOtp(db, emailAddress, oneTimePassword);
+		await saveOtp(db, emailAddress, caseReference, oneTimePassword);
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 
 		req.session.emailAddress = emailAddress;
@@ -78,6 +84,12 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 	return async (req, res) => {
 		const emailAddress = req.session.emailAddress;
 		const caseReference = req.session.caseReference;
+
+		if (!emailAddress || !caseReference) {
+			logger.error('email address and case reference not present');
+			return res.redirect(`${req.baseUrl}/email-address`);
+		}
+
 		const { otpCode } = req.body;
 
 		const handleOtpError = async (message: string) => {
@@ -95,7 +107,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 			return enterOtpPage(req, res);
 		};
 
-		const otpRecord = await getOtpRecord(db, emailAddress);
+		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);
 
 		if (!isValidOtpCode(otpCode)) {
 			return handleOtpError('Provided OTP failed validation');
@@ -107,11 +119,11 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		const isMatch = await bcrypt.compare(otpCode.trim().toUpperCase(), otpRecord?.hashedOtpCode);
 		if (!isMatch) {
-			await incrementOtpAttempts(db, emailAddress);
+			await incrementOtpAttempts(db, emailAddress, caseReference);
 			return handleOtpError('Provided OTP does not match stored OTP');
 		}
 
-		await deleteOtp(db, emailAddress);
+		await deleteOtp(db, emailAddress, caseReference);
 
 		req.session.regenerate((error) => {
 			if (error) {
@@ -141,10 +153,11 @@ export function buildRequestNewCodePage(): AsyncRequestHandler {
 export function buildSubmitNewCodeRequestController({ db, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const emailAddress = req.session.emailAddress;
-		const oneTimePassword = generateOtp();
+		const caseReference = req.session.caseReference;
 
-		if (emailAddress) {
-			await saveOtp(db, emailAddress, oneTimePassword);
+		if (emailAddress && caseReference) {
+			const oneTimePassword = generateOtp();
+			await saveOtp(db, emailAddress, caseReference, oneTimePassword);
 			await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 			return res.redirect(`${req.baseUrl}/enter-code`);
 		}

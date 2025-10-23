@@ -15,14 +15,20 @@ export function generateOtp(): string {
 	return Array.from(bytes, (b) => ALPHABET[b % ALPHABET.length]).join('');
 }
 
-export async function saveOtp(db: PrismaClient, email: string, otp: string): Promise<void> {
+export async function saveOtp(db: PrismaClient, email: string, caseReference: string, otp: string): Promise<void> {
 	const hashedOtp = await bcrypt.hash(otp, SALT_ROUNDS);
-	await db.oneTimePassword.deleteMany({
-		where: { email }
+	await db.oneTimePassword.delete({
+		where: {
+			email_caseReference: {
+				email,
+				caseReference
+			}
+		}
 	});
 	await db.oneTimePassword.create({
 		data: {
 			email,
+			caseReference,
 			hashedOtpCode: hashedOtp,
 			expiresAt: addMinutes(new Date(), TTL),
 			attempts: 0
@@ -30,21 +36,36 @@ export async function saveOtp(db: PrismaClient, email: string, otp: string): Pro
 	});
 }
 
-export async function getOtpRecord(db: PrismaClient, email: string | undefined): Promise<OtpRecord | null> {
+export async function getOtpRecord(db: PrismaClient, email: string, caseReference: string): Promise<OtpRecord | null> {
 	return db.oneTimePassword.findUnique({
-		where: { email }
+		where: {
+			email_caseReference: {
+				email,
+				caseReference
+			}
+		}
 	});
 }
 
-export async function deleteOtp(db: PrismaClient, email: string | undefined): Promise<void> {
+export async function deleteOtp(db: PrismaClient, email: string, caseReference: string): Promise<void> {
 	await db.oneTimePassword.delete({
-		where: { email }
+		where: {
+			email_caseReference: {
+				email,
+				caseReference
+			}
+		}
 	});
 }
 
-export async function incrementOtpAttempts(db: PrismaClient, email: string | undefined): Promise<void> {
+export async function incrementOtpAttempts(db: PrismaClient, email: string, caseReference: string): Promise<void> {
 	await db.oneTimePassword.update({
-		where: { email },
+		where: {
+			email_caseReference: {
+				email,
+				caseReference
+			}
+		},
 		data: { attempts: { increment: 1 } }
 	});
 }

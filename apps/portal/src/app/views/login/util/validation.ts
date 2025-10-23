@@ -23,3 +23,7 @@ export function sentInLastTenSeconds(otpRecord: OtpRecord) {
 	const diff = differenceInSeconds(new Date(), otpRecord.createdAt);
 	return diff >= 0 && diff <= 10;
 }
+
+export function isValidCaseReference(caseReference: string): boolean {
+	return Boolean(caseReference) && /^[A-Za-z]{2}\d{6}$/.test(caseReference);
+}

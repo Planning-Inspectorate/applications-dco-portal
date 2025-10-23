@@ -1,11 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
-import { getDocumentCategoryDisplayName } from './util.ts';
-import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { getDocumentCategoryDisplayName, statusIdRadioButtonValue } from './util.ts';
+import { DOCUMENT_CATEGORY_ID, DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('file-upload util', () => {
 	describe('getDocumentCategoryDisplayName', () => {
-		it('should error if used with the wrong router structure', () => {
+		it('should return document category display name', () => {
 			assert.strictEqual(
 				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION),
 				'Application form related information'
@@ -33,6 +33,13 @@ describe('file-upload util', () => {
 				'Additional prescribed information'
 			);
 			assert.strictEqual(getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.OTHER), 'Other documents');
+		});
+	});
+	describe('statusIdRadioButtonValue', () => {
+		it('should convert status id to radio button value', () => {
+			assert.strictEqual(statusIdRadioButtonValue(DOCUMENT_CATEGORY_STATUS_ID.COMPLETED), 'yes');
+			assert.strictEqual(statusIdRadioButtonValue(DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS), 'no');
+			assert.strictEqual(statusIdRadioButtonValue(DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED), '');
 		});
 	});
 });

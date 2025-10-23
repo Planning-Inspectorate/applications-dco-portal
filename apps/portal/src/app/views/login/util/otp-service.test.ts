@@ -15,13 +15,13 @@ describe('OTP Service', () => {
 		const mockDb = {
 			oneTimePassword: {
 				create: mock.fn(),
-				deleteMany: mock.fn()
+				delete: mock.fn()
 			}
 		};
 
-		await saveOtp(mockDb, 'test@example.com', 'ABCDE');
+		await saveOtp(mockDb, 'test@example.com', 'EN123456', 'ABCDE');
 
-		assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
+		assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 		assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 	});
 
@@ -71,11 +71,16 @@ describe('OTP Service', () => {
 			}
 		};
 
-		await incrementOtpAttempts(mockDb, 'test@email.com');
+		await incrementOtpAttempts(mockDb, 'test@email.com', 'EN123456');
 
 		assert.strictEqual(mockDb.oneTimePassword.update.mock.callCount(), 1);
 		assert.deepStrictEqual(mockDb.oneTimePassword.update.mock.calls[0].arguments[0], {
-			where: { email: 'test@email.com' },
+			where: {
+				email_caseReference: {
+					caseReference: 'EN123456',
+					email: 'test@email.com'
+				}
+			},
 			data: { attempts: { increment: 1 } }
 		});
 	});
