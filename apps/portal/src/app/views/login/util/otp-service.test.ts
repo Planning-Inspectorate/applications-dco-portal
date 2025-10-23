@@ -15,13 +15,13 @@ describe('OTP Service', () => {
 		const mockDb = {
 			oneTimePassword: {
 				create: mock.fn(),
-				delete: mock.fn()
+				deleteMany: mock.fn()
 			}
 		};
 
 		await saveOtp(mockDb, 'test@example.com', 'EN123456', 'ABCDE');
 
-		assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+		assert.strictEqual(mockDb.oneTimePassword.deleteMany.mock.callCount(), 1);
 		assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
 	});
 
