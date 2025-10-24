@@ -1,0 +1,362 @@
+// @ts-nocheck
+
+import { describe, it } from 'node:test';
+import assert from 'node:assert';
+import { isDocOrXlsEncrypted, validateUploadedFile } from './document-validation-util.ts';
+import { mockLogger } from '../../../testing/mock-logger.ts';
+import * as CFB from 'cfb';
+import { createMinimalZipBuffer } from './zip-file-util.ts';
+import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from './constants.ts';
+
+describe('./lib/forms/custom-components/file-upload/document-validation-util.js', () => {
+	describe('validateUploadedFile', () => {
+		it('should not return any validation errors when valid file passed', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[]
+			);
+		});
+		it('should return file size validation error when file is over 100MB', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 100 * 1024 * 1024 + 1
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: The attachment must be smaller than 20MB'
+					}
+				]
+			);
+		});
+		it('should return mime type validation error when file with invalid mime type passed', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'text/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: The attachment must be PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XLSX'
+					}
+				]
+			);
+		});
+		it('should return validation error when zip file passed', async () => {
+			const logger = mockLogger();
+			const file = {
+				originalname: 'test4.zip',
+				mimetype: 'application/zip',
+				buffer: createMinimalZipBuffer(),
+				size: 100
+			};
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.zip: The attachment must not be a zip file'
+					}
+				]
+			);
+		});
+		it('should return validation errors when file type cannot be determined from signature', async () => {
+			const fakePdfContent = 'not a real file';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: Could not determine file type from signature'
+					}
+				]
+			);
+		});
+		it('should return a validation error when there is a file signature mismatch', async () => {
+			const fakeBmpHeader = 'BM\x00\x00\x00\x00';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakeBmpHeader, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: File signature mismatch: declared as .pdf (application/pdf) but detected as .bmp (image/bmp)'
+					}
+				]
+			);
+		});
+		it('should return only show a file signature mismatch validation if the declared mimetype is accepted', async () => {
+			const fakeMp3Content = 'ID3\x03\x00\x00\x00\x00\x00\x21';
+			const file = {
+				originalname: 'test4.bmp',
+				mimetype: 'image/bmp',
+				buffer: Buffer.from(fakeMp3Content, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.bmp: The attachment must be PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XLSX'
+					}
+				]
+			);
+		});
+		it('should return a validation error when pdf file is password protected', async () => {
+			const fakeEncryptedPdf = `%PDF-1.4
+					1 0 obj
+					<< /Type /Catalog /Pages 2 0 R >>
+					endobj
+					2 0 obj
+					<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+					endobj
+					3 0 obj
+					<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>
+					endobj
+					4 0 obj
+					<< /Filter /Standard /V 1 /R 2 /O (...) /U (...) /P -4 >>
+					endobj
+					trailer
+					<< /Root 1 0 R /Encrypt 4 0 R >>
+					%%EOF`;
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakeEncryptedPdf, 'utf-8'),
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: File must not be password protected'
+					}
+				]
+			);
+		});
+		it('should return a validation error when doc/xls file is password protected', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			CFB.utils.cfb_add(cfbContainer, 'EncryptedStream', Buffer.from('fake encrypted data'));
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			await assertFileIsRejectedAsEncrypted(buffer);
+		});
+		it('should detect encrypted Word document via fEncrypted flag', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const content = Buffer.alloc(0x0c, 0); // Create a buffer with 12 bytes
+			content[0x0b] = 0x01;
+			CFB.utils.cfb_add(cfbContainer, 'WordDocument', content);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			await assertFileIsRejectedAsEncrypted(buffer);
+		});
+		it('should detect encrypted Excel file via FILEPASS record', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const content = Buffer.alloc(8);
+			content.writeUInt16LE(0x002f, 0);
+			content.writeUInt16LE(0x0000, 2);
+			CFB.utils.cfb_add(cfbContainer, 'Workbook', content);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			await assertFileIsRejectedAsEncrypted(buffer);
+		});
+		it('should detect encrypted file via presence of encrypted streams', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			CFB.utils.cfb_add(cfbContainer, 'EncryptedStream', Buffer.from('fake data'));
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			await assertFileIsRejectedAsEncrypted(buffer);
+		});
+		it('should not return any errors for valid office document', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const wordContent = Buffer.alloc(0x0c, 0);
+			wordContent[0x0b] = 0x00;
+			CFB.utils.cfb_add(cfbContainer, 'WordDocument', wordContent);
+			const workbookContent = Buffer.alloc(8);
+			workbookContent.writeUInt16LE(0x0010, 0);
+			workbookContent.writeUInt16LE(0x0000, 2);
+			CFB.utils.cfb_add(cfbContainer, 'Workbook', workbookContent);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			const file = {
+				originalname: 'test4.doc',
+				mimetype: 'application/pdf',
+				buffer: buffer,
+				size: 227787
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[]
+			);
+		});
+		it('should return validation error when file size is 0', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 0
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: The attachment is empty'
+					}
+				]
+			);
+		});
+		it('should return validation error when file size is a negative number', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: -1000
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: The attachment is empty'
+					}
+				]
+			);
+		});
+		it('should return validation error when file size is not a numeric value', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 'test'
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.pdf: The attachment is empty'
+					}
+				]
+			);
+		});
+	});
+	describe('isDocOrXlsEncrypted', () => {
+		it('should return true for encrypted doc file', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			CFB.utils.cfb_add(cfbContainer, 'EncryptedStream', Buffer.from('fake encrypted data'));
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			assert.strictEqual(await isDocOrXlsEncrypted(buffer, mockLogger()), true);
+		});
+		it('should return false for unencrypted doc file', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const content = Buffer.alloc(0x0c, 0);
+			content[0x0b] = 0x00;
+			CFB.utils.cfb_add(cfbContainer, 'WordDocument', content);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			assert.strictEqual(await isDocOrXlsEncrypted(buffer, mockLogger()), false);
+		});
+		it('should return true for encrypted xls file', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const content = Buffer.alloc(8);
+			content.writeUInt16LE(0x002f, 0);
+			content.writeUInt16LE(0x0000, 2);
+			CFB.utils.cfb_add(cfbContainer, 'Workbook', content);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			assert.strictEqual(await isDocOrXlsEncrypted(buffer, mockLogger()), true);
+		});
+		it('should return false for unencrypted xls file', async () => {
+			const cfbContainer = CFB.utils.cfb_new();
+			const content = Buffer.alloc(8);
+			content.writeUInt16LE(0x0010, 0);
+			content.writeUInt16LE(0x0000, 2);
+			CFB.utils.cfb_add(cfbContainer, 'Workbook', content);
+			const buffer = CFB.write(cfbContainer, { type: 'buffer' });
+
+			assert.strictEqual(await isDocOrXlsEncrypted(buffer, mockLogger()), false);
+		});
+		it('should return true when isDocOrXlsEncrypted throws an error', async () => {
+			const invalidBuffer = Buffer.from('not a valid CFB file');
+			assert.strictEqual(isDocOrXlsEncrypted(invalidBuffer, mockLogger()), true);
+		});
+	});
+});
+
+async function assertFileIsRejectedAsEncrypted(buffer) {
+	const file = {
+		originalname: 'test4.doc',
+		mimetype: 'application/msword',
+		buffer: buffer,
+		size: 227787
+	};
+	const logger = mockLogger();
+
+	assert.deepStrictEqual(
+		await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+		[
+			{
+				href: '#upload-form',
+				text: 'test4.doc: File must not be password protected'
+			}
+		]
+	);
+}

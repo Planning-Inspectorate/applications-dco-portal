@@ -6,21 +6,16 @@ import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questi
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+// @ts-expect-error - due to not having @types
+import DocumentUploadValidator from '@planning-inspectorate/dynamic-forms/src/validator/document-upload-validator.js';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { APFP_REGULATION, DOCUMENT_SUB_CATEGORY } from '@pins/dco-portal-database/src/seed/data-static.ts';
-
-export const ALLOWED_EXTENSIONS = ['pdf', 'png', 'jpg', 'jpeg', 'tif', 'tiff', 'doc', 'docx', 'xls', 'xlsx'];
-export const ALLOWED_MIME_TYPES = [
-	'application/pdf',
-	'image/png',
-	'image/jpeg',
-	'image/tiff',
-	'application/msword',
-	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-	'application/vnd.ms-excel',
-	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-];
-export const MAX_FILE_SIZE = 20 * 1024 * 1024;
+import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import {
+	ALLOWED_EXTENSIONS,
+	ALLOWED_MIME_TYPES,
+	MAX_FILE_SIZE
+} from '@pins/dco-portal-lib/forms/custom-components/file-upload/constants.ts';
 
 export function getQuestions(documentTypeId: string) {
 	const questions = {
@@ -49,11 +44,29 @@ export function getQuestions(documentTypeId: string) {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Is the document certified?',
 			question: 'Is the document certified?',
-			fieldName: 'certified',
+			fieldName: 'isCertified',
 			url: 'document-certified',
 			validators: [new RequiredValidator()]
+		},
+		fileUpload: {
+			type: CUSTOM_COMPONENTS.FILE_UPLOAD,
+			title: 'Upload your documents',
+			question: 'Upload your documents',
+			fieldName: 'fileUpload',
+			url: 'upload-documents',
+			allowedFileExtensions: ALLOWED_EXTENSIONS,
+			allowedMimeTypes: ALLOWED_MIME_TYPES,
+			maxFileSizeValue: MAX_FILE_SIZE,
+			maxFileSizeString: '100MB',
+			documentTypeId,
+			validators: [new DocumentUploadValidator('fileUpload')]
 		}
 	};
 
-	return createQuestions(questions, questionClasses, {});
+	const classes = {
+		...questionClasses,
+		...CUSTOM_COMPONENT_CLASSES
+	};
+
+	return createQuestions(questions, classes, {});
 }

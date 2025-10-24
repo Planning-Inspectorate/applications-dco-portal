@@ -15,9 +15,12 @@
     "@pins/dco-portal-database": "*",
     "@planning-inspectorate/dynamic-forms": "*",
     "bcrypt": "*",
+    "cfb": "*",
     "connect-redis": "*",
     "express-session": "*",
+    "file-type": "*",
     "notifications-node-client": "*",
+    "pdf-lib": "*",
     "pino": "*",
     "pino-pretty": "*",
     "redis": "*"

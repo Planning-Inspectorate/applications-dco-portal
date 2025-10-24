@@ -63,6 +63,11 @@ describe('login validation', () => {
 		it('should validate case reference provided', async () => {
 			assert.strictEqual(isValidCaseReference('en123456'), true);
 			assert.strictEqual(isValidCaseReference('EN123456'), true);
+			assert.strictEqual(isValidCaseReference('tR123456'), true);
+			assert.strictEqual(isValidCaseReference('BC123456'), true);
+			assert.strictEqual(isValidCaseReference('Wa123456'), true);
+			assert.strictEqual(isValidCaseReference('ws123456'), true);
+			assert.strictEqual(isValidCaseReference('WW123456'), true);
 			assert.strictEqual(isValidCaseReference('En123456'), true);
 			assert.strictEqual(isValidCaseReference('eN123456'), true);
 			assert.strictEqual(isValidCaseReference('E123456'), false);

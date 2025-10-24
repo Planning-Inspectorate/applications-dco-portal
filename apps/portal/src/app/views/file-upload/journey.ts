@@ -19,6 +19,7 @@ export function createJourney(documentTypeId: string, questions: any, response: 
 				.addQuestion(questions.documentType)
 				.addQuestion(questions.apfpRegulation)
 				.addQuestion(questions.isCertified)
+				.addQuestion(questions.fileUpload)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

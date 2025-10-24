@@ -10,6 +10,7 @@ import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/compon
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { statusIdRadioButtonValue } from './util.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import type { Request, Response } from 'express';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -103,5 +104,45 @@ export function buildIsFileUploadSectionCompleted(service: PortalService, docume
 		});
 
 		res.redirect('/');
+	};
+}
+
+export function buildDeleteDocumentAndSaveController(service: PortalService): AsyncRequestHandler {
+	return async (req: Request, res: Response) => {
+		const { db, blobStore, logger } = service;
+		const documentId = req.params.documentId;
+
+		if (!documentId) {
+			return notFoundHandler(req, res);
+		}
+
+		const document = await db.document.findUnique({
+			where: { id: documentId }
+		});
+
+		if (!document) {
+			return notFoundHandler(req, res);
+		}
+
+		const blobName = document.blobName;
+		try {
+			blobStore?.deleteBlobIfExists(blobName);
+		} catch (error) {
+			logger.error({ error, blobName }, `Error deleting file: ${blobName} from Blob store`);
+			throw new Error('Failed to delete file from blob store');
+		}
+
+		try {
+			await db.$transaction(async ($tx) => {
+				await $tx.document.delete({
+					where: { id: documentId }
+				});
+			});
+		} catch (error) {
+			logger.error({ error, documentId }, `Error deleting file: ${documentId} from database`);
+			throw new Error('Failed to delete file from database');
+		}
+
+		res.redirect(req.baseUrl);
 	};
 }

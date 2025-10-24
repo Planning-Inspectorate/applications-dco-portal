@@ -21,6 +21,17 @@ import validate from '@planning-inspectorate/dynamic-forms/src/validator/validat
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import type { Handler, Request } from 'express';
 import { getDocumentCategoryDisplayName } from './util.ts';
+import { buildSaveController } from './save.ts';
+import multer from 'multer';
+import {
+	deleteDocumentsController,
+	uploadDocumentsController
+} from '@pins/dco-portal-lib/forms/custom-components/file-upload/upload-documents.ts';
+import {
+	ALLOWED_EXTENSIONS,
+	ALLOWED_MIME_TYPES,
+	MAX_FILE_SIZE
+} from '@pins/dco-portal-lib/forms/custom-components/file-upload/constants.ts';
 
 export function createRoutes(service: PortalService, documentTypeId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -32,6 +43,13 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 
 	const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId);
 	const isFileUploadSectionCompleted = buildIsFileUploadSectionCompleted(service, documentTypeId);
+	const saveController = buildSaveController(service, documentTypeId);
+
+	const handleUploads = multer();
+	const uploadDocuments = asyncHandler(
+		uploadDocumentsController(service, documentTypeId, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE)
+	);
+	const deleteDocuments = asyncHandler(deleteDocumentsController(service, documentTypeId));
 
 	router.get('/', asyncHandler(fileUploadHomePage));
 	router.post('/', asyncHandler(isFileUploadSectionCompleted));
@@ -47,12 +65,23 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 		buildSave(saveDataToSession)
 	);
 
+	router.post(
+		'/:section/:question/upload',
+		getJourneyResponse,
+		getJourney,
+		handleUploads.array('files[]'),
+		uploadDocuments
+	);
+
+	router.post('/:section/:question/delete/:documentId', getJourneyResponse, getJourney, deleteDocuments);
+
 	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
 		list(req, res, getDocumentCategoryDisplayName(documentTypeId), {
 			pageHeading: 'Check your answers before uploading your document(s)'
 		})
 	);
-	// router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
+
+	router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
 
 	return router;
 }
