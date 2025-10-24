@@ -49,7 +49,7 @@ export function getQuestions(documentTypeId: string) {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Is the document certified?',
 			question: 'Is the document certified?',
-			fieldName: 'certified',
+			fieldName: 'isCertified',
 			url: 'document-certified',
 			validators: [new RequiredValidator()]
 		}

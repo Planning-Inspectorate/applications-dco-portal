@@ -21,6 +21,7 @@ import validate from '@planning-inspectorate/dynamic-forms/src/validator/validat
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import type { Handler, Request } from 'express';
 import { getDocumentCategoryDisplayName } from './util.ts';
+import { buildSaveController } from './save.ts';
 
 export function createRoutes(service: PortalService, documentTypeId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -32,6 +33,7 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 
 	const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId);
 	const isFileUploadSectionCompleted = buildIsFileUploadSectionCompleted(service, documentTypeId);
+	const saveController = buildSaveController(service, documentTypeId);
 
 	router.get('/', asyncHandler(fileUploadHomePage));
 	router.post('/', asyncHandler(isFileUploadSectionCompleted));
@@ -52,7 +54,7 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 			pageHeading: 'Check your answers before uploading your document(s)'
 		})
 	);
-	// router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
+	router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
 
 	return router;
 }
