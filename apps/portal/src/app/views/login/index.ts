@@ -2,9 +2,11 @@ import { type IRouter, Router as createRouter } from 'express';
 import {
 	buildEnterEmailPage,
 	buildEnterOtpPage,
+	buildHasApplicationReferencePage,
 	buildNoAccessPage,
 	buildRequestNewCodePage,
 	buildSubmitEmailController,
+	buildSubmitHasApplicationReference,
 	buildSubmitNewCodeRequestController,
 	buildSubmitOtpController
 } from './controller.ts';
@@ -14,6 +16,8 @@ import type { PortalService } from '#service';
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
+	const hasApplicationReferencePage = buildHasApplicationReferencePage();
+	const submitHasApplicationReference = buildSubmitHasApplicationReference(service);
 	const enterEmailPage = buildEnterEmailPage();
 	const submitEmailController = buildSubmitEmailController(service);
 	const enterCodePage = buildEnterOtpPage();
@@ -22,8 +26,10 @@ export function createRoutes(service: PortalService): IRouter {
 	const submitNewCodeRequestController = buildSubmitNewCodeRequestController(service);
 	const noAccessPage = buildNoAccessPage();
 
-	router.get('/email-address', asyncHandler(enterEmailPage));
-	router.post('/email-address', asyncHandler(submitEmailController));
+	router.get('/application-reference-number', asyncHandler(hasApplicationReferencePage));
+	router.post('/application-reference-number', asyncHandler(submitHasApplicationReference));
+	router.get('/sign-in', asyncHandler(enterEmailPage));
+	router.post('/sign-in', asyncHandler(submitEmailController));
 	router.get('/enter-code', asyncHandler(enterCodePage));
 	router.post('/enter-code', asyncHandler(submitOtpController));
 	router.get('/request-new-code', asyncHandler(requestNewCodePage));
