@@ -1,0 +1,148 @@
+{% extends layoutTemplate %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/file-upload/macro.njk" import govukFileUpload %}
+
+{% block before_content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorSummary,
+                    attributes: {"data-cy": "error-wrapper"}
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock before_content %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <input type="hidden" name="_csrf" value="{{ _csrf }}">
+            <h1 class="govuk-heading-l">
+                {{ question.question }}
+            </h1>
+            <p class="govuk-body">Choose a single document or multiple documents to upload.</p>
+            <p class="govuk-body">
+                {% set upperExtensions = [] %}
+                {% for ext in question.allowedFileExtensions %}
+                    {% set _ = upperExtensions.push(ext | upper) %}
+                {% endfor %}
+                {% if upperExtensions.length == 1 %}
+                    Each document must be a {{ upperExtensions[0] }}
+                    {% elif upperExtensions.length == 2 %}
+                    Each document must be a {{ upperExtensions[0] }} or {{ upperExtensions[1] }}
+                {% else %}
+                    Each document must be a
+                    {{ upperExtensions.slice(0, -1) | join(", ") }}, or {{ upperExtensions[upperExtensions.length - 1] }}
+                {% endif %}
+            </p>
+            <p class="govuk-body">The total size of your uploaded documents must be smaller than 1GB.</p>
+
+
+            {% if uploadedFiles and uploadedFiles | length > 0 %}
+                <p class="govuk-body govuk-!-font-weight-bold">Documents added</p>
+                <dl class="govuk-summary-list">
+                    {% for file in uploadedFiles %}
+                        <div class="govuk-summary-list__row">
+                            <dt class="govuk-summary-list__value">
+                                {{ file.fileName }} ({{ file.formattedSize }})
+                            </dt>
+                            <dd class="govuk-summary-list__actions">
+                                <form id="deleteForm{{ loop.index }}" action="{{ currentUrl }}/delete/{{ file.blobName | urlencode }}" method="POST">
+                                    <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                                    <noscript>
+                                        {{ govukButton({
+                                            text: "Remove",
+                                            classes: "govuk-button--warning"
+                                        }) }}
+                                    </noscript>
+                                </form>
+                                <a href="#" role="button" class="js-remove-link govuk-link js-enabled-link" data-form-id="deleteForm{{ loop.index }}">Remove</a>
+                            </dd>
+                        </div>
+                    {% endfor %}
+                </dl>
+            {% endif %}
+
+            {% set uploadForm = "upload-form" %}
+
+            <p class="govuk-body govuk-!-font-weight-bold">Upload documents</p>
+
+            <form id={{ uploadForm }} method="post" enctype="multipart/form-data" action="{{ currentUrl }}/upload">
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                {{ govukFileUpload({
+                    id: question.fieldName,
+                    name: "files[]",
+                    label: {
+                        text: "Upload attachments",
+                        classes: "govuk-visually-hidden"
+                    },
+                    javascript: true,
+                    multiple: true,
+                    chooseFilesButtonText: "Select attachments",
+                    dropInstructionText: "or drag and drop attachments here",
+                    attributes: {
+                        accept: question.allowedMimeTypes | join(", ")
+                    },
+                    errorMessage: errors[uploadForm] and {
+                        text: errors[uploadForm].msg
+                    } or errors[question.fieldName] and {
+                        text: errors[question.fieldName].msg
+                    }
+                }) }}
+                <noscript>
+                    {{ govukButton({
+                        text: "Upload"
+                    }) }}
+                </noscript>
+            </form>
+
+            <form action="" method="post" novalidate>
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                <input type="hidden" name="{{ question.fieldName }}" value='{{ uploadedFilesEncoded | safe }}'>
+                {{ govukButton({
+                    text: continueButtonText,
+                    type: "submit",
+                    attributes: { "data-cy":"button-save-and-continue"}
+                }) }}
+            </form>
+
+            <script {% if cspNonce %}nonce={{ cspNonce }}{% endif %}>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.js-remove-link').forEach(function (link) {
+                        link.addEventListener('click', function (event) {
+                            event.preventDefault();
+                            const formId = link.getAttribute('data-form-id');
+                            const form = document.getElementById(formId);
+                            if (form) form.submit();
+                        });
+                    });
+                });
+
+                document.addEventListener('DOMContentLoaded', function () {
+                    const fileInput = document.querySelector('#{{ question.fieldName }}-input');
+                    const form = document.querySelector('#upload-form');
+
+                    if (fileInput && form) {
+                        fileInput.addEventListener('change', function () {
+                            const files = fileInput.files;
+                            if (files.length === 0) return;
+                            form.submit();
+                        });
+                    }
+                });
+
+                window.addEventListener("DOMContentLoaded", () => {
+                    const links = document.querySelectorAll(".js-enabled-link");
+                    links.forEach(link => {
+                        link.style.display = "inline";
+                    });
+                });
+            </script>
+        </div>
+    </div>
+{% endblock %}

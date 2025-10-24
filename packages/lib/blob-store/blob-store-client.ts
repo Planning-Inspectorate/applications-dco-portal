@@ -88,6 +88,13 @@ export class BlobStorageClient {
 		return blockBlobClient.deleteIfExists();
 	}
 
+	async doesBlobExist(blobName: string) {
+		const containerClient = this.blobServiceClient.getContainerClient(this.container);
+		const blobClient = containerClient.getBlobClient(blobName);
+
+		return await blobClient.exists();
+	}
+
 	async getContainerContents(folderName?: string): Promise<BlobMetaData[]> {
 		const containerClient = this.blobServiceClient.getContainerClient(this.container);
 		const options = folderName ? { prefix: folderName } : undefined;

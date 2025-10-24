@@ -65,6 +65,8 @@ model Document {
   id               String              @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
   fileName         String
   uploadedDate     DateTime            @default(now())
+  size             BigInt              @default(0)
+  blobName         String
   isCertified      Boolean
   subCategoryId    String
   SubCategory      DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
