@@ -2,6 +2,8 @@
 import bcrypt from 'bcrypt';
 // @ts-expect-error - due to not having @types
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import {
 	isValidCaseReference,
 	isValidEmailAddress,
@@ -13,28 +15,71 @@ import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } f
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
 
-export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
+export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
-		return res.render('views/login/email.njk', {
-			emailQuestionText: 'What is your email address?',
-			emailHintText: 'If we recognise this address, we will send you a code.',
-			caseReferenceQuestionText: 'What is your case reference?',
+		const hasReferenceNumberValue = req.session.hasReferenceNumber;
+		return res.render('views/login/application-reference.njk', {
+			questionText: 'Do you have an application reference number?',
+			hintText: 'For example, EN012345',
+			hasReferenceNumberValue,
 			...viewData
 		});
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient, logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitHasApplicationReference({ logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
-		const { emailAddress, caseReference } = req.body;
+		const { hasReferenceNumber } = req.body;
 
-		const handleError = async (field: string, message: string) => {
+		if (!hasReferenceNumber) {
+			logger.info({ hasReferenceNumber }, 'no value provided for hasReferenceNumber');
+
 			req.body.errors = {
-				[field]: { msg: message }
+				hasReferenceNumber: { msg: 'You must select an answer' }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
-			logger.info({ emailAddress, caseReference }, message);
+			const hasApplicationReferencePage = buildHasApplicationReferencePage({
+				errors: req.body.errors,
+				errorSummary: req.body.errorSummary
+			});
+			return hasApplicationReferencePage(req, res);
+		}
+
+		req.session.hasReferenceNumber = hasReferenceNumber;
+
+		if (hasReferenceNumber === BOOLEAN_OPTIONS.NO) {
+			return res.redirect(`${req.baseUrl}/no-access`);
+		}
+
+		return res.redirect(`${req.baseUrl}/sign-in`);
+	};
+}
+
+export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
+	return async (req, res) => {
+		return res.render('views/login/email.njk', {
+			pageTitle: 'Sign-in',
+			emailQuestionText: 'Email address',
+			caseReferenceQuestionText: 'Application reference number',
+			caseReferenceHintText:
+				'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+			backLinkUrl: `${req.baseUrl}/application-reference-number`,
+			...viewData
+		});
+	};
+}
+
+export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		const { emailAddress, caseReference } = req.body;
+
+		const handleError = async (errors: Record<string, string>) => {
+			req.body.errors = req.body.errors || {};
+			for (const [field, message] of Object.entries(errors)) {
+				req.body.errors[field] = { msg: message };
+			}
+			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
 			const enterEmailPage = buildEnterEmailPage({
 				errors: req.body.errors,
@@ -43,17 +88,24 @@ export function buildSubmitEmailController({ db, notifyClient, logger }: PortalS
 			return enterEmailPage(req, res);
 		};
 
+		if (!isValidEmailAddress(emailAddress) && !isValidCaseReference(caseReference)) {
+			return handleError({
+				emailAddress: 'Invalid email address',
+				caseReference: 'You must provide a valid case reference'
+			});
+		}
+
 		if (!isValidEmailAddress(emailAddress)) {
-			return handleError('emailAddress', 'Invalid email address');
+			return handleError({ emailAddress: 'Invalid email address' });
 		}
 
 		if (!isValidCaseReference(caseReference)) {
-			return handleError('caseReference', 'You must provide a valid case reference');
+			return handleError({ caseReference: 'You must provide a valid case reference' });
 		}
 
 		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);
 		if (otpRecord && sentInLastTenSeconds(otpRecord)) {
-			return handleError('emailAddress', 'Code already requested');
+			return handleError({ emailAddress: 'Code already requested' });
 		}
 
 		const oneTimePassword = generateOtp();
@@ -74,7 +126,7 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
 		return res.render('views/login/otp.njk', {
 			questionText: 'Enter the code we sent to your email address',
-			backLinkUrl: `${req.baseUrl}/email-address`,
+			backLinkUrl: `${req.baseUrl}/sign-in`,
 			...viewData
 		});
 	};
@@ -87,7 +139,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		if (!emailAddress || !caseReference) {
 			logger.error('email address and case reference not present');
-			return res.redirect(`${req.baseUrl}/email-address`);
+			return res.redirect(`${req.baseUrl}/sign-in`);
 		}
 
 		const { otpCode } = req.body;
@@ -161,7 +213,7 @@ export function buildSubmitNewCodeRequestController({ db, notifyClient }: Portal
 			await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 			return res.redirect(`${req.baseUrl}/enter-code`);
 		}
-		res.redirect(`${req.baseUrl}/email-address`);
+		res.redirect(`${req.baseUrl}/sign-in`);
 	};
 }
 

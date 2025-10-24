@@ -4,7 +4,7 @@ export function isUserAuthenticated(req: Request, res: Response, next: NextFunct
 	if (req.session && req.session.isAuthenticated) {
 		return next();
 	}
-	res.redirect('/login/email-address');
+	res.redirect('/login/application-reference-number');
 }
 
 export function isUserUnauthenticated(req: Request, res: Response, next: NextFunction) {

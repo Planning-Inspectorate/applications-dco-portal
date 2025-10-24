@@ -8,17 +8,13 @@
         <div class="govuk-grid-column-two-thirds">
             <form action="" method="post" novalidate>
                 <input type="hidden" name="_csrf" value="{{ _csrf }}">
-
                 {{ govukInput({
-                    id: "email-address",
+                    id: "emailAddress",
                     name: "emailAddress",
                     label: {
                         text: emailQuestionText,
-                        classes: "govuk-label--l",
+                        classes: "govuk-label--m",
                         isPageHeading: true
-                    },
-                    hint: {
-                        text: emailHintText
                     },
                     errorMessage: errors.emailAddress and {
                         text: errors.emailAddress.msg
@@ -26,12 +22,15 @@
                 }) }}
 
                 {{ govukInput({
-                    id: "case-reference",
+                    id: "caseReference",
                     name: "caseReference",
                     label: {
                         text: caseReferenceQuestionText,
-                        classes: "govuk-label--l",
+                        classes: "govuk-label--m",
                         isPageHeading: true
+                    },
+                    hint: {
+                        text: caseReferenceHintText
                     },
                     errorMessage: errors.caseReference and {
                         text: errors.caseReference.msg

@@ -25,9 +25,12 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				caseReferenceQuestionText: 'What is your case reference?',
-				emailHintText: 'If we recognise this address, we will send you a code.',
-				emailQuestionText: 'What is your email address?'
+				backLinkUrl: 'undefined/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
+				pageTitle: 'Sign-in'
 			});
 		});
 		it('should render enter email address page with errors if in view data', async () => {
@@ -43,9 +46,13 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Sign-in',
 				caseReferenceQuestionText: 'What is your case reference?',
-				emailHintText: 'If we recognise this address, we will send you a code.',
-				emailQuestionText: 'What is your email address?',
+				backLinkUrl: 'undefined/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
 				errors: { emailAddress: { msg: 'Error message' } },
 				errorSummary: [{ text: 'Error message', href: '#emailAddress' }]
 			});
@@ -129,16 +136,19 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				caseReferenceQuestionText: 'What is your case reference?',
-				emailHintText: 'If we recognise this address, we will send you a code.',
-				emailQuestionText: 'What is your email address?',
+				pageTitle: 'Sign-in',
+				backLinkUrl: '/login/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
 				errors: { emailAddress: { msg: 'Code already requested' } },
 				errorSummary: [{ text: 'Code already requested', href: '#emailAddress' }]
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
 		});
-		it('should redirect back to email page and render errors if an invalid email is provided', async () => {
+		it('should redirect back to email page and render errors if an invalid email and case reference provided', async () => {
 			const mockNotifyClient = {
 				sendOneTimePasswordNotification: mock.fn()
 			};
@@ -155,10 +165,51 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				caseReferenceQuestionText: 'What is your case reference?',
-				emailHintText: 'If we recognise this address, we will send you a code.',
-				emailQuestionText: 'What is your email address?',
-				errors: { emailAddress: { msg: 'Invalid email address' } },
+				pageTitle: 'Sign-in',
+				backLinkUrl: 'undefined/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
+				errors: {
+					emailAddress: { msg: 'Invalid email address' },
+					caseReference: { msg: 'You must provide a valid case reference' }
+				},
+				errorSummary: [
+					{ text: 'Invalid email address', href: '#emailAddress' },
+					{ text: 'You must provide a valid case reference', href: '#caseReference' }
+				]
+			});
+
+			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+		});
+		it('should redirect back to email page and render errors if an invalid email is provided', async () => {
+			const mockNotifyClient = {
+				sendOneTimePasswordNotification: mock.fn()
+			};
+			const mockReq = {
+				body: {
+					emailAddress: 'invalid.com',
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = { render: mock.fn() };
+
+			const controller = buildSubmitEmailController({ logger: mockLogger(), notifyClient: mockNotifyClient });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Sign-in',
+				backLinkUrl: 'undefined/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
+				errors: {
+					emailAddress: { msg: 'Invalid email address' }
+				},
 				errorSummary: [{ text: 'Invalid email address', href: '#emailAddress' }]
 			});
 
@@ -182,9 +233,12 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				caseReferenceQuestionText: 'What is your case reference?',
-				emailHintText: 'If we recognise this address, we will send you a code.',
-				emailQuestionText: 'What is your email address?',
+				pageTitle: 'Sign-in',
+				backLinkUrl: 'undefined/application-reference-number',
+				caseReferenceHintText:
+					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
+				caseReferenceQuestionText: 'Application reference number',
+				emailQuestionText: 'Email address',
 				errors: { caseReference: { msg: 'You must provide a valid case reference' } },
 				errorSummary: [{ text: 'You must provide a valid case reference', href: '#caseReference' }]
 			});
@@ -206,7 +260,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address'
+				backLinkUrl: '/login/sign-in'
 			});
 		});
 		it('should render enter otp page with errors if in view data', async () => {
@@ -226,7 +280,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address',
+				backLinkUrl: '/login/sign-in',
 				errors: { otpCode: { msg: 'Error message' } },
 				errorSummary: [{ text: 'Error message', href: '#otpCode' }]
 			});
@@ -303,7 +357,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address',
+				backLinkUrl: '/login/sign-in',
 				errors: { otpCode: { msg: 'Provided OTP does not match stored OTP' } },
 				errorSummary: [{ text: 'Provided OTP does not match stored OTP', href: '#otpCode' }]
 			});
@@ -335,7 +389,7 @@ describe('login controllers', () => {
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/email-address');
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/sign-in');
 		});
 		it('should redirect to request new code number of attempts exceeds 4', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
@@ -485,7 +539,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address',
+				backLinkUrl: '/login/sign-in',
 				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
 				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
 			});
@@ -515,7 +569,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address',
+				backLinkUrl: '/login/sign-in',
 				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
 				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
 			});
@@ -545,7 +599,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/email-address',
+				backLinkUrl: '/login/sign-in',
 				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
 				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
 			});
@@ -630,7 +684,7 @@ describe('login controllers', () => {
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/email-address');
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/sign-in');
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 0);
 			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 0);
