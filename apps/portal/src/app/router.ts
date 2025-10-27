@@ -5,13 +5,11 @@ import { createRoutes as loginRoutes } from './views/login/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/auth.ts';
 import { PortalService } from '#service';
-import { cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
+import { cacheDisableAllCachingMiddleware, cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
 import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
 
 export function buildRouter(service: PortalService): IRouter {
 	const router = createRouter();
-
-	router.use('/login', isUserUnauthenticated, loginRoutes(service));
 
 	const monitoringRoutes = createMonitoringRoutes(service);
 
@@ -20,6 +18,8 @@ export function buildRouter(service: PortalService): IRouter {
 	// don't cache responses, note no-cache allows some caching, but with revalidation
 	// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#no-cache
 	router.use(cacheNoCacheMiddleware);
+
+	router.use('/login', cacheDisableAllCachingMiddleware, isUserUnauthenticated, loginRoutes(service));
 
 	// all subsequent routes will require user to be authenticated
 	// place any routes that do not require user auth above here

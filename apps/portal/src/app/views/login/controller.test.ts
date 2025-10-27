@@ -389,7 +389,7 @@ describe('login controllers', () => {
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/sign-in');
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/application-reference-number');
 		});
 		it('should redirect to request new code number of attempts exceeds 4', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');

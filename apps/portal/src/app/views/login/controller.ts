@@ -139,7 +139,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		if (!emailAddress || !caseReference) {
 			logger.error('email address and case reference not present');
-			return res.redirect(`${req.baseUrl}/sign-in`);
+			return res.redirect(`${req.baseUrl}/application-reference-number`);
 		}
 
 		const { otpCode } = req.body;
