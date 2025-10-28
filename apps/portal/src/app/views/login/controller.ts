@@ -70,7 +70,7 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController({ db, notifyClient, dummyWhiteList }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { emailAddress, caseReference } = req.body;
 
@@ -101,6 +101,16 @@ export function buildSubmitEmailController({ db, notifyClient }: PortalService):
 
 		if (!isValidCaseReference(caseReference)) {
 			return handleError({ caseReference: 'You must provide a valid case reference' });
+		}
+
+		//TODO: replace below check with call to CBOS once CBOS integration completed
+		if (!(caseReference in dummyWhiteList)) {
+			return res.redirect(`${req.baseUrl}/no-access`);
+		}
+
+		//TODO: replace below check with call to CBOS once CBOS integration completed
+		if (caseReference in dummyWhiteList && dummyWhiteList[caseReference] !== emailAddress) {
+			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 
 		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);

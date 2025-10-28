@@ -86,6 +86,10 @@ module "app_portal" {
     BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled
     BLOB_STORE_HOST      = data.azurerm_storage_account.back_office.primary_blob_endpoint
     BLOB_STORE_CONTAINER = azurerm_storage_container.documents.name
+
+    # dummy case whitelist
+    # todo: remove once cbos integration is complete
+    CASE_WHITELIST = local.key_vault_refs["dcop-case-whitelist"]
   }
 
   providers = {

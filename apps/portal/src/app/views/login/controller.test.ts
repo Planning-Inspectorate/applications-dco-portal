@@ -83,7 +83,10 @@ describe('login controllers', () => {
 			const controller = buildSubmitEmailController({
 				db: mockDb,
 				logger: mockLogger(),
-				notifyClient: mockNotifyClient
+				notifyClient: mockNotifyClient,
+				dummyWhiteList: {
+					['EN123456']: 'valid@email.com'
+				}
 			});
 			await controller(mockReq, mockRes);
 
@@ -129,7 +132,10 @@ describe('login controllers', () => {
 			const controller = buildSubmitEmailController({
 				db: mockDb,
 				logger: mockLogger(),
-				notifyClient: mockNotifyClient
+				notifyClient: mockNotifyClient,
+				dummyWhiteList: {
+					['EN123456']: 'valid@email.com'
+				}
 			});
 			await controller(mockReq, mockRes);
 
@@ -147,6 +153,50 @@ describe('login controllers', () => {
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+		});
+		it('should redirect back to no access page if case reference is not whitelisted', async () => {
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
+				},
+				session: {}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitEmailController({
+				logger: mockLogger(),
+				dummyWhiteList: {
+					['EN987654']: 'valid@email.com'
+				}
+			});
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/no-access');
+		});
+		it('should redirect back to no access page if case reference is whitelisted but email not linked to case', async () => {
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
+				},
+				session: {}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitEmailController({
+				logger: mockLogger(),
+				dummyWhiteList: {
+					['EN123456']: 'test@email.com'
+				}
+			});
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/no-access');
 		});
 		it('should redirect back to email page and render errors if an invalid email and case reference provided', async () => {
 			const mockNotifyClient = {
