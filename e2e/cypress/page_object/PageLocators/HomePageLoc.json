@@ -1,8 +1,0 @@
-{
-	"homepage": {
-		"startNowButton": "#start-now",
-		"pageTitle": "h1",
-		"navigationMenu": ".navigation",
-		"footerLinks": ".footer-links"
-	}
-}
