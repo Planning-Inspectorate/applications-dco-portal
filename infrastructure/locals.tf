@@ -8,9 +8,10 @@ locals {
   secondary_resource_suffix = "${local.service_name}-secondary-${var.environment}"
 
   secrets = [
+    "dcop-case-whitelist",
     "dcop-client-secret",
     "dcop-gov-notify-api-key",
-    "microsoft-provider-authentication-secret"
+    "microsoft-provider-authentication-secret",
   ]
 
   key_vault_refs = merge(

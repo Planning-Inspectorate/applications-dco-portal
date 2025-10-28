@@ -9,6 +9,7 @@ interface Config {
 		maxAge: string;
 	};
 	database: Prisma.PrismaClientOptions;
+	dummyWhiteList: Record<string, string>;
 	gitSha?: string;
 	govNotify: NotifyConfig;
 	httpPort: number;
