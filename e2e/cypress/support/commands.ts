@@ -21,3 +21,7 @@ Cypress.Commands.add('validateDownloadedFile', (fileName) => {
 Cypress.Commands.add('getByData', (value) => {
 	return cy.get(`[data-cy="${value}"]`);
 });
+
+Cypress.Commands.add('testLogin', (emailAddress, caseReference) => {
+	cy.request('POST', '/login/test', { emailAddress, caseReference });
+});
