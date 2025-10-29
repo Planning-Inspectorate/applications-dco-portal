@@ -11,9 +11,9 @@ export function formatBytes(bytes: number): string {
 }
 
 export function encodeBlobNameToBase64(blobName: string): string {
-	return Buffer.from(blobName).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+	return Buffer.from(blobName, 'utf8').toString('base64url');
 }
 
 export function decodeBlobNameFromBase64(encodedBlobName: string): string {
-	return Buffer.from(encodedBlobName.replace(/-/g, '+').replace(/_/g, '/'), 'base64').toString('utf8');
+	return Buffer.from(encodedBlobName, 'base64url').toString('utf8');
 }
