@@ -1,22 +1,17 @@
-import homePageLocators from '../PageLocators/homePageLocators.js';
+import HomePageLocators from '../PageLocators/homePageLocators.js';
+import CommonLocators from '../PageLocators/commonLocators.js';
 
-export class HomePageActions {
+class HomePageActions {
 	enterEmailAddress(email) {
-		homePageLocators.emailInput().clear().type(email);
+		HomePageLocators.emailInput().clear().type(email);
 	}
 
 	enterApplicationNumber(applicationNumber) {
-		homePageLocators.applicationNumberInput().clear().type(applicationNumber);
+		HomePageLocators.applicationNumberInput().clear().type(applicationNumber);
 	}
 
 	submitLoginDetails() {
-		cy.get("[data-cy='button-save-and-continue']").click();
-	}
-
-	login(email, applicationNumber) {
-		this.enterEmailAddress(email);
-		this.enterApplicationNumber(applicationNumber);
-		this.submitLoginDetails();
+		CommonLocators.saveAndContinueButton().click();
 	}
 }
 
