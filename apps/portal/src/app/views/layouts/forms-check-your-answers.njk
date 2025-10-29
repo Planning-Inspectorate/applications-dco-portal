@@ -16,18 +16,41 @@
     {% endif %}
 {% endblock beforeContent %}
 
-{% block beforeTaskList %}
+{% block content %}
+    {% block beforeTaskList %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-3">
+                <h1 class="govuk-heading-l">
+                    {{ pageHeading | default('Check your answers') }}
+                </h1>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% set summaryRows = [] %}
+    {% for section in summaryListData.sections %}
+        {% for row in section.list.rows %}
+            {% set summaryRows = (summaryRows.push(row), summaryRows) %}
+        {% endfor %}
+    {% endfor %}
+    {% set obj = { "rows": summaryRows } %}
+
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-3">
-            <h1 class="govuk-heading-l">
-                {{ pageHeading | default('Check your answers') }}
-            </h1>
+        <div class="govuk-grid-column-full">
+            {{ govukSummaryList(obj) }}
         </div>
     </div>
-{% endblock %}
 
-{% if summaryWarningMessage %}
-    {% set beforeSubmitButton = govukWarningText({
-        text: summaryWarningMessage
-    }) %}
-{% endif %}
+    {% if journeyComplete %}
+        <form method="POST">
+            {{ govukButton({
+                text: "Confirm upload"
+            }) }}
+        </form>
+
+    {% else %}
+        <strong class="govuk-tag govuk-tag--grey">
+            Cannot submit yet
+        </strong>
+    {% endif %}
+{% endblock %}

@@ -15,7 +15,8 @@ describe('file upload journey save controller', () => {
 					findUnique: mock.fn(() => ({
 						id: 'case-id-1',
 						reference: 'EN123456'
-					}))
+					})),
+					update: mock.fn()
 				},
 				document: {
 					create: mock.fn(async () => 'document-id')
@@ -114,6 +115,127 @@ describe('file upload journey save controller', () => {
 					}
 				}
 			});
+
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				data: {
+					draftDcoStatusId: 'in-progress'
+				},
+				where: {
+					reference: 'EN123456'
+				}
+			});
+		});
+		it('should save uploaded documents into the database but not update status if already in progress', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						reference: 'EN123456',
+						draftDcoStatusId: 'in-progress'
+					})),
+					update: mock.fn()
+				},
+				document: {
+					create: mock.fn(async () => 'document-id')
+				}
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							apfpRegulation: '5-1',
+							isCertified: 'yes',
+							documentType: 'draft-development-consent-order',
+							fileUpload: [
+								{
+									fileName: 'test.pdf',
+									size: 208,
+									formattedSize: '208B',
+									blobName: `EN123456/draft-dco/test.pdf`
+								},
+								{
+									fileName: 'plan.pdf',
+									size: 500,
+									formattedSize: '500B',
+									blobName: `EN123456/draft-dco/plan.pdf`
+								}
+							]
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				DOCUMENT_CATEGORY_ID.DRAFT_DCO
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.document.create.mock.callCount(), 2);
+			assert.deepStrictEqual(mockDb.document.create.mock.calls[0].arguments[0], {
+				data: {
+					fileName: 'test.pdf',
+					size: 208,
+					blobName: 'EN123456/draft-dco/test.pdf',
+					isCertified: true,
+					SubCategory: {
+						connect: {
+							id: 'draft-development-consent-order'
+						}
+					},
+					ApfpRegulation: {
+						connect: {
+							id: '5-1'
+						}
+					},
+					Case: {
+						connect: {
+							id: 'case-id-1'
+						}
+					}
+				}
+			});
+			assert.deepStrictEqual(mockDb.document.create.mock.calls[1].arguments[0], {
+				data: {
+					fileName: 'plan.pdf',
+					size: 500,
+					blobName: 'EN123456/draft-dco/plan.pdf',
+					isCertified: true,
+					SubCategory: {
+						connect: {
+							id: 'draft-development-consent-order'
+						}
+					},
+					ApfpRegulation: {
+						connect: {
+							id: '5-1'
+						}
+					},
+					Case: {
+						connect: {
+							id: 'case-id-1'
+						}
+					}
+				}
+			});
+
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 0);
 		});
 		it('should throw if error encountered during database operations', async () => {
 			const mockDb = {

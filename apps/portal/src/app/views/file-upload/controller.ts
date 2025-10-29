@@ -61,13 +61,16 @@ export function buildFileUploadHomePage(
 			];
 		});
 
+		const documentTypeStatusId = (caseData as any)[`${kebabCaseToCamelCase(documentTypeId)}StatusId`];
+
 		return res.render('views/file-upload/view.njk', {
 			pageTitle: documentCategory?.displayName,
 			documentCategory: kebabCaseToCamelCase(documentTypeId),
 			documents: documentRows,
+			showUploadButton: documentTypeStatusId !== DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 			uploadButtonUrl: `${req.baseUrl}/upload/document-type`,
 			backLinkUrl: '/',
-			isCompletedValue: statusIdRadioButtonValue((caseData as any)[`${kebabCaseToCamelCase(documentTypeId)}StatusId`]),
+			isCompletedValue: statusIdRadioButtonValue(documentTypeStatusId),
 			...viewData
 		});
 	};
@@ -138,6 +141,8 @@ export function buildDeleteDocumentAndSaveController(service: PortalService): As
 					where: { id: documentId }
 				});
 			});
+			//TODO: if documents list is empty for category after documentId is deleted
+			// set the categoryId - StatusId to -> not-started
 		} catch (error) {
 			logger.error({ error, documentId }, `Error deleting file: ${documentId} from database`);
 			throw new Error('Failed to delete file from database');

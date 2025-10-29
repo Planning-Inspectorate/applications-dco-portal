@@ -92,6 +92,7 @@ describe('file upload controllers', () => {
 					]
 				],
 				pageTitle: 'Draft DCO',
+				showUploadButton: true,
 				uploadButtonUrl: '/draft-dco/upload/document-type',
 				isCompletedValue: 'no'
 			});
@@ -129,6 +130,7 @@ describe('file upload controllers', () => {
 				documentCategory: 'draftDco',
 				documents: [],
 				pageTitle: 'Draft DCO',
+				showUploadButton: true,
 				uploadButtonUrl: '/draft-dco/upload/document-type',
 				isCompletedValue: ''
 			});
@@ -237,6 +239,7 @@ describe('file upload controllers', () => {
 				pageTitle: 'Draft DCO',
 				documentCategory: 'draftDco',
 				documents: [],
+				showUploadButton: true,
 				uploadButtonUrl: '/draft-dco/upload/document-type',
 				backLinkUrl: '/',
 				isCompletedValue: '',
