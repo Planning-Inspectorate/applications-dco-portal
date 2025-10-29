@@ -19,7 +19,9 @@ describe('upload-documents.js', () => {
 			const mockReq = {
 				baseUrl: '/draft-dco',
 				files: [file],
-				session: {},
+				session: {
+					caseReference: 'EN123456'
+				},
 				body: {}
 			};
 			const mockRes = {
@@ -61,7 +63,8 @@ describe('upload-documents.js', () => {
 				'draft-dco': {
 					uploadedFiles: [
 						{
-							blobName: 'undefined/draft-dco/test4.pdf',
+							blobName: 'EN123456/draft-dco/test4.pdf',
+							blobNameBase64Encoded: 'RU4xMjM0NTYvZHJhZnQtZGNvL3Rlc3Q0LnBkZg',
 							fileName: 'test4.pdf',
 							formattedSize: '222KB',
 							size: 227787
@@ -76,17 +79,17 @@ describe('upload-documents.js', () => {
 			const mockReq = {
 				baseUrl: '/draft-dco',
 				params: {
-					documentId: encodeURI('EN123456/draft-dco/test.pdf')
+					documentId: 'RU4xMjM0NTYvZHJhZnQtZGNvL3Rlc3Q0LnBkZg'
 				},
 				session: {
 					files: {
 						'draft-dco': {
 							uploadedFiles: [
 								{
-									fileName: 'test.pdf',
+									fileName: 'test4.pdf',
 									size: 208,
 									formattedSize: '208B',
-									blobName: 'EN123456/draft-dco/test.pdf'
+									blobName: 'EN123456/draft-dco/test4.pdf'
 								}
 							]
 						}
