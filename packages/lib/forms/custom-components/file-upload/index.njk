@@ -52,7 +52,7 @@
                                 {{ file.fileName }} ({{ file.formattedSize }})
                             </dt>
                             <dd class="govuk-summary-list__actions">
-                                <form id="deleteForm{{ loop.index }}" action="{{ currentUrl }}/delete/{{ file.blobName | urlencode }}" method="POST">
+                                <form id="deleteForm{{ loop.index }}" action="{{ currentUrl }}/delete/{{ file.blobNameBase64Encoded }}" method="POST">
                                     <input type="hidden" name="_csrf" value="{{ _csrf }}">
                                     <noscript>
                                         {{ govukButton({

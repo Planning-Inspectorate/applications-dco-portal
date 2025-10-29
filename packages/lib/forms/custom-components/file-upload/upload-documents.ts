@@ -4,6 +4,7 @@ import type { Request, Response } from 'express';
 import { addSessionData } from '../../../util/session.ts';
 import { Readable } from 'stream';
 import type { UploadedFile } from './types.d.ts';
+import { decodeBlobNameFromBase64, encodeBlobNameToBase64, formatBytes } from './util.ts';
 
 export function uploadDocumentsController(
 	service: PortalService,
@@ -73,7 +74,10 @@ export function uploadDocumentsController(
 					fileName: file.originalname,
 					size: file.size,
 					formattedSize: formatBytes(file.size),
-					blobName: `${req.session.caseReference}/${documentCategoryId}/${file.originalname}`
+					blobName: `${req.session.caseReference}/${documentCategoryId}/${file.originalname}`,
+					blobNameBase64Encoded: encodeBlobNameToBase64(
+						`${req.session.caseReference}/${documentCategoryId}/${file.originalname}`
+					)
 				});
 			});
 
@@ -91,7 +95,7 @@ export function uploadDocumentsController(
 export function deleteDocumentsController(service: PortalService, documentCategoryId: string) {
 	return async (req: Request, res: Response) => {
 		const { blobStore, logger } = service;
-		const blobName = decodeURIComponent(req.params.documentId);
+		const blobName = decodeBlobNameFromBase64(req.params.documentId);
 		try {
 			blobStore?.deleteBlobIfExists(blobName);
 		} catch (error) {
@@ -105,16 +109,4 @@ export function deleteDocumentsController(service: PortalService, documentCatego
 
 		res.redirect(`${req.baseUrl}/upload/upload-documents`);
 	};
-}
-
-function formatBytes(bytes: number): string {
-	if (bytes === 0) return '0B';
-
-	const KIB: number = 1024;
-	const sizes = ['B', 'KB', 'MB', 'GB'] as const;
-
-	const unitIndex = Math.floor(Math.log(bytes) / Math.log(KIB));
-	const value = Math.round(bytes / Math.pow(KIB, unitIndex));
-
-	return `${value}${sizes[unitIndex]}`;
 }

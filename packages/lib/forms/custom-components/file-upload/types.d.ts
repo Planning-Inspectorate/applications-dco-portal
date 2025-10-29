@@ -3,4 +3,5 @@ export interface UploadedFile {
 	size: number;
 	formattedSize: string;
 	blobName: string;
+	blobNameBase64Encoded: string;
 }
