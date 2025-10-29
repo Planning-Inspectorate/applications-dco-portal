@@ -283,3 +283,14 @@ export function buildNoAccessPage(): AsyncRequestHandler {
 		});
 	};
 }
+
+export function buildTestLogin(): AsyncRequestHandler {
+	return async (req, res) => {
+		const { emailAddress, caseReference } = req.body;
+		req.session.isAuthenticated = true;
+		req.session.emailAddress = emailAddress;
+		req.session.caseReference = caseReference;
+
+		return res.redirect('/');
+	};
+}

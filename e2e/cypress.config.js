@@ -22,7 +22,8 @@ export default defineConfig({
 		baseUrl: process.env.BASE_URL,
 		env: {
 			USER_EMAIL: process.env.USER_EMAIL,
-			PASSWORD: process.env.USER_PASSWORD
+			PASSWORD: process.env.USER_PASSWORD,
+			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE
 		},
 		specPattern: `cypress/e2e/dco-portal/**/*.cy.js`,
 		supportFile: './cypress/support/e2e.js',
