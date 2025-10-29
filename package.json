@@ -23,6 +23,7 @@
     "lint": "npx eslint .",
     "prepare": "node .husky/install.mjs",
     "test-e2e": "npm run cy:run --prefix ./e2e",
+    "test-e2e-headed": "npm run cy:open --prefix ./e2e",
     "test": "node --test",
     "test-coverage": "node --test --experimental-test-coverage"
   },
