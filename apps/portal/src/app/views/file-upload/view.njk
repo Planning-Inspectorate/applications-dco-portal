@@ -44,11 +44,13 @@
                         <p class="govuk-body">This category contains 0 document(s).</p>
                     {% endif %}
 
-                    {{ govukButton({
-                        text: "Upload documents",
-                        href: uploadButtonUrl,
-                        classes: "govuk-button--secondary"
-                    }) }}
+                    {% if showUploadButton %}
+                        {{ govukButton({
+                            text: "Upload documents",
+                            href: uploadButtonUrl,
+                            classes: "govuk-button--secondary"
+                        }) }}
+                    {% endif %}
 
                     {% if documents.length > 0 %}
                         <form action="" method="post" novalidate>

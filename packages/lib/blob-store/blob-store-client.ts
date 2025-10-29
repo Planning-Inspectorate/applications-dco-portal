@@ -97,6 +97,7 @@ export class BlobStorageClient {
 
 	async getContainerContents(folderName?: string): Promise<BlobMetaData[]> {
 		const containerClient = this.blobServiceClient.getContainerClient(this.container);
+		await containerClient.createIfNotExists();
 		const options = folderName ? { prefix: folderName } : undefined;
 		const blobs = await Array.fromAsync(containerClient.listBlobsFlat(options));
 

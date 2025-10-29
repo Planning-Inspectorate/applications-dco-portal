@@ -7,6 +7,8 @@ import { yesNoToBoolean } from '@planning-inspectorate/dynamic-forms/src/compone
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
 import type { UploadedFile } from '@pins/dco-portal-lib/forms/custom-components/file-upload/types.js';
 import { clearSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function buildSaveController({ db, logger }: PortalService, documentTypeId: string): AsyncRequestHandler {
 	return async (req, res) => {
@@ -28,6 +30,16 @@ export function buildSaveController({ db, logger }: PortalService, documentTypeI
 				for (const file of answers.fileUpload) {
 					const input: DocumentRecord = mapAnswersToInput(caseData?.id as string, file, answers);
 					await $tx.document.create({ data: input });
+				}
+
+				if (
+					(caseData as any)[`${kebabCaseToCamelCase(documentTypeId)}StatusId`] !==
+					DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS
+				) {
+					await db.case.update({
+						where: { reference: req.session.caseReference },
+						data: { [`${kebabCaseToCamelCase(documentTypeId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS }
+					});
 				}
 			});
 		} catch (error) {

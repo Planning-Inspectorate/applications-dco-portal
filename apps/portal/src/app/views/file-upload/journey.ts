@@ -17,9 +17,9 @@ export function createJourney(documentTypeId: string, questions: any, response: 
 		sections: [
 			new Section(documentTypeDisplayName, 'upload')
 				.addQuestion(questions.documentType)
+				.addQuestion(questions.fileUpload)
 				.addQuestion(questions.apfpRegulation)
 				.addQuestion(questions.isCertified)
-				.addQuestion(questions.fileUpload)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
