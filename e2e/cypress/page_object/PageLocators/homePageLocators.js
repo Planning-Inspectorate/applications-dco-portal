@@ -6,6 +6,10 @@ class HomePageLocators {
 	applicationNumberInput() {
 		return cy.get('input[name="caseReference"]');
 	}
+
+	otpCodeInput() {
+		return cy.get('input[name="otpCode"]');
+	}
 }
 
 export default new HomePageLocators();
