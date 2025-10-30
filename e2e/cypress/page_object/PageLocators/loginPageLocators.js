@@ -1,4 +1,4 @@
-class HomePageLocators {
+class LoginPageLocators {
 	emailInput() {
 		return cy.get('input[name="emailAddress"]');
 	}
@@ -12,4 +12,4 @@ class HomePageLocators {
 	}
 }
 
-export default new HomePageLocators();
+export default new LoginPageLocators();
