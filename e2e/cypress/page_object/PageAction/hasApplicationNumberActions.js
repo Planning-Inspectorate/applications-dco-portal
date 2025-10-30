@@ -1,6 +1,5 @@
 import HasApplicationNumberLocators from '../PageLocators/hasApplicationNumberLocators.js';
 import CommonLocators from '../PageLocators/commonLocators.js';
-
 class HasApplicationNumberActions {
 	confirmHasApplicationNumber() {
 		HasApplicationNumberLocators.yesRadioButton().check();
