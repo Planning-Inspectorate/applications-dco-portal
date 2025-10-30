@@ -38,7 +38,7 @@ export function createRoutes(service: PortalService): IRouter {
 	router.post('/request-new-code', asyncHandler(submitNewCodeRequestController));
 	router.get('/no-access', asyncHandler(noAccessPage));
 	//TODO - ensure only mounted in test
-	router.post('/test', asyncHandler(testLogin));
+	if (service.enableTestTools) router.post('/test', asyncHandler(testLogin));
 
 	return router;
 }

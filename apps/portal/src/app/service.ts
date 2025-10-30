@@ -63,4 +63,8 @@ export class PortalService {
 	get staticDir() {
 		return this.#config.staticDir;
 	}
+
+	get enableTestTools() {
+		return this.#config.enableTestTools;
+	}
 }
