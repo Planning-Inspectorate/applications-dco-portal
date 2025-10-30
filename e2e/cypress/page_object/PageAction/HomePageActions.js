@@ -13,6 +13,12 @@ class HomePageActions {
 	submitLoginDetails() {
 		CommonLocators.saveAndContinueButton().click();
 	}
+
+	signInWithValidCredentials(email, applicationNumber) {
+		this.enterEmailAddress(email);
+		this.enterApplicationNumber(applicationNumber);
+		this.submitLoginDetails();
+	}
 }
 
 export default new HomePageActions();
