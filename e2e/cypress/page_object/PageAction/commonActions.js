@@ -1,7 +1,3 @@
-import HomePageActions from '../PageAction/homePageActions.js';
-import HomePageLocators from '../PageLocators/homePageLocators.js';
-import CommonLocators from '../PageLocators/commonLocators.js';
-
 class CommonActions {
 	login() {
 		/*
@@ -20,7 +16,7 @@ class CommonActions {
 		HomePageActions.signInWithValidCredentials(Cypress.env('USER_EMAIL'), Cypress.env('TEST_APPLICATION_REFERENCE'));
 		cy.url().should('include', '/enter-code');
 
-		HomePageLocators.otpCodeInput().type('ABCDE');
+		LoginPageLocators.otpCodeInput().type('ABCDE');
 		CommonLocators.saveAndContinueButton().click();
 		*/
 		cy.request({
