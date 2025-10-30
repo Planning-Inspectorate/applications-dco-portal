@@ -32,7 +32,8 @@ export function loadConfig(): Config {
 		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER,
-		BLOB_STORE_CONNECTION_STRING
+		BLOB_STORE_CONNECTION_STRING,
+		ENABLE_TEST_TOOLS
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -117,7 +118,8 @@ export function loadConfig(): Config {
 			secret: SESSION_SECRET
 		},
 		// the static directory to serve assets from (images, css, etc..)
-		staticDir: buildConfig.staticDir
+		staticDir: buildConfig.staticDir,
+		enableTestTools: ENABLE_TEST_TOOLS === 'true'
 	};
 
 	return config;
