@@ -14,6 +14,14 @@ class uploadDocumentsLocators {
 	apfpRegulationTextbox() {
 		return cy.get('#apfpRegulation');
 	}
+
+	certifiedDocumentYesRadioButton() {
+		return cy.get(`input[name="isCertified"][value="yes"]`);
+	}
+
+	certifiedDocumentNoRadioButton() {
+		return cy.get(`input[name="isCertified"][value="no"]`);
+	}
 }
 
 export default new uploadDocumentsLocators();
