@@ -33,7 +33,7 @@ export const validateDownloadedFile = (fileName) => {
  */
 export const deleteUnwantedFixtures = () => {
 	const folderPath = path.join(__dirname, '../fixtures');
-	const keepList = ['users.js'];
+	const keepList = ['users.js', 'uploadTest.pdf'];
 	fs.readdir(folderPath, (err, files) => {
 		if (err) {
 			console.error(err);
