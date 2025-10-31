@@ -8,7 +8,8 @@ import {
 	buildSubmitEmailController,
 	buildSubmitHasApplicationReference,
 	buildSubmitNewCodeRequestController,
-	buildSubmitOtpController
+	buildSubmitOtpController,
+	buildTestLogin
 } from './controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import type { PortalService } from '#service';
@@ -25,6 +26,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const requestNewCodePage = buildRequestNewCodePage();
 	const submitNewCodeRequestController = buildSubmitNewCodeRequestController(service);
 	const noAccessPage = buildNoAccessPage();
+	const testLogin = buildTestLogin();
 
 	router.get('/application-reference-number', asyncHandler(hasApplicationReferencePage));
 	router.post('/application-reference-number', asyncHandler(submitHasApplicationReference));
@@ -35,6 +37,8 @@ export function createRoutes(service: PortalService): IRouter {
 	router.get('/request-new-code', asyncHandler(requestNewCodePage));
 	router.post('/request-new-code', asyncHandler(submitNewCodeRequestController));
 	router.get('/no-access', asyncHandler(noAccessPage));
+	//TODO - ensure only mounted in test
+	router.post('/test', asyncHandler(testLogin));
 
 	return router;
 }
