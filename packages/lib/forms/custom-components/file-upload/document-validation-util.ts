@@ -44,6 +44,52 @@ export async function validateUploadedFile(
 		});
 	}
 
+	const declaredExt: string = path.extname(file.originalname).slice(1).toLowerCase();
+	if (['html', 'prj', 'gis', 'dbf', 'shp', 'shx'].includes(declaredExt)) {
+		const text: string = file.buffer.toString('utf8', 0, 200).trim();
+		const header: string = file.buffer.subarray(0, 8).toString('hex').toUpperCase();
+
+		if (
+			declaredExt === 'html' &&
+			!text.toLowerCase().includes('<html') &&
+			!text.toLowerCase().includes('<!doctype html')
+		) {
+			validationErrors.push({
+				text: `${originalname}: The attachment is not a valid .html file`,
+				href: '#upload-form'
+			});
+		}
+
+		if (declaredExt === 'prj' && !(text.startsWith('PROJCS[') || text.startsWith('GEOGCS['))) {
+			validationErrors.push({
+				text: `${originalname}: The attachment is not a valid .prj file`,
+				href: '#upload-form'
+			});
+		}
+
+		if (declaredExt === 'gis' && !/coordinate|longitude|latitude/i.test(text)) {
+			validationErrors.push({
+				text: `${originalname}: The attachment is not a valid .gis file`,
+				href: '#upload-form'
+			});
+		}
+
+		if (declaredExt === 'dbf' && !['03', '83', '8B', '8E'].includes(header.slice(0, 2))) {
+			validationErrors.push({
+				text: `${originalname}: The attachment is not a valid .dbf file`,
+				href: '#upload-form'
+			});
+		}
+
+		if ((declaredExt === 'shp' || declaredExt === 'shx') && !header.startsWith('0000270A')) {
+			validationErrors.push({
+				text: `${originalname}: The attachment is not a valid .shp or .shx file`,
+				href: '#upload-form'
+			});
+		}
+		return validationErrors;
+	}
+
 	const fileTypeResult = await fileTypeFromBuffer(buffer);
 
 	if (!fileTypeResult) {
@@ -103,33 +149,6 @@ export async function validateUploadedFile(
 		});
 	}
 
-	// if (!fileTypeResult) {
-	// 	const declaredExt = path.extname(file.originalname).slice(1).toLowerCase();
-	// 	const text = file.buffer.toString('utf8', 0, 200).trim();
-	//
-	// 	if (declaredExt === 'html' && !text.toLowerCase().includes('<html') && !text.toLowerCase().includes('<!doctype html')) {
-	//
-	// 	}
-	//
-	// 	if (declaredExt === 'prj') {
-	// 		//       isValidTextType = text.startsWith('PROJCS[') || text.startsWith('GEOGCS[');
-	// 	}
-	//
-	// 	if (declaredExt === 'dbf') {
-	// 		//       return ['03', '83', '8B', '8E'].includes(header.slice(0, 2));
-	// 	}
-	//
-	// 	if (declaredExt === 'gis') {
-	// 		//       isValidTextType = /coordinate|longitude|latitude/i.test(text);
-	// 	}
-	//
-	// 	if ((declaredExt === 'shp' || declaredExt === 'shx') && ) {
-	// 		//  const header = buffer.slice(0, 8).toString('hex').toUpperCase();
-	// 		//     case 'shp':
-	// 		//     case 'shx':
-	// 		//       return header.startsWith('0000270A');
-	// 	}
-	// }
 	return validationErrors;
 }
 
