@@ -1,14 +1,24 @@
-import uploadDocumentsLocators from '../PageLocators/uploadDocumentsLocators.js';
+import UploadDocumentsLocators from '../PageLocators/uploadDocumentsLocators.js';
+import CommonActions from './commonActions.js';
+import CommonLocators from '../PageLocators/commonLocators.js';
 
-class uploadDocumentsActions {
+class UploadDocumentsActions {
 	//tasks are 0-indexed
 	openTask(index) {
-		uploadDocumentsLocators.taskList().eq(index).find('a').click();
+		UploadDocumentsLocators.taskList().eq(index).find('a').click();
 	}
 
 	selectDocumentTypeByValue(value) {
-		uploadDocumentsLocators.getDocumentTypeRadioButtonByValue(value).check();
+		UploadDocumentsLocators.getDocumentTypeRadioButtonByValue(value).check();
+	}
+
+	reachDocumentUploadPage() {
+		CommonActions.login();
+		this.openTask(0);
+		UploadDocumentsLocators.uploadDocumentsButton().click();
+		UploadDocumentsLocators.getDocumentTypeRadioButtonByValue('guide-to-the-application').check();
+		CommonLocators.saveAndContinueButton().click();
 	}
 }
 
-export default new uploadDocumentsActions();
+export default new UploadDocumentsActions();
