@@ -2,6 +2,8 @@ import * as CFB from 'cfb';
 import { fileTypeFromBuffer } from 'file-type';
 import { PDFDocument } from 'pdf-lib';
 import type { Logger } from 'pino';
+import { ALLOWED_EXTENSIONS_TEXT } from './constants.ts';
+import path from 'path';
 
 export async function validateUploadedFile(
 	file: Express.Multer.File,
@@ -21,9 +23,23 @@ export async function validateUploadedFile(
 		return validationErrors;
 	}
 
+	if (originalname.length > 255) {
+		validationErrors.push({
+			text: `${originalname}: The attachment name exceeds the 255 character limit`,
+			href: '#upload-form'
+		});
+	}
+
+	if (originalname.includes('–') || originalname.includes('—')) {
+		validationErrors.push({
+			text: `${originalname}: The attachment name contains special characters '-' or '_'. Please remove these and try again.`,
+			href: '#upload-form'
+		});
+	}
+
 	if (!allowedMimeTypes.includes(mimetype)) {
 		validationErrors.push({
-			text: `${originalname}: The attachment must be PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XLSX`,
+			text: `${originalname}: The attachment must be ${ALLOWED_EXTENSIONS_TEXT}`,
 			href: '#upload-form'
 		});
 	}
@@ -49,7 +65,7 @@ export async function validateUploadedFile(
 
 	// Compound File Binary (.cfb) is a Microsoft file container format that acts like a mini filesystem inside a file
 	// common users include older Microsoft Office files such as .doc and .xls
-	if ((ext === 'cfb' || mime === 'application/x-cfb') && (await isDocOrXlsEncrypted(buffer, logger))) {
+	if ((ext === 'cfb' || mime === 'application/x-cfb') && isDocOrXlsEncrypted(buffer, logger)) {
 		validationErrors.push({
 			text: `${originalname}: File must not be password protected`,
 			href: '#upload-form'
@@ -58,6 +74,7 @@ export async function validateUploadedFile(
 
 	// this check is to prevent file spoofing and checks the parsed result returned from file-type library
 	if (
+		fileTypeResult &&
 		allowedMimeTypes.includes(mimetype) &&
 		(!new Set([...allowedMimeTypes, 'application/x-cfb']).has(mime) ||
 			!new Set([...allowedFileExtensions, 'cfb']).has(ext))
@@ -71,7 +88,7 @@ export async function validateUploadedFile(
 
 	if (size > maxFileSize) {
 		validationErrors.push({
-			text: `${originalname}: The attachment must be smaller than 20MB`,
+			text: `${originalname}: The attachment must be smaller than 250MB`,
 			href: '#upload-form'
 		});
 	}
@@ -86,6 +103,33 @@ export async function validateUploadedFile(
 		});
 	}
 
+	// if (!fileTypeResult) {
+	// 	const declaredExt = path.extname(file.originalname).slice(1).toLowerCase();
+	// 	const text = file.buffer.toString('utf8', 0, 200).trim();
+	//
+	// 	if (declaredExt === 'html' && !text.toLowerCase().includes('<html') && !text.toLowerCase().includes('<!doctype html')) {
+	//
+	// 	}
+	//
+	// 	if (declaredExt === 'prj') {
+	// 		//       isValidTextType = text.startsWith('PROJCS[') || text.startsWith('GEOGCS[');
+	// 	}
+	//
+	// 	if (declaredExt === 'dbf') {
+	// 		//       return ['03', '83', '8B', '8E'].includes(header.slice(0, 2));
+	// 	}
+	//
+	// 	if (declaredExt === 'gis') {
+	// 		//       isValidTextType = /coordinate|longitude|latitude/i.test(text);
+	// 	}
+	//
+	// 	if ((declaredExt === 'shp' || declaredExt === 'shx') && ) {
+	// 		//  const header = buffer.slice(0, 8).toString('hex').toUpperCase();
+	// 		//     case 'shp':
+	// 		//     case 'shx':
+	// 		//       return header.startsWith('0000270A');
+	// 	}
+	// }
 	return validationErrors;
 }
 

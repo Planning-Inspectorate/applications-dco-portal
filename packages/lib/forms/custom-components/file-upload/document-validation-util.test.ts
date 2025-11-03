@@ -31,7 +31,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				originalname: 'test4.pdf',
 				mimetype: 'application/pdf',
 				buffer: Buffer.from(fakePdfContent, 'utf-8'),
-				size: 100 * 1024 * 1024 + 1
+				size: 250 * 1024 * 1024 + 1
 			};
 			const logger = mockLogger();
 
@@ -40,7 +40,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment must be smaller than 20MB'
+						text: 'test4.pdf: The attachment must be smaller than 250MB'
 					}
 				]
 			);
@@ -60,7 +60,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment must be PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XLSX'
+						text: 'test4.pdf: The attachment must be PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
 					}
 				]
 			);
@@ -139,7 +139,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.bmp: The attachment must be PDF, PNG, DOC, DOCX, JPG, JPEG, TIF, TIFF, XLS or XLSX'
+						text: 'test4.bmp: The attachment must be PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
 					}
 				]
 			);

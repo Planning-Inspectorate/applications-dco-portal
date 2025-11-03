@@ -1,3 +1,5 @@
+import { formatExtensions } from './util.ts';
+
 export const ALLOWED_EXTENSIONS = [
 	'pdf',
 	'doc',
@@ -6,6 +8,7 @@ export const ALLOWED_EXTENSIONS = [
 	'pptx',
 	'xls',
 	'xlsx',
+	'xlsm',
 	'msg',
 	'jpg',
 	'jpeg',
@@ -15,8 +18,16 @@ export const ALLOWED_EXTENSIONS = [
 	'mov',
 	'png',
 	'tif',
-	'tiff'
+	'tiff',
+	'dbf',
+	'html',
+	'prj',
+	'shp',
+	'shx',
+	'gis'
 ];
+
+export const ALLOWED_EXTENSIONS_TEXT = formatExtensions(ALLOWED_EXTENSIONS);
 
 export const ALLOWED_MIME_TYPES = [
 	'application/pdf',
@@ -26,6 +37,7 @@ export const ALLOWED_MIME_TYPES = [
 	'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 	'application/vnd.ms-excel',
 	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+	'application/vnd.ms-excel.sheet.macroEnabled.12',
 	'application/vnd.ms-outlook',
 	'image/jpeg',
 	'video/mpeg',
@@ -33,7 +45,15 @@ export const ALLOWED_MIME_TYPES = [
 	'video/mp4',
 	'video/quicktime',
 	'image/png',
-	'image/tiff'
+	'image/tiff',
+	'application/vnd.dbf',
+	'text/html',
+	'application/x-prj',
+	'application/x-shapefile',
+	'application/x-shx',
+	'application/octet-stream',
+	'application/x-gis'
 ];
 
-export const MAX_FILE_SIZE = 100 * 1024 * 1024;
+export const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB
+export const TOTAL_UPLOAD_LIMIT = 1073741824; // 1GB

@@ -17,3 +17,9 @@ export function encodeBlobNameToBase64(blobName: string): string {
 export function decodeBlobNameFromBase64(encodedBlobName: string): string {
 	return Buffer.from(encodedBlobName, 'base64url').toString('utf8');
 }
+
+export function formatExtensions(allowedExtensions: string[]): string {
+	const upper = allowedExtensions.map((ext) => ext.toUpperCase());
+	if (upper.length <= 1) return upper[0] || '';
+	return `${upper.slice(0, -1).join(', ')}, or ${upper.at(-1)}`;
+}

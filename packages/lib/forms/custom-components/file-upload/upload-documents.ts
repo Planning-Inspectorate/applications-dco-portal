@@ -5,6 +5,12 @@ import { addSessionData } from '../../../util/session.ts';
 import { Readable } from 'stream';
 import type { UploadedFile } from './types.d.ts';
 import { decodeBlobNameFromBase64, encodeBlobNameToBase64, formatBytes } from './util.ts';
+import { TOTAL_UPLOAD_LIMIT } from './constants.ts';
+
+//Validation to do
+// * Scenario 5 - Individual file is uploaded and contents aren’t valid for file type:
+//     * If a file is uploaded AND the contents don’t match the file type,
+//     * Then, prevent the file from being uploaded AND display an error message and summary as shown in *
 
 export function uploadDocumentsController(
 	service: PortalService,
@@ -47,6 +53,14 @@ export function uploadDocumentsController(
 		if (blobAlreadyExists.some(Boolean)) {
 			fileErrors.push({
 				text: 'Attachment with this name has already been uploaded',
+				href: '#upload-form'
+			});
+		}
+
+		const totalSizeUploaded = files.reduce((sum, file) => sum + (file.size || 0), 0);
+		if (totalSizeUploaded > TOTAL_UPLOAD_LIMIT) {
+			fileErrors.push({
+				text: 'Total file size of all attachments must not exceed 1GB',
 				href: '#upload-form'
 			});
 		}
