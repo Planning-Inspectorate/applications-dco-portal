@@ -6,9 +6,18 @@ import CommonLocators from '../../page_object/PageLocators/commonLocators.js';
 
 describe('1. Your documents', () => {
 	documentUploadJourneyTests('Application form related information', 0, '/application-form-related-information');
+	documentUploadJourneyTests('Plans and drawings', 1, '/plans-and-drawings');
+	documentUploadJourneyTests('Draft DCO', 2, '/draft-dco');
+	documentUploadJourneyTests('Compulsory acquisition information', 3, '/compulsory-acquisition-information');
+	documentUploadJourneyTests('Consultation report', 4, '/consultation-report');
 });
 
-function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
+function documentUploadJourneyTests(
+	taskName,
+	taskIndex,
+	urlFragment,
+	fileToUpload = 'cypress/fixtures/uploadTest.pdf'
+) {
 	describe(taskName, () => {
 		it('Standard journey', () => {
 			CommonActions.login();
@@ -25,13 +34,23 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 			//documentType
 			cy.url().should('include', `${urlFragment}/upload/document-type`);
 			cy.get('h1').contains('Select the document type').should('be.visible');
-			UploadDocumentsLocators.getDocumentTypeRadioButtonByValue('guide-to-the-application').check();
+			UploadDocumentsLocators.getDocumentTypeRadioButtons()
+				.eq(0)
+				.invoke('attr', 'id')
+				.then((id) => {
+					cy.get(`label[for="${id}"]`)
+						.invoke('text')
+						.then((text) => {
+							cy.wrap(text.trim()).as('selectedDocumentType');
+						});
+				});
+			UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
 			CommonLocators.saveAndContinueButton().click();
 
 			//fileUpload
 			cy.get('h1').contains('Upload your documents').should('be.visible');
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
-			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.pdf', { force: true });
+			cy.get('input[type="file"]').selectFile(fileToUpload, { force: true });
 			CommonLocators.saveAndContinueButton().click();
 
 			//apfpRegulation
@@ -50,12 +69,14 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 			cy.get('h1').contains('Check your answers before uploading your document(s)');
 			cy.url().should('include', `${urlFragment}/check-your-answers`);
 			cy.get('.govuk-summary-list').find('div').should('have.length', 4);
-			cy.get('.govuk-summary-list')
-				.children('div')
-				.eq(0)
-				.find('dd')
-				.contains('Guide to the Application')
-				.should('be.visible');
+			cy.get('@selectedDocumentType').then((selectedDocumentType) => {
+				cy.get('.govuk-summary-list')
+					.children('div')
+					.eq(0)
+					.find('dd')
+					.contains(selectedDocumentType)
+					.should('be.visible');
+			});
 			cy.get('.govuk-summary-list').children('div').eq(1).find('dd').contains('uploadTest.pdf').should('be.visible');
 			cy.get('.govuk-summary-list').children('div').eq(2).find('dd').contains('5').should('be.visible');
 			cy.get('.govuk-summary-list').children('div').eq(3).find('dd').contains('Yes').should('be.visible');
@@ -70,7 +91,7 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 		});
 		it('Required input validation', () => {
 			CommonActions.login();
-			UploadDocumentsActions.openTask(0);
+			UploadDocumentsActions.openTask(taskIndex);
 			cy.url().should('include', urlFragment);
 			cy.get('p').contains('This category contains 0 document(s)').should('be.visible');
 
@@ -81,7 +102,7 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 			CommonLocators.saveAndContinueButton().click();
 			cy.get('.govuk-error-summary__title').should('be.visible').contains('There is a problem');
 			cy.get('a').contains('You must select an answer');
-			UploadDocumentsLocators.getDocumentTypeRadioButtonByValue('guide-to-the-application').check();
+			UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
 			CommonLocators.saveAndContinueButton().click();
 
 			//fileUpload
@@ -108,7 +129,7 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 			cy.get('a').contains('You must select an answer');
 		});
 		it('Uploaded file type validation', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 
 			//fileUpload
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
@@ -120,70 +141,70 @@ function documentUploadJourneyTests(taskName, taskIndex, urlFragment) {
 	});
 	describe('Allowed file type coverage for upload', () => {
 		it('PDF', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.pdf', { force: true });
 			CommonLocators.saveAndContinueButton().click();
-			cy.url().should('include', '/application-form-related-information/upload/regulation');
+			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('PNG', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.png', { force: true });
 			CommonLocators.saveAndContinueButton().click();
-			cy.url().should('include', '/application-form-related-information/upload/regulation');
+			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('JPG', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.jpg', { force: true });
 			CommonLocators.saveAndContinueButton().click();
 			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('JPEG', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.jpeg', { force: true });
 			CommonLocators.saveAndContinueButton().click();
 			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('DOCX', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.docx', { force: true });
 			CommonLocators.saveAndContinueButton().click();
 			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('DOC', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.doc', { force: true });
 			CommonLocators.saveAndContinueButton().click();
 			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('XLSX', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.xlsx', { force: true });
 			CommonLocators.saveAndContinueButton().click();
-			cy.url().should('include', '/application-form-related-information/upload/regulation');
+			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('XLS', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.xls', { force: true });
 			CommonLocators.saveAndContinueButton().click();
-			cy.url().should('include', '/application-form-related-information/upload/regulation');
+			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('TIFF', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.tiff', { force: true });
 			CommonLocators.saveAndContinueButton().click();
-			cy.url().should('include', '/application-form-related-information/upload/regulation');
+			cy.url().should('include', `${urlFragment}/upload/regulation`);
 		});
 		it('TIF', () => {
-			UploadDocumentsActions.reachDocumentUploadPage();
+			UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 			cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 			cy.get('input[type="file"]').selectFile('cypress/fixtures/uploadTest.tif', { force: true });
 			CommonLocators.saveAndContinueButton().click();

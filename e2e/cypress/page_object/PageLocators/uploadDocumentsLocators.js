@@ -7,8 +7,8 @@ class uploadDocumentsLocators {
 		return cy.get('[data-cy="upload-documents-btn"]');
 	}
 
-	getDocumentTypeRadioButtonByValue(value) {
-		return cy.get(`input[name="documentType"][value="${value}"]`);
+	getDocumentTypeRadioButtons() {
+		return cy.get(`input[name="documentType"]`);
 	}
 
 	apfpRegulationTextbox() {
