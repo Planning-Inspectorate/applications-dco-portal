@@ -21,10 +21,6 @@ import registerCypressGrep from '@cypress/grep';
 registerCypressGrep();
 
 after(() => {
-	cy.deleteUnwantedFixtures();
-});
-
-after(() => {
 	cy.clearAllSessionStorage();
 	cy.clearCookies();
 });
