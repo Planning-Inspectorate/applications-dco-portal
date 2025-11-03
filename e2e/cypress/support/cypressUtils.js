@@ -26,32 +26,3 @@ export const validateDownloadedFile = (fileName) => {
 		return false;
 	}
 };
-
-/**
- * Deletes all files in the 'fixtures' directory that are not included in the keep list.
- * @returns {null}
- */
-export const deleteUnwantedFixtures = () => {
-	const folderPath = path.join(__dirname, '../fixtures');
-	const keepList = ['users.js', 'uploadTest.pdf'];
-	fs.readdir(folderPath, (err, files) => {
-		if (err) {
-			console.error(err);
-			return;
-		}
-
-		files.forEach((file) => {
-			if (!keepList.includes(file)) {
-				fs.unlink(`${folderPath}/${file}`, (err) => {
-					if (err) {
-						console.error(err);
-						return;
-					}
-					console.log(`Deleted ${file}`);
-				});
-			}
-		});
-	});
-
-	return null;
-};

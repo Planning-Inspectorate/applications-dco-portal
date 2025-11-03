@@ -2,7 +2,7 @@
 /* global process */
 
 import { defineConfig } from 'cypress';
-import { deleteDownloads, deleteUnwantedFixtures, validateDownloadedFile } from './cypress/support/cypressUtils.js';
+import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
 
 import 'dotenv/config';
 
@@ -11,7 +11,6 @@ export default defineConfig({
 		async setupNodeEvents(on, config) {
 			on('task', {
 				DeleteDownloads: deleteDownloads,
-				DeleteUnwantedFixtures: deleteUnwantedFixtures,
 				ValidateDownloadedFile: validateDownloadedFile
 			});
 			// Set timezone explicitly for CI consistency
