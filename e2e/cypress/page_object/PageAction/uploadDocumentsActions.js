@@ -8,15 +8,11 @@ class UploadDocumentsActions {
 		UploadDocumentsLocators.taskList().eq(index).find('a').click();
 	}
 
-	selectDocumentTypeByValue(value) {
-		UploadDocumentsLocators.getDocumentTypeRadioButtonByValue(value).check();
-	}
-
-	reachDocumentUploadPage() {
+	reachDocumentUploadPage(taskIndex) {
 		CommonActions.login();
-		this.openTask(0);
+		this.openTask(taskIndex);
 		UploadDocumentsLocators.uploadDocumentsButton().click();
-		UploadDocumentsLocators.getDocumentTypeRadioButtonByValue('guide-to-the-application').check();
+		UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
 		CommonLocators.saveAndContinueButton().click();
 	}
 }
