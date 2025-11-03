@@ -4,10 +4,6 @@ Cypress.Commands.add('deleteDownloads', () => {
 	cy.task('DeleteDownloads');
 });
 
-Cypress.Commands.add('deleteUnwantedFixtures', () => {
-	cy.task('DeleteUnwantedFixtures');
-});
-
 Cypress.Commands.add('validateDownloadedFile', (fileName) => {
 	cy.task('ValidateDownloadedFile', fileName).then((success) => {
 		if (success) {
