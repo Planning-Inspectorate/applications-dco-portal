@@ -277,11 +277,30 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 			);
 		});
 		it('should return validation error when file size is not a numeric value', async () => {
+			const file = {
+				originalname: 'test4.html',
+				mimetype: 'text/html',
+				buffer: Buffer.from('fake html file', 'utf-8'),
+				size: 60
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.html: The attachment is not a valid .html file'
+					}
+				]
+			);
+		});
+		it('should return validation error when invalid html file uploaded', async () => {
 			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
 			const file = {
 				originalname: 'test4.pdf',
 				mimetype: 'application/pdf',
-				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				buffer: Buffer.from('', 'utf-8'),
 				size: 'test'
 			};
 			const logger = mockLogger();
@@ -292,6 +311,82 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 					{
 						href: '#upload-form',
 						text: 'test4.pdf: The attachment is empty'
+					}
+				]
+			);
+		});
+		it('should return validation error when invalid prj file uploaded', async () => {
+			const file = {
+				originalname: 'test4.prj',
+				mimetype: 'application/x-prj',
+				buffer: Buffer.from('', 'utf-8'),
+				size: 601
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.prj: The attachment is not a valid .prj file'
+					}
+				]
+			);
+		});
+		it('should return validation error when invalid prj file uploaded', async () => {
+			const file = {
+				originalname: 'test4.dbf',
+				mimetype: 'application/vnd.dbf',
+				buffer: Buffer.from('99', 'hex'),
+				size: 601
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.dbf: The attachment is not a valid .dbf file'
+					}
+				]
+			);
+		});
+		it('should return validation error when invalid shp file uploaded', async () => {
+			const file = {
+				originalname: 'test4.shp',
+				mimetype: 'application/x-shapefile',
+				buffer: Buffer.from('0000270B', 'hex'),
+				size: 601
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.shp: The attachment is not a valid .shp or .shx file'
+					}
+				]
+			);
+		});
+		it('should return validation error when invalid shx file uploaded', async () => {
+			const file = {
+				originalname: 'test4.shx',
+				mimetype: 'application/x-shx',
+				buffer: Buffer.from('0000270B', 'hex'),
+				size: 601
+			};
+			const logger = mockLogger();
+
+			assert.deepStrictEqual(
+				await validateUploadedFile(file, logger, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE),
+				[
+					{
+						href: '#upload-form',
+						text: 'test4.shx: The attachment is not a valid .shp or .shx file'
 					}
 				]
 			);

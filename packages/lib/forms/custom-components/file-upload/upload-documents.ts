@@ -7,11 +7,6 @@ import type { UploadedFile } from './types.d.ts';
 import { decodeBlobNameFromBase64, encodeBlobNameToBase64, formatBytes } from './util.ts';
 import { TOTAL_UPLOAD_LIMIT } from './constants.ts';
 
-//Validation to do
-// * Scenario 5 - Individual file is uploaded and contents aren’t valid for file type:
-//     * If a file is uploaded AND the contents don’t match the file type,
-//     * Then, prevent the file from being uploaded AND display an error message and summary as shown in *
-
 export function uploadDocumentsController(
 	service: PortalService,
 	documentCategoryId: string,
