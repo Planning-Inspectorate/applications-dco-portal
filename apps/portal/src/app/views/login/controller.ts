@@ -109,7 +109,10 @@ export function buildSubmitEmailController({ db, notifyClient, dummyWhiteList }:
 		}
 
 		//TODO: replace below check with call to CBOS once CBOS integration completed
-		if (caseReference in dummyWhiteList && dummyWhiteList[caseReference] !== emailAddress) {
+		if (
+			caseReference in dummyWhiteList &&
+			(dummyWhiteList[caseReference] || '').toLowerCase() !== emailAddress.toLowerCase()
+		) {
 			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 
