@@ -3,6 +3,7 @@
 
 import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
+import { clearDocumentCategory } from './cypress/support/dbUtils.js';
 
 import 'dotenv/config';
 
@@ -11,7 +12,8 @@ export default defineConfig({
 		async setupNodeEvents(on, config) {
 			on('task', {
 				DeleteDownloads: deleteDownloads,
-				ValidateDownloadedFile: validateDownloadedFile
+				ValidateDownloadedFile: validateDownloadedFile,
+				clearDocumentCategory: clearDocumentCategory
 			});
 			// Set timezone explicitly for CI consistency
 			process.env.TZ = 'Europe/London';

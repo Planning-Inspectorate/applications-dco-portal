@@ -69,3 +69,19 @@ export function getDateAndTimeValues(date) {
 		minutes: date.getMinutes() + ''
 	};
 }
+
+/**
+ * Formats an input string in camel case
+ * @param {string} input
+ * @returns
+ */
+export function formatAsCamelCase(input) {
+	return input
+		.trim()
+		.split(/[\s-_]+/)
+		.map((word, index) => {
+			if (index === 0) return word.toLowerCase(); // First word is lowercase
+			return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+		})
+		.join('');
+}
