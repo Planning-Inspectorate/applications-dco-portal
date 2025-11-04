@@ -64,7 +64,7 @@
     "@types/node": "^24.10.0",
     "@types/nunjucks": "^3.2.6",
     "cookie-parser": "^1.4.7",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-cypress": "^5.2.0",
     "husky": "^9.1.7",
