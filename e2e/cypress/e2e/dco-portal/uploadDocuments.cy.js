@@ -3,6 +3,7 @@ import CommonActions from '../../page_object/PageAction/commonActions.js';
 import UploadDocumentsActions from '../../page_object/PageAction/uploadDocumentsActions.js';
 import UploadDocumentsLocators from '../../page_object/PageLocators/uploadDocumentsLocators.js';
 import CommonLocators from '../../page_object/PageLocators/commonLocators.js';
+import { formatAsCamelCase } from '../../support/utils/format.js';
 
 describe('1. Your documents', () => {
 	documentUploadJourneyTests('Application form related information', 0, '/application-form-related-information');
@@ -19,6 +20,9 @@ function documentUploadJourneyTests(
 	fileToUpload = 'cypress/fixtures/uploadTest.pdf'
 ) {
 	describe(taskName, () => {
+		//if you submit a journey be sure to retain atomicity by deleting it after:
+		//cy.task('clearDocumentCategory', {documentTypeId: formatAsCamelCase(taskName), reference: Cypress.env('TEST_APPLICATION_REFERENCE')});
+
 		it('Standard journey', () => {
 			CommonActions.login();
 			cy.get('h1').should('be.visible').contains('Application reference number');
@@ -82,11 +86,10 @@ function documentUploadJourneyTests(
 			cy.get('.govuk-summary-list').children('div').eq(3).find('dd').contains('Yes').should('be.visible');
 
 			/*
-			Need to enforce the redirect and normal behaviour after submitting without persisting to the database. You could stub it?
-	
 			cy.get('.govuk-button').contains('Confirm upload').click();
-			cy.get('input[name="applicationFormRelatedInformationIsCompleted"][value="yes"]').click();
+			cy.get(`input[name="${formatAsCamelCase(taskName)}IsCompleted"][value="yes"]`).click();
 			cy.get('button[data-module="govuk-button"]').click();
+			cy.task('clearDocumentCategory', {documentTypeId: formatAsCamelCase(taskName), reference: Cypress.env('TEST_APPLICATION_REFERENCE')});
 			*/
 		});
 		it('Required input validation', () => {
