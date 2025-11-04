@@ -23,8 +23,8 @@ class CommonActions {
 			method: 'POST',
 			url: '/login/test',
 			body: {
-				emailAddress: 'test@example.com',
-				caseReference: 'ABC123'
+				emailAddress: 'inspectorappeals.test@planninginspectorate.gov.uk',
+				caseReference: 'EN123456' //WIP - ENSURE THESE MATCH YOUR .ENV EMAIL/REFERENCES
 			},
 			followRedirect: true
 		});
