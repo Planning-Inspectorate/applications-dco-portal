@@ -45,125 +45,155 @@ describe('home page', () => {
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
 		assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 			pageTitle: 'Application reference number',
-			taskListItems: [
-				{
-					href: '/application-form-related-information',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+			taskListItems: {
+				yourDocuments: [
+					{
+						href: '/application-form-related-information',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Application form related information'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Application form related information'
-					}
-				},
-				{
-					href: '/plans-and-drawings',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+					{
+						href: '/plans-and-drawings',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Plans and drawings'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Plans and drawings'
-					}
-				},
-				{
-					href: '/draft-dco',
-					status: {
-						tag: {
-							classes: 'govuk-tag--yellow',
-							text: 'In progress'
+					{
+						href: '/draft-dco',
+						status: {
+							tag: {
+								classes: 'govuk-tag--yellow',
+								text: 'In progress'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Draft DCO'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Draft DCO'
-					}
-				},
-				{
-					href: '/compulsory-acquisition-information',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+					{
+						href: '/compulsory-acquisition-information',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Compulsory acquisition information'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Compulsory acquisition information'
-					}
-				},
-				{
-					href: '/consultation-report',
-					status: {
-						tag: {
-							classes: 'govuk-tag--blue',
-							text: 'Completed'
+					{
+						href: '/consultation-report',
+						status: {
+							tag: {
+								classes: 'govuk-tag--blue',
+								text: 'Completed'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Consultation report'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Consultation report'
-					}
-				},
-				{
-					href: '/reports-and-statements',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+					{
+						href: '/reports-and-statements',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Reports and statements'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Reports and statements'
-					}
-				},
-				{
-					href: '/environmental-statement',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+					{
+						href: '/environmental-statement',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Environmental statement'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Environmental statement'
-					}
-				},
-				{
-					href: '/additional-prescribed-information',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+					{
+						href: '/additional-prescribed-information',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Additional prescribed information'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Additional prescribed information'
+					{
+						href: '/other-documents',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Other documents'
+						}
 					}
-				},
-				{
-					href: '/other-documents',
-					status: {
-						tag: {
-							classes: 'govuk-tag--grey',
-							text: 'Not yet started'
+				],
+				yourApplication: [
+					{
+						href: '/applicant-and-agent-details',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'Applicant and agent details'
 						}
 					},
-					title: {
-						classes: 'govuk-link--no-visited-state',
-						text: 'Other documents'
+					{
+						href: '/about-the-project',
+						status: {
+							tag: {
+								classes: 'govuk-tag--grey',
+								text: 'Not yet started'
+							}
+						},
+						title: {
+							classes: 'govuk-link--no-visited-state',
+							text: 'About the project'
+						}
 					}
-				}
-			]
+				]
+			}
 		});
 	});
 	it('should render not found error page if no email present', async () => {

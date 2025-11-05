@@ -20,12 +20,13 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 model Case {
-  id         String     @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  reference  String     @unique
-  email      String
-  createdAt  DateTime   @default(now())
-  modifiedAt DateTime   @updatedAt
-  Documents  Document[]
+  id               String          @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference        String          @unique
+  email            String
+  createdAt        DateTime        @default(now())
+  modifiedAt       DateTime        @updatedAt
+  Documents        Document[]
+  ApplicantDetails ContactDetails? @relation("ApplicantDetails")
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -45,6 +46,11 @@ model Case {
   additionalPrescribedInformationStatus     DocumentCategoryStatus @relation(name: "AdditionalPrescribedInformationStatus", fields: [additionalPrescribedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   otherDocumentsStatusId                    String                 @default("not-started")
   otherDocumentsStatus                      DocumentCategoryStatus @relation(name: "OtherDocumentsStatus", fields: [otherDocumentsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  applicantAndAgentDetailsStatusId String                 @default("not-started")
+  applicantAndAgentDetailsStatus   DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  aboutTheProjectStatusId          String                 @default("not-started")
+  aboutTheProjectStatus            DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -113,4 +119,23 @@ model DocumentCategoryStatus {
   EnvironmentalStatementCases          Case[] @relation("EnvironmentalStatementStatus")
   AdditionalPrescribedInformationCases Case[] @relation("AdditionalPrescribedInformationStatus")
   OtherDocumentsCases                  Case[] @relation("OtherDocumentsStatus")
+
+  ApplicantAndAgentDetailsCases Case[] @relation("applicantAndAgentDetailsStatus")
+  AboutTheProjectCases          Case[] @relation("aboutTheProjectStatus")
+}
+
+model PaymentMethod {
+  id              String           @id
+  displayName     String
+  ApplicantMethod ContactDetails[]
+}
+
+model ContactDetails {
+  id               String        @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  organisation     String
+  paymentMethodId  String
+  PaymentMethod    PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  paymentReference String
+  caseId           String        @unique @db.UniqueIdentifier
+  Case             Case          @relation("ApplicantDetails", fields: [caseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }

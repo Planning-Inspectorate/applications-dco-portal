@@ -430,6 +430,27 @@ export const APFP_REGULATION = [
 	{ id: '6-6', displayName: '6(6)' }
 ];
 
+export const PAYMENT_METHOD_ID = Object.freeze({
+	BACS: 'bacs',
+	CHAPS: 'chaps',
+	CHEQUE: 'cheque'
+});
+
+export const PAYMENT_METHOD = [
+	{
+		id: PAYMENT_METHOD_ID.BACS,
+		displayName: 'BACS'
+	},
+	{
+		id: PAYMENT_METHOD_ID.CHAPS,
+		displayName: 'CHAPS'
+	},
+	{
+		id: PAYMENT_METHOD_ID.CHEQUE,
+		displayName: 'Cheque'
+	}
+];
+
 async function upsertReferenceData<TDelegate extends { upsert: (args: any) => any }, TInput extends { id: string }>({
 	delegate,
 	input
@@ -456,6 +477,8 @@ export async function seedStaticData(dbClient: PrismaClient) {
 	await Promise.all(
 		DOCUMENT_SUB_CATEGORY.map((input) => upsertReferenceData({ delegate: dbClient.documentSubCategory, input }))
 	);
+
+	await Promise.all(PAYMENT_METHOD.map((input) => upsertReferenceData({ delegate: dbClient.paymentMethod, input })));
 
 	await Promise.all(APFP_REGULATION.map((input) => upsertReferenceData({ delegate: dbClient.apfpRegulation, input })));
 

@@ -2,13 +2,9 @@ import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 // @ts-expect-error - due to not having @types
-import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-// @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { statusIdRadioButtonValue } from './util.ts';
+import { statusIdRadioButtonValue } from '../util.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { Request, Response } from 'express';
 
@@ -75,40 +71,6 @@ export function buildFileUploadHomePage(
 			isCompletedValue: statusIdRadioButtonValue(documentTypeStatusId),
 			...viewData
 		});
-	};
-}
-
-export function buildIsFileUploadSectionCompleted(service: PortalService, documentTypeId: string): AsyncRequestHandler {
-	return async (req, res) => {
-		const { db } = service;
-
-		const documentCompletedFieldName = `${kebabCaseToCamelCase(documentTypeId)}IsCompleted`;
-		const isFileUploadCompleted = req.body[documentCompletedFieldName];
-
-		if (!isFileUploadCompleted) {
-			req.body.errors = {
-				[documentCompletedFieldName]: { msg: 'You must select an answer' }
-			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
-
-			const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
-			});
-			return fileUploadHomePage(req, res);
-		}
-
-		const statusId: string =
-			isFileUploadCompleted === BOOLEAN_OPTIONS.YES
-				? DOCUMENT_CATEGORY_STATUS_ID.COMPLETED
-				: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS;
-
-		await db.case.update({
-			where: { reference: req.session.caseReference },
-			data: { [`${kebabCaseToCamelCase(documentTypeId)}StatusId`]: statusId }
-		});
-
-		res.redirect('/');
 	};
 }
 

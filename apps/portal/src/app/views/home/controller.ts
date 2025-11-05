@@ -5,6 +5,7 @@ import {
 	DOCUMENT_CATEGORY_STATUS,
 	DOCUMENT_CATEGORY_STATUS_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { APPLICATION_SECTION } from '../constants.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 
@@ -26,16 +27,10 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 			return notFoundHandler(req, res);
 		}
 
-		const taskListItems = DOCUMENT_CATEGORY.map((category) => ({
-			title: {
-				text: category.displayName,
-				classes: 'govuk-link--no-visited-state'
-			},
-			href: `/${category.id}`,
-			status: {
-				tag: getCategoryStatus((caseData as any)[`${kebabCaseToCamelCase(category.id)}StatusId`])
-			}
-		}));
+		const taskListItems = {
+			yourDocuments: formatTaskListItems(caseData, DOCUMENT_CATEGORY),
+			yourApplication: formatTaskListItems(caseData, APPLICATION_SECTION)
+		};
 
 		return res.render('views/home/view.njk', {
 			pageTitle: 'Application reference number',
@@ -57,4 +52,17 @@ function getCategoryStatus(statusId: string): { text: string; classes: string } 
 		text: status?.displayName || 'Not yet started',
 		classes: statusMap[statusId] || 'govuk-tag--grey'
 	};
+}
+
+function formatTaskListItems(caseData: any, taskList: { id: string; displayName: string }[]) {
+	return taskList.map((subtask) => ({
+		title: {
+			text: subtask.displayName,
+			classes: 'govuk-link--no-visited-state'
+		},
+		href: `/${subtask.id}`,
+		status: {
+			tag: getCategoryStatus((caseData as any)[`${kebabCaseToCamelCase(subtask.id)}StatusId`])
+		}
+	}));
 }

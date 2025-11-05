@@ -16,7 +16,16 @@
 
       {{ govukTaskList({
         idPrefix: "document-categories",
-        items: taskListItems
+        items: taskListItems.yourDocuments
+      }) }}
+
+      <h2 class="govuk-heading-m">
+        2. Your Application
+      </h2>
+
+      {{ govukTaskList({
+        idPrefix: "your-application",
+        items: taskListItems.yourApplication
       }) }}
     </div>
   </div>

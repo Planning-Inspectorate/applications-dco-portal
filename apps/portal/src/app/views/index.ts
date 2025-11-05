@@ -1,8 +1,10 @@
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { createRoutes as fileUploadRoutes } from './file-upload/index.ts';
+import { createRoutes as applicantAgentDetailsRoutes } from './applicant-agent-details/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { APPLICATION_SECTION_ID } from './constants.ts';
 import { buildHomePage } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 
@@ -13,6 +15,7 @@ export function createRoutes(service: PortalService): IRouter {
 
 	router.get('/', asyncHandler(homePageController));
 
+	//file-upload
 	router.use(
 		'/application-form-related-information',
 		fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION)
@@ -31,6 +34,12 @@ export function createRoutes(service: PortalService): IRouter {
 		fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION)
 	);
 	router.use('/other-documents', fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.OTHER));
+
+	//application
+	router.use(
+		'/applicant-and-agent-details',
+		applicantAgentDetailsRoutes(service, APPLICATION_SECTION_ID.APPLICANT_AND_AGENT_DETAILS)
+	);
 
 	return router;
 }

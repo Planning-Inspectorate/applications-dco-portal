@@ -3,7 +3,7 @@ import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
 // @ts-expect-error - due to not having @types
 import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
 import type { Handler, Request } from 'express';
-import { getDocumentCategoryDisplayName } from './util.ts';
+import { getDocumentCategoryDisplayName } from '../util.ts';
 
 export function createJourney(documentTypeId: string, questions: any, response: Handler, req: Request) {
 	if (!req.baseUrl.endsWith('/' + documentTypeId)) {
