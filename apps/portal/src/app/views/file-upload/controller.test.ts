@@ -4,8 +4,7 @@ import { describe, it, mock } from 'node:test';
 import {
 	buildDeleteDocumentAndSaveController,
 	buildDownloadDocumentController,
-	buildFileUploadHomePage,
-	buildIsFileUploadSectionCompleted
+	buildFileUploadHomePage
 } from './controller.ts';
 import assert from 'node:assert';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
@@ -173,83 +172,6 @@ describe('file upload controllers', () => {
 					'If you typed the web address, check it is correct.',
 					'If you pasted the web address, check you copied the entire address.'
 				]
-			});
-		});
-	});
-	describe('buildIsFileUploadSectionCompleted', () => {
-		it('should redirect to landing page if radio button selected', async () => {
-			const mockDb = {
-				case: {
-					findFirst: mock.fn(),
-					update: mock.fn()
-				},
-				documentCategory: {
-					findUnique: mock.fn(() => ({
-						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
-						displayName: 'Draft DCO'
-					}))
-				}
-			};
-			const mockReq = {
-				session: {
-					isAuthenticated: true,
-					emailAddress: 'test@email.com',
-					caseReference: 'EN123456'
-				},
-				body: { draftDcoIsCompleted: 'yes' }
-			};
-			const mockRes = { redirect: mock.fn() };
-
-			const controller = buildIsFileUploadSectionCompleted({ db: mockDb }, 'draft-dco');
-			await controller(mockReq, mockRes);
-
-			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
-			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
-				where: { reference: 'EN123456' },
-				data: { draftDcoStatusId: 'completed' }
-			});
-
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
-		});
-		it('should redirect to document page with errors if no radio button selected', async () => {
-			const mockDb = {
-				case: {
-					findUnique: mock.fn(() => ({
-						reference: 'EN123456',
-						Documents: []
-					}))
-				},
-				documentCategory: {
-					findUnique: mock.fn(() => ({
-						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
-						displayName: 'Draft DCO'
-					}))
-				}
-			};
-			const mockReq = {
-				baseUrl: '/draft-dco',
-				body: {}
-			};
-			const mockRes = {
-				render: mock.fn()
-			};
-
-			const controller = buildIsFileUploadSectionCompleted({ db: mockDb }, 'draft-dco');
-			await controller(mockReq, mockRes);
-
-			assert.strictEqual(mockRes.render.mock.callCount(), 1);
-			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
-			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				pageTitle: 'Draft DCO',
-				documentCategory: 'draftDco',
-				documents: [],
-				showUploadButton: true,
-				uploadButtonUrl: '/draft-dco/upload/document-type',
-				backLinkUrl: '/',
-				isCompletedValue: '',
-				errors: { draftDcoIsCompleted: { msg: 'You must select an answer' } },
-				errorSummary: [{ text: 'You must select an answer', href: '#draftDcoIsCompleted' }]
 			});
 		});
 	});

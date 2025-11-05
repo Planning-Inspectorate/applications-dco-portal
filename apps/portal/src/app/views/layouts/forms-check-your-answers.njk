@@ -42,10 +42,12 @@
     </div>
 
     {% if journeyComplete %}
+        {% set submitButtonParams = {
+                text: submitButtonText | default('Save and continue')
+            }
+        %}
         <form method="POST">
-            {{ govukButton({
-                text: "Confirm upload"
-            }) }}
+            {{ govukButton(submitButtonParams) }}
         </form>
 
     {% else %}
