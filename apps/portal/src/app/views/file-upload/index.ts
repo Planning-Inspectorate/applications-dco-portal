@@ -2,7 +2,12 @@ import { Router as createRouter } from 'express';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import type { PortalService } from '#service';
 import type { IRouter } from 'express';
-import { buildFileUploadHomePage, buildIsFileUploadSectionCompleted } from './controller.ts';
+import {
+	buildDeleteDocumentAndSaveController,
+	buildDownloadDocumentController,
+	buildFileUploadHomePage,
+	buildIsFileUploadSectionCompleted
+} from './controller.ts';
 import { uploadDocumentQuestion } from './middleware.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
@@ -44,6 +49,8 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 	const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId);
 	const isFileUploadSectionCompleted = buildIsFileUploadSectionCompleted(service, documentTypeId);
 	const saveController = buildSaveController(service, documentTypeId);
+	const downloadDocumentController = buildDownloadDocumentController(service);
+	const deleteDocumentAndSaveController = buildDeleteDocumentAndSaveController(service, documentTypeId);
 
 	const handleUploads = multer();
 	const uploadDocuments = asyncHandler(
@@ -53,6 +60,9 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 
 	router.get('/', asyncHandler(fileUploadHomePage));
 	router.post('/', asyncHandler(isFileUploadSectionCompleted));
+
+	router.get('/document/download/:documentId', asyncHandler(downloadDocumentController));
+	router.get('/document/delete/:documentId', asyncHandler(deleteDocumentAndSaveController));
 
 	router.get('/:section/:question', getJourneyResponse, getJourney, uploadDocumentQuestion, question);
 

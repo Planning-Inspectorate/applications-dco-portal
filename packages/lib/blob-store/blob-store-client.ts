@@ -76,12 +76,6 @@ export class BlobStorageClient {
 		return blockBlobClient.url;
 	}
 
-	async downloadStream(path: string): Promise<BlobDownloadResponseParsed> {
-		const blockBlobClient = this.#getBlockBlobClient(path);
-		await this.checkBlobExists(blockBlobClient, path);
-		return blockBlobClient.download();
-	}
-
 	async deleteBlobIfExists(path: string): Promise<BlobDeleteIfExistsResponse> {
 		const blockBlobClient = this.#getBlockBlobClient(path);
 		await this.checkBlobExists(blockBlobClient, path);
@@ -114,5 +108,11 @@ export class BlobStorageClient {
 			this.logger.error(`blob ${path} does not exist`);
 			throw new Error('blob does not exist');
 		}
+	}
+
+	async downloadBlob(blobName: string): Promise<BlobDownloadResponseParsed> {
+		const blockBlobClient = this.#getBlockBlobClient(blobName);
+		await this.checkBlobExists(blockBlobClient, blobName);
+		return await blockBlobClient.download();
 	}
 }
