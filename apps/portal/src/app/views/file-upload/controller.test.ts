@@ -3,12 +3,16 @@
 import { describe, it, mock } from 'node:test';
 import {
 	buildDeleteDocumentAndSaveController,
+	buildDownloadDocumentController,
 	buildFileUploadHomePage,
 	buildIsFileUploadSectionCompleted
 } from './controller.ts';
 import assert from 'node:assert';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { ReadableStream } from 'node:stream/web';
+import EventEmitter from 'node:events';
+import { Readable, Writable } from 'stream';
 
 describe('file upload controllers', () => {
 	describe('buildFileUploadHomePage', () => {
@@ -23,6 +27,7 @@ describe('file upload controllers', () => {
 						draftDcoStatusId: 'in-progress',
 						Documents: [
 							{
+								id: 'doc-id-1',
 								fileName: 'test.pdf',
 								uploadedDate: Date.now(),
 								isCertified: true,
@@ -72,7 +77,7 @@ describe('file upload controllers', () => {
 				documents: [
 					[
 						{
-							html: '<a class="govuk-link" href="#">test.pdf</a>'
+							html: '<a class="govuk-link" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
 						},
 						{
 							text: 'Draft development consent order'
@@ -87,7 +92,7 @@ describe('file upload controllers', () => {
 							text: '30/01/2025 00:00'
 						},
 						{
-							html: '<a class="govuk-link" href="#">Remove</a>'
+							html: '<a class="govuk-link" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
 						}
 					]
 				],
@@ -252,10 +257,14 @@ describe('file upload controllers', () => {
 		it('should delete document from blob store and update db to reflect', async (ctx) => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					update: mock.fn()
+				},
 				document: {
 					findUnique: mock.fn(() => ({
 						blobName: '/case-id-1/draft-dco/test.pdf'
 					})),
+					count: mock.fn(() => 0),
 					delete: mock.fn()
 				}
 			};
@@ -266,6 +275,9 @@ describe('file upload controllers', () => {
 				baseUrl: '/draft-dco',
 				params: {
 					documentId: 'doc-id-1'
+				},
+				session: {
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = {
@@ -273,11 +285,14 @@ describe('file upload controllers', () => {
 				status: mock.fn()
 			};
 
-			const controller = buildDeleteDocumentAndSaveController({
-				db: mockDb,
-				blobStore: mockBlob,
-				logger: mockLogger()
-			});
+			const controller = buildDeleteDocumentAndSaveController(
+				{
+					db: mockDb,
+					blobStore: mockBlob,
+					logger: mockLogger()
+				},
+				'draft-dco'
+			);
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -291,6 +306,17 @@ describe('file upload controllers', () => {
 			assert.deepStrictEqual(mockDb.document.delete.mock.calls[0].arguments[0], {
 				where: {
 					id: 'doc-id-1'
+				}
+			});
+			assert.strictEqual(mockDb.document.count.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				data: {
+					draftDcoStatusId: 'not-started'
+				},
+				where: {
+					reference: 'EN123456'
 				}
 			});
 		});
@@ -409,6 +435,100 @@ describe('file upload controllers', () => {
 					'If you pasted the web address, check you copied the entire address.'
 				]
 			});
+		});
+	});
+	describe('buildDownloadDocumentController', () => {
+		it('should download document from blob store', async (ctx) => {
+			const mockStream = new Readable({
+				read() {
+					this.push('file data');
+					this.push(null);
+				}
+			});
+			const mockDownloadResponse = {
+				contentType: 'text/plain',
+				contentLength: 9,
+				readableStreamBody: mockStream
+			};
+			const mockDb = {
+				document: {
+					findUnique: mock.fn(() => ({ blobName: 'test.txt' }))
+				}
+			};
+			const mockBlob = {
+				downloadBlob: mock.fn(() => mockDownloadResponse)
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				params: {
+					documentId: 'doc-id-1'
+				}
+			};
+			const mockRes = Object.assign(
+				new Writable({
+					write(chunk, encoding, callback) {
+						callback();
+					}
+				}),
+				{
+					render: mock.fn(),
+					status: mock.fn(),
+					setHeader: mock.fn(),
+					destroy: mock.fn()
+				}
+			);
+
+			const controller = buildDownloadDocumentController(
+				{
+					db: mockDb,
+					blobStore: mockBlob,
+					logger: mockLogger()
+				},
+				'draft-dco'
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.setHeader.mock.callCount(), 3);
+			assert.deepStrictEqual(mockRes.setHeader.mock.calls[0].arguments, ['Content-Type', 'text/plain']);
+			assert.deepStrictEqual(mockRes.setHeader.mock.calls[1].arguments, ['Content-Length', 9]);
+			assert.deepStrictEqual(mockRes.setHeader.mock.calls[2].arguments, [
+				'Content-Disposition',
+				'inline; filename="test.txt"'
+			]);
+		});
+		it('should throw error if issue encountered downloading document from blob store', async (ctx) => {
+			const mockDb = {
+				document: {
+					findUnique: mock.fn(() => ({ blobName: 'test.txt' }))
+				}
+			};
+			const mockBlob = {
+				downloadBlob: mock.fn(() => {
+					throw new Error('Error encountered during blob store deletion');
+				})
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				params: {
+					documentId: 'doc-id-1'
+				}
+			};
+			const mockRes = {
+				render: mock.fn(),
+				status: mock.fn(),
+				setHeader: mock.fn(),
+				destroy: mock.fn()
+			};
+
+			const controller = buildDownloadDocumentController(
+				{
+					db: mockDb,
+					blobStore: mockBlob,
+					logger: mockLogger()
+				},
+				'draft-dco'
+			);
+			await assert.rejects(() => controller(mockReq, mockRes), { message: 'Failed to download file from blob store' });
 		});
 	});
 });

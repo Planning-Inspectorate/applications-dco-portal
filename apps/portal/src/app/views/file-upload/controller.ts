@@ -50,14 +50,16 @@ export function buildFileUploadHomePage(
 		}
 
 		const documentRows = caseData.Documents.map((document) => {
-			const { fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
+			const { id, fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
 			return [
-				{ html: `<a class="govuk-link" href="#">${fileName}</a>` },
+				{
+					html: `<a class="govuk-link" href="${req.baseUrl}/document/download/${id}" target="_blank" rel="noreferrer">${fileName}</a>`
+				},
 				{ text: SubCategory?.displayName },
 				{ text: ApfpRegulation?.displayName },
 				{ text: isCertified ? 'Certified' : 'Not certified' },
 				{ text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) },
-				{ html: '<a class="govuk-link" href="#">Remove</a>' }
+				{ html: `<a class="govuk-link" href="${req.baseUrl}/document/delete/${id}">Remove</a>` }
 			];
 		});
 
@@ -110,7 +112,10 @@ export function buildIsFileUploadSectionCompleted(service: PortalService, docume
 	};
 }
 
-export function buildDeleteDocumentAndSaveController(service: PortalService): AsyncRequestHandler {
+export function buildDeleteDocumentAndSaveController(
+	service: PortalService,
+	documentTypeId: string
+): AsyncRequestHandler {
 	return async (req: Request, res: Response) => {
 		const { db, blobStore, logger } = service;
 		const documentId = req.params.documentId;
@@ -140,14 +145,73 @@ export function buildDeleteDocumentAndSaveController(service: PortalService): As
 				await $tx.document.delete({
 					where: { id: documentId }
 				});
+
+				const documentCount = await $tx.document.count({
+					where: {
+						SubCategory: {
+							Category: {
+								id: documentTypeId
+							}
+						}
+					}
+				});
+
+				if (documentCount === 0) {
+					await $tx.case.update({
+						where: { reference: req.session.caseReference },
+						data: { [`${kebabCaseToCamelCase(documentTypeId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED }
+					});
+				}
 			});
-			//TODO: if documents list is empty for category after documentId is deleted
-			// set the categoryId - StatusId to -> not-started
 		} catch (error) {
 			logger.error({ error, documentId }, `Error deleting file: ${documentId} from database`);
 			throw new Error('Failed to delete file from database');
 		}
 
 		res.redirect(req.baseUrl);
+	};
+}
+
+export function buildDownloadDocumentController(service: PortalService): AsyncRequestHandler {
+	return async (req: Request, res: Response) => {
+		const { db, blobStore, logger } = service;
+		const documentId = req.params.documentId;
+
+		if (!documentId) {
+			return notFoundHandler(req, res);
+		}
+
+		const document = await db.document.findUnique({
+			where: { id: documentId }
+		});
+
+		if (!document) {
+			return notFoundHandler(req, res);
+		}
+
+		const blobName = document.blobName;
+		try {
+			const downloadResponse = await blobStore?.downloadBlob(blobName);
+
+			res.setHeader('Content-Type', downloadResponse?.contentType || 'application/octet-stream');
+			res.setHeader('Content-Length', downloadResponse?.contentLength || 0);
+			res.setHeader('Content-Disposition', `inline; filename="${blobName}"`);
+
+			const downloadStream = downloadResponse?.readableStreamBody;
+
+			downloadStream?.on('error', (err) => {
+				if (err?.name === 'AbortError') {
+					logger.debug({ documentId }, 'file download cancelled');
+				} else {
+					logger.error({ err, documentId }, 'file download stream error');
+				}
+				res.destroy(err);
+			});
+
+			downloadStream?.pipe(res);
+		} catch (error) {
+			logger.error({ error, blobName }, `Error downloading file: ${blobName} from Blob store`);
+			throw new Error('Failed to download file from blob store');
+		}
 	};
 }
