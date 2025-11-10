@@ -32,8 +32,7 @@ export function loadConfig(): Config {
 		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER,
-		BLOB_STORE_CONNECTION_STRING,
-		CASE_WHITELIST
+		BLOB_STORE_CONNECTION_STRING
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -81,16 +80,6 @@ export function loadConfig(): Config {
 		}
 	}
 
-	const dummyCaseWhiteList: Record<string, string> = {};
-	if (CASE_WHITELIST) {
-		CASE_WHITELIST.split(',').forEach((entry) => {
-			const [key, email] = entry.split(':');
-			if (key && email) {
-				dummyCaseWhiteList[key] = email;
-			}
-		});
-	}
-
 	config = {
 		blobStore: {
 			disabled: BLOB_STORE_DISABLED === 'true',
@@ -104,7 +93,6 @@ export function loadConfig(): Config {
 		database: {
 			datasourceUrl: SQL_CONNECTION_STRING
 		},
-		dummyWhiteList: dummyCaseWhiteList,
 		gitSha: GIT_SHA,
 		govNotify: {
 			disabled: govNotifyDisabled,

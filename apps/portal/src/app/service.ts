@@ -48,10 +48,6 @@ export class PortalService {
 		return this.dbClient;
 	}
 
-	get dummyWhiteList() {
-		return this.#config.dummyWhiteList;
-	}
-
 	get gitSha() {
 		return this.#config.gitSha;
 	}

@@ -1,0 +1,24 @@
+{
+  "name": "dco-portal-function",
+  "version": "1.0.0",
+  "description": "Function app for handling integrations",
+  "main": "src/functions/*.ts",
+  "type": "module",
+  "scripts": {
+    "start": "func start",
+    "prepare-package": "node src/package.ts",
+    "test": "node --test"
+  },
+  "private": true,
+  "dependencies": {
+    "@azure/functions": "*",
+    "@pins/dco-portal-database": "^0.0.0",
+    "@pins/dco-portal-lib": "^0.0.0",
+    "dotenv": "*"
+  },
+  "imports": {
+    "#pins/dco-portal-lib/*": "./src/packages/dco-portal-lib/*",
+    "#pins/dco-portal-database": "./src/packages/dco-portal-database/src/index.ts",
+    "#pins/dco-portal-database/*": "./src/packages/dco-portal-database/*"
+  }
+}

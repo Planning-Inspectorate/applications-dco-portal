@@ -139,3 +139,19 @@ model ContactDetails {
   caseId           String        @unique @db.UniqueIdentifier
   Case             Case          @relation("ApplicantDetails", fields: [caseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+model NsipServiceUser {
+  id              String   @id @unique
+  caseReference   String   @unique
+  email           String
+  modifiedAt      DateTime @updatedAt
+  serviceUserType String?
+  /// serviceUserTypes:
+  /// AGENT: 'Agent',
+  /// APPELLANT: 'Appellant',
+  /// APPLICANT: 'Applicant',
+  /// INTERESTED_PARTY: 'InterestedParty',
+  /// REPRESENTATION_CONTACT: 'RepresentationContact',
+  /// RULE_6_PARTY: 'Rule6Party',
+  /// SUBSCRIBER: 'Subscriber',
+}
