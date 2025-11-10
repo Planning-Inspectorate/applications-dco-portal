@@ -88,10 +88,7 @@ describe('login controllers', () => {
 			const controller = buildSubmitEmailController({
 				db: mockDb,
 				logger: mockLogger(),
-				notifyClient: mockNotifyClient,
-				dummyWhiteList: {
-					['EN123456']: 'valid@email.com'
-				}
+				notifyClient: mockNotifyClient
 			});
 			await controller(mockReq, mockRes);
 
@@ -142,10 +139,7 @@ describe('login controllers', () => {
 			const controller = buildSubmitEmailController({
 				db: mockDb,
 				logger: mockLogger(),
-				notifyClient: mockNotifyClient,
-				dummyWhiteList: {
-					['EN123456']: 'valid@email.com'
-				}
+				notifyClient: mockNotifyClient
 			});
 			await controller(mockReq, mockRes);
 
