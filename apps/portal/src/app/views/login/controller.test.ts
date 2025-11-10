@@ -65,6 +65,11 @@ describe('login controllers', () => {
 					deleteMany: mock.fn(),
 					create: mock.fn(),
 					findUnique: mock.fn()
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						email: 'valid@email.com'
+					}))
 				}
 			};
 			const mockNotifyClient = {
@@ -114,6 +119,11 @@ describe('login controllers', () => {
 					findUnique: mock.fn(() => ({
 						createdAt: new Date('2025-01-30T00:00:00.000Z')
 					}))
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						email: 'valid@email.com'
+					}))
 				}
 			};
 			const mockNotifyClient = {
@@ -154,7 +164,12 @@ describe('login controllers', () => {
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
 		});
-		it('should redirect back to no access page if case reference is not whitelisted', async () => {
+		it('should redirect back to no access page if no service user associated with case reference', async () => {
+			const mockDb = {
+				nsipServiceUser: {
+					findUnique: mock.fn()
+				}
+			};
 			const mockReq = {
 				baseUrl: '/login',
 				body: {
@@ -165,18 +180,21 @@ describe('login controllers', () => {
 			};
 			const mockRes = { redirect: mock.fn() };
 
-			const controller = buildSubmitEmailController({
-				logger: mockLogger(),
-				dummyWhiteList: {
-					['EN987654']: 'valid@email.com'
-				}
-			});
+			const controller = buildSubmitEmailController({ logger: mockLogger(), db: mockDb });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/no-access');
 		});
-		it('should redirect back to no access page if case reference is whitelisted but email not linked to case', async () => {
+		it('should redirect back to no access page if case reference is whitelisted but email provided does not match service user entry', async () => {
+			const mockDb = {
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						caseReference: 'EN123456',
+						email: 'another-email@email.com'
+					}))
+				}
+			};
 			const mockReq = {
 				baseUrl: '/login',
 				body: {
@@ -187,12 +205,7 @@ describe('login controllers', () => {
 			};
 			const mockRes = { redirect: mock.fn() };
 
-			const controller = buildSubmitEmailController({
-				logger: mockLogger(),
-				dummyWhiteList: {
-					['EN123456']: 'test@email.com'
-				}
-			});
+			const controller = buildSubmitEmailController({ logger: mockLogger(), db: mockDb });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);

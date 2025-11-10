@@ -70,7 +70,7 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient, dummyWhiteList }: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { emailAddress, caseReference } = req.body;
 
@@ -103,13 +103,15 @@ export function buildSubmitEmailController({ db, notifyClient, dummyWhiteList }:
 			return handleError({ caseReference: 'You must provide a valid case reference' });
 		}
 
-		//TODO: replace below check with call to CBOS once CBOS integration completed
-		if (!(caseReference in dummyWhiteList)) {
+		const serviceUser = await db.nsipServiceUser.findUnique({
+			where: { caseReference }
+		});
+
+		if (!serviceUser) {
 			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 
-		//TODO: replace below check with call to CBOS once CBOS integration completed
-		if (caseReference in dummyWhiteList && dummyWhiteList[caseReference].toLowerCase() !== emailAddress.toLowerCase()) {
+		if (serviceUser.email.toLowerCase() !== emailAddress.toLowerCase()) {
 			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 

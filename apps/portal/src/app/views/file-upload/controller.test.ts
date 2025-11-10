@@ -9,8 +9,6 @@ import {
 import assert from 'node:assert';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
-import { ReadableStream } from 'node:stream/web';
-import EventEmitter from 'node:events';
 import { Readable, Writable } from 'stream';
 
 describe('file upload controllers', () => {
