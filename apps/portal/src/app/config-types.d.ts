@@ -22,4 +22,5 @@ interface Config {
 		secret: string;
 	};
 	staticDir: string;
+	enableTestTools: boolean;
 }

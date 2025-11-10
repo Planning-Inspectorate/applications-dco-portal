@@ -2,7 +2,8 @@
 /* global process */
 
 import { defineConfig } from 'cypress';
-import { deleteDownloads, deleteUnwantedFixtures, validateDownloadedFile } from './cypress/support/cypressUtils.js';
+import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
+import { clearDocumentCategory } from './cypress/support/dbUtils.js';
 
 import 'dotenv/config';
 
@@ -11,8 +12,8 @@ export default defineConfig({
 		async setupNodeEvents(on, config) {
 			on('task', {
 				DeleteDownloads: deleteDownloads,
-				DeleteUnwantedFixtures: deleteUnwantedFixtures,
-				ValidateDownloadedFile: validateDownloadedFile
+				ValidateDownloadedFile: validateDownloadedFile,
+				clearDocumentCategory: clearDocumentCategory
 			});
 			// Set timezone explicitly for CI consistency
 			process.env.TZ = 'Europe/London';
@@ -22,7 +23,8 @@ export default defineConfig({
 		baseUrl: process.env.BASE_URL,
 		env: {
 			USER_EMAIL: process.env.USER_EMAIL,
-			PASSWORD: process.env.USER_PASSWORD
+			PASSWORD: process.env.USER_PASSWORD,
+			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE
 		},
 		specPattern: `cypress/e2e/dco-portal/**/*.cy.js`,
 		supportFile: './cypress/support/e2e.js',
