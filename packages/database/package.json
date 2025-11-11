@@ -17,7 +17,6 @@
   },
   "devDependencies": {
     "dotenv": "*",
-    "prisma": "*",
-    "uuid": "*"
+    "prisma": "*"
   }
 }

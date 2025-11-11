@@ -7,7 +7,7 @@ const { logger, serviceBusConfig } = service;
 
 logger.info('registering nsip-service-user function to consume on the associated service bus topic');
 
-app.serviceBusTopic('appeal-document', {
+app.serviceBusTopic('nsip-service-user', {
 	topicName: serviceBusConfig.topics.serviceUser,
 	subscriptionName: serviceBusConfig.subscriptions.serviceUser,
 	connection: 'ServiceBusConnection',

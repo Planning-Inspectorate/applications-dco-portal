@@ -103,8 +103,8 @@ export function buildSubmitEmailController({ db, notifyClient }: PortalService):
 			return handleError({ caseReference: 'You must provide a valid case reference' });
 		}
 
-		const serviceUser = await db.nsipServiceUser.findUnique({
-			where: { caseReference }
+		const serviceUser = await db.nsipServiceUser.findFirst({
+			where: { caseReference, email: emailAddress }
 		});
 
 		if (!serviceUser) {

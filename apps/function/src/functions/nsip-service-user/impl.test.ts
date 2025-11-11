@@ -26,7 +26,11 @@ describe('nsip service user function', () => {
 
 		assert.strictEqual(mockDb.nsipServiceUser.upsert.mock.calls.length, 1);
 		assert.deepStrictEqual(mockDb.nsipServiceUser.upsert.mock.calls[0].arguments[0], {
-			where: { caseReference: 'EN123456' },
+			where: {
+				id: '1',
+				caseReference: 'EN123456',
+				serviceUserType: 'Applicant'
+			},
 			update: {
 				id: '1',
 				caseReference: 'EN123456',
