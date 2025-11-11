@@ -10,7 +10,6 @@ CREATE TABLE [dbo].[NsipServiceUser] (
     [modifiedAt] DATETIME2 NOT NULL,
     [serviceUserType] NVARCHAR(1000),
     CONSTRAINT [NsipServiceUser_pkey] PRIMARY KEY CLUSTERED ([id]),
-    CONSTRAINT [NsipServiceUser_id_key] UNIQUE NONCLUSTERED ([id]),
     CONSTRAINT [NsipServiceUser_caseReference_email_key] UNIQUE NONCLUSTERED ([caseReference],[email])
 );
 
