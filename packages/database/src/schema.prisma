@@ -146,12 +146,6 @@ model NsipServiceUser {
   email           String
   modifiedAt      DateTime @updatedAt
   serviceUserType String?
-  /// serviceUserTypes:
-  /// AGENT: 'Agent',
-  /// APPELLANT: 'Appellant',
-  /// APPLICANT: 'Applicant',
-  /// INTERESTED_PARTY: 'InterestedParty',
-  /// REPRESENTATION_CONTACT: 'RepresentationContact',
-  /// RULE_6_PARTY: 'Rule6Party',
-  /// SUBSCRIBER: 'Subscriber',
+
+  @@unique([caseReference, email])
 }
