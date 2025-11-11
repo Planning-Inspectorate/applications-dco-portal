@@ -3,26 +3,29 @@ import type { PrismaClient } from '@pins/dco-portal-database/src/client';
 export async function seedDev(dbClient: PrismaClient) {
 	const CASE_WHITELIST = process.env.CASE_WHITELIST;
 	if (CASE_WHITELIST) {
-		CASE_WHITELIST.split(',').forEach((entry) => {
-			const [caseReference, email] = entry.split(':');
-			if (caseReference && email) {
-				const serviceUserUpdate = {
-					id: crypto.randomUUID(),
-					caseReference,
-					serviceUserType: 'Applicant',
-					email
-				};
-				dbClient.nsipServiceUser.upsert({
-					where: {
-						id: serviceUserUpdate.id,
+		await Promise.all(
+			CASE_WHITELIST.split(',').map((entry) => {
+				const [caseReference, email] = entry.split(':');
+				if (caseReference && email) {
+					const serviceUserUpdate = {
+						id: crypto.randomUUID(),
 						caseReference,
-						serviceUserType: serviceUserUpdate.serviceUserType
-					},
-					update: serviceUserUpdate,
-					create: serviceUserUpdate
-				});
-			}
-		});
+						serviceUserType: 'Applicant',
+						email
+					};
+					return dbClient.nsipServiceUser.upsert({
+						where: {
+							caseReference_email: {
+								caseReference,
+								email
+							}
+						},
+						update: serviceUserUpdate,
+						create: serviceUserUpdate
+					});
+				}
+			})
+		);
 	}
 
 	console.log('dev seed complete');
