@@ -10,8 +10,7 @@ CREATE TABLE [dbo].[NsipServiceUser] (
     [modifiedAt] DATETIME2 NOT NULL,
     [serviceUserType] NVARCHAR(1000),
     CONSTRAINT [NsipServiceUser_pkey] PRIMARY KEY CLUSTERED ([id]),
-    CONSTRAINT [NsipServiceUser_id_key] UNIQUE NONCLUSTERED ([id]),
-    CONSTRAINT [NsipServiceUser_caseReference_key] UNIQUE NONCLUSTERED ([caseReference])
+    CONSTRAINT [NsipServiceUser_id_key] UNIQUE NONCLUSTERED ([id])
 );
 
 COMMIT TRAN;

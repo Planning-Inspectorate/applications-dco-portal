@@ -1,17 +1,12 @@
 import type { FunctionService } from '../../service.ts';
 import type { ServiceBusTopicHandler } from '@azure/functions';
-
-interface ServiceUserMessage {
-	id: string;
-	caseReference: string;
-	serviceUserType: string;
-	emailAddress: string;
-}
+import type { Schemas } from '@planning-inspectorate/data-model';
+type ServiceUser = Schemas.ServiceUser;
 
 export function buildNsipServiceUserFunction(service: FunctionService): ServiceBusTopicHandler {
 	return async (message, context) => {
 		const { db } = service;
-		const serviceUserMessage = message as ServiceUserMessage;
+		const serviceUserMessage = message as ServiceUser;
 
 		try {
 			const serviceUserUpdate = {
@@ -21,12 +16,14 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 				email: serviceUserMessage.emailAddress
 			};
 
-			await db.$transaction(async ($tx) => {
-				await $tx.nsipServiceUser.upsert({
-					where: { caseReference: serviceUserMessage.caseReference },
-					update: serviceUserUpdate,
-					create: serviceUserUpdate
-				});
+			await db.nsipServiceUser.upsert({
+				where: {
+					id: serviceUserMessage.id,
+					caseReference: serviceUserMessage.caseReference,
+					serviceUserType: serviceUserMessage.serviceUserType
+				},
+				update: serviceUserUpdate,
+				create: serviceUserUpdate
 			});
 
 			context.log('NSIP Service User function run successfully');

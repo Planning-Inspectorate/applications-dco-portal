@@ -14,6 +14,7 @@
     "@azure/functions": "*",
     "@pins/dco-portal-database": "^0.0.0",
     "@pins/dco-portal-lib": "^0.0.0",
+		"@planning-inspectorate/data-model": "*",
     "dotenv": "*"
   },
   "imports": {

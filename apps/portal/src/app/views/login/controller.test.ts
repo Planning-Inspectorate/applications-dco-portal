@@ -67,7 +67,7 @@ describe('login controllers', () => {
 					findUnique: mock.fn()
 				},
 				nsipServiceUser: {
-					findUnique: mock.fn(() => ({
+					findFirst: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
 				}
@@ -118,7 +118,7 @@ describe('login controllers', () => {
 					}))
 				},
 				nsipServiceUser: {
-					findUnique: mock.fn(() => ({
+					findFirst: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
 				}
@@ -161,7 +161,7 @@ describe('login controllers', () => {
 		it('should redirect back to no access page if no service user associated with case reference', async () => {
 			const mockDb = {
 				nsipServiceUser: {
-					findUnique: mock.fn()
+					findFirst: mock.fn()
 				}
 			};
 			const mockReq = {
@@ -183,7 +183,7 @@ describe('login controllers', () => {
 		it('should redirect back to no access page if case reference is whitelisted but email provided does not match service user entry', async () => {
 			const mockDb = {
 				nsipServiceUser: {
-					findUnique: mock.fn(() => ({
+					findFirst: mock.fn(() => ({
 						caseReference: 'EN123456',
 						email: 'another-email@email.com'
 					}))

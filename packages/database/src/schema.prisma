@@ -142,7 +142,7 @@ model ContactDetails {
 
 model NsipServiceUser {
   id              String   @id @unique
-  caseReference   String   @unique
+  caseReference   String
   email           String
   modifiedAt      DateTime @updatedAt
   serviceUserType String?
