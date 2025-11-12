@@ -7,17 +7,18 @@ export async function seedDev(dbClient: PrismaClient) {
 			CASE_WHITELIST.split(',').map((entry) => {
 				const [caseReference, email] = entry.split(':');
 				if (caseReference && email) {
+					const normalisedEmail = email.toLowerCase();
 					const serviceUserUpdate = {
 						id: crypto.randomUUID(),
 						caseReference,
 						serviceUserType: 'Applicant',
-						email
+						email: normalisedEmail
 					};
 					return dbClient.nsipServiceUser.upsert({
 						where: {
 							caseReference_email: {
 								caseReference,
-								email
+								email: normalisedEmail
 							}
 						},
 						update: serviceUserUpdate,

@@ -9,18 +9,20 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 		const serviceUserMessage = message as ServiceUser;
 
 		try {
+			const normalisedEmail = serviceUserMessage.emailAddress.toLowerCase();
 			const serviceUserUpdate = {
 				id: serviceUserMessage.id,
 				caseReference: serviceUserMessage.caseReference,
 				serviceUserType: serviceUserMessage.serviceUserType,
-				email: serviceUserMessage.emailAddress
+				email: normalisedEmail
 			};
 
 			await db.nsipServiceUser.upsert({
 				where: {
-					id: serviceUserMessage.id,
-					caseReference: serviceUserMessage.caseReference,
-					serviceUserType: serviceUserMessage.serviceUserType
+					caseReference_email: {
+						caseReference: serviceUserMessage.caseReference,
+						email: normalisedEmail
+					}
 				},
 				update: serviceUserUpdate,
 				create: serviceUserUpdate
