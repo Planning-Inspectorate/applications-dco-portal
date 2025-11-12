@@ -65,6 +65,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 
 function mapAnswersToInput(answers: Record<string, any>): ContactDetailsRecord {
 	return {
+		firstName: answers.firstName,
+		lastName: answers.lastName,
 		organisation: answers.organisation,
 		paymentReference: answers.paymentReference,
 		PaymentMethod: {

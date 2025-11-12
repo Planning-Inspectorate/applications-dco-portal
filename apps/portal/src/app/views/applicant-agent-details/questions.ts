@@ -43,6 +43,22 @@ export function getQuestions() {
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
 			validators: [new RequiredValidator(), new StringValidator({ maxLength: { maxLength: 18 } })]
+		},
+		firstName: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: "Enter the applicant's name",
+			question: 'First name',
+			fieldName: 'firstName',
+			url: 'first-name',
+			validators: [new RequiredValidator()]
+		},
+		lastName: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: "Enter the applicant's name",
+			question: 'Last name',
+			fieldName: 'lastName',
+			url: 'last-name',
+			validators: [new RequiredValidator()]
 		}
 	};
 
