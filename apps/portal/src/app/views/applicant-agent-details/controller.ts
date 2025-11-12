@@ -2,6 +2,6 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 
 export function buildApplicantAgentDetailsHomePage(): AsyncRequestHandler {
 	return async (req, res) => {
-		res.redirect(`${req.baseUrl}/application/organisation`);
+		res.redirect(`${req.baseUrl}/application/name`);
 	};
 }

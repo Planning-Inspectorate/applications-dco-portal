@@ -18,6 +18,7 @@ describe('applicant agent details journey save controller', () => {
 					update: mock.fn(async () => 'document-id')
 				},
 				contactDetails: {
+					update: mock.fn(async () => ({ id: 'contact-id-1' })),
 					create: mock.fn(async () => ({ id: 'contact-id-1' }))
 				}
 			};
@@ -32,6 +33,19 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
+							emailAddress: 'test@solirius.com',
+							phone: '0711111111',
+							fax: '111111111',
+							address: {
+								addressLine1: '1',
+								addressLine2: 'test way',
+								townCity: 'testville',
+								county: 'testshire',
+								country: 'testy kingdom',
+								postcode: 'te12 5ty'
+							},
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -60,11 +74,26 @@ describe('applicant agent details journey save controller', () => {
 				data: {
 					ApplicantDetails: {
 						create: {
+							firstName: 'test',
+							lastName: 'person',
+							emailAddress: 'test@solirius.com',
+							phone: '0711111111',
+							fax: '111111111',
 							organisation: 'test org',
 							paymentReference: 'pay123',
 							PaymentMethod: {
 								connect: {
 									id: 'cheque'
+								}
+							},
+							Address: {
+								create: {
+									addressLine1: '1',
+									addressLine2: 'test way',
+									townCity: 'testville',
+									county: 'testshire',
+									country: 'testy kingdom',
+									postcode: 'te12 5ty'
 								}
 							}
 						}
@@ -91,6 +120,7 @@ describe('applicant agent details journey save controller', () => {
 					update: mock.fn(async () => 'document-id')
 				},
 				contactDetails: {
+					update: mock.fn(async () => ({ id: 'contact-id-1' })),
 					create: mock.fn(async () => ({ id: 'contact-id-1' }))
 				}
 			};
@@ -105,6 +135,19 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
+							emailAddress: 'test@solirius.com',
+							phone: '0711111111',
+							fax: '111111111',
+							address: {
+								addressLine1: '1',
+								addressLine2: 'test way',
+								townCity: 'testville',
+								county: 'testshire',
+								country: 'testy kingdom',
+								postcode: 'te12 5ty'
+							},
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -133,11 +176,26 @@ describe('applicant agent details journey save controller', () => {
 				data: {
 					ApplicantDetails: {
 						create: {
+							firstName: 'test',
+							lastName: 'person',
+							emailAddress: 'test@solirius.com',
+							phone: '0711111111',
+							fax: '111111111',
 							organisation: 'test org',
 							paymentReference: 'pay123',
 							PaymentMethod: {
 								connect: {
 									id: 'cheque'
+								}
+							},
+							Address: {
+								create: {
+									addressLine1: '1',
+									addressLine2: 'test way',
+									townCity: 'testville',
+									county: 'testshire',
+									country: 'testy kingdom',
+									postcode: 'te12 5ty'
 								}
 							}
 						}
@@ -158,6 +216,7 @@ describe('applicant agent details journey save controller', () => {
 					update: mock.fn(async () => 'document-id')
 				},
 				contactDetails: {
+					create: mock.fn(async () => 'document-id'),
 					update: mock.fn(async () => 'document-id')
 				}
 			};
@@ -172,6 +231,19 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
+							emailAddress: 'test@solirius.com',
+							phone: '0711111111',
+							fax: '111111111',
+							address: {
+								addressLine1: '1',
+								addressLine2: 'test way',
+								townCity: 'testville',
+								county: 'testshire',
+								country: 'testy kingdom',
+								postcode: 'te12 5ty'
+							},
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -198,11 +270,36 @@ describe('applicant agent details journey save controller', () => {
 			assert.deepStrictEqual(mockDb.contactDetails.update.mock.calls[0].arguments[0], {
 				where: { id: 'contact-id' },
 				data: {
+					firstName: 'test',
+					lastName: 'person',
+					emailAddress: 'test@solirius.com',
+					phone: '0711111111',
+					fax: '111111111',
 					organisation: 'test org',
 					paymentReference: 'pay123',
 					PaymentMethod: {
 						connect: {
 							id: 'cheque'
+						}
+					},
+					Address: {
+						upsert: {
+							create: {
+								addressLine1: '1',
+								addressLine2: 'test way',
+								townCity: 'testville',
+								county: 'testshire',
+								country: 'testy kingdom',
+								postcode: 'te12 5ty'
+							},
+							update: {
+								addressLine1: '1',
+								addressLine2: 'test way',
+								townCity: 'testville',
+								county: 'testshire',
+								country: 'testy kingdom',
+								postcode: 'te12 5ty'
+							}
 						}
 					}
 				}
@@ -241,6 +338,8 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
