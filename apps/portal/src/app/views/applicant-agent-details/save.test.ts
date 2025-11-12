@@ -12,14 +12,13 @@ describe('applicant agent details journey save controller', () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
-					findUnique: mock.fn(() => ({
-						id: 'case-id-1',
+					findUnique: mock.fn(async () => ({
 						reference: 'EN123456'
 					})),
-					update: mock.fn()
+					update: mock.fn(async () => 'document-id')
 				},
 				contactDetails: {
-					upsert: mock.fn(async () => 'document-id')
+					create: mock.fn(async () => ({ id: 'contact-id-1' }))
 				}
 			};
 			const mockReq = {
@@ -55,35 +54,24 @@ describe('applicant agent details journey save controller', () => {
 			//assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/applicant-and-agent-details');
 
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
-			assert.strictEqual(mockDb.contactDetails.upsert.mock.callCount(), 1);
-			assert.deepStrictEqual(mockDb.contactDetails.upsert.mock.calls[0].arguments[0], {
-				where: { caseId: 'case-id-1' },
-				update: {
-					organisation: 'test org',
-					paymentReference: 'pay123',
-					PaymentMethod: {
-						connect: {
-							id: 'cheque'
-						}
-					}
-				},
-				create: {
-					organisation: 'test org',
-					paymentReference: 'pay123',
-					PaymentMethod: {
-						connect: {
-							id: 'cheque'
-						}
-					},
-					Case: {
-						connect: {
-							id: 'case-id-1'
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 2);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					ApplicantDetails: {
+						create: {
+							organisation: 'test org',
+							paymentReference: 'pay123',
+							PaymentMethod: {
+								connect: {
+									id: 'cheque'
+								}
+							}
 						}
 					}
 				}
 			});
-			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
-			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[1].arguments[0], {
 				data: {
 					applicantAndAgentDetailsStatusId: 'in-progress'
 				},
@@ -97,14 +85,13 @@ describe('applicant agent details journey save controller', () => {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
 					findUnique: mock.fn(() => ({
-						id: 'case-id-1',
 						reference: 'EN123456',
 						applicantAndAgentDetailsStatusId: 'in-progress'
 					})),
-					update: mock.fn()
+					update: mock.fn(async () => 'document-id')
 				},
 				contactDetails: {
-					upsert: mock.fn(async () => 'document-id')
+					create: mock.fn(async () => ({ id: 'contact-id-1' }))
 				}
 			};
 			const mockReq = {
@@ -140,35 +127,96 @@ describe('applicant agent details journey save controller', () => {
 			//assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/applicant-and-agent-details');
 
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
-			assert.strictEqual(mockDb.contactDetails.upsert.mock.callCount(), 1);
-			assert.deepStrictEqual(mockDb.contactDetails.upsert.mock.calls[0].arguments[0], {
-				where: { caseId: 'case-id-1' },
-				update: {
-					organisation: 'test org',
-					paymentReference: 'pay123',
-					PaymentMethod: {
-						connect: {
-							id: 'cheque'
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					ApplicantDetails: {
+						create: {
+							organisation: 'test org',
+							paymentReference: 'pay123',
+							PaymentMethod: {
+								connect: {
+									id: 'cheque'
+								}
+							}
 						}
 					}
+				}
+			});
+		});
+		it('should save uploaded documents into the database and update the existing contact record if it exists', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						ApplicantDetails: {
+							id: 'contact-id'
+						}
+					})),
+					update: mock.fn(async () => 'document-id')
 				},
-				create: {
+				contactDetails: {
+					update: mock.fn(async () => 'document-id')
+				}
+			};
+			const mockReq = {
+				baseUrl: '/applicant-and-agent-details',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							organisation: 'test org',
+							paymentMethod: 'cheque',
+							paymentReference: 'pay123'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.APPLICANT_AND_AGENT_DETAILS
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			// TODO: reinstate check for redirect back to applicant and agent details homepage when thats been implemented
+			//assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/applicant-and-agent-details');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.contactDetails.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.contactDetails.update.mock.calls[0].arguments[0], {
+				where: { id: 'contact-id' },
+				data: {
 					organisation: 'test org',
 					paymentReference: 'pay123',
 					PaymentMethod: {
 						connect: {
 							id: 'cheque'
-						}
-					},
-					Case: {
-						connect: {
-							id: 'case-id-1'
 						}
 					}
 				}
 			});
 
-			assert.strictEqual(mockDb.case.update.mock.callCount(), 0);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				data: {
+					applicantAndAgentDetailsStatusId: 'in-progress'
+				},
+				where: {
+					reference: 'EN123456'
+				}
+			});
 		});
 		it('should throw if error encountered during database operations', async () => {
 			const mockDb = {
@@ -177,7 +225,7 @@ describe('applicant agent details journey save controller', () => {
 					findUnique: mock.fn(() => ({ reference: 'EN123456' }))
 				},
 				applicantAgentDetails: {
-					upsert: mock.fn(() => {
+					create: mock.fn(() => {
 						throw new Prisma.PrismaClientKnownRequestError('Error', { code: 'E1' });
 					})
 				}

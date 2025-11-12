@@ -26,7 +26,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		journeyTitle: `Application details`,
 		returnToListing: false,
 		makeBaseUrl: () => req.baseUrl,
-		initialBackLink: req.baseUrl,
+		initialBackLink: '/',
 		response
 	});
 }

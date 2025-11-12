@@ -20,13 +20,14 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 model Case {
-  id               String          @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  reference        String          @unique
-  email            String
-  createdAt        DateTime        @default(now())
-  modifiedAt       DateTime        @updatedAt
-  Documents        Document[]
-  ApplicantDetails ContactDetails? @relation("ApplicantDetails")
+  id                 String          @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference          String          @unique
+  email              String
+  createdAt          DateTime        @default(now())
+  modifiedAt         DateTime        @updatedAt
+  Documents          Document[]
+  applicantDetailsId String?         @db.UniqueIdentifier
+  ApplicantDetails   ContactDetails? @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -136,8 +137,7 @@ model ContactDetails {
   paymentMethodId  String
   PaymentMethod    PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentReference String
-  caseId           String        @unique @db.UniqueIdentifier
-  Case             Case          @relation("ApplicantDetails", fields: [caseId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  CaseApplicant    Case[]        @relation("ApplicantDetails")
 }
 
 model NsipServiceUser {
