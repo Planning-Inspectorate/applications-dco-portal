@@ -148,11 +148,19 @@ model DocumentCategoryStatus {
 
 model ContactDetails {
   id               String        @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  firstName        String
+  lastName         String
+  emailAddress     String
+  phone            String
+  fax              String?
   organisation     String
+  addressId        String        @db.UniqueIdentifier
+  Address          FullAddress   @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentMethodId  String
   PaymentMethod    PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentReference String
-  CaseApplicant    Case[]        @relation("ApplicantDetails")
+
+  CaseApplicant Case[] @relation("ApplicantDetails")
 }
 
 model PaymentMethod {
@@ -196,4 +204,15 @@ model NsipServiceUser {
   addressCountry String?
 
   @@unique([caseReference, email])
+}
+
+model FullAddress {
+  id             String           @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  addressLine1   String
+  addressLine2   String
+  townCity       String
+  county         String?
+  country        String
+  postcode       String
+  ContactDetails ContactDetails[]
 }

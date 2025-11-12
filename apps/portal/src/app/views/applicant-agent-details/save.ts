@@ -4,7 +4,7 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import type { ContactDetailsRecord } from './types.js';
+import { mapAnswersToInput, mapAnswersToFullAddressInput } from './mappers.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
@@ -21,22 +21,41 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			await db.$transaction(async ($tx) => {
 				const caseData = await $tx.case.findUnique({
 					where: { reference: req.session?.caseReference },
-					include: { ApplicantDetails: true }
+					include: {
+						ApplicantDetails: {
+							include: {
+								Address: true
+							}
+						}
+					}
 				});
 
-				const input: ContactDetailsRecord = mapAnswersToInput(answers);
+				const [input, address] = [mapAnswersToInput(answers), mapAnswersToFullAddressInput(answers.address)];
 
 				if (caseData?.ApplicantDetails) {
 					await $tx.contactDetails.update({
 						where: { id: caseData?.ApplicantDetails.id },
-						data: input
+						data: {
+							...input,
+							Address: {
+								upsert: {
+									update: address,
+									create: address
+								}
+							}
+						}
 					});
 				} else {
 					await $tx.case.update({
 						where: { reference: req.session.caseReference },
 						data: {
 							ApplicantDetails: {
-								create: input
+								create: {
+									...input,
+									Address: {
+										create: address
+									}
+								}
 							}
 						}
 					});
@@ -60,17 +79,5 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 		clearDataFromSession({ req, journeyId: applicationSectionId });
 
 		res.redirect('/');
-	};
-}
-
-function mapAnswersToInput(answers: Record<string, any>): ContactDetailsRecord {
-	return {
-		organisation: answers.organisation,
-		paymentReference: answers.paymentReference,
-		PaymentMethod: {
-			connect: {
-				id: answers.paymentMethod
-			}
-		}
 	};
 }
