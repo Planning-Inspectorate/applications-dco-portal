@@ -20,23 +20,27 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseData = await $tx.case.findUnique({
-					where: { reference: req.session?.caseReference }
+					where: { reference: req.session?.caseReference },
+					include: { ApplicantDetails: true }
 				});
 
-				const caseId = caseData?.id as string;
 				const input: ContactDetailsRecord = mapAnswersToInput(answers);
-				await $tx.contactDetails.upsert({
-					where: { caseId },
-					update: input,
-					create: {
-						...input,
-						Case: {
-							connect: {
-								id: caseId
+
+				if (caseData?.ApplicantDetails) {
+					await $tx.contactDetails.update({
+						where: { id: caseData?.ApplicantDetails.id },
+						data: input
+					});
+				} else {
+					await $tx.case.update({
+						where: { reference: req.session.caseReference },
+						data: {
+							ApplicantDetails: {
+								create: input
 							}
 						}
-					}
-				});
+					});
+				}
 
 				if (
 					(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
