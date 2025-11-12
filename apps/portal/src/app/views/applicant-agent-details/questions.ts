@@ -1,6 +1,8 @@
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 // @ts-expect-error - due to not having @types
+import MultiFieldInputValidator from '@planning-inspectorate/dynamic-forms/src/validator/multi-field-input-validator.js';
+// @ts-expect-error - due to not having @types
 import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
 // @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
@@ -44,20 +46,40 @@ export function getQuestions() {
 			url: 'payment-reference',
 			validators: [new RequiredValidator(), new StringValidator({ maxLength: { maxLength: 18 } })]
 		},
-		firstName: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		name: {
+			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
 			title: "Enter the applicant's name",
-			question: 'First name',
-			fieldName: 'firstName',
-			url: 'first-name',
+			question: "Enter the applicant's name",
+			fieldName: 'name',
+			url: 'name',
+			validators: [
+				new MultiFieldInputValidator({
+					fields: [
+						{ fieldName: 'firstName', errorMessage: 'Please enter a first name', required: true },
+						{ fieldName: 'lastName', errorMessage: 'Please enter a last name', required: true }
+					]
+				})
+			],
+			inputFields: [
+				{ fieldName: 'firstName', label: 'First name', type: COMPONENT_TYPES.SINGLE_LINE_INPUT },
+				{ fieldName: 'lastName', label: 'Last name', type: COMPONENT_TYPES.SINGLE_LINE_INPUT }
+			]
+		},
+		//TODO: validation on these two
+		emailAddress: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: "Enter the applicant's email address",
+			question: "Enter the applicant's email address",
+			fieldName: 'emailAddress',
+			url: 'email-address',
 			validators: [new RequiredValidator()]
 		},
-		lastName: {
+		phoneNumber: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: "Enter the applicant's name",
-			question: 'Last name',
-			fieldName: 'lastName',
-			url: 'last-name',
+			title: "Enter the applicant's phone number",
+			question: "Enter the applicant's phone number",
+			fieldName: 'phoneNumber',
+			url: 'phone-number',
 			validators: [new RequiredValidator()]
 		}
 	};

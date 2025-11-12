@@ -16,6 +16,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 		if (typeof answers !== 'object') {
 			throw new Error('answers should be an object');
 		}
+		console.log(answers);
 
 		try {
 			await db.$transaction(async ($tx) => {
@@ -67,6 +68,8 @@ function mapAnswersToInput(answers: Record<string, any>): ContactDetailsRecord {
 	return {
 		firstName: answers.firstName,
 		lastName: answers.lastName,
+		emailAddress: answers.emailAddress,
+		phoneNumber: answers.phoneNumber,
 		organisation: answers.organisation,
 		paymentReference: answers.paymentReference,
 		PaymentMethod: {
