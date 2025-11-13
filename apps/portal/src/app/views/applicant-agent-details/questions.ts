@@ -5,6 +5,8 @@ import MultiFieldInputValidator from '@planning-inspectorate/dynamic-forms/src/v
 // @ts-expect-error - due to not having @types
 import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
 // @ts-expect-error - due to not having @types
+import AddressValidator from '@planning-inspectorate/dynamic-forms/src/validator/address-validator.js';
+// @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
@@ -102,6 +104,14 @@ export function getQuestions() {
 					}
 				})
 			]
+		},
+		address: {
+			type: COMPONENT_TYPES.ADDRESS,
+			title: 'Address',
+			question: "Enter the applicant's address",
+			fieldName: 'address',
+			url: 'address',
+			validators: [new AddressValidator({ requiredFields: { addressLine1: true, townCity: true, postcode: true } })]
 		}
 	};
 

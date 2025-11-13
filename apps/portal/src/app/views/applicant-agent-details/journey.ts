@@ -19,6 +19,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.name)
 				.addQuestion(questions.emailAddress)
 				.addQuestion(questions.phoneNumber)
+				.addQuestion(questions.address)
 				.addQuestion(questions.organisation)
 				.addQuestion(questions.paymentMethod)
 				.addQuestion(questions.paymentReference)
