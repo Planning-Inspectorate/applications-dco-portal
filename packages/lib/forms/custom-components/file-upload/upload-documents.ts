@@ -52,8 +52,15 @@ export function uploadDocumentsController(
 			});
 		}
 
-		const totalSizeUploaded = files.reduce((sum, file) => sum + (file.size || 0), 0);
-		if (totalSizeUploaded > TOTAL_UPLOAD_LIMIT) {
+		const sessionFilesUploadedSoFar: Express.Multer.File[] =
+			req.session?.files?.[documentCategoryId]?.uploadedFiles || [];
+		const sessionFilesUploadedSoFarSize: number = sessionFilesUploadedSoFar.reduce(
+			(total, file) => total + (file.size || 0),
+			0
+		);
+		const totalSizeUploaded: number = files.reduce((sum, file) => sum + (file.size || 0), 0);
+
+		if (sessionFilesUploadedSoFarSize + totalSizeUploaded > TOTAL_UPLOAD_LIMIT) {
 			fileErrors.push({
 				text: 'Total file size of all attachments must not exceed 1GB',
 				href: '#upload-form'
