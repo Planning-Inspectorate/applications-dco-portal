@@ -18,7 +18,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 			new Section(applicationSectionDisplayName, 'application')
 				.addQuestion(questions.name)
 				.addQuestion(questions.emailAddress)
-				.addQuestion(questions.phoneNumber)
+				.addQuestion(questions.phoneAndFax)
 				.addQuestion(questions.address)
 				.addQuestion(questions.organisation)
 				.addQuestion(questions.paymentMethod)

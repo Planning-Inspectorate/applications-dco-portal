@@ -19,7 +19,7 @@ export function getQuestions() {
 	const questions = {
 		organisation: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: "Enter the applicant's organisation",
+			title: 'Applicant Organisation',
 			question: "Enter the applicant's organisation",
 			fieldName: 'organisation',
 			url: 'organisation',
@@ -33,7 +33,7 @@ export function getQuestions() {
 		},
 		paymentMethod: {
 			type: COMPONENT_TYPES.RADIO,
-			title: 'Tell us about the application fee payment',
+			title: 'Application Payment Method',
 			question: 'Select how you paid the application fee',
 			fieldName: 'paymentMethod',
 			url: 'payment-method',
@@ -42,7 +42,7 @@ export function getQuestions() {
 		},
 		paymentReference: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Tell us about the application fee payment',
+			title: 'Payment Reference',
 			question: 'Enter the payment reference',
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
@@ -55,7 +55,7 @@ export function getQuestions() {
 		},
 		name: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
-			title: "Enter the applicant's name",
+			title: 'Applicant Name',
 			question: "Enter the applicant's name",
 			fieldName: 'name',
 			url: 'name',
@@ -74,7 +74,7 @@ export function getQuestions() {
 		},
 		emailAddress: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: "Enter the applicant's email address",
+			title: 'Applicant Email Address',
 			question: "Enter the applicant's email address",
 			fieldName: 'emailAddress',
 			url: 'email-address',
@@ -88,32 +88,60 @@ export function getQuestions() {
 				})
 			]
 		},
-		phoneNumber: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: "Enter the applicant's phone number",
+		phoneAndFax: {
+			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
+			title: 'Applicant Phone Number',
 			question: "Enter the applicant's phone number",
-			fieldName: 'phoneNumber',
-			url: 'phone-number',
+			fieldName: 'phoneAndFax',
+			url: 'phone',
+			inputFields: [
+				{
+					fieldName: 'phone',
+					label: 'Phone number',
+					type: COMPONENT_TYPES.SINGLE_LINE_INPUT
+				},
+				{
+					fieldName: 'fax',
+					label: 'Fax number (optional)',
+					type: COMPONENT_TYPES.SINGLE_LINE_INPUT
+				}
+			],
 			validators: [
-				new StringValidator({
-					maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
-					minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
-					regex: {
-						regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-						regexMessage: 'Please enter a valid phone number'
-					}
+				new MultiFieldInputValidator({
+					fields: [
+						{
+							fieldName: 'phone',
+							maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
+							minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
+							regex: {
+								regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+								regexMessage: 'Please enter a valid phone number'
+							}
+						},
+						{
+							fieldName: 'fax',
+							maxLength: { maxLength: 15, maxLengthMessage: 'Fax number must be 15 characters or less' },
+							regex: {
+								regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+								regexMessage: 'Please enter a valid fax number'
+							}
+						}
+					]
 				})
 			]
 		},
 		address: {
 			type: COMPONENT_TYPES.ADDRESS,
-			title: 'Address',
+			title: 'Applicant Address',
 			question: "Enter the applicant's address",
 			fieldName: 'address',
 			url: 'address',
 			validators: [new AddressValidator({ requiredFields: { addressLine1: true, townCity: true, postcode: true } })]
 		}
 	};
+	//2 things:
+	//use pre-packaged adderss component rather than awqkward search address one
+	//how to structure fax machine question? Is there an existing wireframe to slot it into or give its own question
 
 	const classes = {
 		...questionClasses
