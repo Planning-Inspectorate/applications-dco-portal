@@ -44,7 +44,12 @@ export function getQuestions() {
 			question: 'Enter the payment reference',
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
-			validators: [new RequiredValidator(), new StringValidator({ maxLength: { maxLength: 18 } })]
+			validators: [
+				new RequiredValidator(),
+				new StringValidator({
+					maxLength: { maxLength: 18, maxLengthMessage: 'Payment reference must be 18 characters or less.' }
+				})
+			]
 		},
 		name: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
@@ -65,14 +70,21 @@ export function getQuestions() {
 				{ fieldName: 'lastName', label: 'Last name', type: COMPONENT_TYPES.SINGLE_LINE_INPUT }
 			]
 		},
-		//TODO: validation on these two
 		emailAddress: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 			title: "Enter the applicant's email address",
 			question: "Enter the applicant's email address",
 			fieldName: 'emailAddress',
 			url: 'email-address',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator(),
+				new StringValidator({
+					regex: {
+						regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+						regexMessage: 'Please enter a valid email address'
+					}
+				})
+			]
 		},
 		phoneNumber: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
@@ -80,7 +92,16 @@ export function getQuestions() {
 			question: "Enter the applicant's phone number",
 			fieldName: 'phoneNumber',
 			url: 'phone-number',
-			validators: [new RequiredValidator()]
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
+					minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
+					regex: {
+						regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+						regexMessage: 'Please enter a valid phone number'
+					}
+				})
+			]
 		}
 	};
 
