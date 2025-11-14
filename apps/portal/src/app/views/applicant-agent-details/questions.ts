@@ -10,6 +10,7 @@ import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questi
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import FullAddressValidator from '@pins/dco-portal-lib/forms/custom-components/full-address/full-address-validator.js';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { PAYMENT_METHOD } from '@pins/dco-portal-database/src/seed/data-static.ts';
@@ -109,8 +110,12 @@ export function getQuestions() {
 			title: 'Applicant Address',
 			question: "Enter the applicant's address",
 			fieldName: 'address',
-			url: 'address'
-			//validators: [new FullAddressValidator({ requiredFields: { buildingNameOrNumber: true, street: true, townCity: true, postcode: true, country: true } })]
+			url: 'address',
+			validators: [
+				new FullAddressValidator({
+					requiredFields: { buildingNameOrNumber: true, street: true, townCity: true, postcode: true, country: true }
+				})
+			]
 		}
 	};
 

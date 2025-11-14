@@ -52,7 +52,7 @@
                         id: "address-building-name-or-number",
                         name: buildingNameOrNumber,
                         value: question.value.buildingNameOrNumber,
-                        autocomplete: "address-line1",
+                        autocomplete: "address-building-name-or-number",
                         errorMessage: errors[buildingNameOrNumber] and {
                             text: errors[buildingNameOrNumber].msg
                         }
@@ -65,7 +65,7 @@
                         id: "address-street",
                         name: street,
                         value: question.value.street,
-                        autocomplete: "address-line2",
+                        autocomplete: "address-street",
                         errorMessage: errors[street] and {
                             text: errors[street].msg
                         }
@@ -79,7 +79,7 @@
                         id: "address-town",
                         name: townCity,
                         value: question.value.townCity,
-                        autocomplete: "address-level2",
+                        autocomplete: "address-town-city",
                         errorMessage: errors[townCity] and {
                             text: errors[townCity].msg
                         }
@@ -93,7 +93,7 @@
                         id: "address-county",
                         name: county,
                         value: question.value.county,
-                        autocomplete: "address-level1",
+                        autocomplete: "address-county",
                         errorMessage: errors[county] and {
                             text: errors[county].msg
                         }
@@ -107,7 +107,7 @@
                         id: "address-country",
                         name: country,
                         value: question.value.country,
-                        autocomplete: "address-level1",
+                        autocomplete: "address-country",
                         errorMessage: errors[country] and {
                             text: errors[country].msg
                         }

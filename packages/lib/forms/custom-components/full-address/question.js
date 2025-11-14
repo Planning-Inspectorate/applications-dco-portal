@@ -2,6 +2,7 @@ import { Question } from '@planning-inspectorate/dynamic-forms/src/questions/que
 import { nl2br } from '@planning-inspectorate/dynamic-forms/src/lib/utils.js';
 import escape from 'escape-html';
 import { Address } from '@planning-inspectorate/dynamic-forms/src/lib/address.js';
+import FullAddressValidator from './full-address-validator.js';
 
 /**
  * @typedef {import('../../journey/journey-response.js').JourneyResponse} JourneyResponse
@@ -11,8 +12,6 @@ import { Address } from '@planning-inspectorate/dynamic-forms/src/lib/address.js
  * @typedef {import('appeals-service-api').Api.SubmissionAddress} SubmissionAddress
 
  */
-
-//TODO: make index.njk template
 export default class FullAddressQuestion extends Question {
 	/**
 	 * @param {import('#question-types').QuestionParameters} params
@@ -23,13 +22,11 @@ export default class FullAddressQuestion extends Question {
 			viewFolder: 'custom-components/full-address'
 		});
 
-		/*
 		for (const validator of params.validators || []) {
 			if (validator instanceof FullAddressValidator) {
 				this.requiredFields = validator.requiredFields;
 			}
 		}
-            */
 
 		this.addressLabels = {
 			buildingNameOrNumber: `Building name or number${this.formatLabelFromRequiredFields('buildingNameOrNumber')}`,
@@ -47,9 +44,16 @@ export default class FullAddressQuestion extends Question {
 	 * @param {Record<string, unknown>} customViewData
 	 * @returns {QuestionViewModel}
 	 */
-	prepQuestionForRendering(section, journey, customViewData) {
+	prepQuestionForRendering(section, journey, customViewData, payload) {
 		const viewModel = super.prepQuestionForRendering(section, journey, customViewData);
-		const address = journey.response.answers[this.fieldName] || {};
+		const address = payload || viewModel.question.value;
+
+		//RIGHT SO
+		//we want viewmodel.question.value to be an object of our vals: {buildingNameOrNumber: '1', street: 'main st'} etc.
+		//multi input field has an array of the fieldNames of each input - we iterate over and fetch the val. theyre simply stored as {firstName: 'pee', lastName: 'paa'}
+		//single input field stores it the same way
+		//ours are stored as: FullAddressQuestionFieldName_inputFieldName, so address_townCity
+		//we need to extract this from our payload!
 
 		// will only ever have 1
 		if (address) {
