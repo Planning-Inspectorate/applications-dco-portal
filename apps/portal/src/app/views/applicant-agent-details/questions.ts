@@ -88,45 +88,20 @@ export function getQuestions() {
 				})
 			]
 		},
-		phoneAndFax: {
-			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
+		phone: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 			title: 'Applicant Phone Number',
 			question: "Enter the applicant's phone number",
-			fieldName: 'phoneAndFax',
+			fieldName: 'phone',
 			url: 'phone',
-			inputFields: [
-				{
-					fieldName: 'phone',
-					label: 'Phone number',
-					type: COMPONENT_TYPES.SINGLE_LINE_INPUT
-				},
-				{
-					fieldName: 'fax',
-					label: 'Fax number (optional)',
-					type: COMPONENT_TYPES.SINGLE_LINE_INPUT
-				}
-			],
 			validators: [
-				new MultiFieldInputValidator({
-					fields: [
-						{
-							fieldName: 'phone',
-							maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
-							minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
-							regex: {
-								regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-								regexMessage: 'Please enter a valid phone number'
-							}
-						},
-						{
-							fieldName: 'fax',
-							maxLength: { maxLength: 15, maxLengthMessage: 'Fax number must be 15 characters or less' },
-							regex: {
-								regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-								regexMessage: 'Please enter a valid fax number'
-							}
-						}
-					]
+				new StringValidator({
+					maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
+					minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
+					regex: {
+						regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+						regexMessage: 'Please enter a valid phone number'
+					}
 				})
 			]
 		},
@@ -139,9 +114,6 @@ export function getQuestions() {
 			validators: [new AddressValidator({ requiredFields: { addressLine1: true, townCity: true, postcode: true } })]
 		}
 	};
-	//2 things:
-	//use pre-packaged adderss component rather than awqkward search address one
-	//how to structure fax machine question? Is there an existing wireframe to slot it into or give its own question
 
 	const classes = {
 		...questionClasses
