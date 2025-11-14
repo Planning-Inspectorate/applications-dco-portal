@@ -1,0 +1,138 @@
+{% extends layoutTemplate %}
+
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set buildingNameOrNumber= question.fieldName + "_buildingNameOrNumber" %}
+{% set street= question.fieldName + "_street" %}
+{% set townCity= question.fieldName + "_townCity" %}
+{% set county= question.fieldName + "_county" %}
+{% set country= question.fieldName + "_country" %}
+{% set postcode= question.fieldName + "_postcode" %}
+
+{% block before_content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorSummary,
+                    attributes: {"data-cy": "error-wrapper"}
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock before_content %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <form action="" method="post" novalidate>
+                {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
+                {% call govukFieldset({
+                    legend: {
+                        text: question.question,
+                        classes: "govuk-fieldset__legend--l",
+                        isPageHeading: true
+                    }
+                }) %}
+                    {% if question.hint %}
+                        <div class="govuk-hint">{{ question.hint }}</div>
+                    {% endif %}
+
+                    {% if question.html %}
+                        {% include question.html ignore missing %}
+                    {% endif %}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.buildingNameOrNumber
+                        },
+                        id: "address-building-name-or-number",
+                        name: buildingNameOrNumber,
+                        value: question.value.buildingNameOrNumber,
+                        autocomplete: "address-building-name-or-number",
+                        errorMessage: errors[buildingNameOrNumber] and {
+                            text: errors[buildingNameOrNumber].msg
+                        }
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.street
+                        },
+                        id: "address-street",
+                        name: street,
+                        value: question.value.street,
+                        autocomplete: "address-street",
+                        errorMessage: errors[street] and {
+                            text: errors[street].msg
+                        }
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.townCity
+                        },
+                        classes: "govuk-!-width-two-thirds",
+                        id: "address-town",
+                        name: townCity,
+                        value: question.value.townCity,
+                        autocomplete: "address-town-city",
+                        errorMessage: errors[townCity] and {
+                            text: errors[townCity].msg
+                        }
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.county
+                        },
+                        classes: "govuk-!-width-two-thirds",
+                        id: "address-county",
+                        name: county,
+                        value: question.value.county,
+                        autocomplete: "address-county",
+                        errorMessage: errors[county] and {
+                            text: errors[county].msg
+                        }
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.country
+                        },
+                        classes: "govuk-!-width-two-thirds",
+                        id: "address-country",
+                        name: country,
+                        value: question.value.country,
+                        autocomplete: "address-country",
+                        errorMessage: errors[country] and {
+                            text: errors[country].msg
+                        }
+                    }) }}
+
+                    {{ govukInput({
+                        label: {
+                            text: question.labels.postcode
+                        },
+                        classes: "govuk-input--width-10",
+                        id: "address-postcode",
+                        name: postcode,
+                        value: question.value.postcode,
+                        autocomplete: "postal-code",
+                        errorMessage: errors[postcode] and {
+                            text: errors[postcode].msg
+                        }
+                    }) }}
+                    {{ govukButton({
+                        text: continueButtonText,
+                        type: "submit",
+                        attributes: { "data-cy":"button-save-and-continue"}
+                    }) }}
+                {% endcall %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

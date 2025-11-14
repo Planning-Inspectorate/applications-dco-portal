@@ -32,6 +32,8 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -60,6 +62,8 @@ describe('applicant agent details journey save controller', () => {
 				data: {
 					ApplicantDetails: {
 						create: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentReference: 'pay123',
 							PaymentMethod: {
@@ -105,6 +109,8 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -133,6 +139,8 @@ describe('applicant agent details journey save controller', () => {
 				data: {
 					ApplicantDetails: {
 						create: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentReference: 'pay123',
 							PaymentMethod: {
@@ -172,6 +180,8 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
@@ -198,6 +208,8 @@ describe('applicant agent details journey save controller', () => {
 			assert.deepStrictEqual(mockDb.contactDetails.update.mock.calls[0].arguments[0], {
 				where: { id: 'contact-id' },
 				data: {
+					firstName: 'test',
+					lastName: 'person',
 					organisation: 'test org',
 					paymentReference: 'pay123',
 					PaymentMethod: {
@@ -241,6 +253,8 @@ describe('applicant agent details journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
+							firstName: 'test',
+							lastName: 'person',
 							organisation: 'test org',
 							paymentMethod: 'cheque',
 							paymentReference: 'pay123'
