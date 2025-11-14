@@ -5,13 +5,12 @@ import MultiFieldInputValidator from '@planning-inspectorate/dynamic-forms/src/v
 // @ts-expect-error - due to not having @types
 import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
 // @ts-expect-error - due to not having @types
-import AddressValidator from '@planning-inspectorate/dynamic-forms/src/validator/address-validator.js';
-// @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { PAYMENT_METHOD } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
@@ -106,17 +105,18 @@ export function getQuestions() {
 			]
 		},
 		address: {
-			type: COMPONENT_TYPES.ADDRESS,
+			type: CUSTOM_COMPONENTS.FULL_ADDRESS,
 			title: 'Applicant Address',
 			question: "Enter the applicant's address",
 			fieldName: 'address',
-			url: 'address',
-			validators: [new AddressValidator({ requiredFields: { addressLine1: true, townCity: true, postcode: true } })]
+			url: 'address'
+			//validators: [new FullAddressValidator({ requiredFields: { buildingNameOrNumber: true, street: true, townCity: true, postcode: true, country: true } })]
 		}
 	};
 
 	const classes = {
-		...questionClasses
+		...questionClasses,
+		...CUSTOM_COMPONENT_CLASSES
 	};
 
 	return createQuestions(questions, classes, {});
