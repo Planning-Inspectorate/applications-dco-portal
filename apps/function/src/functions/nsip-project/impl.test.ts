@@ -3,11 +3,11 @@ import assert from 'node:assert';
 import { describe, it, mock } from 'node:test';
 import { buildNsipProjectFunction } from './impl.ts';
 
-describe('nsip service user function', () => {
-	it('should save data from message into db', async () => {
+describe('nsip project function', () => {
+	it('should save data all data from nsip project message into db when all fields received in message', async () => {
 		const mockDb = {
 			$transaction: mock.fn((fn) => fn(mockDb)),
-			nsipServiceUser: {
+			nsipProject: {
 				upsert: mock.fn()
 			}
 		};
@@ -15,61 +15,119 @@ describe('nsip service user function', () => {
 			log: mock.fn()
 		};
 		const message = {
-			id: '1',
+			caseId: '1',
 			caseReference: 'EN123456',
-			serviceUserType: 'Applicant',
-			emailAddress: 'test@email.com'
+			projectName: 'test@email.com',
+			projectDescription: 'Applicant',
+			projectLocation: 'John',
+			easting: 'Doe',
+			northing: 'Test Org'
 		};
 
 		const handler = buildNsipProjectFunction({ db: mockDb });
 		await handler(message, context);
 
-		assert.strictEqual(mockDb.nsipServiceUser.upsert.mock.calls.length, 1);
-		assert.deepStrictEqual(mockDb.nsipServiceUser.upsert.mock.calls[0].arguments[0], {
+		assert.strictEqual(mockDb.nsipProject.upsert.mock.calls.length, 1);
+		assert.deepStrictEqual(mockDb.nsipProject.upsert.mock.calls[0].arguments[0], {
 			where: {
-				caseReference_email: {
-					caseReference: 'EN123456',
-					email: 'test@email.com'
-				}
+				caseReference: 'EN123456'
 			},
 			update: {
-				id: '1',
+				caseId: '1',
 				caseReference: 'EN123456',
-				serviceUserType: 'Applicant',
-				email: 'test@email.com'
+				projectName: 'test@email.com',
+				projectDescription: 'Applicant',
+				projectLocation: 'John',
+				easting: 'Doe',
+				northing: 'Test Org'
 			},
 			create: {
-				id: '1',
+				caseId: '1',
 				caseReference: 'EN123456',
-				serviceUserType: 'Applicant',
-				email: 'test@email.com'
+				projectName: 'test@email.com',
+				projectDescription: 'Applicant',
+				projectLocation: 'John',
+				easting: 'Doe',
+				northing: 'Test Org'
 			}
 		});
 
 		assert.strictEqual(context.log.mock.callCount(), 1);
 	});
-	// it('should throw an error if issue encountered during service bus message consumption', async () => {
-	// 	const mockDb = {
-	// 		$transaction: mock.fn((fn) => fn(mockDb)),
-	// 		nsipServiceUser: {
-	// 			upsert: mock.fn(() => {
-	// 				throw new Error('Error', { code: 'E1' });
-	// 			})
-	// 		}
-	// 	};
-	// 	const context = {
-	// 		error: mock.fn()
-	// 	};
-	// 	const message = {
-	// 		id: '1',
-	// 		caseReference: 'EN123456',
-	// 		serviceUserType: 'Applicant',
-	// 		emailAddress: 'test@email.com'
-	// 	};
-	//
-	// 	const handler = buildNsipProjectFunction({ db: mockDb });
-	// 	await assert.rejects(() => handler(message, context), {
-	// 		message: 'Error during NSIP Service User function run: Error'
-	// 	});
-	// });
+	it('should save data from message into db if only mandatory fields received', async () => {
+		const mockDb = {
+			$transaction: mock.fn((fn) => fn(mockDb)),
+			nsipProject: {
+				upsert: mock.fn()
+			}
+		};
+		const context = {
+			log: mock.fn()
+		};
+		const message = {
+			caseId: '1',
+			caseReference: 'EN123456'
+		};
+
+		const handler = buildNsipProjectFunction({ db: mockDb });
+		await handler(message, context);
+
+		assert.strictEqual(mockDb.nsipProject.upsert.mock.calls.length, 1);
+		assert.deepStrictEqual(mockDb.nsipProject.upsert.mock.calls[0].arguments[0], {
+			where: {
+				caseReference: 'EN123456'
+			},
+			update: {
+				caseId: '1',
+				caseReference: 'EN123456'
+			},
+			create: {
+				caseId: '1',
+				caseReference: 'EN123456'
+			}
+		});
+
+		assert.strictEqual(context.log.mock.callCount(), 1);
+	});
+	it('should return without processing message if message does not contain required fields', async () => {
+		const mockDb = {
+			$transaction: mock.fn((fn) => fn(mockDb)),
+			nsipProject: {
+				upsert: mock.fn()
+			}
+		};
+		const context = {
+			log: mock.fn()
+		};
+		const message = {
+			id: '1'
+		};
+
+		const handler = buildNsipProjectFunction({ db: mockDb });
+		await handler(message, context);
+
+		assert.strictEqual(mockDb.nsipProject.upsert.mock.calls.length, 0);
+	});
+	it('should throw an error if issue encountered during service bus message consumption', async () => {
+		const mockDb = {
+			$transaction: mock.fn((fn) => fn(mockDb)),
+			nsipProject: {
+				upsert: mock.fn(() => {
+					throw new Error('Error', { code: 'E1' });
+				})
+			}
+		};
+		const context = {
+			error: mock.fn()
+		};
+		const message = {
+			caseId: '1',
+			caseReference: 'EN123456'
+		};
+
+		const handler = buildNsipProjectFunction({ db: mockDb });
+		await assert.rejects(() => handler(message, context), {
+			message: 'Error during NSIP Project function run: Error'
+		});
+	});
 });
