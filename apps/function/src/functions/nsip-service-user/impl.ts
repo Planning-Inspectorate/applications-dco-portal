@@ -8,7 +8,12 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 		const { db } = service;
 		const serviceUserMessage = message as ServiceUser;
 
-		if (!serviceUserMessage || !serviceUserMessage.caseReference || !serviceUserMessage.emailAddress) {
+		if (
+			!serviceUserMessage ||
+			!serviceUserMessage.id ||
+			!serviceUserMessage.caseReference ||
+			!serviceUserMessage.emailAddress
+		) {
 			context.log('NSIP Service User function exited with no caseReference or emailAddress');
 			return;
 		}
@@ -18,8 +23,8 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 			const serviceUserUpdate = {
 				id: serviceUserMessage.id,
 				caseReference: serviceUserMessage.caseReference,
-				serviceUserType: serviceUserMessage.serviceUserType,
 				email: normalisedEmail,
+				...(serviceUserMessage.serviceUserType && { serviceUserType: serviceUserMessage.serviceUserType }),
 				...(serviceUserMessage.firstName && { firstName: serviceUserMessage.firstName }),
 				...(serviceUserMessage.lastName && { lastName: serviceUserMessage.lastName }),
 				...(serviceUserMessage.organisation && { organisation: serviceUserMessage.organisation }),

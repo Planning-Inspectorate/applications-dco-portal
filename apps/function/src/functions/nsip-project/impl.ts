@@ -8,7 +8,7 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 		const { db } = service;
 		const nsipProjectMessage = message as NSIPProject;
 
-		if (!nsipProjectMessage || !nsipProjectMessage.caseReference) {
+		if (!nsipProjectMessage || !nsipProjectMessage.caseId || !nsipProjectMessage.caseReference) {
 			context.log('NSIP Project function exited with no caseReference');
 			return;
 		}
