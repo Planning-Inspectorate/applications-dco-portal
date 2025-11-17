@@ -147,5 +147,29 @@ model NsipServiceUser {
   modifiedAt      DateTime @updatedAt
   serviceUserType String?
 
+  firstName       String?
+  lastName        String?
+  organisation    String?
+  telephoneNumber String?
+
+  addressLine1   String?
+  addressLine2   String?
+  addressTown    String?
+  addressCounty  String?
+  postcode       String?
+  addressCountry String?
+
   @@unique([caseReference, email])
+}
+
+model NsipProject {
+  caseId        String @id
+  caseReference String @unique
+
+  projectName        String?
+  projectDescription String?
+  projectLocation    String?
+
+  easting  Int?
+  northing Int?
 }
