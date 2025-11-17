@@ -6,9 +6,11 @@ interface Config {
 	NODE_ENV: string;
 	serviceBus: {
 		subscriptions: {
+			nsipProject: string;
 			serviceUser: string;
 		};
 		topics: {
+			nsipProject: string;
 			serviceUser: string;
 		};
 	};

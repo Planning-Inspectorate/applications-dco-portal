@@ -8,13 +8,28 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 		const { db } = service;
 		const serviceUserMessage = message as ServiceUser;
 
+		if (!serviceUserMessage || !serviceUserMessage.caseReference || !serviceUserMessage.emailAddress) {
+			context.log('NSIP Service User function exited with no caseReference or emailAddress');
+			return;
+		}
+
 		try {
 			const normalisedEmail = serviceUserMessage.emailAddress.toLowerCase();
 			const serviceUserUpdate = {
 				id: serviceUserMessage.id,
 				caseReference: serviceUserMessage.caseReference,
 				serviceUserType: serviceUserMessage.serviceUserType,
-				email: normalisedEmail
+				email: normalisedEmail,
+				...(serviceUserMessage.firstName && { firstName: serviceUserMessage.firstName }),
+				...(serviceUserMessage.lastName && { lastName: serviceUserMessage.lastName }),
+				...(serviceUserMessage.organisation && { organisation: serviceUserMessage.organisation }),
+				...(serviceUserMessage.telephoneNumber && { telephoneNumber: serviceUserMessage.telephoneNumber }),
+				...(serviceUserMessage.addressLine1 && { addressLine1: serviceUserMessage.addressLine1 }),
+				...(serviceUserMessage.addressLine2 && { addressLine2: serviceUserMessage.addressLine2 }),
+				...(serviceUserMessage.addressTown && { addressTown: serviceUserMessage.addressTown }),
+				...(serviceUserMessage.addressCounty && { addressCounty: serviceUserMessage.addressCounty }),
+				...(serviceUserMessage.postcode && { postcode: serviceUserMessage.postcode }),
+				...(serviceUserMessage.addressCountry && { addressCountry: serviceUserMessage.addressCountry })
 			};
 
 			await db.nsipServiceUser.upsert({
