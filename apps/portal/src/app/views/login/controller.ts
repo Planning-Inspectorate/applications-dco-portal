@@ -154,6 +154,8 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 			return res.redirect(`${req.baseUrl}/application-reference-number`);
 		}
 
+		logger.info('a test change to test pipeline');
+
 		const { otpCode } = req.body;
 
 		const handleOtpError = async (message: string) => {
