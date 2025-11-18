@@ -126,6 +126,7 @@ model DocumentCategoryStatus {
 }
 
 model PaymentMethod {
+  /// unique machine-readable name, not generated, e.g. "bacs"
   id              String           @id
   displayName     String
   ApplicantMethod ContactDetails[]
@@ -138,6 +139,18 @@ model ContactDetails {
   PaymentMethod    PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentReference String
   CaseApplicant    Case[]        @relation("ApplicantDetails")
+}
+
+model NsipProject {
+  caseId        String @id
+  caseReference String @unique
+
+  projectName        String?
+  projectDescription String?
+  projectLocation    String?
+
+  easting  Int?
+  northing Int?
 }
 
 model NsipServiceUser {
@@ -159,17 +172,15 @@ model NsipServiceUser {
   postcode       String?
   addressCountry String?
 
+  userRoleId String
+  UserRole   ServiceUserRole @relation(fields: [userRoleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
   @@unique([caseReference, email])
 }
 
-model NsipProject {
-  caseId        String @id
-  caseReference String @unique
-
-  projectName        String?
-  projectDescription String?
-  projectLocation    String?
-
-  easting  Int?
-  northing Int?
+model ServiceUserRole {
+  /// unique machine-readable name, not generated, e.g. "super-user"
+  id          String            @id
+  displayName String?
+  ServiceUser NsipServiceUser[]
 }
