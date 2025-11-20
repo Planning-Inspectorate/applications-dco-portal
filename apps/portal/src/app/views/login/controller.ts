@@ -191,7 +191,19 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 
 		await deleteOtp(db, emailAddress, caseReference);
 
-		return res.redirect(`${req.baseUrl}/success`);
+		req.session.regenerate((error) => {
+			if (error) {
+				throw error;
+			}
+
+			req.session.isAuthenticated = true;
+			req.session.emailAddress = emailAddress;
+			req.session.caseReference = caseReference;
+
+			logger.info('User authenticated, redirecting to the landing page');
+
+			return res.redirect(`${req.baseUrl}/success`);
+		});
 	};
 }
 
@@ -214,6 +226,8 @@ export function buildLoginSuccessController({ db, logger }: PortalService): Asyn
 			});
 
 			if (caseData.Whitelist.length === 0) {
+				logger.info('Setting up case whitelist');
+
 				await $tx.whitelistUser.upsert({
 					where: {
 						caseReference_email: {
@@ -241,19 +255,7 @@ export function buildLoginSuccessController({ db, logger }: PortalService): Asyn
 			}
 		});
 
-		req.session.regenerate((error) => {
-			if (error) {
-				throw error;
-			}
-
-			req.session.isAuthenticated = true;
-			req.session.emailAddress = emailAddress;
-			req.session.caseReference = caseReference;
-
-			logger.info('User authenticated, redirecting to the landing page');
-
-			return res.redirect('/');
-		});
+		return res.redirect('/');
 	};
 }
 
