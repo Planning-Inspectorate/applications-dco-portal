@@ -11,7 +11,7 @@ describe('home page', () => {
 		const nunjucks = configureNunjucks();
 		const mockDb = {
 			case: {
-				upsert: mock.fn(() => ({
+				findUnique: mock.fn(() => ({
 					reference: 'EN123456',
 					email: 'test@email.com',
 					applicationFormRelatedInformationStatusId: 'not-started',
@@ -259,7 +259,7 @@ describe('home page', () => {
 
 		const mockDb = {
 			case: {
-				upsert: mock.fn()
+				findUnique: mock.fn()
 			}
 		};
 

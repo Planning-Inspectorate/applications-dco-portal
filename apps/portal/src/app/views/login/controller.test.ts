@@ -4,6 +4,7 @@ import { describe, it, mock } from 'node:test';
 import {
 	buildEnterEmailPage,
 	buildEnterOtpPage,
+	buildLoginSuccessController,
 	buildNoAccessPage,
 	buildRequestNewCodePage,
 	buildSubmitEmailController,
@@ -13,6 +14,7 @@ import {
 import assert from 'node:assert';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { mockOtpCode } from '@pins/dco-portal-lib/testing/mock-otp.ts';
+import { buildHomePage } from '../home/controller.ts';
 
 describe('login controllers', () => {
 	describe('buildEnterEmailPage', () => {
@@ -359,15 +361,13 @@ describe('login controllers', () => {
 				}
 			};
 			const mockReq = {
+				baseUrl: '/login',
 				body: {
 					otpCode: 'ABCDE'
 				},
 				session: {
 					emailAddress: 'test@email.com',
-					caseReference: 'EN123456',
-					regenerate: mock.fn((callback) => {
-						callback(null);
-					})
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -375,9 +375,8 @@ describe('login controllers', () => {
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/success');
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 		});
@@ -660,6 +659,155 @@ describe('login controllers', () => {
 				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
 				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
 			});
+		});
+	});
+	describe('buildLoginSuccessController', () => {
+		it('should redirect to landing page after successfully initiating the session and case if required', async (ctx) => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					upsert: mock.fn(() => ({
+						id: 'case-id-1',
+						Whitelist: []
+					}))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'ABCDE'
+				},
+				session: {
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
+				}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildLoginSuccessController({ db: mockDb, logger: mockLogger() });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
+			assert.strictEqual(mockReq.session.isAuthenticated, true);
+			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+
+			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.whitelistUser.upsert.mock.calls[0].arguments[0], {
+				where: {
+					caseReference_email: { caseReference: 'EN123456', email: 'test@email.com' }
+				},
+				update: {},
+				create: {
+					caseReference: 'EN123456',
+					email: 'test@email.com',
+					isInitialInvitee: true,
+					UserRole: {
+						connect: {
+							id: 'super-user'
+						}
+					},
+					Case: {
+						connect: {
+							id: 'case-id-1'
+						}
+					}
+				}
+			});
+		});
+		it('should not update whitelist if already populated', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					upsert: mock.fn(() => ({
+						id: 'case-id-1',
+						Whitelist: [
+							{
+								caseReference: 'EN123456',
+								email: 'test@email.com',
+								isInitialInvitee: true,
+								userRoleId: 'super-user'
+							}
+						]
+					}))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'ABCDE'
+				},
+				session: {
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
+				}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildLoginSuccessController({ db: mockDb, logger: mockLogger() });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
+			assert.strictEqual(mockReq.session.isAuthenticated, true);
+			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+
+			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 0);
+		});
+		it('should render not found handler if email address not present', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				render: mock.fn(),
+				status: mock.fn()
+			};
+
+			const homePage = buildLoginSuccessController({});
+			await homePage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/layouts/error');
+		});
+		it('should render not found handler if case reference not present', async () => {
+			const mockReq = {
+				session: {
+					emailAddress: 'test@email.com'
+				}
+			};
+			const mockRes = {
+				render: mock.fn(),
+				status: mock.fn()
+			};
+
+			const homePage = buildLoginSuccessController({});
+			await homePage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/layouts/error');
 		});
 	});
 	describe('buildRequestNewCodePage', () => {

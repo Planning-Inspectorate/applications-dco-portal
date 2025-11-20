@@ -28,6 +28,7 @@ model Case {
   Documents          Document[]
   applicantDetailsId String?         @db.UniqueIdentifier
   ApplicantDetails   ContactDetails? @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Whitelist          WhitelistUser[]
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -65,6 +66,26 @@ model OneTimePassword {
 
   @@unique([email, caseReference])
   @@index([email])
+}
+
+model WhitelistUser {
+  id               String            @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseReference    String
+  email            String
+  isInitialInvitee Boolean           @default(false)
+  userRoleId       String
+  UserRole         WhitelistUserRole @relation(fields: [userRoleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  caseId           String            @db.UniqueIdentifier
+  Case             Case              @relation(fields: [caseId], references: [id])
+
+  @@unique([caseReference, email])
+}
+
+model WhitelistUserRole {
+  /// unique machine-readable name, not generated, e.g. "super-user"
+  id            String          @id
+  displayName   String?
+  WhitelistUser WhitelistUser[]
 }
 
 model Document {
@@ -125,13 +146,6 @@ model DocumentCategoryStatus {
   AboutTheProjectCases          Case[] @relation("aboutTheProjectStatus")
 }
 
-model PaymentMethod {
-  /// unique machine-readable name, not generated, e.g. "bacs"
-  id              String           @id
-  displayName     String
-  ApplicantMethod ContactDetails[]
-}
-
 model ContactDetails {
   id               String        @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
   organisation     String
@@ -141,7 +155,15 @@ model ContactDetails {
   CaseApplicant    Case[]        @relation("ApplicantDetails")
 }
 
+model PaymentMethod {
+  /// unique machine-readable name, not generated, e.g. "bacs"
+  id              String           @id
+  displayName     String
+  ApplicantMethod ContactDetails[]
+}
+
 model NsipProject {
+  /// relation used for integration with CBOS NSIP Project topic
   caseId        String @id
   caseReference String @unique
 
@@ -154,6 +176,7 @@ model NsipProject {
 }
 
 model NsipServiceUser {
+  /// relation used for integration with CBOS Service User topic
   id              String   @id
   caseReference   String
   email           String
@@ -172,15 +195,5 @@ model NsipServiceUser {
   postcode       String?
   addressCountry String?
 
-  userRoleId String
-  UserRole   ServiceUserRole @relation(fields: [userRoleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
   @@unique([caseReference, email])
-}
-
-model ServiceUserRole {
-  /// unique machine-readable name, not generated, e.g. "super-user"
-  id          String            @id
-  displayName String?
-  ServiceUser NsipServiceUser[]
 }

@@ -14,6 +14,8 @@ import {
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
+import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -188,6 +190,56 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 		}
 
 		await deleteOtp(db, emailAddress, caseReference);
+
+		return res.redirect(`${req.baseUrl}/success`);
+	};
+}
+
+export function buildLoginSuccessController({ db, logger }: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		const { emailAddress, caseReference } = req.session;
+
+		if (!emailAddress || !caseReference) {
+			return notFoundHandler(req, res);
+		}
+
+		await db.$transaction(async ($tx) => {
+			const caseData = await $tx.case.upsert({
+				where: { reference: caseReference },
+				update: {},
+				create: { reference: caseReference, email: emailAddress },
+				include: {
+					Whitelist: true
+				}
+			});
+
+			if (caseData.Whitelist.length === 0) {
+				await $tx.whitelistUser.upsert({
+					where: {
+						caseReference_email: {
+							caseReference,
+							email: emailAddress
+						}
+					},
+					update: {},
+					create: {
+						caseReference,
+						email: emailAddress,
+						isInitialInvitee: true,
+						UserRole: {
+							connect: {
+								id: WHITELIST_USER_ROLE_ID.SUPER_USER
+							}
+						},
+						Case: {
+							connect: {
+								id: caseData.id
+							}
+						}
+					}
+				});
+			}
+		});
 
 		req.session.regenerate((error) => {
 			if (error) {

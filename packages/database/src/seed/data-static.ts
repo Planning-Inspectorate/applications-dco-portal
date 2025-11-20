@@ -451,6 +451,22 @@ export const PAYMENT_METHOD = [
 	}
 ];
 
+export const WHITELIST_USER_ROLE_ID = Object.freeze({
+	SUPER_USER: 'super-user',
+	STANDARD_USER: 'standard-user'
+});
+
+export const WHITELIST_USER_ROLE = [
+	{
+		id: WHITELIST_USER_ROLE_ID.SUPER_USER,
+		displayName: 'Super User'
+	},
+	{
+		id: WHITELIST_USER_ROLE_ID.STANDARD_USER,
+		displayName: 'Standard User'
+	}
+];
+
 async function upsertReferenceData<TDelegate extends { upsert: (args: any) => any }, TInput extends { id: string }>({
 	delegate,
 	input
@@ -481,6 +497,10 @@ export async function seedStaticData(dbClient: PrismaClient) {
 	await Promise.all(PAYMENT_METHOD.map((input) => upsertReferenceData({ delegate: dbClient.paymentMethod, input })));
 
 	await Promise.all(APFP_REGULATION.map((input) => upsertReferenceData({ delegate: dbClient.apfpRegulation, input })));
+
+	await Promise.all(
+		WHITELIST_USER_ROLE.map((input) => upsertReferenceData({ delegate: dbClient.whitelistUserRole, input }))
+	);
 
 	await dbClient.$queryRaw`SELECT 1`;
 	console.log('static data seed complete');
