@@ -367,7 +367,10 @@ describe('login controllers', () => {
 				},
 				session: {
 					emailAddress: 'test@email.com',
-					caseReference: 'EN123456'
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -375,8 +378,13 @@ describe('login controllers', () => {
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/success');
+
+			assert.strictEqual(mockReq.session.isAuthenticated, true);
+			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 		});
@@ -696,11 +704,6 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
 
-			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
-			assert.strictEqual(mockReq.session.isAuthenticated, true);
-			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
-			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
-
 			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 1);
@@ -753,10 +756,7 @@ describe('login controllers', () => {
 				},
 				session: {
 					emailAddress: 'test@email.com',
-					caseReference: 'EN123456',
-					regenerate: mock.fn((callback) => {
-						callback(null);
-					})
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -766,11 +766,6 @@ describe('login controllers', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
-
-			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
-			assert.strictEqual(mockReq.session.isAuthenticated, true);
-			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
-			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
 
 			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
 			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 0);
