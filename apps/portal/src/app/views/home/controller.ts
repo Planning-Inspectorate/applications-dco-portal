@@ -17,27 +17,8 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 			return notFoundHandler(req, res);
 		}
 
-		const caseData = await db.case.upsert({
-			where: { reference: caseReference },
-			update: {},
-			create: { reference: caseReference, email: emailAddress }
-		});
-
-		//TODO: how to know whether to assign super user role on first log in???
-		await db.nsipServiceUser.update({
-			where: {
-				caseReference_email: {
-					caseReference,
-					email: emailAddress
-				}
-			},
-			data: {
-				// UserRole: {
-				// 	connect: {
-				// 		id: 'super-user' //TODO: check these ids with BAs
-				// 	}
-				// }
-			}
+		const caseData = await db.case.findUnique({
+			where: { reference: caseReference }
 		});
 
 		if (!caseData) {

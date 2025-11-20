@@ -3,6 +3,7 @@ import {
 	buildEnterEmailPage,
 	buildEnterOtpPage,
 	buildHasApplicationReferencePage,
+	buildLoginSuccessController,
 	buildNoAccessPage,
 	buildRequestNewCodePage,
 	buildSubmitEmailController,
@@ -25,6 +26,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const requestNewCodePage = buildRequestNewCodePage();
 	const submitNewCodeRequestController = buildSubmitNewCodeRequestController(service);
 	const noAccessPage = buildNoAccessPage();
+	const successController = buildLoginSuccessController(service);
 
 	router.get('/application-reference-number', asyncHandler(hasApplicationReferencePage));
 	router.post('/application-reference-number', asyncHandler(submitHasApplicationReference));
@@ -35,6 +37,7 @@ export function createRoutes(service: PortalService): IRouter {
 	router.get('/request-new-code', asyncHandler(requestNewCodePage));
 	router.post('/request-new-code', asyncHandler(submitNewCodeRequestController));
 	router.get('/no-access', asyncHandler(noAccessPage));
+	router.get('/success', asyncHandler(successController));
 
 	return router;
 }
