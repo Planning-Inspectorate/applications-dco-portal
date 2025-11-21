@@ -19,7 +19,7 @@ module "function_integration" {
   function_apps_storage_account_access_key = azurerm_storage_account.functions.primary_access_key
 
   # networking
-  integration_subnet_id      = azurerm_subnet.apps.id # it will be placed inside of this subnet, but we need further changes?
+  integration_subnet_id      = azurerm_subnet.apps.id # do we need any further changes?
   outbound_vnet_connectivity = true
 
   # monitoring
@@ -29,13 +29,13 @@ module "function_integration" {
   monitoring_alerts_enabled   = var.alerts_enabled
 
   # settings
-  function_node_version = var.apps_config.functions_node_version # This var is referenced in tfvars as node version 22
+  function_node_version = var.apps_config.functions_node_version
   app_settings = {
     # back office has a namespace here: pins-sb-back-office-dev-ukw-001. We have a data refernce to it below ⬇️
     CBOS_API_URL = "https://${data.azurerm_linux_web_app.cbos_api.default_hostname}"
     # reference to bo service bus? find the value here, do we copy the pattern in appeals bo or inspector.
     # Find this resource in azure and work backwards
-    ServiceBusConnection__fullyQualifiedNamespace = data.azurerm_servicebus_namespace.back_office_sb.servicebus_endpoint # if a test is needed then copy appeals bo pattern
+    ServiceBusConnection__fullyQualifiedNamespace = "${local.service_bus.name}.servicebus.windows.net" # use central local.service_bus for FQDN
     OS_API_KEY                                    = local.key_vault_refs["os-api-key"]
     SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"] # What is this doing, is this for the api permissions?
     SERVICE_USER_TOPIC                            = "service-user"
@@ -52,15 +52,22 @@ data "azurerm_linux_web_app" "cbos_api" {
   resource_group_name = var.apps_config.cbos.api_app_rg
 }
 
-# Reference existing Back Office Service Bus namespace and topics
-data "azurerm_servicebus_namespace" "back_office_sb" { # linked to servicebusconnection__; where the resource is located - and where we need to connect to. This is simply the address of the existing service bus. This does not equal integration. We need a subscription to read too.
+# Reference Back Office Service Bus namespace (used by subscriptions and role assignments)
+data "azurerm_servicebus_namespace" "back_office_sb" {
   name                = var.apps_config.cbos.service_bus_namespace_name
   resource_group_name = var.back_office_config.resource_group_name
 }
 
+locals {
+  service_bus = {
+    id   = data.azurerm_servicebus_namespace.back_office_sb.id
+    name = data.azurerm_servicebus_namespace.back_office_sb.name
+  }
+}
+
 resource "azurerm_servicebus_subscription" "service_user_subscription" {
-  name                                 = "service-user-dco-portal-sub"                                                # use correct naming with variables and locals etc., no as this is what they wanted on their ticket
-  topic_id                             = "${data.azurerm_servicebus_namespace.back_office_sb.id}/topics/service-user" # This is the service bus id subscription; ensure this is correct pathing/formatting
+  name                                 = "service-user-dco-portal-sub"   # use correct naming with variables and locals etc., no as this is what they wanted on their ticket
+  topic_id                             = "${local.service_bus.id}/topics/service-user"
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
   default_message_ttl                  = var.sb_ttl.dco # this stays same as we are conn to bo?
@@ -68,7 +75,7 @@ resource "azurerm_servicebus_subscription" "service_user_subscription" {
 
 resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
   name                                 = "nsip-project-dco-portal-sub"
-  topic_id                             = "${data.azurerm_servicebus_namespace.back_office_sb.id}/topics/nsip-project"
+  topic_id                             = "${local.service_bus.id}/topics/nsip-project"
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
   default_message_ttl                  = var.sb_ttl.nsip
@@ -84,7 +91,7 @@ resource "azurerm_role_assignment" "function_integration_secrets_user" {
 
 ## Add role assignments so the function app can read from the Service Bus via Managed Identity
 resource "azurerm_role_assignment" "function_integration_servicebus_data_owner" {
-  scope                = data.azurerm_servicebus_namespace.back_office_sb.id
+  scope                = local.service_bus.id
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = module.function_integration.principal_id
 }
@@ -93,19 +100,19 @@ resource "azurerm_role_assignment" "function_integration_servicebus_data_owner" 
 resource "azurerm_private_endpoint" "sb_main" {
   count = var.service_bus_config.sku == "Premium" ? 1 : 0
 
-  name                = "pins-pe-${local.service_name}-sb-${var.environment}"
+  name                = "pins-pe-${local.service_name}-sb-${var.environment}" #changeme?
   resource_group_name = azurerm_resource_group.primary.name
   location            = module.primary_region.location
   subnet_id           = azurerm_subnet.main.id
 
   private_dns_zone_group {
     name                 = "pins-pdns-${local.service_name}-sb-${var.environment}"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id]
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id] # changeme?
   }
 
   private_service_connection {
     name                           = "pins-psc-${local.service_name}-sb-${var.environment}"
-    private_connection_resource_id = local.service_bus.id
+    private_connection_resource_id = local.service_bus.id # changeme
     is_manual_connection           = false
     subresource_names              = ["namespace"]
   }
@@ -113,22 +120,14 @@ resource "azurerm_private_endpoint" "sb_main" {
   tags = local.tags
 }
 
-##### All of these could be removed as not relevant to this project?
+resource "azurerm_servicebus_topic" "service-user" {
+  name                = var.sb_topic_names.submissions.service-user
+  namespace_id        = local.service_bus.id
+  default_message_ttl = var.sb_ttl.default
+}
 
-# resource "azurerm_servicebus_topic" "appeal_fo_appellant_submission" {
-#   name                = var.sb_topic_names.submissions.appellant
-#   namespace_id        = local.service_bus.id
-#   default_message_ttl = var.sb_ttl.default
-# }
-
-# resource "azurerm_servicebus_topic" "appeal_fo_lpa_questionnaire_submission" {
-#   name                = var.sb_topic_names.submissions.lpa_questionnaire
-#   namespace_id        = local.service_bus.id
-#   default_message_ttl = var.sb_ttl.default
-# }
-
-# resource "azurerm_servicebus_topic" "appeal_fo_representation_submission" {
-#   name                = var.sb_topic_names.submissions.representation
-#   namespace_id        = local.service_bus.id
-#   default_message_ttl = var.sb_ttl.default
-# }
+resource "azurerm_servicebus_topic" "nsip-project" {
+  name                = var.sb_topic_names.submissions.nsip-project
+  namespace_id        = local.service_bus.id
+  default_message_ttl = var.sb_ttl.default
+}

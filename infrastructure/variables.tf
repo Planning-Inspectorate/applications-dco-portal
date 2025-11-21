@@ -130,19 +130,10 @@ variable "sql_config" {
 variable "sb_topic_names" {
   description = "Service bus topic names"
   type = object({
-    submissions = object({
-      appellant         = string
+      service-user         = string
       lpa_questionnaire = string
       representation    = string
     })
-    events = object({
-      document              = string
-      document_to_move      = string
-      event                 = string
-      listed_building       = string
-      service_user          = string
-    })
-  })
 }
 
 variable "sb_ttl" {
