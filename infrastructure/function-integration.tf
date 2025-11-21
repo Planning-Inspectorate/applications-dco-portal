@@ -15,7 +15,7 @@ module "function_integration" {
   app_service_plan_id = azurerm_service_plan.apps.id
 
   # storage
-  function_apps_storage_account            = azurerm_storage_account.functions.name # created in storage.tf
+  function_apps_storage_account            = azurerm_storage_account.functions.name
   function_apps_storage_account_access_key = azurerm_storage_account.functions.primary_access_key
 
   # networking
@@ -23,10 +23,10 @@ module "function_integration" {
   outbound_vnet_connectivity = true
 
   # monitoring
-  action_group_ids            = local.action_group_ids # already there
+  action_group_ids            = local.action_group_ids
   app_insights_instrument_key = azurerm_application_insights.main.instrumentation_key
   log_analytics_workspace_id  = azurerm_log_analytics_workspace.main.id
-  monitoring_alerts_enabled   = var.alerts_enabled # added in vars and tfvars
+  monitoring_alerts_enabled   = var.alerts_enabled
 
   # settings
   function_node_version = var.apps_config.functions_node_version # This var is referenced in tfvars as node version 22
@@ -112,3 +112,23 @@ resource "azurerm_private_endpoint" "sb_main" {
 
   tags = local.tags
 }
+
+##### All of these could be removed as not relevant to this project?
+
+# resource "azurerm_servicebus_topic" "appeal_fo_appellant_submission" {
+#   name                = var.sb_topic_names.submissions.appellant
+#   namespace_id        = local.service_bus.id
+#   default_message_ttl = var.sb_ttl.default
+# }
+
+# resource "azurerm_servicebus_topic" "appeal_fo_lpa_questionnaire_submission" {
+#   name                = var.sb_topic_names.submissions.lpa_questionnaire
+#   namespace_id        = local.service_bus.id
+#   default_message_ttl = var.sb_ttl.default
+# }
+
+# resource "azurerm_servicebus_topic" "appeal_fo_representation_submission" {
+#   name                = var.sb_topic_names.submissions.representation
+#   namespace_id        = local.service_bus.id
+#   default_message_ttl = var.sb_ttl.default
+# }
