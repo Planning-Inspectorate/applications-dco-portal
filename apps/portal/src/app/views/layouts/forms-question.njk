@@ -10,33 +10,14 @@
 
 {% block pageTitle %}{{ "Error: " + title if errors else title }}{% endblock %}
 
-{% block beforeContent %}
+{# show question content within content, overrides main content #}
+{% block content %}
     {{ super() }}
-    {% if pageCaption %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <span class="govuk-caption-l">
-          {{ pageCaption }}
-        </span>
-      </div>
-    </div>
-  {% endif %}
-{% endblock beforeContent %}
+    {% block dynQuestionContent %}{% endblock %}
+{% endblock %}
 
 {% if warningMessage %}
   {% set beforeSubmitButton = govukWarningText({
     text: warningMessage
   }) %}
 {% endif %}
-
-{% block after_content %}
-  {% if showBackToListLink %}
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <p class="govuk-body">
-          <a href="{{listLink}}" class="govuk-link">Return</a>
-        </p>
-      </div>
-    </div>
-  {% endif %}
-{% endblock after_content %}

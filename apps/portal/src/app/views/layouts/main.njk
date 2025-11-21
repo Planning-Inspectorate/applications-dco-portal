@@ -52,7 +52,6 @@
     {% endblock %}
 {% endblock %}
 
-{% block before_content %}{% endblock %}
 
 {% block content %}
     {% block pageHeading %}
@@ -60,7 +59,7 @@
             <div class="govuk-grid-column-full">
                 <h1 class="govuk-heading-xl">
                     {% if pageCaption %}
-                        <span class="govuk-caption-xl">{{ pageCaption }}</span>
+                        <span class="govuk-caption-l">{{ pageCaption }}</span>
                     {% endif %}
                     {{ pageHeading or pageTitle }}
                 </h1>
@@ -68,8 +67,6 @@
         </div>
     {% endblock %}
     {% block pageContent %}{% endblock %}
-
-    {% block after_content %}{% endblock %}
 {% endblock %}
 
 {% block footer %}

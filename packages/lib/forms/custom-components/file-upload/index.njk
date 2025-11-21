@@ -1,4 +1,4 @@
-{% extends layoutTemplate %}
+{% extends "views/layouts/main.njk" %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
@@ -19,6 +19,7 @@
 {% endblock before_content %}
 
 {% block content %}
+    {{ super() }}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <input type="hidden" name="_csrf" value="{{ _csrf }}">

@@ -22,7 +22,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
-		listingPageViewPath: 'views/layouts/forms-check-your-answers.njk',
+		taskListTemplate: 'views/layouts/forms-check-your-answers.njk',
 		journeyTitle: `Application details`,
 		returnToListing: false,
 		makeBaseUrl: () => req.baseUrl,

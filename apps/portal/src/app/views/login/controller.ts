@@ -123,6 +123,7 @@ export function buildSubmitEmailController({ db, notifyClient }: PortalService):
 		}
 
 		const oneTimePassword = generateOtp();
+		console.log(oneTimePassword);
 		await saveOtp(db, emailAddress, caseReference, oneTimePassword);
 		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
 
