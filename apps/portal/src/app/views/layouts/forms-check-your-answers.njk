@@ -1,58 +1,16 @@
-{% extends "components/task-list/index.njk" %}
-
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
-
-{% set title = "Check your Answers - " + journeyTitle + " - DCO Portal" %}
-
-{% block beforeContent %}
-    {% if pageCaption %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds">
-                <span class="govuk-caption-l govuk-!-margin-top-8">
-                    {{ pageCaption }}
-                 </span>
-            </div>
-        </div>
-    {% endif %}
-{% endblock beforeContent %}
+{% extends "views/layouts/main.njk" %}
 
 {% block content %}
-    {% block beforeTaskList %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-3">
-                <h1 class="govuk-heading-l">
-                    {{ pageHeading | default('Check your answers') }}
-                </h1>
-            </div>
-        </div>
-    {% endblock %}
-
-    {% set summaryRows = [] %}
-    {% for section in summaryListData.sections %}
-        {% for row in section.list.rows %}
-            {% set summaryRows = (summaryRows.push(row), summaryRows) %}
-        {% endfor %}
-    {% endfor %}
-    {% set obj = { "rows": summaryRows } %}
-
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {{ govukSummaryList(obj) }}
+            <h1 class="govuk-heading-l">
+                {% if pageCaption %}
+                    <span class="govuk-caption-l govuk-!-margin-top-8">{{ pageCaption }}</span>
+                {% endif %}
+                {{ pageHeading | default('Check your answers') }}
+            </h1>
         </div>
     </div>
 
-    {% if journeyComplete %}
-        {% set submitButtonParams = {
-                text: submitButtonText | default('Save and continue')
-            }
-        %}
-        <form method="POST">
-            {{ govukButton(submitButtonParams) }}
-        </form>
-
-    {% else %}
-        <strong class="govuk-tag govuk-tag--grey">
-            Cannot submit yet
-        </strong>
-    {% endif %}
+    {% block dynTaskList %}{% endblock %}
 {% endblock %}
