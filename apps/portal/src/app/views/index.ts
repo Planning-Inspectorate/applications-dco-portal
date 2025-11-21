@@ -2,6 +2,11 @@ import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { createRoutes as fileUploadRoutes } from './file-upload/index.ts';
 import { createRoutes as applicantAgentDetailsRoutes } from './applicant-agent-details/index.ts';
+import { createRoutes as aboutTheProjectRoutes } from './about-the-project/index.ts';
+import { createRoutes as consultationAndPublicityDetailsRoutes } from './consultation-and-publicity-details/index.ts';
+import { createRoutes as draftOrderAndExplanatoryMemorandumRoutes } from './draft-order-and-explanatory-memorandum/index.ts';
+import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
+import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
@@ -39,6 +44,23 @@ export function createRoutes(service: PortalService): IRouter {
 	router.use(
 		'/applicant-and-agent-details',
 		applicantAgentDetailsRoutes(service, APPLICATION_SECTION_ID.APPLICANT_AND_AGENT_DETAILS)
+	);
+	router.use('/about-the-project', aboutTheProjectRoutes(service, APPLICATION_SECTION_ID.ABOUT_THE_PROJECT));
+	router.use(
+		'/consultation-and-publicity-details',
+		consultationAndPublicityDetailsRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
+	);
+	router.use(
+		'/draft-order-and-explanatory-memorandum',
+		draftOrderAndExplanatoryMemorandumRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
+	);
+	router.use(
+		'/land-and-works-plans',
+		landAndWorksPlansRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
+	);
+	router.use(
+		'/land-rights-information',
+		landRightsInformationRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
 	);
 
 	return router;
