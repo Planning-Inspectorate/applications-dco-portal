@@ -35,15 +35,21 @@ module "function_integration" {
     CBOS_API_URL = "https://${data.azurerm_linux_web_app.cbos_api.default_hostname}"
     # reference to bo service bus? find the value here, do we copy the pattern in appeals bo or inspector.
     # Find this resource in azure and work backwards
-    ServiceBusConnection__fullyQualifiedNamespace = "${local.service_bus.name}.servicebus.windows.net" # use central local.service_bus for FQDN
+    ServiceBusConnection__fullyQualifiedNamespace = "${local.service_bus.name}.servicebus.windows.net"
     OS_API_KEY                                    = local.key_vault_refs["os-api-key"]
-    SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"] # What is this doing, is this for the api permissions?
+    SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"] # unsure full usage of this with the app
     SERVICE_USER_TOPIC                            = "service-user"
     SERVICE_USER_SUBSCRIPTION                     = azurerm_servicebus_subscription.service_user_subscription.name
     NSIP_PROJECT_TOPIC                            = "nsip-project"
     NSIP_PROJECT_SUBSCRIPTION                     = azurerm_servicebus_subscription.nsip_project_subscription.name
   }
 }
+
+################################################################
+############ MONDAY - figure out cbos integration ##############
+############ - ensure all vars and tfvars are correct ##########
+############ - understand all components #######################
+################################################################
 
 # Keep here or move into data.tf
 # We need data block references to applications service bus resource; We are getting the endpoint here to connect to it from this function app.
@@ -70,7 +76,7 @@ resource "azurerm_servicebus_subscription" "service_user_subscription" {
   topic_id                             = "${local.service_bus.id}/topics/service-user"
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
-  default_message_ttl                  = var.sb_ttl.dco # this stays same as we are conn to bo?
+  default_message_ttl                  = var.sb_ttl.dco
 }
 
 resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
