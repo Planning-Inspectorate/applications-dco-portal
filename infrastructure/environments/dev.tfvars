@@ -5,32 +5,34 @@ apps_config = {
     worker_count             = 1
     zone_balancing_enabled   = false
   }
-  node_environment         = "development"
-  private_endpoint_enabled = true
-
+  blob_store = {
+    disabled = false
+  }
+  cbos = {
+    api_app_name = "pins-app-appeals-bo-api-dev"
+    api_app_rg   = "pins-rg-appeals-bo-dev"
+    cbos_url     = "https://back-office-appeals-dev.planninginspectorate.gov.uk/"
+  }
   functions_node_version = 22
-
-  logging = {
-    level = "info"
-  }
-
-  redis = {
-    capacity = 0
-    family   = "C"
-    sku_name = "Basic"
-  }
-
   gov_notify = {
     disabled = false
     templates = {
       otp_template_id = "88eb5326-aa5a-4dc4-9a91-9a06953fb45a"
     }
   }
-
-  blob_store = {
-    disabled = false
+  logging = {
+    level = "info"
+  }
+  node_environment         = "development"
+  private_endpoint_enabled = true
+  redis = {
+    capacity = 0
+    family   = "C"
+    sku_name = "Basic"
   }
 }
+
+alerts_enabled = false
 
 auth_config = {
   auth_enabled   = true
@@ -81,6 +83,19 @@ sql_config = {
     long_term_yearly       = "P1Y"
     long_term_week_of_year = 1
   }
+}
+
+sb_ttl = {
+  # default service bus topic TTL
+  default = "P3D"
+  nsip    = "P1D"
+  dco     = "P1D"
+}
+
+service_bus_config = {
+  sku                           = "Standard"
+  capacity                      = 0
+  public_network_access_enabled = true
 }
 
 vnet_config = {

@@ -18,6 +18,12 @@ variable "apps_config" {
     node_environment         = string
     private_endpoint_enabled = bool
 
+    cbos = object({
+      api_app_name = string
+      api_app_rg   = string
+      cbos_url     = string
+    })
+
     functions_node_version = number
 
     logging = object({
@@ -118,6 +124,43 @@ variable "sql_config" {
       long_term_yearly       = string
       long_term_week_of_year = number
     })
+  })
+}
+
+variable "sb_topic_names" {
+  description = "Service bus topic names"
+  type = object({
+    submissions = object({
+      appellant         = string
+      lpa_questionnaire = string
+      representation    = string
+    })
+    events = object({
+      document              = string
+      document_to_move      = string
+      event                 = string
+      listed_building       = string
+      service_user          = string
+    })
+  })
+}
+
+variable "sb_ttl" {
+  description = "Service bus TTL settings"
+  type = object({
+    # default topic TTL
+    default = string
+    dco     = string
+    nsip    = string
+  })
+}
+
+variable "service_bus_config" {
+  description = "Config for Service Bus"
+  type = object({
+    sku                           = string
+    capacity                      = number
+    public_network_access_enabled = bool
   })
 }
 
