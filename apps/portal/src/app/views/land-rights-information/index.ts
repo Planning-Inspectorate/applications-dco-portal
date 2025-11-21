@@ -4,13 +4,20 @@ import type { IRouter } from 'express';
 import type { PortalService } from '#service';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildLandRightsInformationHomePage } from './controller.ts';
+import { buildIsTaskCompleted } from '../util.ts';
 
 export function createRoutes(service: PortalService, applicationSectionId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
 
-	const applicantAgentDetailsHomePage = buildLandRightsInformationHomePage();
+	const landRightsInformationHomePage = buildLandRightsInformationHomePage();
+	const isLandRightsInformationCompleted = buildIsTaskCompleted(
+		service,
+		applicationSectionId,
+		buildLandRightsInformationHomePage
+	);
 
-	router.get('/', asyncHandler(applicantAgentDetailsHomePage));
+	router.get('/', asyncHandler(landRightsInformationHomePage));
+	router.post('/', isLandRightsInformationCompleted);
 
 	return router;
 }
