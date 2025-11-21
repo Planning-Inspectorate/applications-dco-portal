@@ -100,19 +100,19 @@ resource "azurerm_role_assignment" "function_integration_servicebus_data_owner" 
 resource "azurerm_private_endpoint" "sb_main" {
   count = var.service_bus_config.sku == "Premium" ? 1 : 0
 
-  name                = "pins-pe-${local.service_name}-sb-${var.environment}" #changeme?
+  name                = "pins-pe-${local.service_name}-sb-${var.environment}"
   resource_group_name = azurerm_resource_group.primary.name
   location            = module.primary_region.location
   subnet_id           = azurerm_subnet.main.id
 
   private_dns_zone_group {
     name                 = "pins-pdns-${local.service_name}-sb-${var.environment}"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id] # changeme?
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id]
   }
 
   private_service_connection {
     name                           = "pins-psc-${local.service_name}-sb-${var.environment}"
-    private_connection_resource_id = local.service_bus.id # changeme
+    private_connection_resource_id = local.service_bus.id
     is_manual_connection           = false
     subresource_names              = ["namespace"]
   }
