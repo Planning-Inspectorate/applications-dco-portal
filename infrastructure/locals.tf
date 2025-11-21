@@ -7,8 +7,6 @@ locals {
   resource_suffix           = "${local.service_name}-${var.environment}"
   secondary_resource_suffix = "${local.service_name}-secondary-${var.environment}"
 
-  service_bus_hostname = "${local.service_bus.name}.servicebus.windows.net"
-
   secrets = [
     "dcop-case-whitelist",
     "dcop-client-secret",

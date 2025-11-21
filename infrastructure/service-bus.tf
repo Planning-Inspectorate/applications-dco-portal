@@ -24,7 +24,6 @@
 #   tags = local.tags
 # }
 
-
 ##### All of these could be removed as they may not be relevant to this project?
 
 # resource "azurerm_servicebus_topic" "appeal_fo_appellant_submission" {
