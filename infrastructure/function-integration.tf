@@ -45,11 +45,13 @@ module "function_integration" {
   }
 }
 
-################################################################
-############ MONDAY - figure out cbos integration ##############
-############ - ensure all vars and tfvars are correct ##########
-############ - understand all components #######################
-################################################################
+##################################################################
+############               MONDAY                     ############
+############              =======                     ############
+############ - figure out cbos integration            ############
+############ - ensure all vars and tfvars are correct ############
+############ - understand all components              ############
+##################################################################
 
 # Keep here or move into data.tf
 # We need data block references to applications service bus resource; We are getting the endpoint here to connect to it from this function app.
