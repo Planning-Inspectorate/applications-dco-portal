@@ -422,7 +422,7 @@ describe('login controllers', () => {
 				}
 			});
 		});
-		it('should initialise case and whitelist then redirect to landing page if valid and correct otp entered', async (ctx) => {
+		it('should initialise case but not whitelist if already exists then redirect to landing page if valid and correct otp entered', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
