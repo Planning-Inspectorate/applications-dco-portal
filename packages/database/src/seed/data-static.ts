@@ -99,7 +99,7 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	SI_VALIDATION_REPORT_SUCCESS_EMAIL: 'si-validation-report-success-email',
 	STATEMENT_OF_REASONS: 'statement-of-reasons',
 	FUNDING_STATEMENT: 'funding-statement',
-	BOOK_OF_REFERENCE_PARTS_1_TO_5: 'book-of-reference-parts-1-to-5',
+	BOOK_OF_REFERENCE_PARTS_1_TO_5: 'book-of-reference',
 	LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER: 'land-and-rights-negotiations-tracker',
 	CONSULTATION_REPORT: 'consultation-report',
 	CONSULTATION_REPORT_APPENDICES: 'consultation-report-appendices',

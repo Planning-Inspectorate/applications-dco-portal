@@ -1,0 +1,74 @@
+import type { PortalService } from '#service';
+import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+// @ts-expect-error - due to not having @types
+import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+import { getAnswersFromRes } from '../util.ts';
+import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import {
+	DOCUMENT_CATEGORY_STATUS_ID,
+	DOCUMENT_SUB_CATEGORY_ID
+} from '@pins/dco-portal-database/src/seed/data-static.ts';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/util.ts';
+import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
+
+export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
+	return async (req, res) => {
+		const answers = getAnswersFromRes(res);
+		const caseData = await db.case.findUnique({
+			where: { reference: req.session?.caseReference }
+		});
+
+		if (!caseData) {
+			return notFoundHandler(req, res);
+		}
+
+		try {
+			await db.$transaction(async ($tx) => {
+				const caseId = caseData.id;
+				const categories: CategoryInformation[] = [
+					{
+						key: 'statementOfReasons',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS
+					},
+					{
+						key: 'fundingStatement',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT
+					},
+					{
+						key: 'bookOfReference',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.BOOK_OF_REFERENCE_PARTS_1_TO_5
+					},
+					{
+						key: 'landAndRightsNegotiationsTracker',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER
+					}
+				];
+
+				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
+
+				if (answers.compulsoryAcquisition === BOOLEAN_OPTIONS.YES) {
+					for (const { key, subCategoryId } of categories) {
+						const ids = answers[key]?.split(',') ?? [];
+						for (const documentId of ids) {
+							await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
+						}
+					}
+				}
+
+				await $tx.case.update({
+					where: { reference: req.session.caseReference },
+					data: { [`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+				});
+			});
+		} catch (error) {
+			logger.error({ error }, 'error saving land rights information data to database');
+			throw new Error('error saving land rights information journey');
+		}
+
+		clearDataFromSession({ req, journeyId: applicationSectionId });
+		res.redirect('/');
+	};
+}

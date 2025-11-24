@@ -5,18 +5,11 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapAnswersToInput, mapAnswersToFullAddressInput } from './mappers.ts';
+import { getAnswersFromRes } from '../util.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
-		if (!res.locals || !res.locals.journeyResponse) {
-			throw new Error('journey response required');
-		}
-		const journeyResponse = res.locals.journeyResponse;
-		const answers = journeyResponse.answers;
-		if (typeof answers !== 'object') {
-			throw new Error('answers should be an object');
-		}
-
+		const answers = getAnswersFromRes(res);
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseData = await $tx.case.findUnique({

@@ -52,15 +52,12 @@ export function createRoutes(service: PortalService): IRouter {
 	);
 	router.use(
 		'/draft-order-and-explanatory-memorandum',
-		draftOrderAndExplanatoryMemorandumRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
+		draftOrderAndExplanatoryMemorandumRoutes(service, APPLICATION_SECTION_ID.DRAFT_ORDER_AND_EXPLANATORY_MEMORANDUM)
 	);
-	router.use(
-		'/land-and-works-plans',
-		landAndWorksPlansRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
-	);
+	router.use('/land-and-works-plans', landAndWorksPlansRoutes(service, APPLICATION_SECTION_ID.LAND_AND_WORKS_PLANS));
 	router.use(
 		'/land-rights-information',
-		landRightsInformationRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
+		landRightsInformationRoutes(service, APPLICATION_SECTION_ID.LAND_RIGHTS_INFORMATION)
 	);
 
 	return router;
