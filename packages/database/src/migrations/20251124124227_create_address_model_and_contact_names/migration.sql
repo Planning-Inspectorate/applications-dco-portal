@@ -13,7 +13,7 @@ BEGIN TRY
 BEGIN TRAN;
 
 -- AlterTable
-ALTER TABLE [dbo].[ContactDetails] ADD [addressId] UNIQUEIDENTIFIER NOT NULL,
+ALTER TABLE [dbo].[ContactDetails] ADD [addressId] UNIQUEIDENTIFIER,
 [emailAddress] NVARCHAR(1000) NOT NULL,
 [fax] NVARCHAR(1000),
 [firstName] NVARCHAR(1000) NOT NULL,
