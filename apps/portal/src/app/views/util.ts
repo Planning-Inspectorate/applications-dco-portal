@@ -8,6 +8,7 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import type { Response } from 'express';
 
 export function getDocumentCategoryDisplayName(documentCategoryId: string): string {
 	return DOCUMENT_CATEGORY.find(({ id }) => id === documentCategoryId)?.displayName ?? '';
@@ -61,4 +62,16 @@ export function buildIsTaskCompleted(
 
 		res.redirect('/');
 	};
+}
+
+export function getAnswersFromRes(res: Response) {
+	if (!res.locals || !res.locals.journeyResponse) {
+		throw new Error('journey response required');
+	}
+	const journeyResponse = res.locals.journeyResponse;
+	const answers = journeyResponse.answers;
+	if (typeof answers !== 'object') {
+		throw new Error('answers should be an object');
+	}
+	return answers;
 }

@@ -7,7 +7,7 @@ import {
 	buildDownloadDocumentController,
 	buildFileUploadHomePage
 } from './controller.ts';
-import { uploadDocumentQuestion } from './middleware.ts';
+import { uploadDocumentQuestion } from '../middleware/file-upload-middleware.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
 // @ts-expect-error - due to not having @types

@@ -1,0 +1,60 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% block before_content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errorSummary %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorSummary,
+                    attributes: {"data-cy": "error-wrapper"}
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock before_content %}
+
+{% block content %}
+    {{ super() }}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if question.options and question.options | length > 0 %}
+                <form action="" method="post" novalidate>
+                    {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
+                    {{ govukCheckboxes({
+                        name: question.fieldName,
+                        fieldset: {
+                            legend: {
+                                text: question.question,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        items: question.options
+                    }) }}
+                    {{ govukButton({
+                        text: continueButtonText,
+                        type: "submit",
+                        attributes: { "data-cy":"button-save-and-continue"}
+                    }) }}
+                </form>
+            {% else %}
+                <h1 class="govuk-heading-l">
+                    {{ question.question }}
+                </h1>
+                {{ govukWarningText({
+                    text: 'No documents have been uploaded. Upload documents first to select them.'
+                }) }}
+                {{ govukButton({
+                    text: 'Return home',
+                    href: '/'
+                }) }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

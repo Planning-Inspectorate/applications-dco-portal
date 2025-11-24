@@ -1,0 +1,29 @@
+import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { Request } from 'express';
+
+export async function populateDocumentOptions(req: Request, dbClient: PrismaClient, documentSubCategoryId: string) {
+	const caseData = await dbClient.case.findUnique({
+		where: { reference: req.session?.caseReference },
+		include: {
+			Documents: {
+				where: {
+					SubCategory: {
+						id: documentSubCategoryId
+					}
+				}
+			}
+		}
+	});
+
+	if (!caseData || caseData.Documents.length === 0) {
+		return [];
+	}
+
+	return caseData.Documents.map((document) => {
+		const { id, fileName } = document;
+		return {
+			value: id,
+			text: fileName
+		};
+	});
+}

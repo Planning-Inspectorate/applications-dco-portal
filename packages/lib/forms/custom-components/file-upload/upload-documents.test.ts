@@ -4,7 +4,7 @@ import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { deleteDocumentsController, uploadDocumentsController } from './upload-documents.ts';
 import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from './constants.ts';
-import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { DOCUMENT_CATEGORY_ID, DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('upload-documents.js', () => {
 	describe('uploadDocumentsController', () => {
@@ -27,7 +27,10 @@ describe('upload-documents.js', () => {
 			const mockRes = {
 				locals: {
 					journeyResponse: {
-						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
 					}
 				},
 				redirect: mock.fn()
@@ -63,8 +66,8 @@ describe('upload-documents.js', () => {
 				'draft-dco': {
 					uploadedFiles: [
 						{
-							blobName: 'EN123456/draft-dco/test4.pdf',
-							blobNameBase64Encoded: 'RU4xMjM0NTYvZHJhZnQtZGNvL3Rlc3Q0LnBkZg',
+							blobName: 'EN123456/draft-dco/confidential-documents/test4.pdf',
+							blobNameBase64Encoded: 'RU4xMjM0NTYvZHJhZnQtZGNvL2NvbmZpZGVudGlhbC1kb2N1bWVudHMvdGVzdDQucGRm',
 							fileName: 'test4.pdf',
 							formattedSize: '222KB',
 							size: 227787
@@ -103,7 +106,10 @@ describe('upload-documents.js', () => {
 			const mockRes = {
 				locals: {
 					journeyResponse: {
-						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
 					}
 				},
 				redirect: mock.fn()
@@ -168,7 +174,10 @@ describe('upload-documents.js', () => {
 			const mockRes = {
 				locals: {
 					journeyResponse: {
-						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
 					}
 				},
 				redirect: mock.fn()
@@ -233,7 +242,10 @@ describe('upload-documents.js', () => {
 			const mockRes = {
 				locals: {
 					journeyResponse: {
-						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
 					}
 				},
 				redirect: mock.fn()

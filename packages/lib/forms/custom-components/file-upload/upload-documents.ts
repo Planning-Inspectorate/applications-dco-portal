@@ -67,6 +67,8 @@ export function uploadDocumentsController(
 			});
 		}
 
+		const documentSubCategoryId = getDocumentSubCategory(res);
+
 		if (fileErrors.length > 0) {
 			req.session.errors = {
 				'upload-form': { msg: 'Errors encountered during file upload' }
@@ -75,7 +77,7 @@ export function uploadDocumentsController(
 		} else {
 			for (const file of files) {
 				try {
-					const blobName = `${req.session.caseReference}/${documentCategoryId}/${file.originalname}`;
+					const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${file.originalname}`;
 					await blobStore?.uploadStream(Readable.from(file.buffer), file.mimetype, blobName);
 				} catch (error) {
 					const filename = file.originalname;
@@ -86,14 +88,13 @@ export function uploadDocumentsController(
 
 			const latestUploads: UploadedFile[] = [];
 			files.forEach((file) => {
+				const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${file.originalname}`;
 				latestUploads.push({
 					fileName: file.originalname,
 					size: file.size,
 					formattedSize: formatBytes(file.size),
-					blobName: `${req.session.caseReference}/${documentCategoryId}/${file.originalname}`,
-					blobNameBase64Encoded: encodeBlobNameToBase64(
-						`${req.session.caseReference}/${documentCategoryId}/${file.originalname}`
-					)
+					blobName,
+					blobNameBase64Encoded: encodeBlobNameToBase64(blobName)
 				});
 			});
 
@@ -125,4 +126,16 @@ export function deleteDocumentsController(service: PortalService, documentCatego
 
 		res.redirect(`${req.baseUrl}/upload/upload-documents`);
 	};
+}
+
+function getDocumentSubCategory(res: Response) {
+	if (!res.locals || !res.locals.journeyResponse) {
+		throw new Error('journey response required');
+	}
+	const journeyResponse = res.locals.journeyResponse;
+	const answers = journeyResponse.answers;
+	if (typeof answers !== 'object') {
+		throw new Error('answers should be an object');
+	}
+	return answers.documentType;
 }

@@ -20,14 +20,15 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 model Case {
-  id                 String          @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  reference          String          @unique
+  id                 String               @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference          String               @unique
   email              String
-  createdAt          DateTime        @default(now())
-  modifiedAt         DateTime        @updatedAt
+  createdAt          DateTime             @default(now())
+  modifiedAt         DateTime             @updatedAt
   Documents          Document[]
-  applicantDetailsId String?         @db.UniqueIdentifier
-  ApplicantDetails   ContactDetails? @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  SupportingEvidence SupportingEvidence[]
+  applicantDetailsId String?              @db.UniqueIdentifier
+  ApplicantDetails   ContactDetails?      @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: Cascade)
   Whitelist          WhitelistUser[]
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
@@ -53,6 +54,8 @@ model Case {
   applicantAndAgentDetailsStatus   DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   aboutTheProjectStatusId          String                 @default("not-started")
   aboutTheProjectStatus            DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  landRightsInformationStatusId    String                 @default("not-started")
+  landRightsInformationStatus      DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -89,19 +92,33 @@ model WhitelistUserRole {
 }
 
 model Document {
-  // internal identifier
-  id               String              @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  fileName         String
-  uploadedDate     DateTime            @default(now())
-  size             BigInt              @default(0)
-  blobName         String
-  isCertified      Boolean
-  subCategoryId    String
-  SubCategory      DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  apfpRegulationId String
-  ApfpRegulation   ApfpRegulation      @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  caseId           String              @db.UniqueIdentifier
-  Case             Case                @relation(fields: [caseId], references: [id])
+  /// internal identifier
+  id                 String               @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  fileName           String
+  uploadedDate       DateTime             @default(now())
+  size               BigInt               @default(0)
+  blobName           String
+  isCertified        Boolean
+  subCategoryId      String
+  SubCategory        DocumentSubCategory  @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  apfpRegulationId   String
+  ApfpRegulation     ApfpRegulation       @relation(fields: [apfpRegulationId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  caseId             String               @db.UniqueIdentifier
+  Case               Case                 @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  supportingEvidence SupportingEvidence[]
+}
+
+model SupportingEvidence {
+  /// internal identifier
+  id            String              @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId        String              @db.UniqueIdentifier
+  Case          Case                @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  documentId    String              @db.UniqueIdentifier
+  Document      Document            @relation(fields: [documentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subCategoryId String
+  SubCategory   DocumentSubCategory @relation(fields: [subCategoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([caseId, documentId, subCategoryId])
 }
 
 model DocumentCategory {
@@ -113,11 +130,12 @@ model DocumentCategory {
 
 model DocumentSubCategory {
   /// unique machine-readable name, not generated, e.g. "application-cover-letter"
-  id          String           @id
-  displayName String?
-  Document    Document[]
-  categoryId  String
-  Category    DocumentCategory @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                 String               @id
+  displayName        String?
+  Document           Document[]
+  SupportingEvidence SupportingEvidence[]
+  categoryId         String
+  Category           DocumentCategory     @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model ApfpRegulation {
@@ -144,6 +162,7 @@ model DocumentCategoryStatus {
 
   ApplicantAndAgentDetailsCases Case[] @relation("applicantAndAgentDetailsStatus")
   AboutTheProjectCases          Case[] @relation("aboutTheProjectStatus")
+  LandRightsInformationCases    Case[] @relation("landRightsInformationStatus")
 }
 
 model ContactDetails {
