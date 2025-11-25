@@ -21,21 +21,6 @@ export function getQuestions() {
 	const questions = {
 		...contactDetailsQuestions('applicant', 'Applicant'),
 		...contactDetailsQuestions('agent', 'Agent'),
-		organisation: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Applicant Organisation',
-			pageTitle: 'Applicant Organisation',
-			question: "Enter the applicant's organisation",
-			fieldName: 'organisation',
-			url: 'organisation',
-			validators: [
-				new RequiredValidator(),
-				new StringValidator({
-					maxLength: { maxLength: 30 },
-					regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Organisation name can only contain letters and spaces' }
-				})
-			]
-		},
 		paymentMethod: {
 			type: COMPONENT_TYPES.RADIO,
 			title: 'Application Payment Method',
@@ -80,17 +65,30 @@ export function getQuestions() {
 }
 
 export function contactDetailsQuestions(prefix: string, title: string) {
-	const prefixUrl = prefix.split(/(?=[A-Z])/).join('-');
-
 	const questions: Record<string, QuestionProps | FullAddressProps> = {};
 
+	questions[`${prefix}Organisation`] = {
+		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		title: `${title} Organisation`,
+		pageTitle: `${title} Organisation`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s organisation`,
+		fieldName: `${prefix}Organisation`,
+		url: `organisation`,
+		validators: [
+			new RequiredValidator(),
+			new StringValidator({
+				maxLength: { maxLength: 30 },
+				regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Organisation name can only contain letters and spaces' }
+			})
+		]
+	};
 	questions[`${prefix}Name`] = {
 		type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
 		title: `${title} Name`,
 		pageTitle: `${title} Name`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s name`,
 		fieldName: `${prefix}Name`,
-		url: `${prefixUrl}-name`,
+		url: `name`,
 		validators: [
 			new MultiFieldInputValidator({
 				fields: [
@@ -110,7 +108,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Email Address`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s email address`,
 		fieldName: `${prefix}EmailAddress`,
-		url: `${prefixUrl}-email-address`,
+		url: `email-address`,
 		validators: [
 			new RequiredValidator(),
 			new StringValidator({
@@ -127,7 +125,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Phone Number`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s phone number`,
 		fieldName: `${prefix}Phone`,
-		url: `${prefixUrl}-phone`,
+		url: `phone`,
 		validators: [
 			new StringValidator({
 				maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
@@ -139,28 +137,28 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 			})
 		]
 	};
-	((questions[`${prefix}Address`] = {
+	questions[`${prefix}Address`] = {
 		type: CUSTOM_COMPONENTS.FULL_ADDRESS,
 		title: `${title} Address`,
 		pageTitle: `${title} Address`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s address`,
 		fieldName: `${prefix}Address`,
-		url: `${prefixUrl}-address`,
+		url: `address`,
 		fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
 		validators: [
 			new FullAddressValidator({
 				requiredFields: { addressLine1: true, addressLine2: true, townCity: true, postcode: true, country: true }
 			})
 		]
-	}),
-		(questions[`${prefix}Fax`] = {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: `${title} Fax Number`,
-			pageTitle: `${title} Fax Number`,
-			question: `Enter the ${title.toLocaleLowerCase()}'s fax number (optional)`,
-			fieldName: `${prefix}Fax`,
-			url: `${prefixUrl}-fax`
-		}));
+	};
+	questions[`${prefix}Fax`] = {
+		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		title: `${title} Fax Number`,
+		pageTitle: `${title} Fax Number`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s fax number (optional)`,
+		fieldName: `${prefix}Fax`,
+		url: `fax`
+	};
 
 	return questions;
 }

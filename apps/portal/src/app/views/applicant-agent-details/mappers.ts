@@ -1,29 +1,23 @@
 import type { ContactDetailsRecord, FullAddressRecord } from './types.js';
 
-export function mapAnswersToInput(answers: Record<string, any>): ContactDetailsRecord {
+export function mapAnswersToContact(answers: Record<string, any>, prefix: string): ContactDetailsRecord {
 	return {
-		firstName: answers.firstName,
-		lastName: answers.lastName,
-		emailAddress: answers.emailAddress,
-		phone: answers.phone,
-		fax: answers.fax,
-		organisation: answers.organisation,
-		paymentReference: answers.paymentReference,
-		PaymentMethod: {
-			connect: {
-				id: answers.paymentMethod
-			}
-		}
+		firstName: answers[`${prefix}FirstName`],
+		lastName: answers[`${prefix}LastName`],
+		emailAddress: answers[`${prefix}EmailAddress`],
+		phone: answers[`${prefix}Phone`],
+		fax: answers[`${prefix}Fax`] || null,
+		organisation: answers[`${prefix}Organisation`]
 	};
 }
 
-export function mapAnswersToFullAddressInput(answers: Record<string, any>): FullAddressRecord {
+export function mapAnswersToFullAddressInput(addressAnswer: Record<string, any>): FullAddressRecord {
 	return {
-		addressLine1: answers.addressLine1,
-		addressLine2: answers.addressLine2,
-		townCity: answers.townCity,
-		county: answers.county,
-		country: answers.country,
-		postcode: answers.postcode
+		addressLine1: addressAnswer.addressLine1,
+		addressLine2: addressAnswer.addressLine2,
+		townCity: addressAnswer.townCity,
+		county: addressAnswer.county || null,
+		country: addressAnswer.country,
+		postcode: addressAnswer.postcode
 	};
 }
