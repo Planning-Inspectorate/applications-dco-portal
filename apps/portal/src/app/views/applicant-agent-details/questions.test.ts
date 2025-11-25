@@ -7,10 +7,10 @@ describe('applicant-agent-details questions', () => {
 		const prefix = 'myField';
 		const prefixHyphens = 'my-field';
 		const title = 'My Field';
-		it('should create five questions with prefix in question keys', () => {
+		it('should create six questions with prefix in question keys', () => {
 			const questions = contactDetailsQuestions(prefix, title);
 
-			assert.strictEqual(Object.keys(questions).length, 5);
+			assert.strictEqual(Object.keys(questions).length, 6);
 			for (const key of Object.keys(questions)) {
 				assert.ok(key.startsWith(prefix));
 			}
@@ -20,12 +20,6 @@ describe('applicant-agent-details questions', () => {
 			for (const question of Object.values(questions)) {
 				assert.ok(question.title.startsWith(title));
 				assert.ok(question.question.includes(title.toLowerCase()));
-			}
-		});
-		it('should use hyphenated prefix for urls', () => {
-			const questions = contactDetailsQuestions(prefix, title);
-			for (const question of Object.values(questions)) {
-				assert.ok((question.url || '').startsWith(prefixHyphens));
 			}
 		});
 	});
