@@ -35,7 +35,7 @@
     "@azure/storage-blob": "^12.29.1",
     "accessible-autocomplete": "^3.0.1",
     "bcrypt": "^6.0.0",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.1",
     "cfb": "^1.2.2",
     "connect-redis": "^9.0.0",
     "cypress": "^15.6.0",
