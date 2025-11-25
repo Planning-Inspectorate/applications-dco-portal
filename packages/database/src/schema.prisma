@@ -154,8 +154,8 @@ model ContactDetails {
   phone            String
   fax              String?
   organisation     String
-  addressId        String?       @db.UniqueIdentifier
-  Address          FullAddress?  @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  addressId        String        @db.UniqueIdentifier
+  Address          FullAddress   @relation(fields: [addressId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentMethodId  String
   PaymentMethod    PaymentMethod @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentReference String
