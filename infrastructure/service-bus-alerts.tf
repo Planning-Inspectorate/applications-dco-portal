@@ -3,7 +3,7 @@ locals {
   # keys in this object used for alert name
   # max five action groups per alert
 
-## Not sure on any of these values, but have matched up with vars, but not tfvars.
+  ## Not sure on any of these values, but have matched up with vars, but not tfvars.
 
   sb_alerts = {
     # DCO submissions

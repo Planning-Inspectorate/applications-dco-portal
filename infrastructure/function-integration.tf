@@ -74,7 +74,7 @@ locals {
 }
 
 resource "azurerm_servicebus_subscription" "service_user_subscription" {
-  name                                 = "service-user-dco-portal-sub"   # use correct naming with variables and locals etc., no as this is what they wanted on their ticket
+  name                                 = "service-user-dco-portal-sub" # use correct naming with variables and locals etc., no as this is what they wanted on their ticket
   topic_id                             = "${local.service_bus.id}/topics/service-user"
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
