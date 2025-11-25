@@ -14,9 +14,13 @@ import FullAddressValidator from '@pins/dco-portal-lib/forms/custom-components/f
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { PAYMENT_METHOD } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import type { QuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
+import type { FullAddressProps } from '@pins/dco-portal-lib/forms/custom-components/full-address/types.d.ts';
 
 export function getQuestions() {
 	const questions = {
+		...contactDetailsQuestions('applicant', 'Applicant'),
+		...contactDetailsQuestions('agent', 'Agent'),
 		organisation: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 			title: 'Applicant Organisation',
@@ -56,82 +60,14 @@ export function getQuestions() {
 				})
 			]
 		},
-		name: {
-			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
-			title: 'Applicant Name',
-			pageTitle: 'Applicant Name',
-			question: "Enter the applicant's name",
-			fieldName: 'name',
-			url: 'name',
-			validators: [
-				new MultiFieldInputValidator({
-					fields: [
-						{ fieldName: 'firstName', errorMessage: 'Please enter a first name', required: true },
-						{ fieldName: 'lastName', errorMessage: 'Please enter a last name', required: true }
-					]
-				})
-			],
-			inputFields: [
-				{ fieldName: 'firstName', label: 'First name', type: COMPONENT_TYPES.SINGLE_LINE_INPUT },
-				{ fieldName: 'lastName', label: 'Last name', type: COMPONENT_TYPES.SINGLE_LINE_INPUT }
-			]
-		},
-		emailAddress: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Applicant Email Address',
-			pageTitle: 'Applicant Email Address',
-			question: "Enter the applicant's email address",
-			fieldName: 'emailAddress',
-			url: 'email-address',
-			validators: [
-				new RequiredValidator(),
-				new StringValidator({
-					regex: {
-						regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-						regexMessage: 'Please enter a valid email address'
-					}
-				})
-			]
-		},
-		phone: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Applicant Phone Number',
-			pageTitle: 'Applicant Phone Number',
-			question: "Enter the applicant's phone number",
-			fieldName: 'phone',
-			url: 'phone',
-			validators: [
-				new StringValidator({
-					maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
-					minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
-					regex: {
-						regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-						regexMessage: 'Please enter a valid phone number'
-					}
-				})
-			]
-		},
-		address: {
-			type: CUSTOM_COMPONENTS.FULL_ADDRESS,
-			title: 'Applicant Address',
-			pageTitle: 'Applicant Address',
-			question: "Enter the applicant's address",
-			fieldName: 'address',
-			url: 'address',
-			fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
-			validators: [
-				new FullAddressValidator({
-					requiredFields: { addressLine1: true, addressLine2: true, townCity: true, postcode: true, country: true }
-				})
-			]
-		},
-		fax: {
-			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Applicant Fax Number',
-			pageTitle: 'Applicant Fax Number',
-			question: "Enter the applicant's fax number (optional)",
-			fieldName: 'fax',
-			url: 'fax'
+		isAgent: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Is Agent?',
+			pageTitle: 'Is Agent',
+			question: 'Are you an agent acting on behalf of the applicant?',
+			fieldName: 'isAgent',
+			url: 'is-agent',
+			validators: [new RequiredValidator()]
 		}
 	};
 
@@ -141,4 +77,90 @@ export function getQuestions() {
 	};
 
 	return createQuestions(questions, classes, {});
+}
+
+export function contactDetailsQuestions(prefix: string, title: string) {
+	const prefixUrl = prefix.split(/(?=[A-Z])/).join('-');
+
+	const questions: Record<string, QuestionProps | FullAddressProps> = {};
+
+	questions[`${prefix}Name`] = {
+		type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
+		title: `${title} Name`,
+		pageTitle: `${title} Name`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s name`,
+		fieldName: `${prefix}Name`,
+		url: `${prefixUrl}-name`,
+		validators: [
+			new MultiFieldInputValidator({
+				fields: [
+					{ fieldName: `${prefix}FirstName`, errorMessage: 'Please enter a first name', required: true },
+					{ fieldName: `${prefix}LastName`, errorMessage: 'Please enter a last name', required: true }
+				]
+			})
+		],
+		inputFields: [
+			{ fieldName: `${prefix}FirstName`, label: 'First name' },
+			{ fieldName: `${prefix}LastName`, label: 'Last name' }
+		]
+	};
+	questions[`${prefix}EmailAddress`] = {
+		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		title: `${title} Email Address`,
+		pageTitle: `${title} Email Address`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s email address`,
+		fieldName: `${prefix}EmailAddress`,
+		url: `${prefixUrl}-email-address`,
+		validators: [
+			new RequiredValidator(),
+			new StringValidator({
+				regex: {
+					regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+					regexMessage: 'Please enter a valid email address'
+				}
+			})
+		]
+	};
+	questions[`${prefix}Phone`] = {
+		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+		title: `${title} Phone Number`,
+		pageTitle: `${title} Phone Number`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s phone number`,
+		fieldName: `${prefix}Phone`,
+		url: `${prefixUrl}-phone`,
+		validators: [
+			new StringValidator({
+				maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
+				minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
+				regex: {
+					regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+					regexMessage: 'Please enter a valid phone number'
+				}
+			})
+		]
+	};
+	((questions[`${prefix}Address`] = {
+		type: CUSTOM_COMPONENTS.FULL_ADDRESS,
+		title: `${title} Address`,
+		pageTitle: `${title} Address`,
+		question: `Enter the ${title.toLocaleLowerCase()}'s address`,
+		fieldName: `${prefix}Address`,
+		url: `${prefixUrl}-address`,
+		fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
+		validators: [
+			new FullAddressValidator({
+				requiredFields: { addressLine1: true, addressLine2: true, townCity: true, postcode: true, country: true }
+			})
+		]
+	}),
+		(questions[`${prefix}Fax`] = {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: `${title} Fax Number`,
+			pageTitle: `${title} Fax Number`,
+			question: `Enter the ${title.toLocaleLowerCase()}'s fax number (optional)`,
+			fieldName: `${prefix}Fax`,
+			url: `${prefixUrl}-fax`
+		}));
+
+	return questions;
 }

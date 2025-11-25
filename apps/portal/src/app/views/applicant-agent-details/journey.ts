@@ -2,6 +2,8 @@
 import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
 // @ts-expect-error - due to not having @types
 import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
+// @ts-expect-error - due to not having @types
+import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
@@ -16,11 +18,21 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		journeyId: applicationSectionId,
 		sections: [
 			new Section(applicationSectionDisplayName, 'application')
-				.addQuestion(questions.name)
-				.addQuestion(questions.emailAddress)
-				.addQuestion(questions.phone)
-				.addQuestion(questions.fax)
-				.addQuestion(questions.address)
+				.addQuestion(questions.applicantName)
+				.addQuestion(questions.applicantEmailAddress)
+				.addQuestion(questions.applicantPhone)
+				.addQuestion(questions.applicantFax)
+				.addQuestion(questions.applicantAddress)
+				.addQuestion(questions.isAgent)
+				.startMultiQuestionCondition('agent-questions', (response: Handler) =>
+					questionHasAnswer(response, questions.isAgent, 'yes')
+				)
+				.addQuestion(questions.agentName)
+				.addQuestion(questions.agentEmailAddress)
+				.addQuestion(questions.agentPhone)
+				.addQuestion(questions.agentFax)
+				.addQuestion(questions.agentAddress)
+				.endMultiQuestionCondition('agent-questions')
 				.addQuestion(questions.organisation)
 				.addQuestion(questions.paymentMethod)
 				.addQuestion(questions.paymentReference)
