@@ -15,7 +15,7 @@ module "function_integration" {
   location            = module.primary_region.location
 
   # naming
-  app_name        = "service-bus-integration"
+  app_name        = "function-integration"
   resource_suffix = var.environment
   service_name    = local.service_name
   tags            = local.tags
