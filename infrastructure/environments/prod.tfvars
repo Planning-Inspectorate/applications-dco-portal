@@ -2,11 +2,15 @@ auth_config = {
   auth_enabled   = false
   auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
   application_id = "d597841a-bf3a-491f-908f-d581d1999b17" # App Registration for DCO deployment Prod
+
+  functions_service_plan_sku = "P1v3"
+  functions_node_version     = 22
 }
 
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-prod-ukw-001"
   storage_account_name = "pinsstdocsboprodukw001"
+  service_bus_name     = "pins-sb-back-office-prod-ukw-001"
 }
 
 environment = "prod"
@@ -38,6 +42,39 @@ sql_config = {
     long_term_yearly       = "P1Y"
     long_term_week_of_year = 1
   }
+}
+
+service_bus_config = {
+  sku                           = "Premium"
+  capacity                      = 1
+  public_network_access_enabled = false
+}
+
+# Is this needed? Appeals has a separate file called terraform vars that contains this information
+sb_ttl = {
+  default      = "P3D" # are these values the same for prod?
+  service_user = "P1D"
+  nsip_project = "P1D"
+}
+
+# sb_topic_names = {
+#   submissions = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+#   Broadcasts = {
+#     service_user = "service-user-topic"
+#   nsip_project = "nsip-project-topic" }
+
+#   Internal = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+# }
+
+sb_topic_names_small = {
+  service_user = "service-user-topic"
+  nsip_project = "nsip-project-topic"
 }
 
 vnet_config = {

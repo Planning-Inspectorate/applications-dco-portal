@@ -8,7 +8,9 @@ apps_config = {
   node_environment         = "production"
   private_endpoint_enabled = true
 
-  functions_node_version = 22
+  # Appeals training have p1v3
+  functions_service_plan_sku = "P0v3" # if the plans are the same is it worth having this and the extra resource in function.tf?
+  functions_node_version     = 22
 
   logging = {
     level = "warn"
@@ -41,6 +43,7 @@ auth_config = {
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-training-ukw-001"
   storage_account_name = "pinsstdocsbotrainingukw"
+  service_bus_name     = "pins-sb-back-office-training-ukw-001"
 }
 
 common_config = {
@@ -81,6 +84,38 @@ sql_config = {
     long_term_yearly       = "P1Y"
     long_term_week_of_year = 1
   }
+}
+
+service_bus_config = {
+  sku                           = "Standard"
+  capacity                      = 0
+  public_network_access_enabled = true
+}
+
+sb_ttl = {
+  default      = "P3D"
+  service_user = "P1D"
+  nsip_project = "P1D"
+}
+
+# sb_topic_names = {
+#   submissions = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+#   Broadcasts = {
+#     service_user = "service-user-topic"
+#   nsip_project = "nsip-project-topic" }
+
+#   Internal = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+# }
+
+sb_topic_names_small = {
+  service_user = "service-user-topic"
+  nsip_project = "nsip-project-topic"
 }
 
 vnet_config = {

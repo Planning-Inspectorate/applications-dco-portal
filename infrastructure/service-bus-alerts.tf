@@ -2,42 +2,52 @@ locals {
   # action group keys from var.common_config.action_group_names
   # keys in this object used for alert name
   # max five action groups per alert
-  sb_alerts = {
-    "Submissions" = {
-      topics = [
-        var.sb_topic_names.service_user,
-        var.sb_topic_names.nsip_project
-      ],
-      action_groups = [
-        "tech",
-        "service_manager"
-      ]
-    },
-    "Broadcasts" = {
-      topics = [
-        var.sb_topic_names.service_user,
-        var.sb_topic_names.nsip_project
-      ],
-      action_groups = [
-        "tech",
-        "service_manager"
-      ]
-    },
-    "Internal" = {
-      topics = [
-        var.sb_topic_names.service_user,
-        var.sb_topic_names.nsip_project
-      ],
-      action_groups = [
-        "tech",
-        "service_manager"
-      ]
-    }
+  # sb_alerts = {
+  #   "Submissions" = {
+  #     topics = [
+  #       var.sb_topic_names.service_user,
+  #       var.sb_topic_names.nsip_project
+  #     ],
+  #     action_groups = [
+  #       "tech",
+  #       "service_manager"
+  #     ]
+  #   },
+  #   "Broadcasts" = {
+  #     topics = [
+  #       var.sb_topic_names.service_user,
+  #       var.sb_topic_names.nsip_project
+  #     ],
+  #     action_groups = [
+  #       "tech",
+  #       "service_manager"
+  #     ]
+  #   },
+  #   "Internal" = {
+  #     topics = [
+  #       var.sb_topic_names.service_user,
+  #       var.sb_topic_names.nsip_project
+  #     ],
+  #     action_groups = [
+  #       "tech",
+  #       "service_manager"
+  #     ]
+  #   }
+  # }
+  sb_alerts_small = {
+    topics = [
+      var.sb_topic_names.service_user,
+      var.sb_topic_names.nsip_project
+    ],
+    action_groups = [
+      "tech",
+      "service_manager"
+    ]
   }
 }
 
 resource "azurerm_monitor_metric_alert" "sb_dead_letter_alerts" {
-  for_each = local.sb_alerts
+  for_each = local.sb_alerts_small
 
   name                = "Dead Letter Alert - ${each.key} - ${var.back_office_config.service_bus_name}"
   resource_group_name = azurerm_resource_group.primary.name

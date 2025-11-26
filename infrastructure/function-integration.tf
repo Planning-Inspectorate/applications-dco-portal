@@ -21,7 +21,7 @@ module "function_integration" {
   tags            = local.tags
 
   # service plan
-  app_service_plan_id = azurerm_service_plan.functions.id # changed this to functions service plan; easy change to reference original service plan but this is more accurate
+  app_service_plan_id = azurerm_service_plan.functions.id # A new service plan created and added into function.tf; easy change to reference original service plan but this is more accurate
 
   # storage
   function_apps_storage_account            = azurerm_storage_account.functions.name

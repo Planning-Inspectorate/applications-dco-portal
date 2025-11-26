@@ -8,11 +8,6 @@ apps_config = {
   blob_store = {
     disabled = false
   }
-  cbos = {
-    api_app_name = "pins-app-appeals-bo-api-dev" # change to applications back office 
-    api_app_rg   = "pins-rg-appeals-bo-dev"
-    cbos_url     = "https://back-office-appeals-dev.planninginspectorate.gov.uk/"
-  }
 
   functions_service_plan_sku = "P0v3" # if the plans are the same is it worth having this and the extra resource in function.tf?
   functions_node_version     = 22
@@ -89,16 +84,36 @@ sql_config = {
   }
 }
 
+service_bus_config = {
+  sku                           = "Standard"
+  capacity                      = 0
+  public_network_access_enabled = true
+}
+
 sb_ttl = {
   default      = "P3D"
   service_user = "P1D"
   nsip_project = "P1D"
 }
 
-service_bus_config = {
-  sku                           = "Standard"
-  capacity                      = 0
-  public_network_access_enabled = true
+# sb_topic_names = {
+#   submissions = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+#   Broadcasts = {
+#     service_user = "service-user-topic"
+#   nsip_project = "nsip-project-topic" }
+
+#   Internal = {
+#     service_user = "service-user-topic"
+#     nsip_project = "nsip-project-topic"
+#   }
+# }
+
+sb_topic_names_small = {
+  service_user = "service-user-topic"
+  nsip_project = "nsip-project-topic"
 }
 
 vnet_config = {

@@ -132,7 +132,25 @@ variable "service_bus_config" {
   })
 }
 
-variable "sb_topic_names" {
+# variable "sb_topic_names" {
+#   description = "Service bus topic names"
+#   type = object({
+#     submissions = object({
+#       service_user = string
+#       nsip_project = string
+#     })
+#     Broadcasts = object({
+#       service_user = string
+#       nsip_project = string
+#     })
+#     Internal = object({
+#       service_user = string
+#       nsip_project = string
+#     })
+#   })
+# }
+
+variable "sb_topic_names" { # Linked with sb_alerts_small
   description = "Service bus topic names"
   type = object({
     service_user = string
