@@ -57,6 +57,7 @@ variable "back_office_config" {
   type = object({
     resource_group_name  = string
     storage_account_name = string
+    service_bus_name     = string
   })
 }
 
@@ -123,6 +124,15 @@ variable "sql_config" {
 
 #add in vars from data call azurerm_servicebus_namespace
 
+variable "service_bus_config" {
+  description = "Config for Service Bus"
+  type = object({
+    sku                           = string
+    capacity                      = number
+    public_network_access_enabled = bool
+  })
+}
+
 variable "sb_topic_names" {
   description = "Service bus topic names"
   type = object({
@@ -134,19 +144,9 @@ variable "sb_topic_names" {
 variable "sb_ttl" {
   description = "Service bus TTL settings"
   type = object({
-    # default topic TTL
     default      = string
     service_user = string
     nsip_project = string
-  })
-}
-
-variable "service_bus_config" {
-  description = "Config for Service Bus"
-  type = object({
-    sku                           = string
-    capacity                      = number
-    public_network_access_enabled = bool
   })
 }
 

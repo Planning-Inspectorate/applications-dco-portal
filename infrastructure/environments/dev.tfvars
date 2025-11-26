@@ -43,6 +43,7 @@ auth_config = {
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-dev-ukw-001"
   storage_account_name = "pinsstdocsbodevukw001"
+  service_bus_name     = "pins-sb-back-office-dev-ukw-001" # I'm not keen or 100% sure on this method, would a data call in function-integration.tf would be better such as the locals that was previously done
 }
 
 common_config = {

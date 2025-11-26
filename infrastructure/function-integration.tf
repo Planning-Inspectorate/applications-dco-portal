@@ -1,7 +1,13 @@
-# TODOs:
-#### We did mention about naming on one or two values but can't remember which ones around service user and nsip user
-#### Choose better naming for: module, app_name and file name?
-#### Move some items into a newer file similar to appeals?
+## 📋 TODOs:
+#### ⭕ We did mention about naming on one or two values but can't remember which ones around service user and nsip user
+#### ⭕ Choose better naming for: module, app_name and file name?
+#### ⭕ Move some items into a newer file similar to appeals?
+#### ⭕ Do we need the extra locals in this file or could we remove it and use something else to get the file smaller
+#### ⭕ Remove any appeals references
+#### ⭕ Make changes to the Build pipeline
+#### ⭕ Make changes to the Deploy pipeline
+
+# A subscription will
 
 module "function_integration" {
   #checkov:skip=CKV_TF_1: Use of commit hash are not required for our Terraform modules
@@ -24,7 +30,7 @@ module "function_integration" {
   function_apps_storage_account_access_key = azurerm_storage_account.functions.primary_access_key
 
   # networking
-  integration_subnet_id      = azurerm_subnet.apps.id # do we need any further changes?
+  integration_subnet_id      = azurerm_subnet.apps.id # do we need any further changes? Is this referenced anywhere?
   outbound_vnet_connectivity = true
 
   # monitoring
@@ -36,9 +42,7 @@ module "function_integration" {
   # settings
   function_node_version = var.apps_config.functions_node_version
   app_settings = {
-    # reference to bo service bus? find the value here, do we copy the pattern in appeals bo or inspector.
-    # Find this resource in azure and work backwards
-    ServiceBusConnection__fullyQualifiedNamespace = "${local.service_bus.name}.servicebus.windows.net" # come back to this
+    ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net" # removed local.service_bus.name
     SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"]
     SERVICE_USER_TOPIC                            = "service-user"
     SERVICE_USER_SUBSCRIPTION                     = azurerm_servicebus_subscription.service_user_subscription.name
@@ -47,34 +51,31 @@ module "function_integration" {
   }
 }
 
-# Reference Back Office Service Bus namespace (used by subscriptions and role assignments)
-// Back-office Service Bus namespace lookup.
-// The tfvars currently provide only `resource_group_name` and `storage_account_name` for back_office_config.
-// Allow callers to optionally provide `service_bus_namespace_name`. If not provided, we construct
-// a likely namespace name as a best-effort fallback.
-locals {
-  back_office_servicebus_name = try(var.back_office_config.service_bus_namespace_name, "")
-  inferred_servicebus_name    = local.back_office_servicebus_name != "" ? local.back_office_servicebus_name : format("%s-sb-%s", local.service_name, var.environment)
+locals { # could delete this entirely if we are referencing via vars?
+  service_bus = {
+    id   = data.azurerm_servicebus_namespace.back_office_sb.id
+    name = data.azurerm_servicebus_namespace.back_office_sb.name
+  }
 }
 
+# despite this data call name being hard coded in the tfvars it will still bring back other attiributes such as id and sku...
 data "azurerm_servicebus_namespace" "back_office_sb" {
-  name                = local.inferred_servicebus_name
-  resource_group_name = var.back_office_config.resource_group_name
+  name                = var.back_office_config.service_bus_name    # locals.service_bus.name - this creates a cycle error as data>local>data
+  resource_group_name = var.back_office_config.resource_group_name # this will find it via vars->tfvars
 }
 
-# These should both be data calls to reference existing topics in back office service bus as these already exist we do not want to recreate them as they are already in back office which we are linking to
 data "azurerm_servicebus_topic" "service_user" {
-  name         = "service-user" # This probably is not a variable or was it that we don't need to go so far into the dot notation. Was previously var.sb_topic_names.submissions.
-  namespace_id = local.service_bus.id
+  name         = "service-user"       # Need to grab service user from this # This should be a data call as the resource already exists? Was previously var.sb_topic_names.submissions.
+  namespace_id = local.service_bus.id # or / data.azurerm_servicebus_namespace.back_office_sb.id
 }
 
 data "azurerm_servicebus_topic" "nsip_project" {
-  name         = "nsip-project" # I don't believe this is correct
-  namespace_id = local.service_bus.id
-  # topics are read-only data sources here; TTL is a topic property used only when creating a topic resource
+  name         = "nsip-project"                                      # I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
+  namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id # Just showing the different way but then why use locals at all if using this method
 }
 
-#### Needed we want a data block call on the resource not create a new one
+## ❓ Needed we want a data block call on the resource not create a new one. Ensure that this is referencing correctly and links up as extended
+## 🚨 need to go over this and understand the flow of it, what it is referencing etc
 data "azurerm_private_dns_zone" "service_bus" {
   name                = "privatelink.servicebus.windows.net"
   resource_group_name = var.tooling_config.network_rg
@@ -82,16 +83,9 @@ data "azurerm_private_dns_zone" "service_bus" {
   provider = azurerm.tooling
 }
 
-locals {
-  service_bus = {
-    id   = data.azurerm_servicebus_namespace.back_office_sb.id
-    name = data.azurerm_servicebus_namespace.back_office_sb.name
-  }
-}
-
 resource "azurerm_servicebus_subscription" "service_user_subscription" {
   name                                 = "service-user-dco-portal-sub"
-  topic_id                             = "${local.service_bus.id}/topics/service-user" # this should be a data call
+  topic_id                             = "${data.azurerm_servicebus_namespace.back_office_sb.id}/topics/service-user" # or 🚨❓ local.service_bus.id, it is better to directly reference so we know straight away what it is referencing, if the locals does not stop repeating code then just use data this should be a data call; But if I am using locals elsewhere perhaps keep to locals?
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
   default_message_ttl                  = var.sb_ttl.service_user
@@ -99,7 +93,7 @@ resource "azurerm_servicebus_subscription" "service_user_subscription" {
 
 resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
   name                                 = "nsip-project-dco-portal-sub"
-  topic_id                             = "${local.service_bus.id}/topics/nsip-project" # this should also be a data call
+  topic_id                             = "${data.azurerm_servicebus_namespace.back_office_sb.id}/topics/nsip-project"
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
   default_message_ttl                  = var.sb_ttl.nsip_project
@@ -121,20 +115,20 @@ resource "azurerm_role_assignment" "function_integration_servicebus_data_owner" 
 }
 
 resource "azurerm_private_endpoint" "sb_main" {
-  count = data.azurerm_servicebus_namespace.back_office_sb.sku == "Premium" ? 1 : 0 # A data call that will get the sku of environment
+  count = data.azurerm_servicebus_namespace.back_office_sb.sku == "Premium" ? 1 : 0
 
-  name                = "pins-pe-${local.service_name}-sb-${var.environment}"
+  name                = "pins-pe-${var.back_office_config.service_bus_name}-sb-${var.environment}" # / could use local.service_bus.name instead
   resource_group_name = azurerm_resource_group.primary.name
   location            = module.primary_region.location
   subnet_id           = azurerm_subnet.main.id
 
   private_dns_zone_group {
-    name                 = "pins-pdns-${local.service_name}-sb-${var.environment}"
+    name                 = "pins-pdns-${var.back_office_config.service_bus_name}-sb-${var.environment}"
     private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id]
   }
 
   private_service_connection {
-    name                           = "pins-psc-${local.service_name}-sb-${var.environment}"
+    name                           = "pins-psc-${var.back_office_config.service_bus_name}-sb-${var.environment}"
     private_connection_resource_id = local.service_bus.id
     is_manual_connection           = false
     subresource_names              = ["namespace"]
