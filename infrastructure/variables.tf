@@ -18,12 +18,6 @@ variable "apps_config" {
     node_environment         = string
     private_endpoint_enabled = bool
 
-    cbos = object({
-      api_app_name = string
-      api_app_rg   = string
-      cbos_url     = string
-    })
-
     functions_node_version = number
 
     logging = object({
@@ -127,12 +121,13 @@ variable "sql_config" {
   })
 }
 
+#add in vars from data call azurerm_servicebus_namespace
+
 variable "sb_topic_names" {
   description = "Service bus topic names"
   type = object({
-    service-user      = string
-    lpa_questionnaire = string
-    representation    = string
+    service_user = string
+    nsip_project = string
   })
 }
 
@@ -140,9 +135,9 @@ variable "sb_ttl" {
   description = "Service bus TTL settings"
   type = object({
     # default topic TTL
-    default = string
-    dco     = string
-    nsip    = string
+    default      = string
+    service_user = string
+    nsip_project = string
   })
 }
 

@@ -9,7 +9,7 @@ apps_config = {
     disabled = false
   }
   cbos = {
-    api_app_name = "pins-app-appeals-bo-api-dev"
+    api_app_name = "pins-app-appeals-bo-api-dev" # change to applications back office 
     api_app_rg   = "pins-rg-appeals-bo-dev"
     cbos_url     = "https://back-office-appeals-dev.planninginspectorate.gov.uk/"
   }
@@ -86,10 +86,9 @@ sql_config = {
 }
 
 sb_ttl = {
-  # default service bus topic TTL
-  default = "P3D"
-  nsip    = "P1D"
-  dco     = "P1D"
+  default      = "P3D"
+  service_user = "P1D"
+  nsip_project = "P1D"
 }
 
 service_bus_config = {

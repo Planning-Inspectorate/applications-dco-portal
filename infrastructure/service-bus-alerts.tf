@@ -7,10 +7,10 @@ locals {
 
   sb_alerts = {
     # DCO submissions
-    "Submissions" = {
+    "Submissions" = { # does this naming/key need to change
       topics = [
-        var.sb_topic_names.submissions.appellant,
-        var.sb_topic_names.submissions.lpa_questionnaire
+        var.sb_topic_names.service_user,
+        var.sb_topic_names.nsip_project
       ],
       action_groups = [
         "tech",
@@ -19,8 +19,8 @@ locals {
     },
     "Broadcasts" = {
       topics = [
-        var.sb_topic_names.events.document,
-        var.sb_topic_names.events.service_user
+        var.sb_topic_names.service_user,
+        var.sb_topic_names.nsip_project
       ],
       action_groups = [
         "tech",
@@ -29,7 +29,8 @@ locals {
     },
     "Internal" = {
       topics = [
-        var.sb_topic_names.events.document_to_move
+        var.sb_topic_names.service_user,
+        var.sb_topic_names.nsip_project
       ],
       action_groups = [
         "tech",
