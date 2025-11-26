@@ -13,7 +13,10 @@ apps_config = {
     api_app_rg   = "pins-rg-appeals-bo-dev"
     cbos_url     = "https://back-office-appeals-dev.planninginspectorate.gov.uk/"
   }
-  functions_node_version = 22
+
+  functions_service_plan_sku = "P0v3" # if the plans are the same is it worth having this and the extra resource in function.tf?
+  functions_node_version     = 22
+
   gov_notify = {
     disabled = false
     templates = {
@@ -43,7 +46,7 @@ auth_config = {
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-dev-ukw-001"
   storage_account_name = "pinsstdocsbodevukw001"
-  service_bus_name     = "pins-sb-back-office-dev-ukw-001" # I'm not keen or 100% sure on this method, would a data call in function-integration.tf would be better such as the locals that was previously done
+  service_bus_name     = "pins-sb-back-office-dev-ukw-001"
 }
 
 common_config = {

@@ -18,7 +18,8 @@ variable "apps_config" {
     node_environment         = string
     private_endpoint_enabled = bool
 
-    functions_node_version = number
+    functions_service_plan_sku = string
+    functions_node_version     = number
 
     logging = object({
       level = string
@@ -121,8 +122,6 @@ variable "sql_config" {
     })
   })
 }
-
-#add in vars from data call azurerm_servicebus_namespace
 
 variable "service_bus_config" {
   description = "Config for Service Bus"

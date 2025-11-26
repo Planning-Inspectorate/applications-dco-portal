@@ -2,12 +2,8 @@ locals {
   # action group keys from var.common_config.action_group_names
   # keys in this object used for alert name
   # max five action groups per alert
-
-  ## Not sure on any of these values, but have matched up with vars, but not tfvars.
-
   sb_alerts = {
-    # DCO submissions
-    "Submissions" = { # does this naming/key need to change
+    "Submissions" = {
       topics = [
         var.sb_topic_names.service_user,
         var.sb_topic_names.nsip_project
@@ -43,9 +39,9 @@ locals {
 resource "azurerm_monitor_metric_alert" "sb_dead_letter_alerts" {
   for_each = local.sb_alerts
 
-  name                = "Dead Letter Alert - ${each.key} - ${local.service_bus.name}" # would need this edited to match service bus name. Appeals uses local for test and default
+  name                = "Dead Letter Alert - ${each.key} - ${var.back_office_config.service_bus_name}"
   resource_group_name = azurerm_resource_group.primary.name
-  scopes              = [local.service_bus.id]
+  scopes              = [data.azurerm_servicebus_namespace.back_office_sb.id]
   description         = "Triggered when messages are added to dead-letter queue"
   severity            = 1
   frequency           = "PT5M"
@@ -59,7 +55,7 @@ resource "azurerm_monitor_metric_alert" "sb_dead_letter_alerts" {
     operator    = "GreaterThanOrEqual"
     threshold   = 1 # any dead-lettered messages
 
-    dimension { # separate alerts by topic
+    dimension {
       name     = "EntityName"
       operator = "Include"
       values   = each.value["topics"]

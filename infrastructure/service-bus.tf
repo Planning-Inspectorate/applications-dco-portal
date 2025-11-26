@@ -1,0 +1,46 @@
+data "azurerm_servicebus_namespace" "back_office_sb" {
+  name                = var.back_office_config.service_bus_name
+  resource_group_name = var.back_office_config.resource_group_name
+}
+
+data "azurerm_servicebus_topic" "service_user" {
+  name         = "service-user" # I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
+  namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
+}
+
+data "azurerm_servicebus_topic" "nsip_project" {
+  name         = "nsip-project"
+  namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
+}
+
+## ❓ we want a data block call on the resource not create a new one. Ensure that this is referencing correctly and links up as extended
+## 🚨 need to go over this and understand the flow of it, what it is referencing etc
+data "azurerm_private_dns_zone" "service_bus" {
+  name                = "privatelink.servicebus.windows.net"
+  resource_group_name = var.tooling_config.network_rg
+
+  provider = azurerm.tooling
+}
+
+resource "azurerm_private_endpoint" "sb_main" {
+  count = data.azurerm_servicebus_namespace.back_office_sb.sku == "Premium" ? 1 : 0
+
+  name                = "pins-pe-${var.back_office_config.service_bus_name}-sb-${var.environment}"
+  resource_group_name = azurerm_resource_group.primary.name
+  location            = module.primary_region.location
+  subnet_id           = azurerm_subnet.main.id
+
+  private_dns_zone_group {
+    name                 = "pins-pdns-${var.back_office_config.service_bus_name}-sb-${var.environment}"
+    private_dns_zone_ids = [data.azurerm_private_dns_zone.service_bus.id]
+  }
+
+  private_service_connection {
+    name                           = "pins-psc-${var.back_office_config.service_bus_name}-sb-${var.environment}"
+    private_connection_resource_id = data.azurerm_servicebus_namespace.back_office_sb.id
+    is_manual_connection           = false
+    subresource_names              = ["namespace"]
+  }
+
+  tags = local.tags
+}
