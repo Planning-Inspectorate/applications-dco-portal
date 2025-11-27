@@ -4,7 +4,7 @@ data "azurerm_servicebus_namespace" "back_office_sb" {
 }
 
 data "azurerm_servicebus_topic" "service_user" {
-  name         = "service-user" # I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
+  name         = "service-user"
   namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
 }
 
@@ -13,8 +13,6 @@ data "azurerm_servicebus_topic" "nsip_project" {
   namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
 }
 
-## ❓ we want a data block call on the resource not create a new one. Ensure that this is referencing correctly and links up as extended
-## 🚨 need to go over this and understand the flow of it, what it is referencing etc
 data "azurerm_private_dns_zone" "service_bus" {
   name                = "privatelink.servicebus.windows.net"
   resource_group_name = var.tooling_config.network_rg

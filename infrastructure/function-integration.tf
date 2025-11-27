@@ -1,12 +1,15 @@
-## 📋 TODOs:
-#### ⭕ We did mention about naming on one or two values but can't remember which ones around service user and nsip user
-#### ⭕ Choose better naming for: module, app_name and file name? 🤷‍♂️
-#### ✅ Move some items into a newer file similar to appeals?
-#### ✅ Remove any appeals references
-#### ✅ Make changes to the Build pipeline
-#### ✅ Make changes to the Deploy pipeline
+# 📋 TODOs:
+## ⭕ We did mention about naming on one or two values but can't remember which ones around service user and nsip user
+## ⭕ Choose better naming for: module, app_name and file name? 🤷‍♂️
+## ✅ Move some items into a newer file similar to appeals?
+## ✅ Remove any appeals references
+## ✅ Make changes to the Build pipeline
+## ✅ Make changes to the Deploy pipeline
+## ✅ removed locals completely from this file and replaced with vars
+## ⭕ A new service plan created and added into function.tf; easy change to reference original service plan but this is more accurate
+## ⭕ networking - subnet, private endpoints, integrate into back office - do we need any further changes? Is this referenced anywhere?
+## ⭕ data block "service-user/nsip-project" I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
 
-#### ✅ removed locals completely from this file and replaced with vars
 module "function_integration" {
   #checkov:skip=CKV_TF_1: Use of commit hash are not required for our Terraform modules
   source = "github.com/Planning-Inspectorate/infrastructure-modules.git//modules/node-function-app?ref=1.53"
@@ -21,14 +24,14 @@ module "function_integration" {
   tags            = local.tags
 
   # service plan
-  app_service_plan_id = azurerm_service_plan.functions.id # A new service plan created and added into function.tf; easy change to reference original service plan but this is more accurate
+  app_service_plan_id = azurerm_service_plan.functions.id
 
   # storage
   function_apps_storage_account            = azurerm_storage_account.functions.name
   function_apps_storage_account_access_key = azurerm_storage_account.functions.primary_access_key
 
   # networking
-  integration_subnet_id      = azurerm_subnet.apps.id # do we need any further changes? Is this referenced anywhere?
+  integration_subnet_id      = azurerm_subnet.apps.id
   outbound_vnet_connectivity = true
 
   # monitoring
