@@ -107,7 +107,7 @@ sb_ttl = {
 #   }
 # }
 
-sb_topic_names_small = {
+sb_topic_names = {
   service_user = "service-user-topic"
   nsip_project = "nsip-project-topic"
 }
