@@ -1,6 +1,6 @@
 # 📋 TODOs:
 ## ⭕ We did mention about naming on one or two values but can't remember which ones around service user and nsip user
-## ⭕ Choose better naming for: module, app_name and file name? 🤷‍♂️
+## ⭕ Choose better naming for: module, app_name and file name? 🤷‍♂️ change pipeline references afterwards
 ## ✅ Move some items into a newer file similar to appeals?
 ## ✅ Remove any appeals references
 ## ✅ Make changes to the Build pipeline
