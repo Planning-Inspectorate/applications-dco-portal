@@ -85,7 +85,7 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	SITE_LAYOUT_PLANS: 'site-layout-plans',
 	ELEVATION_DRAWINGS: 'elevation-drawings',
 	FLOOR_PLANS: 'floor-plans',
-	ACCESS_PARKING_AND_LANDSCAPING: 'access-parking-and-landscaping',
+	CAR_PARKING_LANDSCAPING_ACCESS: 'car-parking-landscaping-access',
 	DRAINAGE_AND_SURFACE_WATER_MANAGEMENT: 'drainage-and-surface-water-management',
 	OTHER_DETAILED_PLANS_AND_SECTIONS: 'other-detailed-plans-and-sections',
 	PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES: 'plans-of-statutory-and-non-statutory-sites-or-features',
@@ -93,6 +93,7 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	CROWN_LAND_PLAN: 'crown-land-plan',
 	CHARTS_FOR_MARINE_SCHEMES: 'charts-for-marine-schemes',
 	TREE_PRESERVATION_ORDER_AND_HEDGEROW_PLAN: 'tree-preservation-order-and-hedgerow-plan',
+	ENVIRONMENTAL_MANAGEMENT_PLAN: 'environmental-management-plan',
 	DRAFT_DEVELOPMENT_CONSENT_ORDER: 'draft-development-consent-order',
 	EXPLANATORY_MEMORANDUM: 'explanatory-memorandum',
 	SI_VALIDATION_REPORT_SUCCESS_EMAIL: 'si-validation-report-success-email',
@@ -123,9 +124,25 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	MODEL_INFORMATION: 'model-information',
 	ANY_OTHER_MEDIA_INFORMATION: 'any-other-media-information',
 	CONFIDENTIAL_DOCUMENTS: 'confidential-documents',
+	SCREENING_DIRECTION: 'screening-direction',
+	SCOPING_OPINION: 'scoping-opinion',
+	FLOOD_RISK_ASSESSMENT: 'flood-risk-assessment',
+	SENSITIVE_ENVIRONMENTAL_INFORMATION: 'sensitive-environmental-information',
 	OFFSHORE_GENERATING_STATION_DETAILS: 'offshore-generating-station-details',
 	NON_OFFSHORE_GENERATING_STATION_STATEMENT: 'non-offshore-generating-station-statement',
-	ANY_OTHER_DOCUMENTS_TO_SUPPORT_THE_APPLICATION: 'any-other-documents-to-support-the-application'
+	OFFSHORE_CABLE_ROUTE: 'offshore-cable-route',
+	OFFSHORE_SAFETY_ZONE_STATEMENT: 'offshore-safety-zone-statement',
+	NON_OFFSHORE_CONNECTION_RESPONSIBILITY: 'non-offshore-connection-responsibility',
+	HIGHWAY_RAILWAY_LEVELS_DEPTHS_HEIGHTS: 'highway-railway-levels-depths-heights',
+	HIGHWAY_RAILWAY_CROSS_SECTIONS: 'highway-railway-cross-sections',
+	HIGHWAY_RAILWAY_DRAINAGE_OUTFALLS: 'highway-railway-drainage-outfall-details',
+	HARBOUR_FACILITIES_DCO_JUSTIFICATION: 'harbour-facilities-dco-justification',
+	PIPELINES_NAME_OWNER: 'pipelines-name-owner',
+	PIPELINES_MEASUREMENTS: 'pipelines-measurements',
+	PIPELINES_CONTENTS_CONVEYED: 'pipelines-contents-conveyed',
+	PIPELINES_GRANT_OF_RIGHTS: 'pipelines-grant-of-rights',
+	HAZARDOUS_WASTE_STATEMENT: 'hazardous-waste-statement',
+	DAM_RESERVOIR_RECREATIONAL_AMENITIES: 'dam-reservoir-recreational-amenities'
 });
 
 export const DOCUMENT_SUB_CATEGORY = [
@@ -190,8 +207,8 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.ACCESS_PARKING_AND_LANDSCAPING,
-		displayName: 'Access, parking, and landscaping',
+		id: DOCUMENT_SUB_CATEGORY_ID.CAR_PARKING_LANDSCAPING_ACCESS,
+		displayName: 'Car parking, landscaping, vehicular and pedestrian access',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
@@ -228,6 +245,11 @@ export const DOCUMENT_SUB_CATEGORY = [
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.TREE_PRESERVATION_ORDER_AND_HEDGEROW_PLAN,
 		displayName: 'Tree Preservation Order and Hedgerow Plan',
+		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_MANAGEMENT_PLAN,
+		displayName: 'Environmental Management Plan',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
@@ -382,6 +404,26 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
+		id: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
+		displayName: 'Screening Direction (if applicable)',
+		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
+		displayName: 'Scoping Opinion (if applicable)',
+		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT,
+		displayName: 'Flood Risk Assessment',
+		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
+		displayName: 'Sensitive environmental information (please discuss with Planning Inspectorate case team)',
+		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
+	},
+	{
 		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION_DETAILS,
 		displayName: 'Offshore generating station - details of proposed route for offshore cables, safety zone statement',
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
@@ -393,8 +435,69 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_DOCUMENTS_TO_SUPPORT_THE_APPLICATION,
-		displayName: 'Any other documents to support the application',
+		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_CABLE_ROUTE,
+		displayName: 'Offshore generating station - Details of proposed route for offshore cables',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_SAFETY_ZONE_STATEMENT,
+		displayName: 'Offshore generating station - Safety zone statement',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_CONNECTION_RESPONSIBILITY,
+		displayName:
+			'Non offshore generating station - Statement of responsibility for designing and building the connection',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_LEVELS_DEPTHS_HEIGHTS,
+		displayName: 'Highway or railway development - Levels, depths, and heights of proposed works',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_CROSS_SECTIONS,
+		displayName: 'Highway or railway development - Cross sections',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_DRAINAGE_OUTFALLS,
+		displayName: 'Highway or railway development - Drainage outfall details',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES_DCO_JUSTIFICATION,
+		displayName: 'Harbour facilities - Statements on why the DCO is necessary',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_NAME_OWNER,
+		displayName: 'Pipelines - Name and owner',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_MEASUREMENTS,
+		displayName: 'Pipelines - Measurements of pipeline',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_CONTENTS_CONVEYED,
+		displayName: 'Pipelines - What will be conveyed by the pipeline',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_GRANT_OF_RIGHTS,
+		displayName: 'Pipelines - Any grant of rights in land or consents that are required',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_STATEMENT,
+		displayName: 'Hazardous waste facility - Statement of purpose and annual capacity, final disposal, and recovery',
+		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.DAM_RESERVOIR_RECREATIONAL_AMENITIES,
+		displayName: 'Dam or reservoir - Recreational amenities',
 		categoryId: DOCUMENT_CATEGORY_ID.OTHER
 	}
 ];
