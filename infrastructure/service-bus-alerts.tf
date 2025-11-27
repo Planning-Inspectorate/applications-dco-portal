@@ -34,7 +34,7 @@ locals {
   #     ]
   #   }
   # }
-  sb_alerts_small = {
+  sb_alerts = {
     topics = [
       var.sb_topic_names.service_user,
       var.sb_topic_names.nsip_project
@@ -47,7 +47,7 @@ locals {
 }
 
 resource "azurerm_monitor_metric_alert" "sb_dead_letter_alerts" {
-  for_each = local.sb_alerts_small
+  for_each = local.sb_alerts
 
   name                = "Dead Letter Alert - ${each.key} - ${var.back_office_config.service_bus_name}"
   resource_group_name = azurerm_resource_group.primary.name
