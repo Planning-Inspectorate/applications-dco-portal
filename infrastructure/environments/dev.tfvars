@@ -84,11 +84,12 @@ sql_config = {
   }
 }
 
-service_bus_config = {
-  sku                           = "Standard"
-  capacity                      = 0
-  public_network_access_enabled = true
-}
+# 🚨 Not needed as we are not creating this resource but simply using data blocks to read what already exists
+# service_bus_config = {
+#   sku                           = "Standard"
+#   capacity                      = 0
+#   public_network_access_enabled = true
+# }
 
 sb_ttl = {
   default      = "P3D"

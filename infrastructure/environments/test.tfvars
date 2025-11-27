@@ -86,12 +86,6 @@ sql_config = {
   }
 }
 
-service_bus_config = {
-  sku                           = "Standard"
-  capacity                      = 0
-  public_network_access_enabled = true
-}
-
 sb_ttl = {
   default      = "P3D"
   service_user = "P1D"

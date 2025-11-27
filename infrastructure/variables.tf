@@ -123,14 +123,15 @@ variable "sql_config" {
   })
 }
 
-variable "service_bus_config" {
-  description = "Config for Service Bus"
-  type = object({
-    sku                           = string
-    capacity                      = number
-    public_network_access_enabled = bool
-  })
-}
+# 🚨 Not needed as we are not creating this resource but simply using data blocks to read what already exists. We are doing a data call on line 1 of service-bus for namespace
+# variable "service_bus_config" {
+#   description = "Config for Service Bus"
+#   type = object({
+#     sku                           = string
+#     capacity                      = number
+#     public_network_access_enabled = bool
+#   })
+# }
 
 # variable "sb_topic_names" {
 #   description = "Service bus topic names"

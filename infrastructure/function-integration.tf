@@ -9,6 +9,11 @@
 ## ⭕ A new service plan created and added into function.tf; easy change to reference original service plan but this is more accurate
 ## ⭕ networking - subnet, private endpoints, integrate into back office - do we need any further changes? Is this referenced anywhere?
 ## ⭕ data block "service-user/nsip-project" I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
+## ❓ Do we need linting in build pipeline as well?
+## ❓ Should i have two - one for each subscription? 
+####💡 One should be enougn to get all topics from a namespace. Multiple for multiple namespaces
+
+
 
 module "function_integration" {
   #checkov:skip=CKV_TF_1: Use of commit hash are not required for our Terraform modules

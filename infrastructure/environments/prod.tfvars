@@ -44,13 +44,6 @@ sql_config = {
   }
 }
 
-service_bus_config = {
-  sku                           = "Premium"
-  capacity                      = 1
-  public_network_access_enabled = false
-}
-
-# Is this needed? Appeals has a separate file called terraform vars that contains this information
 sb_ttl = {
   default      = "P3D" # are these values the same for prod?
   service_user = "P1D"
