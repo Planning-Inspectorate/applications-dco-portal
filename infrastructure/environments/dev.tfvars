@@ -9,7 +9,7 @@ apps_config = {
     disabled = false
   }
 
-  functions_service_plan_sku = "P0v3" # if the plans are the same is it worth having this and the extra resource in function.tf?
+  functions_service_plan_sku = "P0v3"
   functions_node_version     = 22
 
   gov_notify = {

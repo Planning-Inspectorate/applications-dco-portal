@@ -7,11 +7,12 @@
 ## ✅ Make changes to the Deploy pipeline
 ## ✅ removed locals completely from this file and replaced with vars
 ## ⭕ A new service plan created and added into function.tf; easy change to reference original service plan but this is more accurate
-## ⭕ networking - subnet, private endpoints, integrate into back office - do we need any further changes? Is this referenced anywhere?
+## ✅ networking - subnet, private endpoints, integrate into back office - do we need any further changes? Is this referenced anywhere - made changes in service-bus.tf and variables.tf
 ## ⭕ data block "service-user/nsip-project" I am pretty sure this is correct and do not need to dive into the resources to grab but simply a string to reference it
 ## ❓ Do we need linting in build pipeline as well?
-## ❓ Should i have two - one for each subscription? 
-####💡 One should be enougn to get all topics from a namespace. Multiple for multiple namespaces
+## ❓ Role assignements - Should i have two, one for each subscription? 
+#### 💡 One should be enougn to get all topics from a namespace. Multiple for multiple namespaces
+## ❓ functions_service_plan_sku = "P0v3" # if the plans are the same is it worth having this and the extra resource in function.tf?
 
 
 
