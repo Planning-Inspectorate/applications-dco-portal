@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { describe, it, mock } from 'node:test';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import assert from 'node:assert';
