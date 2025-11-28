@@ -1,9 +1,10 @@
 import { PrismaClient } from '@pins/dco-portal-database/src/client/index.js';
+import { PrismaMssql } from '@prisma/adapter-mssql';
 import type { Prisma } from '@pins/dco-portal-database/src/client/client.d.ts';
 import type { Logger } from 'pino';
 
 export function initDatabaseClient(
-	config: { database: Prisma.PrismaClientOptions; NODE_ENV: string },
+	config: { database: { datasourceUrl: string }; NODE_ENV: string },
 	logger: Logger
 ): PrismaClient {
 	let prismaLogger: Logger | undefined;
@@ -12,12 +13,13 @@ export function initDatabaseClient(
 		prismaLogger = logger;
 	}
 
-	return newDatabaseClient(config.database, prismaLogger);
+	return newDatabaseClient(config.database.datasourceUrl, prismaLogger);
 }
 
-export function newDatabaseClient(prismaConfig: Prisma.PrismaClientOptions, logger?: Logger): PrismaClient {
+export function newDatabaseClient(connectionString: string, logger?: Logger): PrismaClient {
+	const adapter = new PrismaMssql(connectionString);
 	const prisma = new PrismaClient({
-		...prismaConfig,
+		adapter,
 		log: [
 			{
 				emit: 'event',

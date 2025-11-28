@@ -79,6 +79,9 @@ export function loadConfig(): Config {
 			throw new Error(BLOB_STORE_CONNECTION_STRING + ' must only be used for local development');
 		}
 	}
+	if (!SQL_CONNECTION_STRING) {
+		throw new Error('SQL_CONNECTION_STRING is required');
+	}
 
 	config = {
 		blobStore: {
