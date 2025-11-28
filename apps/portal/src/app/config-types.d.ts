@@ -1,4 +1,3 @@
-import { Prisma } from '@pins/dco-portal-database/src/client';
 import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types';
 import { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
 
@@ -8,7 +7,9 @@ interface Config {
 	cacheControl: {
 		maxAge: string;
 	};
-	database: Prisma.PrismaClientOptions;
+	database: {
+		datasourceUrl: string;
+	};
 	gitSha?: string;
 	govNotify: NotifyConfig;
 	httpPort: number;
