@@ -6,8 +6,7 @@ import {
 	getDocumentCategoryDisplayName,
 	getApplicationSectionDisplayName,
 	statusIdRadioButtonValue,
-	buildIsTaskCompleted,
-	getAnswersFromRes
+	buildIsTaskCompleted
 } from './util.ts';
 import { buildFileUploadHomePage } from './file-upload/controller.ts';
 import { buildApplicantAgentDetailsHomePage } from './applicant-agent-details/controller.ts';
@@ -179,43 +178,6 @@ describe('dynamic forms util', () => {
 				errors: { draftDcoIsCompleted: { msg: 'You must select an answer' } },
 				errorSummary: [{ text: 'You must select an answer', href: '#draftDcoIsCompleted' }]
 			});
-		});
-	});
-	describe('getAnswersFromRes', () => {
-		it('should return answers if present in journeyResponse', async () => {
-			const mockRes = {
-				locals: {
-					journeyResponse: {
-						answers: {
-							firstName: 'test',
-							lastName: 'name',
-							emailAddress: 'test@email.com'
-						}
-					}
-				}
-			};
-
-			assert.deepStrictEqual(getAnswersFromRes(mockRes), {
-				firstName: 'test',
-				lastName: 'name',
-				emailAddress: 'test@email.com'
-			});
-		});
-		it('should throw an error if res.locals is not present', async () => {
-			assert.throws(() => getAnswersFromRes({}));
-		});
-		it('should throw an error if res.locals.journeyResponse is not present', async () => {
-			assert.throws(() => getAnswersFromRes({ locals: {} }));
-		});
-		it('should throw an error if answers is not an object', async () => {
-			const mockRes = {
-				locals: {
-					journeyResponse: {
-						answers: 'invalid value'
-					}
-				}
-			};
-			assert.throws(() => getAnswersFromRes(mockRes));
 		});
 	});
 });

@@ -5,7 +5,7 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapAnswersToInput, mapAnswersToFullAddressInput } from './mappers.ts';
-import { getAnswersFromRes } from '../util.ts';
+import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {

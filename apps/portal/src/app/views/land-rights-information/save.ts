@@ -2,7 +2,7 @@ import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 // @ts-expect-error - due to not having @types
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
-import { getAnswersFromRes } from '../util.ts';
+import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	DOCUMENT_CATEGORY_STATUS_ID,
@@ -11,8 +11,8 @@ import {
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/util.ts';
 import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
+import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/db-operations.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
