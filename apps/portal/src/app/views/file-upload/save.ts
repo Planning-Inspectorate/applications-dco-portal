@@ -9,7 +9,7 @@ import type { UploadedFile } from '@pins/dco-portal-lib/forms/custom-components/
 import { clearSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { getAnswersFromRes } from '../util.ts';
+import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 
 export function buildSaveController({ db, logger }: PortalService, documentTypeId: string): AsyncRequestHandler {
 	return async (req, res) => {

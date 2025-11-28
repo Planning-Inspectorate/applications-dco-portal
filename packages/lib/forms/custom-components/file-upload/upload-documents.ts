@@ -6,6 +6,7 @@ import { Readable } from 'stream';
 import type { UploadedFile } from './types.d.ts';
 import { decodeBlobNameFromBase64, encodeBlobNameToBase64, formatBytes } from './util.ts';
 import { TOTAL_UPLOAD_LIMIT } from './constants.ts';
+import { getAnswersFromRes } from '../../../util/answers.ts';
 
 export function uploadDocumentsController(
 	service: PortalService,
@@ -67,7 +68,8 @@ export function uploadDocumentsController(
 			});
 		}
 
-		const documentSubCategoryId = getDocumentSubCategory(res);
+		const answersFromRes = getAnswersFromRes(res);
+		const documentSubCategoryId = answersFromRes.documentType;
 
 		if (fileErrors.length > 0) {
 			req.session.errors = {
@@ -126,16 +128,4 @@ export function deleteDocumentsController(service: PortalService, documentCatego
 
 		res.redirect(`${req.baseUrl}/upload/upload-documents`);
 	};
-}
-
-function getDocumentSubCategory(res: Response) {
-	if (!res.locals || !res.locals.journeyResponse) {
-		throw new Error('journey response required');
-	}
-	const journeyResponse = res.locals.journeyResponse;
-	const answers = journeyResponse.answers;
-	if (typeof answers !== 'object') {
-		throw new Error('answers should be an object');
-	}
-	return answers.documentType;
 }
