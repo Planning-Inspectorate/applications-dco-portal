@@ -62,6 +62,8 @@ model Case {
   consultationAndPublicityDetailsStatus   DocumentCategoryStatus @relation(name: "consultationAndPublicityDetailsStatus", fields: [consultationAndPublicityDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   landRightsInformationStatusId           String                 @default("not-started")
   landRightsInformationStatus             DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  floodRiskInformationStatusId            String                 @default("not-started")
+  floodRiskInformationStatus              DocumentCategoryStatus @relation(name: "floodRiskInformationStatus", fields: [floodRiskInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -170,6 +172,7 @@ model DocumentCategoryStatus {
   AboutTheProjectCases                 Case[] @relation("aboutTheProjectStatus")
   ConsultationAndPublicityDetailsCases Case[] @relation("consultationAndPublicityDetailsStatus")
   LandRightsInformationCases           Case[] @relation("landRightsInformationStatus")
+  FloodRiskInformationCases            Case[] @relation("floodRiskInformationStatus")
 }
 
 model ContactDetails {
