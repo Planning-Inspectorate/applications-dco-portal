@@ -54,12 +54,14 @@ model Case {
   otherDocumentsStatusId                    String                 @default("not-started")
   otherDocumentsStatus                      DocumentCategoryStatus @relation(name: "OtherDocumentsStatus", fields: [otherDocumentsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  applicantAndAgentDetailsStatusId String                 @default("not-started")
-  applicantAndAgentDetailsStatus   DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  aboutTheProjectStatusId          String                 @default("not-started")
-  aboutTheProjectStatus            DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  landRightsInformationStatusId    String                 @default("not-started")
-  landRightsInformationStatus      DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicantAndAgentDetailsStatusId        String                 @default("not-started")
+  applicantAndAgentDetailsStatus          DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  aboutTheProjectStatusId                 String                 @default("not-started")
+  aboutTheProjectStatus                   DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consultationAndPublicityDetailsStatusId String                 @default("not-started")
+  consultationAndPublicityDetailsStatus   DocumentCategoryStatus @relation(name: "consultationAndPublicityDetailsStatus", fields: [consultationAndPublicityDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  landRightsInformationStatusId           String                 @default("not-started")
+  landRightsInformationStatus             DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -164,9 +166,10 @@ model DocumentCategoryStatus {
   AdditionalPrescribedInformationCases Case[] @relation("AdditionalPrescribedInformationStatus")
   OtherDocumentsCases                  Case[] @relation("OtherDocumentsStatus")
 
-  ApplicantAndAgentDetailsCases Case[] @relation("applicantAndAgentDetailsStatus")
-  AboutTheProjectCases          Case[] @relation("aboutTheProjectStatus")
-  LandRightsInformationCases    Case[] @relation("landRightsInformationStatus")
+  ApplicantAndAgentDetailsCases        Case[] @relation("applicantAndAgentDetailsStatus")
+  AboutTheProjectCases                 Case[] @relation("aboutTheProjectStatus")
+  ConsultationAndPublicityDetailsCases Case[] @relation("consultationAndPublicityDetailsStatus")
+  LandRightsInformationCases           Case[] @relation("landRightsInformationStatus")
 }
 
 model ContactDetails {
