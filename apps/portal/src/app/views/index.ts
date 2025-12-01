@@ -5,6 +5,7 @@ import { createRoutes as applicantAgentDetailsRoutes } from './applicant-agent-d
 import { createRoutes as aboutTheProjectRoutes } from './about-the-project/index.ts';
 import { createRoutes as consultationAndPublicityDetailsRoutes } from './consultation-and-publicity-details/index.ts';
 import { createRoutes as draftOrderAndExplanatoryMemorandumRoutes } from './draft-order-and-explanatory-memorandum/index.ts';
+import { createRoutes as floodRiskInformationRoutes } from './flood-risk-information/index.ts';
 import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
 import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
 import { PortalService } from '#service';
@@ -58,6 +59,10 @@ export function createRoutes(service: PortalService): IRouter {
 	router.use(
 		'/land-rights-information',
 		landRightsInformationRoutes(service, APPLICATION_SECTION_ID.LAND_RIGHTS_INFORMATION)
+	);
+	router.use(
+		'/flood-risk-information',
+		floodRiskInformationRoutes(service, APPLICATION_SECTION_ID.FLOOD_RISK_INFORMATION)
 	);
 
 	return router;
