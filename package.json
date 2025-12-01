@@ -80,7 +80,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-prisma": "^5.0.0",
     "prisma": "^7.0.1",
-    "puppeteer": "^24.26.0",
+    "puppeteer": "^24.31.0",
     "sass": "^1.93.3",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.46.4"
