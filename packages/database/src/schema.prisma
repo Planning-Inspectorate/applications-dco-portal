@@ -19,21 +19,23 @@ datasource db {
 // not everything needs this, but easier to make them all consistent and the increase in size (vs int) is negligible
 
 model Case {
-  id                 String               @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
-  reference          String               @unique
-  email              String
-  createdAt          DateTime             @default(now())
-  modifiedAt         DateTime             @updatedAt
-  Documents          Document[]
-  SupportingEvidence SupportingEvidence[]
-  applicantDetailsId String?              @db.UniqueIdentifier
-  ApplicantDetails   ContactDetails?      @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: Cascade)
-  agentDetailsId     String?              @db.UniqueIdentifier
-  AgentDetails       ContactDetails?      @relation("AgentDetails", fields: [agentDetailsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  paymentMethodId    String?
-  CasePaymentMethod  PaymentMethod?       @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  paymentReference   String?
-  Whitelist          WhitelistUser[]
+  id                   String               @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  reference            String               @unique
+  email                String
+  createdAt            DateTime             @default(now())
+  modifiedAt           DateTime             @updatedAt
+  Documents            Document[]
+  SupportingEvidence   SupportingEvidence[]
+  applicantDetailsId   String?              @db.UniqueIdentifier
+  ApplicantDetails     ContactDetails?      @relation("ApplicantDetails", fields: [applicantDetailsId], references: [id], onDelete: Cascade)
+  agentDetailsId       String?              @db.UniqueIdentifier
+  AgentDetails         ContactDetails?      @relation("AgentDetails", fields: [agentDetailsId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  paymentMethodId      String?
+  CasePaymentMethod    PaymentMethod?       @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  paymentReference     String?
+  Whitelist            WhitelistUser[]
+  projectDescription   String?
+  projectConsentReason String?
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -11,8 +11,6 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 	}
 
 	const applicationSectionDisplayName = getApplicationSectionDisplayName(applicationSectionId);
-	console.log('the qs');
-	console.log(questions);
 
 	return new Journey({
 		journeyId: applicationSectionId,
