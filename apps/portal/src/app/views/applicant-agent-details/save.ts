@@ -76,19 +76,12 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						},
 						...(agentDetails !== null
 							? buildAgentQuery(agentDetails, answers.agentAddress)
-							: { AgentDetails: { disconnect: true } })
+							: { AgentDetails: { disconnect: true } }),
+						[`${kebabCaseToCamelCase(applicationSectionId)}Status`]: {
+							connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+						}
 					}
 				});
-
-				if (
-					(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
-					DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS
-				) {
-					await $tx.case.update({
-						where: { reference: req.session.caseReference },
-						data: { [`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS }
-					});
-				}
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving applicant agent details data to database');
