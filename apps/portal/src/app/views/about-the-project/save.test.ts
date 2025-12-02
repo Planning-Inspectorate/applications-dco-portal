@@ -26,7 +26,8 @@ describe('about the project journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							description: 'This is a test project description'
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason'
 						}
 					}
 				}
@@ -48,6 +49,7 @@ describe('about the project journey save controller', () => {
 				where: { reference: 'EN123456' },
 				data: {
 					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
 					aboutTheProjectStatusId: 'completed'
 				}
 			});
@@ -72,7 +74,8 @@ describe('about the project journey save controller', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							description: 'This is a test project description'
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason'
 						}
 					}
 				}
