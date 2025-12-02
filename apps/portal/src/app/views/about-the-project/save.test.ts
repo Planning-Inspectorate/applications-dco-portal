@@ -8,10 +8,13 @@ import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 describe('about the project journey save controller', () => {
 	describe('buildSaveController', () => {
-		it('should save project details into the database', async () => {
+		it('should save project details into the database for single sites', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456'
+					})),
 					update: mock.fn(() => 'document-id')
 				}
 			};
@@ -27,7 +30,11 @@ describe('about the project journey save controller', () => {
 					journeyResponse: {
 						answers: {
 							description: 'This is a test project description',
-							consentReason: 'This is a test consent reason'
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: 'single',
+							easting: 123456,
+							northing: 345678
 						}
 					}
 				}
@@ -43,24 +50,38 @@ describe('about the project journey save controller', () => {
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 				where: { reference: 'EN123456' },
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
-					aboutTheProjectStatusId: 'completed'
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: {
+						upsert: {
+							update: {
+								easting: 123456,
+								northing: 345678
+							},
+							create: {
+								easting: 123456,
+								northing: 345678
+							}
+						}
+					},
+					ProjectLinearSite: { disconnect: true }
 				}
 			});
 		});
-		it('should throw if error encountered during database operations', async () => {
+		it('should save project details into the database for linear sites', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
-					update: mock.fn(() => {
-						throw new Prisma.PrismaClientKnownRequestError('Error', { code: 'E1' });
-					})
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456'
+					})),
+					update: mock.fn(() => 'document-id')
 				}
 			};
 			const mockReq = {
@@ -75,7 +96,321 @@ describe('about the project journey save controller', () => {
 					journeyResponse: {
 						answers: {
 							description: 'This is a test project description',
-							consentReason: 'This is a test consent reason'
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: 'linear',
+							startEasting: 123456,
+							startNorthing: 345678,
+							middleEasting: 123456,
+							middleNorthing: 345678,
+							endEasting: 123456,
+							endNorthing: 345678
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.ABOUT_THE_PROJECT
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: { disconnect: true },
+					ProjectLinearSite: {
+						upsert: {
+							update: {
+								startEasting: 123456,
+								startNorthing: 345678,
+								middleEasting: 123456,
+								middleNorthing: 345678,
+								endEasting: 123456,
+								endNorthing: 345678
+							},
+							create: {
+								startEasting: 123456,
+								startNorthing: 345678,
+								middleEasting: 123456,
+								middleNorthing: 345678,
+								endEasting: 123456,
+								endNorthing: 345678
+							}
+						}
+					}
+				}
+			});
+		});
+		it('should save project details into the database and delete existing single site records if saving a linear site', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						ProjectSingleSite: {
+							id: 'single-site-id'
+						}
+					})),
+					update: mock.fn(() => 'document-id')
+				},
+				singleSite: {
+					delete: mock.fn(() => {})
+				}
+			};
+			const mockReq = {
+				baseUrl: '/about-the-project',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: 'linear',
+							startEasting: 123456,
+							startNorthing: 345678,
+							middleEasting: 123456,
+							middleNorthing: 345678,
+							endEasting: 123456,
+							endNorthing: 345678
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.ABOUT_THE_PROJECT
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.singleSite.delete.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.singleSite.delete.mock.calls[0].arguments[0], {
+				where: { id: 'single-site-id' }
+			});
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: { disconnect: true },
+					ProjectLinearSite: {
+						upsert: {
+							update: {
+								startEasting: 123456,
+								startNorthing: 345678,
+								middleEasting: 123456,
+								middleNorthing: 345678,
+								endEasting: 123456,
+								endNorthing: 345678
+							},
+							create: {
+								startEasting: 123456,
+								startNorthing: 345678,
+								middleEasting: 123456,
+								middleNorthing: 345678,
+								endEasting: 123456,
+								endNorthing: 345678
+							}
+						}
+					}
+				}
+			});
+		});
+		it('should save project details into the database and delete existing linear site records if saving a single site', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						ProjectLinearSite: {
+							id: 'linear-site-id'
+						}
+					})),
+					update: mock.fn(() => 'document-id')
+				},
+				linearSite: {
+					delete: mock.fn(() => {})
+				}
+			};
+			const mockReq = {
+				baseUrl: '/about-the-project',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: 'single',
+							easting: 123456,
+							northing: 345678
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.ABOUT_THE_PROJECT
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.linearSite.delete.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.linearSite.delete.mock.calls[0].arguments[0], {
+				where: { id: 'linear-site-id' }
+			});
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: {
+						upsert: {
+							update: {
+								easting: 123456,
+								northing: 345678
+							},
+							create: {
+								easting: 123456,
+								northing: 345678
+							}
+						}
+					},
+					ProjectLinearSite: { disconnect: true }
+				}
+			});
+		});
+		it('should update any project details into the database ', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						projectDescription: 'This is a test project description',
+						projectConsentReason: 'This is a test consent reason',
+						ProjectSingleSite: {
+							id: 'single-site-id'
+						}
+					})),
+					update: mock.fn(() => 'document-id')
+				}
+			};
+			const mockReq = {
+				baseUrl: '/about-the-project',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: 'single',
+							easting: 123456,
+							northing: 345678
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.ABOUT_THE_PROJECT
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: {
+						upsert: {
+							update: {
+								easting: 123456,
+								northing: 345678
+							},
+							create: {
+								easting: 123456,
+								northing: 345678
+							}
+						}
+					},
+					ProjectLinearSite: { disconnect: true }
+				}
+			});
+		});
+		it('should throw if error encountered during database operations', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => {
+						throw new Prisma.PrismaClientKnownRequestError('Error', { code: 'E1' });
+					}),
+					update: mock.fn(() => 'document-id')
+				}
+			};
+			const mockReq = {
+				baseUrl: '/about-the-project',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description'
 						}
 					}
 				}
