@@ -23,6 +23,20 @@ export function getQuestions() {
 					minLength: { minLength: 2 }
 				})
 			]
+		},
+		consentReason: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Project Consent Reason',
+			pageTitle: 'Project Consent Reason',
+			question: 'Explain why the project requires development consent',
+			fieldName: 'consentReason',
+			url: 'consent-reason',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
 		}
 	};
 
