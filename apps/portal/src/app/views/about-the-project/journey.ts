@@ -2,6 +2,10 @@
 import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
 // @ts-expect-error - due to not having @types
 import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
+// @ts-expect-error - due to not having @types
+import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
+// @ts-expect-error - due to not having @types
+import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
@@ -18,6 +22,12 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 			new Section(applicationSectionDisplayName, 'about')
 				.addQuestion(questions.consentReason)
 				.addQuestion(questions.description)
+				.addQuestion(questions.locationDescription)
+				.addQuestion(questions.singleOrLinear)
+				.addQuestion(questions.singleGridReferences)
+				.withCondition((response: JourneyResponse) => questionHasAnswer(response, questions.singleOrLinear, 'single'))
+				.addQuestion(questions.linearGridReferences)
+				.withCondition((response: JourneyResponse) => questionHasAnswer(response, questions.singleOrLinear, 'linear'))
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
