@@ -8,6 +8,7 @@ import { createRoutes as draftOrderAndExplanatoryMemorandumRoutes } from './draf
 import { createRoutes as floodRiskInformationRoutes } from './flood-risk-information/index.ts';
 import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
 import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
+import { createRoutes as statutoryNuisanceInformationRoutes } from './statutory-nuisance-information/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
@@ -63,6 +64,10 @@ export function createRoutes(service: PortalService): IRouter {
 	router.use(
 		'/flood-risk-information',
 		floodRiskInformationRoutes(service, APPLICATION_SECTION_ID.FLOOD_RISK_INFORMATION)
+	);
+	router.use(
+		'/statutory-nuisance-information',
+		statutoryNuisanceInformationRoutes(service, APPLICATION_SECTION_ID.STATUTORY_NUISANCE_INFORMATION)
 	);
 
 	return router;
