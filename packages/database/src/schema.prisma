@@ -34,8 +34,8 @@ model Case {
   CasePaymentMethod    PaymentMethod?       @relation(fields: [paymentMethodId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   paymentReference     String?
   Whitelist            WhitelistUser[]
-  projectDescription   String?
-  projectConsentReason String?
+  projectDescription   String?              @db.NVarChar(2000)
+  projectConsentReason String?              @db.NVarChar(2000)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
