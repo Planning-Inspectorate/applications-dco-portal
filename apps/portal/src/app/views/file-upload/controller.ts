@@ -7,6 +7,10 @@ import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/
 import { statusIdRadioButtonValue } from '../util.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { Request, Response } from 'express';
+import {
+	expressValidationErrorsToGovUkErrorList
+	// @ts-expect-error - due to not having @types
+} from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -49,13 +53,15 @@ export function buildFileUploadHomePage(
 			const { id, fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
 			return [
 				{
-					html: `<a class="govuk-link" href="${req.baseUrl}/document/download/${id}" target="_blank" rel="noreferrer">${fileName}</a>`
+					html: `<a class="govuk-link govuk-link--no-visited-state" href="${req.baseUrl}/document/download/${id}" target="_blank" rel="noreferrer">${fileName}</a>`
 				},
 				{ text: SubCategory?.displayName },
 				{ text: ApfpRegulation?.displayName },
 				{ text: isCertified ? 'Certified' : 'Not certified' },
 				{ text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) },
-				{ html: `<a class="govuk-link" href="${req.baseUrl}/document/delete/${id}">Remove</a>` }
+				{
+					html: `<a class="govuk-link govuk-link--no-visited-state" href="${req.baseUrl}/document/delete/${id}">Remove</a>`
+				}
 			];
 		});
 
@@ -92,6 +98,28 @@ export function buildDeleteDocumentAndSaveController(
 
 		if (!document) {
 			return notFoundHandler(req, res);
+		}
+
+		const supportingEvidenceDocument = await db.supportingEvidence.findUnique({
+			where: {
+				caseId_documentId_subCategoryId: {
+					caseId: document.caseId,
+					documentId: document.id,
+					subCategoryId: document.subCategoryId
+				}
+			}
+		});
+
+		if (supportingEvidenceDocument) {
+			const errors = {
+				[`${kebabCaseToCamelCase(documentTypeId)}DocumentTable`]: {
+					msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
+				}
+			};
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
+
+			const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId, { errors, errorSummary });
+			return fileUploadHomePage(req, res);
 		}
 
 		const blobName = document.blobName;
