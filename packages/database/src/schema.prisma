@@ -56,18 +56,20 @@ model Case {
   otherDocumentsStatusId                    String                 @default("not-started")
   otherDocumentsStatus                      DocumentCategoryStatus @relation(name: "OtherDocumentsStatus", fields: [otherDocumentsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  applicantAndAgentDetailsStatusId        String                 @default("not-started")
-  applicantAndAgentDetailsStatus          DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  aboutTheProjectStatusId                 String                 @default("not-started")
-  aboutTheProjectStatus                   DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  consultationAndPublicityDetailsStatusId String                 @default("not-started")
-  consultationAndPublicityDetailsStatus   DocumentCategoryStatus @relation(name: "consultationAndPublicityDetailsStatus", fields: [consultationAndPublicityDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  landRightsInformationStatusId           String                 @default("not-started")
-  landRightsInformationStatus             DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  floodRiskInformationStatusId            String                 @default("not-started")
-  floodRiskInformationStatus              DocumentCategoryStatus @relation(name: "floodRiskInformationStatus", fields: [floodRiskInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  statutoryNuisanceInformationStatusId    String                 @default("not-started")
-  statutoryNuisanceInformationStatus      DocumentCategoryStatus @relation(name: "statutoryNuisanceInformationStatus", fields: [statutoryNuisanceInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  applicantAndAgentDetailsStatusId                String                 @default("not-started")
+  applicantAndAgentDetailsStatus                  DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  aboutTheProjectStatusId                         String                 @default("not-started")
+  aboutTheProjectStatus                           DocumentCategoryStatus @relation(name: "aboutTheProjectStatus", fields: [aboutTheProjectStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consultationAndPublicityDetailsStatusId         String                 @default("not-started")
+  consultationAndPublicityDetailsStatus           DocumentCategoryStatus @relation(name: "consultationAndPublicityDetailsStatus", fields: [consultationAndPublicityDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  landRightsInformationStatusId                   String                 @default("not-started")
+  landRightsInformationStatus                     DocumentCategoryStatus @relation(name: "landRightsInformationStatus", fields: [landRightsInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  habitatRegulationsAssessmentInformationStatusId String                 @default("not-started")
+  habitatRegulationsAssessmentInformationStatus   DocumentCategoryStatus @relation(name: "habitatRegulationsAssessmentInformationStatus", fields: [habitatRegulationsAssessmentInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  floodRiskInformationStatusId                    String                 @default("not-started")
+  floodRiskInformationStatus                      DocumentCategoryStatus @relation(name: "floodRiskInformationStatus", fields: [floodRiskInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  statutoryNuisanceInformationStatusId            String                 @default("not-started")
+  statutoryNuisanceInformationStatus              DocumentCategoryStatus @relation(name: "statutoryNuisanceInformationStatus", fields: [statutoryNuisanceInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -172,12 +174,13 @@ model DocumentCategoryStatus {
   AdditionalPrescribedInformationCases Case[] @relation("AdditionalPrescribedInformationStatus")
   OtherDocumentsCases                  Case[] @relation("OtherDocumentsStatus")
 
-  ApplicantAndAgentDetailsCases        Case[] @relation("applicantAndAgentDetailsStatus")
-  AboutTheProjectCases                 Case[] @relation("aboutTheProjectStatus")
-  ConsultationAndPublicityDetailsCases Case[] @relation("consultationAndPublicityDetailsStatus")
-  LandRightsInformationCases           Case[] @relation("landRightsInformationStatus")
-  FloodRiskInformationCases            Case[] @relation("floodRiskInformationStatus")
-  StatutoryNuisanceInformationCases    Case[] @relation("statutoryNuisanceInformationStatus")
+  ApplicantAndAgentDetailsCases                Case[] @relation("applicantAndAgentDetailsStatus")
+  AboutTheProjectCases                         Case[] @relation("aboutTheProjectStatus")
+  ConsultationAndPublicityDetailsCases         Case[] @relation("consultationAndPublicityDetailsStatus")
+  LandRightsInformationCases                   Case[] @relation("landRightsInformationStatus")
+  habitatRegulationsAssessmentInformationCases Case[] @relation("habitatRegulationsAssessmentInformationStatus")
+  FloodRiskInformationCases                    Case[] @relation("floodRiskInformationStatus")
+  StatutoryNuisanceInformationCases            Case[] @relation("statutoryNuisanceInformationStatus")
 }
 
 model ContactDetails {
