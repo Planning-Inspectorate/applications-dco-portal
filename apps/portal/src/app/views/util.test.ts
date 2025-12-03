@@ -156,7 +156,8 @@ describe('dynamic forms util', () => {
 			};
 			const mockReq = {
 				baseUrl: '/draft-dco',
-				body: {}
+				body: {},
+				session: {}
 			};
 			const mockRes = {
 				render: mock.fn()

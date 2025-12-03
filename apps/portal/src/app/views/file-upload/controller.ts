@@ -3,14 +3,14 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
-import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { statusIdRadioButtonValue } from '../util.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import type { Request, Response } from 'express';
 import {
 	expressValidationErrorsToGovUkErrorList
 	// @ts-expect-error - due to not having @types
 } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
+import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { statusIdRadioButtonValue } from '../util.ts';
+import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import type { Request, Response } from 'express';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -67,6 +67,14 @@ export function buildFileUploadHomePage(
 
 		const documentTypeStatusId = (caseData as any)[`${kebabCaseToCamelCase(documentTypeId)}StatusId`];
 
+		let errors;
+		let errorSummary;
+		if (req.session?.supportingEvidenceError) {
+			errors = req.session.supportingEvidenceError;
+			errorSummary = expressValidationErrorsToGovUkErrorList(req.session.supportingEvidenceError);
+			delete req.session.supportingEvidenceError;
+		}
+
 		return res.render('views/file-upload/view.njk', {
 			pageTitle: documentCategory?.displayName,
 			documentCategory: kebabCaseToCamelCase(documentTypeId),
@@ -75,6 +83,8 @@ export function buildFileUploadHomePage(
 			uploadButtonUrl: `${req.baseUrl}/upload/document-type`,
 			backLinkUrl: '/',
 			isCompletedValue: statusIdRadioButtonValue(documentTypeStatusId),
+			errors,
+			errorSummary,
 			...viewData
 		});
 	};
@@ -111,15 +121,12 @@ export function buildDeleteDocumentAndSaveController(
 		});
 
 		if (supportingEvidenceDocument) {
-			const errors = {
+			req.session.supportingEvidenceError = {
 				[`${kebabCaseToCamelCase(documentTypeId)}DocumentTable`]: {
 					msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
 				}
 			};
-			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
-
-			const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId, { errors, errorSummary });
-			return fileUploadHomePage(req, res);
+			return res.redirect(`${req.baseUrl}`);
 		}
 
 		const blobName = document.blobName;
