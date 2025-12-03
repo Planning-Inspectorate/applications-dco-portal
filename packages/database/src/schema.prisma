@@ -36,6 +36,11 @@ model Case {
   Whitelist            WhitelistUser[]
   projectDescription   String?              @db.NVarChar(2000)
   projectConsentReason String?              @db.NVarChar(2000)
+  locationDescription  String?              @db.NVarChar(2000)
+  singleSiteId         String?              @db.UniqueIdentifier
+  ProjectSingleSite    SingleSite?          @relation("ProjectSingleSite", fields: [singleSiteId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  linearSiteId         String?              @db.UniqueIdentifier
+  ProjectLinearSite    LinearSite?          @relation("ProjectLinearSite", fields: [linearSiteId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -249,4 +254,24 @@ model FullAddress {
   country        String
   postcode       String
   ContactDetails ContactDetails[]
+}
+
+model SingleSite {
+  id       String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  easting  Int
+  northing Int
+
+  SingleSiteCase Case[] @relation("ProjectSingleSite")
+}
+
+model LinearSite {
+  id             String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  startEasting   Int
+  startNorthing  Int
+  middleEasting  Int
+  middleNorthing Int
+  endEasting     Int
+  endNorthing    Int
+
+  LinearSiteCase Case[] @relation("ProjectLinearSite")
 }
