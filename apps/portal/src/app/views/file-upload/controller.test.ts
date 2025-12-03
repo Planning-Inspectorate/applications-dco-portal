@@ -96,7 +96,111 @@ describe('file upload controllers', () => {
 				pageTitle: 'Draft DCO',
 				showUploadButton: true,
 				uploadButtonUrl: '/draft-dco/upload/document-type',
-				isCompletedValue: 'no'
+				isCompletedValue: 'no',
+				errorSummary: undefined,
+				errors: undefined
+			});
+		});
+		it('should render file upload home page with supporting evidence error if user tries to delete file linked to supporting evidence answer', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'case-ref-1',
+						draftDcoStatusId: 'in-progress',
+						Documents: [
+							{
+								id: 'doc-id-1',
+								fileName: 'test.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							}
+						]
+					}))
+				},
+				documentCategory: {
+					findUnique: mock.fn(() => ({
+						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						displayName: 'Draft DCO'
+					}))
+				}
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				session: {
+					caseReference: 'case-ref-1',
+					supportingEvidenceError: {
+						draftDcoDocumentTable: {
+							msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
+						}
+					}
+				}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const controller = buildFileUploadHomePage({ db: mockDb }, 'draft-dco');
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				documentCategory: 'draftDco',
+				documents: [
+					[
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
+						},
+						{
+							text: 'Draft development consent order'
+						},
+						{
+							text: '5(1)'
+						},
+						{
+							text: 'Certified'
+						},
+						{
+							text: '30/01/2025 00:00'
+						},
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
+						}
+					]
+				],
+				pageTitle: 'Draft DCO',
+				showUploadButton: true,
+				uploadButtonUrl: '/draft-dco/upload/document-type',
+				isCompletedValue: 'no',
+				errorSummary: [
+					{
+						href: '#draftDcoDocumentTable',
+						text: 'You cannot delete a document that is being used as supporting evidence in the application form'
+					}
+				],
+				errors: {
+					draftDcoDocumentTable: {
+						msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
+					}
+				}
 			});
 		});
 		it('should render file upload home page for given document type with no documents', async () => {
@@ -116,7 +220,8 @@ describe('file upload controllers', () => {
 			};
 			const mockReq = {
 				baseUrl: '/draft-dco',
-				body: {}
+				body: {},
+				session: {}
 			};
 			const mockRes = {
 				render: mock.fn()
@@ -134,7 +239,9 @@ describe('file upload controllers', () => {
 				pageTitle: 'Draft DCO',
 				showUploadButton: true,
 				uploadButtonUrl: '/draft-dco/upload/document-type',
-				isCompletedValue: ''
+				isCompletedValue: '',
+				errorSummary: undefined,
+				errors: undefined
 			});
 		});
 		it('should render not found handler if caseData not found in database', async () => {
@@ -243,40 +350,12 @@ describe('file upload controllers', () => {
 				}
 			});
 		});
-		it('should delete document from blob store and update db to reflect', async (ctx) => {
+		it('should redirect back to document summary page with error if document is linked to supporting evidence', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
-				case: {
-					findUnique: mock.fn(() => ({
-						reference: 'case-ref-1',
-						draftDcoStatusId: 'in-progress',
-						Documents: [
-							{
-								id: 'doc-id-1',
-								fileName: 'test.pdf',
-								uploadedDate: Date.now(),
-								isCertified: true,
-								apfpRegulationId: '5-1',
-								ApfpRegulation: {
-									id: '5-1',
-									displayName: '5(1)'
-								},
-								subCategoryId: 'draft-development-consent-order',
-								SubCategory: {
-									id: 'draft-development-consent-order',
-									displayName: 'Draft development consent order',
-									Category: {
-										id: 'draft-dco',
-										displayName: 'Draft DCO'
-									}
-								}
-							}
-						]
-					}))
-				},
 				document: {
 					findUnique: mock.fn(() => ({
 						blobName: '/case-id-1/draft-dco/test.pdf'
@@ -288,12 +367,6 @@ describe('file upload controllers', () => {
 						caseId: '18be8caa-9176-4d69-8f1a-d3659fed89e8',
 						documentId: 'f4194748-f9a1-4ee3-a8aa-87172c42f480',
 						subCategoryId: 'draft-dco'
-					}))
-				},
-				documentCategory: {
-					findUnique: mock.fn(() => ({
-						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
-						displayName: 'Draft DCO'
 					}))
 				}
 			};
@@ -310,7 +383,7 @@ describe('file upload controllers', () => {
 				}
 			};
 			const mockRes = {
-				render: mock.fn()
+				redirect: mock.fn()
 			};
 
 			const controller = buildDeleteDocumentAndSaveController(
@@ -323,48 +396,12 @@ describe('file upload controllers', () => {
 			);
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockRes.render.mock.callCount(), 1);
-			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
-			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				pageTitle: 'Draft DCO',
-				documentCategory: 'draftDco',
-				documents: [
-					[
-						{
-							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
-						},
-						{
-							text: 'Draft development consent order'
-						},
-						{
-							text: '5(1)'
-						},
-						{
-							text: 'Certified'
-						},
-						{
-							text: '30/01/2025 00:00'
-						},
-						{
-							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
-						}
-					]
-				],
-				showUploadButton: true,
-				uploadButtonUrl: '/draft-dco/upload/document-type',
-				backLinkUrl: '/',
-				isCompletedValue: 'no',
-				errors: {
-					draftDcoDocumentTable: {
-						msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
-					}
-				},
-				errorSummary: [
-					{
-						text: 'You cannot delete a document that is being used as supporting evidence in the application form',
-						href: '#draftDcoDocumentTable'
-					}
-				]
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco');
+			assert.deepStrictEqual(mockReq.session.supportingEvidenceError, {
+				draftDcoDocumentTable: {
+					msg: 'You cannot delete a document that is being used as supporting evidence in the application form'
+				}
 			});
 		});
 		it('should throw error if error encountered during blob store deletion', async (ctx) => {
