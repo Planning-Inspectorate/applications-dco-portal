@@ -6,6 +6,7 @@ import { createRoutes as aboutTheProjectRoutes } from './about-the-project/index
 import { createRoutes as consultationAndPublicityDetailsRoutes } from './consultation-and-publicity-details/index.ts';
 import { createRoutes as draftOrderAndExplanatoryMemorandumRoutes } from './draft-order-and-explanatory-memorandum/index.ts';
 import { createRoutes as floodRiskInformationRoutes } from './flood-risk-information/index.ts';
+import { createRoutes as habitatRegulationsAssessmentInformationRoutes } from './habitat-regulations-assessment-information/index.ts';
 import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
 import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
 import { createRoutes as statutoryNuisanceInformationRoutes } from './statutory-nuisance-information/index.ts';
@@ -60,6 +61,13 @@ export function createRoutes(service: PortalService): IRouter {
 	router.use(
 		'/land-rights-information',
 		landRightsInformationRoutes(service, APPLICATION_SECTION_ID.LAND_RIGHTS_INFORMATION)
+	);
+	router.use(
+		'/habitat-regulations-assessment-information',
+		habitatRegulationsAssessmentInformationRoutes(
+			service,
+			APPLICATION_SECTION_ID.HABITAT_REGULATIONS_ASSESSMENT_INFORMATION
+		)
 	);
 	router.use(
 		'/flood-risk-information',
