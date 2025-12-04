@@ -4,7 +4,7 @@ import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
 import { initRedis } from '@pins/dco-portal-lib/redis/index.ts';
 import type { Config } from './config-types.d.ts';
 import type { Logger } from 'pino';
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
 import { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 import { BlobStorageClient } from '@pins/dco-portal-lib/blob-store/blob-store-client.ts';

@@ -1,6 +1,6 @@
-import { PrismaClient } from '@pins/dco-portal-database/src/client/index.js';
+import { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { PrismaMssql } from '@prisma/adapter-mssql';
-import type { Prisma } from '@pins/dco-portal-database/src/client/client.d.ts';
+import type { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Logger } from 'pino';
 
 export function initDatabaseClient(

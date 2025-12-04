@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 
 export async function seedDev(dbClient: PrismaClient) {
 	const CASE_WHITELIST = process.env.CASE_WHITELIST;

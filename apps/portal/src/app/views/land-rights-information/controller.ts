@@ -6,7 +6,7 @@ import {
 import type { PortalService } from '#service';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import type { Request, Response } from 'express';
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 

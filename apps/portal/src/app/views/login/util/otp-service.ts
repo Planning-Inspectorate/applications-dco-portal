@@ -1,7 +1,7 @@
 // @ts-expect-error - due to not having @types
 import bcrypt from 'bcrypt';
 import { addMinutes } from 'date-fns';
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import type { OtpRecord } from './types.d.ts';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
