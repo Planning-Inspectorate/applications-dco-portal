@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Request } from 'express';
 
 export async function populateDocumentOptions(req: Request, dbClient: PrismaClient, documentSubCategoryId: string) {

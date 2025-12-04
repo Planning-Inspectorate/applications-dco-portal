@@ -3,7 +3,7 @@
 import { test, describe, mock } from 'node:test';
 import { strict as assert } from 'node:assert';
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler, wrapPrismaErrors } from './errors.ts';
-import { Prisma } from '@pins/dco-portal-database/src/client/index.js';
+import { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 
 describe('errors', () => {
 	describe('buildDefaultErrorHandlerMiddleware', () => {
