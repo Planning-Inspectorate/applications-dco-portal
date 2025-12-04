@@ -8,7 +8,7 @@ import {
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 
 export function buildFloodRiskInformationHomePage(
 	{ db }: PortalService,

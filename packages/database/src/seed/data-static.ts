@@ -1,4 +1,4 @@
-import type { PrismaClient } from '@pins/dco-portal-database/src/client';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 
 export const DOCUMENT_CATEGORY_STATUS_ID = Object.freeze({
 	NOT_STARTED: 'not-started',
