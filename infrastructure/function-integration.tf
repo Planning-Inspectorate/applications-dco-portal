@@ -1,0 +1,69 @@
+module "function_integration" {
+  #checkov:skip=CKV_TF_1: Use of commit hash are not required for our Terraform modules
+  source = "github.com/Planning-Inspectorate/infrastructure-modules.git//modules/node-function-app?ref=1.53"
+
+  resource_group_name = azurerm_resource_group.primary.name
+  location            = module.primary_region.location
+
+  # naming
+  app_name        = "function-integration"
+  resource_suffix = var.environment
+  service_name    = local.service_name
+  tags            = local.tags
+
+  # service plan
+  app_service_plan_id = azurerm_service_plan.functions.id
+
+  # storage
+  function_apps_storage_account            = azurerm_storage_account.functions.name
+  function_apps_storage_account_access_key = azurerm_storage_account.functions.primary_access_key
+
+  # networking
+  integration_subnet_id      = azurerm_subnet.apps.id
+  outbound_vnet_connectivity = true
+
+  # monitoring
+  action_group_ids            = local.action_group_ids
+  app_insights_instrument_key = azurerm_application_insights.main.instrumentation_key
+  log_analytics_workspace_id  = azurerm_log_analytics_workspace.main.id
+  monitoring_alerts_enabled   = var.alerts_enabled
+
+  # settings
+  function_node_version = var.apps_config.functions.node_version
+  app_settings = {
+    ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
+    SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"]
+    SERVICE_USER_TOPIC                            = data.azurerm_servicebus_topic.service_user.name
+    SERVICE_USER_SUBSCRIPTION                     = azurerm_servicebus_subscription.service_user_subscription.name
+    NSIP_PROJECT_TOPIC                            = data.azurerm_servicebus_topic.nsip_project.name
+    NSIP_PROJECT_SUBSCRIPTION                     = azurerm_servicebus_subscription.nsip_project_subscription.name
+  }
+}
+
+resource "azurerm_servicebus_subscription" "service_user_subscription" {
+  name                                 = "service-user-dco-portal-sub"
+  topic_id                             = data.azurerm_servicebus_topic.service_user.id
+  max_delivery_count                   = 1
+  dead_lettering_on_message_expiration = true
+  default_message_ttl                  = var.sb_ttl.service_user
+}
+
+resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
+  name                                 = "nsip-project-dco-portal-sub"
+  topic_id                             = data.azurerm_servicebus_topic.nsip_project.id
+  max_delivery_count                   = 1
+  dead_lettering_on_message_expiration = true
+  default_message_ttl                  = var.sb_ttl.nsip_project
+}
+
+resource "azurerm_role_assignment" "function_integration_secrets_user" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = module.function_integration.principal_id
+}
+
+resource "azurerm_role_assignment" "function_integration_servicebus_data_owner" {
+  scope                = data.azurerm_servicebus_namespace.back_office_sb.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = module.function_integration.principal_id
+}

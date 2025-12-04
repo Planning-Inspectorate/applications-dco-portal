@@ -5,19 +5,13 @@ apps_config = {
     worker_count             = 1
     zone_balancing_enabled   = false
   }
-  node_environment         = "development"
-  private_endpoint_enabled = true
-
-  functions_node_version = 22
-
-  logging = {
-    level = "info"
+  blob_store = {
+    disabled = false
   }
 
-  redis = {
-    capacity = 0
-    family   = "C"
-    sku_name = "Basic"
+  functions = {
+    service_plan_sku = "P0v3"
+    node_version     = 22
   }
 
   gov_notify = {
@@ -26,11 +20,19 @@ apps_config = {
       otp_template_id = "88eb5326-aa5a-4dc4-9a91-9a06953fb45a"
     }
   }
-
-  blob_store = {
-    disabled = false
+  logging = {
+    level = "info"
+  }
+  node_environment         = "development"
+  private_endpoint_enabled = true
+  redis = {
+    capacity = 0
+    family   = "C"
+    sku_name = "Basic"
   }
 }
+
+alerts_enabled = false
 
 auth_config = {
   auth_enabled   = true
@@ -41,6 +43,7 @@ auth_config = {
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-dev-ukw-001"
   storage_account_name = "pinsstdocsbodevukw001"
+  service_bus_name     = "pins-sb-back-office-dev-ukw-001"
 }
 
 common_config = {

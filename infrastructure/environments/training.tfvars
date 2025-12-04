@@ -8,7 +8,10 @@ apps_config = {
   node_environment         = "production"
   private_endpoint_enabled = true
 
-  functions_node_version = 22
+  functions = {
+    service_plan_sku = "P0v3"
+    node_version     = 22
+  }
 
   logging = {
     level = "warn"
@@ -41,6 +44,7 @@ auth_config = {
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-training-ukw-001"
   storage_account_name = "pinsstdocsbotrainingukw"
+  service_bus_name     = "pins-sb-back-office-training-ukw-001"
 }
 
 common_config = {

@@ -18,7 +18,10 @@ variable "apps_config" {
     node_environment         = string
     private_endpoint_enabled = bool
 
-    functions_node_version = number
+    functions = object({
+      node_version     = number
+      service_plan_sku = string
+    })
 
     logging = object({
       level = string
@@ -57,6 +60,7 @@ variable "back_office_config" {
   type = object({
     resource_group_name  = string
     storage_account_name = string
+    service_bus_name     = string
   })
 }
 
@@ -118,6 +122,23 @@ variable "sql_config" {
       long_term_yearly       = string
       long_term_week_of_year = number
     })
+  })
+}
+
+variable "sb_topic_names" {
+  description = "Service bus topic names"
+  type = object({
+    service_user = string
+    nsip_project = string
+  })
+}
+
+variable "sb_ttl" {
+  description = "Service bus TTL settings"
+  type = object({
+    default      = string
+    service_user = string
+    nsip_project = string
   })
 }
 
