@@ -8,3 +8,14 @@ tooling_config = {
   network_rg              = "pins-rg-shared-tooling-uks"
   subscription_id         = "edb1ff78-90da-4901-a497-7e79f966f8e2"
 }
+
+sb_ttl = {
+  default      = "P3D"
+  service_user = "P1D"
+  nsip_project = "P1D"
+}
+
+sb_topic_names = {
+  service_user = "service-user"
+  nsip_project = "nsip-project"
+}
