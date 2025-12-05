@@ -21,7 +21,9 @@ describe('draft-order-and-explanatory-memorandum controller', () => {
 							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER },
 							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM },
 							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM },
-							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER }
+							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER },
+							{ documentId: 'doc-id-6', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL },
+							{ documentId: 'doc-id-7', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL }
 						]
 					}))
 				}
@@ -53,6 +55,7 @@ describe('draft-order-and-explanatory-memorandum controller', () => {
 				forms: {
 					'draft-order-and-explanatory-memorandum': {
 						draftDevelopmentConsentOrder: 'doc-id-1,doc-id-2,doc-id-5',
+						siValidationReportSuccessEmail: 'doc-id-6,doc-id-7',
 						explanatoryMemorandum: 'doc-id-3,doc-id-4'
 					}
 				}
@@ -94,6 +97,7 @@ describe('draft-order-and-explanatory-memorandum controller', () => {
 				forms: {
 					'draft-order-and-explanatory-memorandum': {
 						draftDevelopmentConsentOrder: '',
+						siValidationReportSuccessEmail: '',
 						explanatoryMemorandum: ''
 					}
 				}

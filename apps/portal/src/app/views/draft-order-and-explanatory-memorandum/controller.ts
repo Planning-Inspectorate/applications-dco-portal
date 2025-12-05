@@ -36,6 +36,7 @@ export function buildDraftOrderAndExplanatoryMemorandumHomePage(
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
 	const draftOrderExplanatoryMemorandumDocumentIds = [
 		DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER,
+		DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
 		DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
 	];
 
@@ -62,6 +63,10 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		draftDevelopmentConsentOrder: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER
+		),
+		siValidationReportSuccessEmail: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL
 		),
 		explanatoryMemorandum: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,

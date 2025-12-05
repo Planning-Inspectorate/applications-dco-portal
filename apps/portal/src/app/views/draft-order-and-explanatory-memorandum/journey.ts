@@ -17,6 +17,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.draftDevelopmentConsentOrder)
+				.addQuestion(questions.siValidationReportSuccessEmail)
 				.addQuestion(questions.explanatoryMemorandum)
 		],
 		taskListUrl: 'check-your-answers',

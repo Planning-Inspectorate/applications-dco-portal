@@ -17,6 +17,15 @@ export function getQuestions() {
 			url: 'draft-development-consent-order',
 			validators: [new RequiredValidator()]
 		},
+		siValidationReportSuccessEmail: {
+			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
+			title: 'SI Validation Report Success Email',
+			pageTitle: 'SI Validation Report Success Email',
+			question: 'Which documents relate to the SI validation report success email?',
+			fieldName: 'siValidationReportSuccessEmail',
+			url: 'si-validation-report-success-email',
+			validators: [new RequiredValidator()]
+		},
 		explanatoryMemorandum: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Explanatory Memorandum',
