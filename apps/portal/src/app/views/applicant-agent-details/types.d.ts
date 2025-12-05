@@ -3,7 +3,6 @@ export interface ContactDetailsRecord {
 	lastName: string;
 	emailAddress: string;
 	phone: string;
-	fax: string;
 	organisation: string;
 }
 
