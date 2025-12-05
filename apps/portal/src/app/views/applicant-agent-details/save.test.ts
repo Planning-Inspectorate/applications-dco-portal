@@ -36,7 +36,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -77,7 +76,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -105,7 +103,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -158,7 +155,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -199,7 +195,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -227,7 +222,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -279,7 +273,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -348,7 +341,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -363,7 +355,6 @@ describe('applicant agent details journey save controller', () => {
 							agentLastName: 'person',
 							agentEmailAddress: 'agent@solirius.com',
 							agentPhone: '0711111111',
-							agentFax: '111111111',
 							agentAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -404,7 +395,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -432,7 +422,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -454,7 +443,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'agent@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -482,7 +470,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'agent@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -537,7 +524,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -552,7 +538,6 @@ describe('applicant agent details journey save controller', () => {
 							agentLastName: 'person',
 							agentEmailAddress: 'agent@solirius.com',
 							agentPhone: '0711111111',
-							agentFax: '111111111',
 							agentAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -593,7 +578,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -621,7 +605,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -643,7 +626,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'agent@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -671,7 +653,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'agent@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
@@ -729,7 +710,6 @@ describe('applicant agent details journey save controller', () => {
 							applicantLastName: 'person',
 							applicantEmailAddress: 'test@solirius.com',
 							applicantPhone: '0711111111',
-							applicantFax: '111111111',
 							applicantAddress: {
 								addressLine1: '1',
 								addressLine2: 'test way',
@@ -775,7 +755,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									upsert: {
@@ -803,7 +782,6 @@ describe('applicant agent details journey save controller', () => {
 								lastName: 'person',
 								emailAddress: 'test@solirius.com',
 								phone: '0711111111',
-								fax: '111111111',
 								organisation: 'test org',
 								Address: {
 									create: {
