@@ -24,7 +24,6 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.applicantName)
 				.addQuestion(questions.applicantEmailAddress)
 				.addQuestion(questions.applicantPhone)
-				.addQuestion(questions.applicantFax)
 				.addQuestion(questions.applicantAddress),
 			new Section('Agent Details', 'agent')
 				.addQuestion(questions.isAgent)
@@ -35,7 +34,6 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.agentName)
 				.addQuestion(questions.agentEmailAddress)
 				.addQuestion(questions.agentPhone)
-				.addQuestion(questions.agentFax)
 				.addQuestion(questions.agentAddress)
 				.endMultiQuestionCondition('agent-questions'),
 			new Section('Payment Details', 'payment')

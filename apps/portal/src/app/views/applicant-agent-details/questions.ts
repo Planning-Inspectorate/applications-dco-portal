@@ -151,14 +151,6 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 			})
 		]
 	};
-	questions[`${prefix}Fax`] = {
-		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-		title: `${title} Fax Number`,
-		pageTitle: `${title} Fax Number`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s fax number (optional)`,
-		fieldName: `${prefix}Fax`,
-		url: `fax`
-	};
 
 	return questions;
 }

@@ -6,7 +6,6 @@ export function mapAnswersToContact(answers: Record<string, any>, prefix: string
 		lastName: answers[`${prefix}LastName`],
 		emailAddress: answers[`${prefix}EmailAddress`],
 		phone: answers[`${prefix}Phone`],
-		fax: answers[`${prefix}Fax`] || null,
 		organisation: answers[`${prefix}Organisation`]
 	};
 }
