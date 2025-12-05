@@ -70,6 +70,8 @@ model Case {
   floodRiskInformationStatus                      DocumentCategoryStatus @relation(name: "floodRiskInformationStatus", fields: [floodRiskInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   statutoryNuisanceInformationStatusId            String                 @default("not-started")
   statutoryNuisanceInformationStatus              DocumentCategoryStatus @relation(name: "statutoryNuisanceInformationStatus", fields: [statutoryNuisanceInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  draftOrderAndExplanatoryMemorandumStatusId      String                 @default("not-started")
+  draftOrderAndExplanatoryMemorandumStatus        DocumentCategoryStatus @relation(name: "draftOrderAndExplanatoryMemorandumStatus", fields: [draftOrderAndExplanatoryMemorandumStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -181,6 +183,7 @@ model DocumentCategoryStatus {
   habitatRegulationsAssessmentInformationCases Case[] @relation("habitatRegulationsAssessmentInformationStatus")
   FloodRiskInformationCases                    Case[] @relation("floodRiskInformationStatus")
   StatutoryNuisanceInformationCases            Case[] @relation("statutoryNuisanceInformationStatus")
+  DraftOrderAndExplanatoryMemorandumCases      Case[] @relation("draftOrderAndExplanatoryMemorandumStatus")
 }
 
 model ContactDetails {
