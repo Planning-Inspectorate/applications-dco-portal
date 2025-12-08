@@ -1,0 +1,32 @@
+// @ts-expect-error - due to not having @types
+import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
+// @ts-expect-error - due to not having @types
+import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
+// @ts-expect-error - due to not having @types
+import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
+// @ts-expect-error - due to not having @types
+import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import { referenceDataToRadioOptionsWithHintText } from '@pins/dco-portal-lib/util/questions.ts';
+import { USER_ROLES } from '../util.ts';
+
+export function getQuestions() {
+	const questions = {
+		accessLevel: {
+			type: COMPONENT_TYPES.RADIO,
+			title: 'Change their access level',
+			pageTitle: 'Change their access level',
+			question: 'Change their access level',
+			hint: 'There can only be up to 3 admins at any time',
+			fieldName: 'accessLevel',
+			url: 'access-level',
+			options: referenceDataToRadioOptionsWithHintText(USER_ROLES),
+			validators: [new RequiredValidator()]
+		}
+	};
+
+	const classes = {
+		...questionClasses
+	};
+
+	return createQuestions(questions, classes, {});
+}

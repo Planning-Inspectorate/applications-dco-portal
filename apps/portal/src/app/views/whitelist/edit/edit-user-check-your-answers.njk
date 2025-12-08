@@ -1,0 +1,68 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageTitle %}{{ "Review Draft Update - " + journeyTitle + " - Manage a Crown Development Application" }}{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% if shouldShowWarningBanner %}
+                {% set html %}
+                    <p class="govuk-notification-banner__heading">
+                        If you change your access level to standard user, you will no longer be able to manage user access on this project.
+                    </p>
+                {% endset %}
+
+                {{ govukNotificationBanner({
+                    html: html
+                }) }}
+            {% endif %}
+
+            <h1 class="govuk-heading-l">
+                {% if pageCaption %}
+                    <span class="govuk-caption-l govuk-!-margin-top-8">{{ pageCaption }}</span>
+                {% endif %}
+                {{ pageHeading | default('Check your answers') }}
+            </h1>
+        </div>
+    </div>
+
+    {% set summaryRows = [] %}
+    {% set emailAddressRow = {
+        key: {
+            text: "Email address"
+        },
+        value: {
+            text: emailAddress
+        }
+    } %}
+    {% set summaryRows = (summaryRows.push(emailAddressRow), summaryRows) %}
+    {% for section in summaryListData.sections %}
+        {% for row in section.list.rows %}
+            {% set summaryRows = (summaryRows.push(row), summaryRows) %}
+        {% endfor %}
+    {% endfor %}
+    {% set obj = { "rows": summaryRows } %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukSummaryList(obj) }}
+        </div>
+    </div>
+
+    {% if journeyComplete %}
+        <form method="POST">
+            {{ govukButton({
+                text: "Save"
+            }) }}
+        </form>
+
+    {% else %}
+        <strong class="govuk-tag govuk-tag--grey">
+            Cannot submit yet
+        </strong>
+    {% endif %}
+{% endblock %}

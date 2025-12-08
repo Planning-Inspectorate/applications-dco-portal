@@ -5,6 +5,7 @@ import assert from 'node:assert';
 import { buildHomePage } from './controller.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { configureNunjucks } from '../../nunjucks.ts';
+import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('home page', () => {
 	it('should render without error', async () => {
@@ -23,6 +24,11 @@ describe('home page', () => {
 					environmentalStatementStatusId: 'not-started',
 					additionalPrescribedInformationStatusId: 'not-started',
 					otherDocumentsStatusId: 'not-started'
+				}))
+			},
+			whitelistUser: {
+				findUnique: mock.fn(() => ({
+					userRoleId: WHITELIST_USER_ROLE_ID.STANDARD_USER
 				}))
 			}
 		};
@@ -45,6 +51,7 @@ describe('home page', () => {
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
 		assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 			pageTitle: 'Application reference number',
+			showManageUsersLink: false,
 			taskListItems: {
 				yourDocuments: [
 					{

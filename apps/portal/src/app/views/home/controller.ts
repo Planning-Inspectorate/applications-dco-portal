@@ -3,7 +3,8 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import {
 	DOCUMENT_CATEGORY,
 	DOCUMENT_CATEGORY_STATUS,
-	DOCUMENT_CATEGORY_STATUS_ID
+	DOCUMENT_CATEGORY_STATUS_ID,
+	WHITELIST_USER_ROLE_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION } from '../constants.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
@@ -25,6 +26,19 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 			return notFoundHandler(req, res);
 		}
 
+		const whitelistUser = await db.whitelistUser.findUnique({
+			where: {
+				caseReference_email: {
+					caseReference,
+					email: emailAddress
+				}
+			}
+		});
+
+		if (!whitelistUser) {
+			return notFoundHandler(req, res);
+		}
+
 		const taskListItems = {
 			yourDocuments: formatTaskListItems(caseData, DOCUMENT_CATEGORY),
 			yourApplication: formatTaskListItems(caseData, APPLICATION_SECTION)
@@ -32,7 +46,8 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 
 		return res.render('views/home/view.njk', {
 			pageTitle: 'Application reference number',
-			taskListItems
+			taskListItems,
+			showManageUsersLink: whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER
 		});
 	};
 }

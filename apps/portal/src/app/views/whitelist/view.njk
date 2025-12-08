@@ -1,0 +1,56 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block pageHeading %}{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if whitelistUpdateMessage %}
+                {{ govukNotificationBanner({
+                    html: whitelistUpdateMessage,
+                    type: 'success'
+                }) }}
+            {% endif %}
+
+            <h1 class="govuk-heading-l">
+                {{ pageTitle }}
+            </h1>
+
+            <p class="govuk-body">As an admin, you can:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Add a new user to this project</li>
+                <li>Remove a user from this project</li>
+                <li>Change a user's access level</li>
+            </ul>
+            <p class="govuk-body">There can only be up to 3 admins at any time.</p>
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="{{ addUserLink }}">Add a user</a></p>
+
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+            <h2 class="govuk-heading-m">
+                Current users
+            </h2>
+            {% set headers = [
+                {
+                    text: 'User'
+                },
+                {
+                    text: 'Access level'
+                },
+                {
+                    text: 'Edit'
+                },
+                {
+                    text: 'Remove'
+                }
+            ] %}
+            {{ govukTable({
+                head: headers,
+                rows: users
+            }) }}
+        </div>
+    </div>
+{% endblock %}

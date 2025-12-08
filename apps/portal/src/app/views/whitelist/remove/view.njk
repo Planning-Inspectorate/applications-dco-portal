@@ -1,0 +1,45 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageHeading %}{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-l">
+                {{ pageTitle }}
+            </h1>
+
+            {{ govukSummaryList({
+                rows: [
+                    {
+                        key: {
+                            text: "Email address"
+                        },
+                        value: {
+                            text: emailAddress
+                        }
+                    },
+                    {
+                        key: {
+                            text: "Access level"
+                        },
+                        value: {
+                            text: accessLevel
+                        }
+                    }
+                ]
+            }) }}
+
+            <form action="" method="post" novalidate>
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                {{ govukButton({
+                    text: "Remove this user"
+                }) }}
+            </form>
+
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/manage-users">Cancel</a></p>
+        </div>
+    </div>
+{% endblock %}
