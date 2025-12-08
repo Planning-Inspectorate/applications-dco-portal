@@ -5,7 +5,7 @@ import type { IRouter } from 'express';
 import type { PortalService } from '#service';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildAboutTheProjectHomePage } from './controller.ts';
-import { buildIsTaskCompleted, getApplicationSectionDisplayName } from '../util.ts';
+import { getApplicationSectionDisplayName } from '../util.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
 import { buildSaveController } from './save.ts';
@@ -33,11 +33,9 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	const getJourneyResponse = buildGetJourneyResponseFromSession(applicationSectionId);
 
 	const aboutTheProjectHomePage = buildAboutTheProjectHomePage();
-	const isAboutTheProjectCompleted = buildIsTaskCompleted(service, applicationSectionId, buildAboutTheProjectHomePage);
 	const saveController = buildSaveController(service, applicationSectionId);
 
 	router.get('/', asyncHandler(aboutTheProjectHomePage));
-	router.post('/', isAboutTheProjectCompleted);
 
 	router.get('/:section/:question', getJourneyResponse, getJourney, question);
 	router.post(

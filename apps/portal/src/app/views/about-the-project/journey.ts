@@ -8,6 +8,7 @@ import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journe
 import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
+import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
 export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
@@ -25,9 +26,13 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.locationDescription)
 				.addQuestion(questions.singleOrLinear)
 				.addQuestion(questions.singleGridReferences)
-				.withCondition((response: JourneyResponse) => questionHasAnswer(response, questions.singleOrLinear, 'single'))
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.SINGLE)
+				)
 				.addQuestion(questions.linearGridReferences)
-				.withCondition((response: JourneyResponse) => questionHasAnswer(response, questions.singleOrLinear, 'linear'))
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.LINEAR)
+				)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
