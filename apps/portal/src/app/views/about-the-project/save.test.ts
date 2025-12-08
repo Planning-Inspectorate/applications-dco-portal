@@ -5,6 +5,7 @@ import assert from 'node:assert';
 import { buildSaveController } from './save.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { APPLICATION_SECTION_ID } from '../constants.ts';
+import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
 describe('about the project journey save controller', () => {
 	describe('buildSaveController', () => {
@@ -32,7 +33,7 @@ describe('about the project journey save controller', () => {
 							description: 'This is a test project description',
 							consentReason: 'This is a test consent reason',
 							locationDescription: 'This is a test location description',
-							singleOrLinear: 'single',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
 							northing: 345678
 						}
@@ -69,8 +70,7 @@ describe('about the project journey save controller', () => {
 								northing: 345678
 							}
 						}
-					},
-					ProjectLinearSite: { disconnect: true }
+					}
 				}
 			});
 		});
@@ -98,7 +98,7 @@ describe('about the project journey save controller', () => {
 							description: 'This is a test project description',
 							consentReason: 'This is a test consent reason',
 							locationDescription: 'This is a test location description',
-							singleOrLinear: 'linear',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.LINEAR,
 							startEasting: 123456,
 							startNorthing: 345678,
 							middleEasting: 123456,
@@ -128,7 +128,6 @@ describe('about the project journey save controller', () => {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
-					ProjectSingleSite: { disconnect: true },
 					ProjectLinearSite: {
 						upsert: {
 							update: {
@@ -182,7 +181,7 @@ describe('about the project journey save controller', () => {
 							description: 'This is a test project description',
 							consentReason: 'This is a test consent reason',
 							locationDescription: 'This is a test location description',
-							singleOrLinear: 'linear',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.LINEAR,
 							startEasting: 123456,
 							startNorthing: 345678,
 							middleEasting: 123456,
@@ -216,7 +215,6 @@ describe('about the project journey save controller', () => {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
-					ProjectSingleSite: { disconnect: true },
 					ProjectLinearSite: {
 						upsert: {
 							update: {
@@ -270,7 +268,7 @@ describe('about the project journey save controller', () => {
 							description: 'This is a test project description',
 							consentReason: 'This is a test consent reason',
 							locationDescription: 'This is a test location description',
-							singleOrLinear: 'single',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
 							northing: 345678
 						}
@@ -311,8 +309,7 @@ describe('about the project journey save controller', () => {
 								northing: 345678
 							}
 						}
-					},
-					ProjectLinearSite: { disconnect: true }
+					}
 				}
 			});
 		});
@@ -345,7 +342,7 @@ describe('about the project journey save controller', () => {
 							description: 'This is a test project description',
 							consentReason: 'This is a test consent reason',
 							locationDescription: 'This is a test location description',
-							singleOrLinear: 'single',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
 							northing: 345678
 						}
@@ -382,8 +379,7 @@ describe('about the project journey save controller', () => {
 								northing: 345678
 							}
 						}
-					},
-					ProjectLinearSite: { disconnect: true }
+					}
 				}
 			});
 		});

@@ -7,6 +7,7 @@ import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { mapAnswersToCase, mapAnswersToLinearSite, mapAnswersToSingleSite } from './mappers.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { ProjectSingleSiteInput, ProjectLinearSiteInput } from './types.d.ts';
+import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
@@ -22,10 +23,12 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				});
 
 				const caseInput = mapAnswersToCase(answers);
-				const singleSiteInput = answers.singleOrLinear === 'single' ? mapAnswersToSingleSite(answers) : null;
-				const linearSiteInput = answers.singleOrLinear === 'linear' ? mapAnswersToLinearSite(answers) : null;
+				const siteInputQuery =
+					answers.singleOrLinear === PROJECT_SITE_TYPE_IDS.SINGLE
+						? buildSingleSiteQuery(mapAnswersToSingleSite(answers))
+						: buildLinearSiteQuery(mapAnswersToLinearSite(answers));
 
-				if (answers.singleOrLinear === 'single') {
+				if (answers.singleOrLinear === PROJECT_SITE_TYPE_IDS.SINGLE) {
 					if (caseData?.ProjectLinearSite) {
 						await $tx.linearSite.delete({
 							where: { id: caseData?.ProjectLinearSite?.id }
@@ -43,12 +46,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					where: { reference: req.session.caseReference },
 					data: {
 						...caseInput,
-						...(singleSiteInput !== null
-							? buildSingleSiteQuery(singleSiteInput)
-							: { ProjectSingleSite: { disconnect: true } }),
-						...(linearSiteInput !== null
-							? buildLinearSiteQuery(linearSiteInput)
-							: { ProjectLinearSite: { disconnect: true } }),
+						...siteInputQuery,
 						[`${kebabCaseToCamelCase(applicationSectionId)}Status`]: {
 							connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
 						}

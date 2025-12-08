@@ -11,6 +11,8 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { CUSTOM_COMPONENTS, CUSTOM_COMPONENT_CLASSES } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import { PROJECT_SITE_TYPES } from './constants.ts';
+import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -63,10 +65,7 @@ export function getQuestions() {
 			question: 'Is the site single or linear?',
 			fieldName: 'singleOrLinear',
 			url: 'single-or-linear',
-			options: [
-				{ text: 'Single', value: 'single' },
-				{ text: 'Linear', value: 'linear' }
-			],
+			options: referenceDataToRadioOptions(PROJECT_SITE_TYPES),
 			validators: [new RequiredValidator()]
 		},
 		singleGridReferences: {

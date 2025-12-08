@@ -8,7 +8,7 @@ import { buildApplicantAgentDetailsHomePage } from './controller.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
 import { buildSaveController } from './save.ts';
-import { buildIsTaskCompleted, getApplicationSectionDisplayName } from '../util.ts';
+import { getApplicationSectionDisplayName } from '../util.ts';
 
 // @ts-expect-error - due to not having @types
 import { buildGetJourney } from '@planning-inspectorate/dynamic-forms/src/middleware/build-get-journey.js';
@@ -33,15 +33,9 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	const getJourneyResponse = buildGetJourneyResponseFromSession(applicationSectionId);
 
 	const applicantAgentDetailsHomePage = buildApplicantAgentDetailsHomePage();
-	const isApplicantAgentDetailsCompleted = buildIsTaskCompleted(
-		service,
-		applicationSectionId,
-		buildApplicantAgentDetailsHomePage
-	);
 	const saveController = buildSaveController(service, applicationSectionId);
 
 	router.get('/', asyncHandler(applicantAgentDetailsHomePage));
-	router.post('/', isApplicantAgentDetailsCompleted);
 
 	router.get('/:section/:question', getJourneyResponse, getJourney, question);
 	router.post(
