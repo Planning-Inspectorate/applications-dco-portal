@@ -10,6 +10,10 @@
         {{ pageTitle }}
       </h1>
 
+      {% if showManageUsersLink %}
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/manage-users">Manage users</a></p>
+      {% endif %}
+
       <h2 class="govuk-heading-m">
         1. Your documents
       </h2>

@@ -10,18 +10,23 @@ import { createRoutes as habitatRegulationsAssessmentInformationRoutes } from '.
 import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
 import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
 import { createRoutes as statutoryNuisanceInformationRoutes } from './statutory-nuisance-information/index.ts';
+import { createRoutes as whitelistRoutes } from './whitelist/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
 import { buildHomePage } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const homePageController = buildHomePage(service);
+	const whitelistMiddleware = buildWhitelistMiddleware(service);
 
 	router.get('/', asyncHandler(homePageController));
+
+	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 
 	//file-upload
 	router.use(

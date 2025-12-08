@@ -555,18 +555,18 @@ export const PAYMENT_METHOD = [
 ];
 
 export const WHITELIST_USER_ROLE_ID = Object.freeze({
-	SUPER_USER: 'super-user',
+	ADMIN_USER: 'admin-user',
 	STANDARD_USER: 'standard-user'
 });
 
 export const WHITELIST_USER_ROLE = [
 	{
-		id: WHITELIST_USER_ROLE_ID.SUPER_USER,
-		displayName: 'Super User'
+		id: WHITELIST_USER_ROLE_ID.ADMIN_USER,
+		displayName: 'Admin'
 	},
 	{
 		id: WHITELIST_USER_ROLE_ID.STANDARD_USER,
-		displayName: 'Standard User'
+		displayName: 'Standard'
 	}
 ];
 

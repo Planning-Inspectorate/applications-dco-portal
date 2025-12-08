@@ -14,6 +14,7 @@ import assert from 'node:assert';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { mockOtpCode } from '@pins/dco-portal-lib/testing/mock-otp.ts';
 import { buildHomePage } from '../home/controller.ts';
+import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('login controllers', () => {
 	describe('buildEnterEmailPage', () => {
@@ -71,6 +72,9 @@ describe('login controllers', () => {
 					findFirst: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
 				}
 			};
 			const mockNotifyClient = {
@@ -122,6 +126,9 @@ describe('login controllers', () => {
 					findFirst: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
 				}
 			};
 			const mockNotifyClient = {
@@ -163,6 +170,9 @@ describe('login controllers', () => {
 			const mockDb = {
 				nsipServiceUser: {
 					findFirst: mock.fn()
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
 				}
 			};
 			const mockReq = {
@@ -185,6 +195,37 @@ describe('login controllers', () => {
 			const mockDb = {
 				nsipServiceUser: {
 					findFirst: mock.fn(() => ({
+						caseReference: 'EN123456',
+						email: 'another-email@email.com'
+					}))
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
+				},
+				session: {}
+			};
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitEmailController({ logger: mockLogger(), db: mockDb });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/no-access');
+		});
+		it('should redirect back to no access page if case reference is whitelisted but email provided does not match whitelist user entry', async () => {
+			const mockDb = {
+				nsipServiceUser: {
+					findFirst: mock.fn()
+				},
+				whitelistUser: {
+					findUnique: mock.fn(() => ({
 						caseReference: 'EN123456',
 						email: 'another-email@email.com'
 					}))
@@ -411,7 +452,7 @@ describe('login controllers', () => {
 					isInitialInvitee: true,
 					UserRole: {
 						connect: {
-							id: 'super-user'
+							id: WHITELIST_USER_ROLE_ID.ADMIN_USER
 						}
 					},
 					Case: {

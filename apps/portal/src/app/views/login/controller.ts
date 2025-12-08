@@ -104,15 +104,21 @@ export function buildSubmitEmailController({ db, notifyClient }: PortalService):
 			return handleError({ caseReference: 'You must provide a valid case reference' });
 		}
 
-		const serviceUser = await db.nsipServiceUser.findFirst({
-			where: { caseReference, email: emailAddress }
-		});
+		const [serviceUser, whitelistUser] = await Promise.all([
+			db.nsipServiceUser.findFirst({
+				where: { caseReference, email: emailAddress }
+			}),
+			db.whitelistUser.findUnique({
+				where: { caseReference_email: { caseReference, email: emailAddress } }
+			})
+		]);
 
-		if (!serviceUser) {
+		if (!serviceUser && !whitelistUser) {
 			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 
-		if (serviceUser.email.toLowerCase() !== emailAddress.toLowerCase()) {
+		const email = emailAddress.toLowerCase();
+		if (serviceUser?.email.toLowerCase() !== email && whitelistUser?.email.toLowerCase() !== email) {
 			return res.redirect(`${req.baseUrl}/no-access`);
 		}
 
@@ -217,7 +223,7 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 						isInitialInvitee: true,
 						UserRole: {
 							connect: {
-								id: WHITELIST_USER_ROLE_ID.SUPER_USER
+								id: WHITELIST_USER_ROLE_ID.ADMIN_USER
 							}
 						},
 						Case: {
