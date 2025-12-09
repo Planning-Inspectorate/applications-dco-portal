@@ -170,6 +170,24 @@ export function getQuestions() {
 					]
 				}
 			]
+		},
+		hasAssociatedDevelopments: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Has Associated Developments',
+			pageTitle: 'Has Associated Developments',
+			question: 'Does the project include any associated developments?',
+			fieldName: 'hasAssociatedDevelopments',
+			url: 'has-associated-developments',
+			validators: [new RequiredValidator()]
+		},
+		associatedDevelopments: {
+			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
+			title: 'Associated Developments',
+			pageTitle: 'Associated Developments',
+			question: 'Which documents relate to the associated developments?',
+			fieldName: 'associatedDevelopments',
+			url: 'details-of-associated-development',
+			validators: [new RequiredValidator()]
 		}
 	};
 
