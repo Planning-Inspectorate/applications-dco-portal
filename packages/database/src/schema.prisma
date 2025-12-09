@@ -206,7 +206,7 @@ model PaymentMethod {
 
 model NsipProject {
   /// relation used for integration with CBOS NSIP Project topic
-  caseId        String @id
+  caseId        Int    @id
   caseReference String @unique
 
   projectName        String?
