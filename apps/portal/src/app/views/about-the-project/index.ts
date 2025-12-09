@@ -8,6 +8,7 @@ import { buildAboutTheProjectHomePage } from './controller.ts';
 import { getApplicationSectionDisplayName } from '../util.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
+import { selectDocumentQuestionMiddleware } from '../middleware/select-document-middleware.ts';
 import { buildSaveController } from './save.ts';
 // @ts-expect-error - due to not having @types
 import { buildGetJourney } from '@planning-inspectorate/dynamic-forms/src/middleware/build-get-journey.js';
@@ -32,12 +33,14 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	);
 	const getJourneyResponse = buildGetJourneyResponseFromSession(applicationSectionId);
 
-	const aboutTheProjectHomePage = buildAboutTheProjectHomePage();
+	const aboutTheProjectHomePage = buildAboutTheProjectHomePage(service, applicationSectionId);
 	const saveController = buildSaveController(service, applicationSectionId);
+
+	const selectDocumentQuestion = selectDocumentQuestionMiddleware(service);
 
 	router.get('/', asyncHandler(aboutTheProjectHomePage));
 
-	router.get('/:section/:question', getJourneyResponse, getJourney, question);
+	router.get('/:section/:question', getJourneyResponse, getJourney, selectDocumentQuestion, question);
 	router.post(
 		'/:section/:question',
 		getJourneyResponse,

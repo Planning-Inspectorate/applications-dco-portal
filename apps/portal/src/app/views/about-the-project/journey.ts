@@ -6,6 +6,8 @@ import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journe
 import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
 // @ts-expect-error - due to not having @types
 import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
@@ -32,6 +34,11 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.linearGridReferences)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(response, questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.LINEAR)
+				)
+				.addQuestion(questions.hasAssociatedDevelopments)
+				.addQuestion(questions.associatedDevelopments)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.hasAssociatedDevelopments, BOOLEAN_OPTIONS.YES)
 				)
 		],
 		taskListUrl: 'check-your-answers',

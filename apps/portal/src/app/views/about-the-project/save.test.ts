@@ -17,6 +17,9 @@ describe('about the project journey save controller', () => {
 						reference: 'EN123456'
 					})),
 					update: mock.fn(() => 'document-id')
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete')
 				}
 			};
 			const mockReq = {
@@ -35,7 +38,8 @@ describe('about the project journey save controller', () => {
 							locationDescription: 'This is a test location description',
 							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
-							northing: 345678
+							northing: 345678,
+							hasAssociatedDevelopments: 'no'
 						}
 					}
 				}
@@ -52,6 +56,7 @@ describe('about the project journey save controller', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 				where: { reference: 'EN123456' },
@@ -82,6 +87,9 @@ describe('about the project journey save controller', () => {
 						reference: 'EN123456'
 					})),
 					update: mock.fn(() => 'document-id')
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete')
 				}
 			};
 			const mockReq = {
@@ -104,7 +112,8 @@ describe('about the project journey save controller', () => {
 							middleEasting: 123456,
 							middleNorthing: 345678,
 							endEasting: 123456,
-							endNorthing: 345678
+							endNorthing: 345678,
+							hasAssociatedDevelopments: 'no'
 						}
 					}
 				}
@@ -121,6 +130,7 @@ describe('about the project journey save controller', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 				where: { reference: 'EN123456' },
@@ -165,6 +175,9 @@ describe('about the project journey save controller', () => {
 				},
 				singleSite: {
 					delete: mock.fn(() => {})
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete')
 				}
 			};
 			const mockReq = {
@@ -187,7 +200,8 @@ describe('about the project journey save controller', () => {
 							middleEasting: 123456,
 							middleNorthing: 345678,
 							endEasting: 123456,
-							endNorthing: 345678
+							endNorthing: 345678,
+							hasAssociatedDevelopments: 'no'
 						}
 					}
 				}
@@ -204,6 +218,7 @@ describe('about the project journey save controller', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.singleSite.delete.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.singleSite.delete.mock.calls[0].arguments[0], {
 				where: { id: 'single-site-id' }
@@ -252,6 +267,9 @@ describe('about the project journey save controller', () => {
 				},
 				linearSite: {
 					delete: mock.fn(() => {})
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete')
 				}
 			};
 			const mockReq = {
@@ -270,7 +288,8 @@ describe('about the project journey save controller', () => {
 							locationDescription: 'This is a test location description',
 							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
-							northing: 345678
+							northing: 345678,
+							hasAssociatedDevelopments: 'no'
 						}
 					}
 				}
@@ -287,10 +306,84 @@ describe('about the project journey save controller', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.linearSite.delete.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.linearSite.delete.mock.calls[0].arguments[0], {
 				where: { id: 'linear-site-id' }
 			});
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				data: {
+					projectDescription: 'This is a test project description',
+					projectConsentReason: 'This is a test consent reason',
+					aboutTheProjectStatus: { connect: { id: 'completed' } },
+					ProjectSingleSite: {
+						upsert: {
+							update: {
+								easting: 123456,
+								northing: 345678
+							},
+							create: {
+								easting: 123456,
+								northing: 345678
+							}
+						}
+					}
+				}
+			});
+		});
+		it('should save project details into the database if has associated developments', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456'
+					})),
+					update: mock.fn(() => 'document-id')
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete'),
+					upsert: mock.fn(() => 'upsert')
+				}
+			};
+			const mockReq = {
+				baseUrl: '/about-the-project',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							description: 'This is a test project description',
+							consentReason: 'This is a test consent reason',
+							locationDescription: 'This is a test location description',
+							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
+							easting: 123456,
+							northing: 345678,
+							hasAssociatedDevelopments: 'yes',
+							associatedDevelopments: 'doc-id-3,doc-id-2'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.ABOUT_THE_PROJECT
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 				where: { reference: 'EN123456' },
@@ -326,6 +419,9 @@ describe('about the project journey save controller', () => {
 						}
 					})),
 					update: mock.fn(() => 'document-id')
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(() => 'delete')
 				}
 			};
 			const mockReq = {
@@ -344,7 +440,8 @@ describe('about the project journey save controller', () => {
 							locationDescription: 'This is a test location description',
 							singleOrLinear: PROJECT_SITE_TYPE_IDS.SINGLE,
 							easting: 123456,
-							northing: 345678
+							northing: 345678,
+							hasAssociatedDevelopments: 'no'
 						}
 					}
 				}
@@ -361,6 +458,7 @@ describe('about the project journey save controller', () => {
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 				where: { reference: 'EN123456' },

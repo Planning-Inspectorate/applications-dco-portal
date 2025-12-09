@@ -3,9 +3,17 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 // @ts-expect-error - due to not having @types
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
 import { mapAnswersToCase, mapAnswersToLinearSite, mapAnswersToSingleSite } from './mappers.ts';
-import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/db-operations.ts';
+import {
+	DOCUMENT_CATEGORY_STATUS_ID,
+	DOCUMENT_SUB_CATEGORY_ID
+} from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { ProjectSingleSiteInput, ProjectLinearSiteInput } from './types.d.ts';
 import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
@@ -21,6 +29,29 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						ProjectLinearSite: true
 					}
 				});
+
+				if (!caseData) {
+					return notFoundHandler(req, res);
+				}
+
+				const caseId = caseData.id;
+				const categories: CategoryInformation[] = [
+					{
+						key: 'associatedDevelopments',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+					}
+				];
+
+				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
+
+				if (answers.hasAssociatedDevelopments === BOOLEAN_OPTIONS.YES) {
+					for (const { key, subCategoryId } of categories) {
+						const ids = answers[key]?.split(',') ?? [];
+						for (const documentId of ids) {
+							await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
+						}
+					}
+				}
 
 				const caseInput = mapAnswersToCase(answers);
 				const siteInputQuery =
