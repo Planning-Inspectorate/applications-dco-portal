@@ -60,6 +60,8 @@ model Case {
   additionalPrescribedInformationStatus     DocumentCategoryStatus @relation(name: "AdditionalPrescribedInformationStatus", fields: [additionalPrescribedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   otherDocumentsStatusId                    String                 @default("not-started")
   otherDocumentsStatus                      DocumentCategoryStatus @relation(name: "OtherDocumentsStatus", fields: [otherDocumentsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  landAndWorksPlansStatusId                 String                 @default("not-started")
+  landAndWorksPlansStatus                   DocumentCategoryStatus @relation(name: "landAndWorksPlansStatus", fields: [landAndWorksPlansStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   applicantAndAgentDetailsStatusId                String                 @default("not-started")
   applicantAndAgentDetailsStatus                  DocumentCategoryStatus @relation(name: "applicantAndAgentDetailsStatus", fields: [applicantAndAgentDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -180,6 +182,7 @@ model DocumentCategoryStatus {
   EnvironmentalStatementCases          Case[] @relation("EnvironmentalStatementStatus")
   AdditionalPrescribedInformationCases Case[] @relation("AdditionalPrescribedInformationStatus")
   OtherDocumentsCases                  Case[] @relation("OtherDocumentsStatus")
+  LandAndWorksPlansCases               Case[] @relation("landAndWorksPlansStatus")
 
   ApplicantAndAgentDetailsCases                Case[] @relation("applicantAndAgentDetailsStatus")
   AboutTheProjectCases                         Case[] @relation("aboutTheProjectStatus")
