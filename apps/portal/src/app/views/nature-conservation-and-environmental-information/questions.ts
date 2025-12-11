@@ -12,8 +12,8 @@ export function getQuestions() {
 	const questions = {
 		hasNaturalEnvironmentInformation: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Natural Environment Information',
-			pageTitle: 'Has Natural Environment Information',
+			title: 'Natural Environment Information',
+			pageTitle: 'Natural Environment Information',
 			question: 'Could the project affect any nature conservation, landscape, geological or water features?',
 			fieldName: 'hasNaturalEnvironmentInformation',
 			url: 'natural-environment-information',
@@ -21,11 +21,29 @@ export function getQuestions() {
 		},
 		naturalEnvironmentInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Natural Environment Information',
-			pageTitle: 'Natural Environment Information',
+			title: 'Natural Environment Information Documents',
+			pageTitle: 'Natural Environment Information Documents',
 			question: 'Which documents relate to the nature conservation, landscape, geological or water features?',
 			fieldName: 'naturalEnvironmentInformation',
 			url: 'plans-of-statutory-and-non-statutory-sites-or-features',
+			validators: [new RequiredValidator()]
+		},
+		hasHistoricEnvironmentInformation: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Historic Environment Information',
+			pageTitle: 'Historic Environment Information',
+			question: 'Could the project affect any historic environment sites or features?',
+			fieldName: 'hasHistoricEnvironmentInformation',
+			url: 'historic-environment-information',
+			validators: [new RequiredValidator()]
+		},
+		historicEnvironmentInformation: {
+			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
+			title: 'Historic Environment Information Documents',
+			pageTitle: 'Historic Environment Information Documents',
+			question: 'Which documents relate to the historic environment sites or features?',
+			fieldName: 'historicEnvironmentInformation',
+			url: 'plans-showing-historic-or-scheduled-monument-sites',
 			validators: [new RequiredValidator()]
 		}
 	};

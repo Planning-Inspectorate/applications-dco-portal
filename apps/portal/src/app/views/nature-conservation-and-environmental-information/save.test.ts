@@ -8,7 +8,7 @@ import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 describe('nature-conservation-and-environmental-information save', () => {
 	describe('buildSaveController', () => {
-		it('should save nature conservation and environmental information journey successfully if compulsory acquisition is yes', async () => {
+		it('should save nature conservation and environmental information journey successfully if has both natural and historic information', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -34,7 +34,9 @@ describe('nature-conservation-and-environmental-information save', () => {
 					journeyResponse: {
 						answers: {
 							naturalEnvironmentInformation: 'doc-id-3,doc-id-2',
-							hasNaturalEnvironmentInformation: 'yes'
+							hasNaturalEnvironmentInformation: 'yes',
+							historicEnvironmentInformation: 'doc-id-4',
+							hasHistoricEnvironmentInformation: 'yes'
 						}
 					}
 				}
@@ -56,9 +58,9 @@ describe('nature-conservation-and-environmental-information save', () => {
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 3);
 		});
-		it('should save nature conservation and environmental information journey successfully if compulsory acquisition is no', async () => {
+		it('should save nature conservation and environmental information journey successfully if has only historic information document', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -83,7 +85,110 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no'
+							hasNaturalEnvironmentInformation: 'no',
+							historicEnvironmentInformation: 'doc-id-4',
+							hasHistoricEnvironmentInformation: 'yes'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 1);
+		});
+		it('should save nature conservation and environmental information journey successfully if has only natural information document', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1'
+					})),
+					update: mock.fn()
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(),
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/nature-conservation-and-environmental-information',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							hasNaturalEnvironmentInformation: 'yes',
+							naturalEnvironmentInformation: 'doc-id-1,doc-id-2',
+							hasHistoricEnvironmentInformation: 'no'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
+		});
+		it('should save nature conservation and environmental information journey successfully if has neither natural or historic information', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1'
+					})),
+					update: mock.fn()
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(),
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/nature-conservation-and-environmental-information',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							hasNaturalEnvironmentInformation: 'no',
+							hasHistoricEnvironmentInformation: 'no'
 						}
 					}
 				}
@@ -107,6 +212,60 @@ describe('nature-conservation-and-environmental-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 0);
 		});
+		/*
+        it('should remove and not replace any existing documents pre-populated if the user answers that there is no document', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1'
+					})),
+					update: mock.fn()
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(),
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/nature-conservation-and-environmental-information',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							naturalEnvironmentInformation: 'doc-id-3,doc-id-2',
+							hasNaturalEnvironmentInformation: 'no',
+                            historicEnvironmentInformation: 'doc-id-4',
+							hasHistoricEnvironmentInformation: 'no'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 0);
+		});
+        */
 		it('should redirect to not found page if the case data is not present in db', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
@@ -126,7 +285,8 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no'
+							hasNaturalEnvironmentInformation: 'no',
+							hasHistoricEnvironmentInformation: 'no'
 						}
 					}
 				}
@@ -177,7 +337,8 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no'
+							hasNaturalEnvironmentInformation: 'no',
+							hasHistoricEnvironmentInformation: 'no'
 						}
 					}
 				}
