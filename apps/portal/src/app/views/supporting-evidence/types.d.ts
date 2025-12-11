@@ -3,4 +3,5 @@ export type SupportingEvidenceInput = Prisma.SupportingEvidenceUncheckedCreateIn
 export interface CategoryInformation {
 	key: string;
 	subCategoryId: string;
+	applied?: boolean;
 }

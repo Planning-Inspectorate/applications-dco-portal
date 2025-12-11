@@ -31,26 +31,23 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				const categories: CategoryInformation[] = [
 					{
 						key: 'naturalEnvironmentInformation',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
+						applied: answers.hasNaturalEnvironmentInformation === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'historicEnvironmentInformation',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES,
+						applied: answers.hasHistoricEnvironmentInformation === BOOLEAN_OPTIONS.YES
 					}
 				];
 
 				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
 
-				if (
-					[answers.hasNaturalEnvironmentInformation, answers.hasHistoricEnvironmentInformation].includes(
-						BOOLEAN_OPTIONS.YES
-					)
-				) {
-					for (const { key, subCategoryId } of categories) {
-						const ids = answers[key]?.split(',') ?? [];
-						for (const documentId of ids) {
-							await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
-						}
+				for (const { key, subCategoryId, applied } of categories) {
+					if (!applied) continue;
+					const ids = answers[key]?.split(',') ?? [];
+					for (const documentId of ids) {
+						await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
 					}
 				}
 
