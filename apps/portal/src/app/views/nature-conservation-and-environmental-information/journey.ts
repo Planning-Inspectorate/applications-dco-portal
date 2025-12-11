@@ -27,6 +27,11 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(response, questions.hasNaturalEnvironmentInformation, BOOLEAN_OPTIONS.YES)
 				)
+				.addQuestion(questions.hasHistoricEnvironmentInformation)
+				.addQuestion(questions.historicEnvironmentInformation)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.hasHistoricEnvironmentInformation, BOOLEAN_OPTIONS.YES)
+				)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

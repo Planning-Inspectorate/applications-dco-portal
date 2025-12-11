@@ -8,7 +8,7 @@ import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 describe('flood-risk-information save', () => {
 	describe('buildSaveController', () => {
-		it('should save flood risk info journey successfully if compulsory acquisition is yes', async () => {
+		it('should save flood risk info journey successfully if flood risk assessment is yes', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -58,7 +58,7 @@ describe('flood-risk-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
 		});
-		it('should save flood risk info journey successfully if compulsory acquisition is no', async () => {
+		it('should save flood risk info journey successfully if flood risk assessment is no', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {

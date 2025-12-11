@@ -32,7 +32,8 @@ export function buildNatureConservationAndEnvironmentalInformationHomePage(
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
 	const natureConservationDocumentIds = [
-		DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
+		DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
+		DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
 	];
 
 	const caseData = await db.case.findUnique({
@@ -52,18 +53,33 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		return notFoundHandler(req, res);
 	}
 
-	const forms = req.session.forms || (req.session.forms = {});
-	const hasEvidence = (caseData?.SupportingEvidence?.length ?? 0) > 0;
-
-	forms[applicationSectionId] = hasEvidence
-		? {
-				hasNaturalEnvironmentInformation: 'yes',
-				naturalEnvironmentInformation: getSupportingEvidenceIds(
-					caseData.SupportingEvidence,
-					DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
-				)
+	const [naturalInformationCount, historicInformationCount] = await Promise.all([
+		db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
 			}
-		: {
-				hasNaturalEnvironmentInformation: 'no'
-			};
+		}),
+		db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
+			}
+		})
+	]);
+
+	const forms = req.session.forms || (req.session.forms = {});
+
+	forms[applicationSectionId] = {
+		hasNaturalEnvironmentInformation: naturalInformationCount > 0 ? 'yes' : 'no',
+		naturalEnvironmentInformation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
+		),
+		hasHistoricEnvironmentInformation: historicInformationCount > 0 ? 'yes' : 'no',
+		historicEnvironmentInformation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
+		)
+	};
 }
