@@ -7,6 +7,7 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -23,7 +24,7 @@ export function getQuestions() {
 			title: 'Which documents relate to the flood risk assessment?',
 			question: 'Which documents relate to the flood risk assessment?',
 			fieldName: 'floodRiskAssessment',
-			url: 'flood-risk-assessment',
+			url: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT,
 			validators: [new RequiredValidator()]
 		}
 	};

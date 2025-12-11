@@ -7,6 +7,7 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -25,7 +26,7 @@ export function getQuestions() {
 			pageTitle: 'Natural Environment Information Documents',
 			question: 'Which documents relate to the nature conservation, landscape, geological or water features?',
 			fieldName: 'naturalEnvironmentInformation',
-			url: 'plans-of-statutory-and-non-statutory-sites-or-features',
+			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
 			validators: [new RequiredValidator()]
 		},
 		hasHistoricEnvironmentInformation: {
@@ -43,7 +44,7 @@ export function getQuestions() {
 			pageTitle: 'Historic Environment Information Documents',
 			question: 'Which documents relate to the historic environment sites or features?',
 			fieldName: 'historicEnvironmentInformation',
-			url: 'plans-showing-historic-or-scheduled-monument-sites',
+			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES,
 			validators: [new RequiredValidator()]
 		}
 	};

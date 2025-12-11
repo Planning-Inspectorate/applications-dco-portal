@@ -13,6 +13,7 @@ import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { CUSTOM_COMPONENTS, CUSTOM_COMPONENT_CLASSES } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { PROJECT_SITE_TYPES } from './constants.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -186,7 +187,7 @@ export function getQuestions() {
 			pageTitle: 'Associated Developments',
 			question: 'Which documents relate to the associated developments?',
 			fieldName: 'associatedDevelopments',
-			url: 'details-of-associated-development',
+			url: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT,
 			validators: [new RequiredValidator()]
 		}
 	};

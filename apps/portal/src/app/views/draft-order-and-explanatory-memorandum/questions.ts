@@ -5,6 +5,7 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -14,7 +15,7 @@ export function getQuestions() {
 			pageTitle: 'Draft Development Consent Order',
 			question: 'Which documents relate to the draft development consent order?',
 			fieldName: 'draftDevelopmentConsentOrder',
-			url: 'draft-development-consent-order',
+			url: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER,
 			validators: [new RequiredValidator()]
 		},
 		siValidationReportSuccessEmail: {
@@ -23,7 +24,7 @@ export function getQuestions() {
 			pageTitle: 'SI Validation Report Success Email',
 			question: 'Which documents relate to the SI validation report success email?',
 			fieldName: 'siValidationReportSuccessEmail',
-			url: 'si-validation-report-success-email',
+			url: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
 			validators: [new RequiredValidator()]
 		},
 		explanatoryMemorandum: {
@@ -32,7 +33,7 @@ export function getQuestions() {
 			pageTitle: 'Explanatory Memorandum',
 			question: 'Which documents relate to the Explanatory Memorandum?',
 			fieldName: 'explanatoryMemorandum',
-			url: 'explanatory-memorandum',
+			url: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM,
 			validators: [new RequiredValidator()]
 		}
 	};

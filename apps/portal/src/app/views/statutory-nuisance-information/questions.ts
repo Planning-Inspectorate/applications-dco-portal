@@ -7,6 +7,7 @@ import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validato
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -23,7 +24,7 @@ export function getQuestions() {
 			title: 'Which documents relate to the statutory nuisance statement?',
 			question: 'Which documents relate to the statutory nuisance statement?',
 			fieldName: 'statutoryNuisanceStatement',
-			url: 'statutory-nuisance-statement',
+			url: DOCUMENT_SUB_CATEGORY_ID.STATUTORY_NUISANCE_STATEMENT,
 			validators: [new RequiredValidator()]
 		}
 	};

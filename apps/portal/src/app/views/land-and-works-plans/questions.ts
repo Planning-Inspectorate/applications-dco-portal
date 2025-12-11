@@ -5,6 +5,7 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -14,7 +15,7 @@ export function getQuestions() {
 			pageTitle: 'Land Plans',
 			question: 'Which documents relate to the land plans?',
 			fieldName: 'landPlans',
-			url: 'land-plans',
+			url: DOCUMENT_SUB_CATEGORY_ID.LAND_PLANS,
 			validators: [new RequiredValidator()]
 		},
 		worksPlans: {
@@ -23,7 +24,7 @@ export function getQuestions() {
 			pageTitle: 'Works Plans',
 			question: 'Which documents relate to the works plan?',
 			fieldName: 'worksPlans',
-			url: 'works-plan',
+			url: DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN,
 			validators: [new RequiredValidator()]
 		}
 	};
