@@ -153,30 +153,24 @@ resource "azurerm_cdn_frontdoor_firewall_policy" "portal" {
     }
 
     override {
-      rule_group_name = "SQLI"
+      rule_group_name = "PROTOCOL-ENFORCEMENT"
       rule {
         action  = "AnomalyScoring"
-        rule_id = "942390"
+        rule_id = "920120"
+      }
+      rule {
+        action  = "AnomalyScoring"
+        rule_id = "920121"
       }
       exclusion {
         match_variable = "RequestBodyPostArgNames"
         operator       = "Equals"
-        selector       = "myselfComment"
-      }
-      exclusion {
-        match_variable = "RequestBodyPostArgNames"
-        operator       = "Equals"
-        selector       = "submitterComment"
+        selector       = "files"
       }
       exclusion {
         match_variable = "RequestBodyPostArgNames"
         operator       = "Equals"
         selector       = "_csrf"
-      }
-      exclusion {
-        match_variable = "RequestBodyPostArgNames"
-        operator       = "Equals"
-        selector       = "healthAndSafetyIssue"
       }
     }
 
