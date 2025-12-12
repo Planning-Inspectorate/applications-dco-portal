@@ -4,7 +4,7 @@ import type { Request, Response } from 'express';
 import { addSessionData } from '../../../util/session.ts';
 import { Readable } from 'stream';
 import type { UploadedFile } from './types.d.ts';
-import { decodeBlobNameFromBase64, encodeBlobNameToBase64, formatBytes } from './util.ts';
+import { encodeBlobNameToBase64, formatBytes } from './util.ts';
 import { TOTAL_UPLOAD_LIMIT } from './constants.ts';
 import { getAnswersFromRes } from '../../../util/answers.ts';
 
@@ -19,6 +19,9 @@ export function uploadDocumentsController(
 ) {
 	return async (req: Request, res: Response) => {
 		const { blobStore, logger } = service;
+
+		const answersFromRes = getAnswersFromRes(res);
+		const documentSubCategoryId = answersFromRes.documentType;
 
 		const files = req.files as Express.Multer.File[];
 		const fileErrors = [];
@@ -41,9 +44,12 @@ export function uploadDocumentsController(
 		fileErrors.push(...fileValidationErrors);
 
 		const blobAlreadyExists = await Promise.all(
-			files.map((file) =>
-				blobStore?.doesBlobExist(`${req.session.caseReference}/${documentCategoryId}/${file.originalname}`)
-			)
+			files.map((file) => {
+				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+				return blobStore?.doesBlobExist(
+					`${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${fileName}`
+				);
+			})
 		);
 
 		if (blobAlreadyExists.some(Boolean)) {
@@ -68,9 +74,6 @@ export function uploadDocumentsController(
 			});
 		}
 
-		const answersFromRes = getAnswersFromRes(res);
-		const documentSubCategoryId = answersFromRes.documentType;
-
 		if (fileErrors.length > 0) {
 			req.session.errors = {
 				'upload-form': { msg: 'Errors encountered during file upload' }
@@ -78,21 +81,22 @@ export function uploadDocumentsController(
 			req.session.errorSummary = fileErrors;
 		} else {
 			for (const file of files) {
+				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
 				try {
-					const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${file.originalname}`;
+					const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${fileName}`;
 					await blobStore?.uploadStream(Readable.from(file.buffer), file.mimetype, blobName);
 				} catch (error) {
-					const filename = file.originalname;
-					logger.error({ error }, `Error uploading file: ${filename} to blob store`);
-					throw new Error(`Failed to upload file: ${filename}`);
+					logger.error({ error }, `Error uploading file: ${fileName} to blob store`);
+					throw new Error(`Failed to upload file: ${fileName}`);
 				}
 			}
 
 			const latestUploads: UploadedFile[] = [];
 			files.forEach((file) => {
-				const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${file.originalname}`;
+				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
+				const blobName = `${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${fileName}`;
 				latestUploads.push({
-					fileName: file.originalname,
+					fileName,
 					size: file.size,
 					formattedSize: formatBytes(file.size),
 					blobName,
@@ -114,9 +118,9 @@ export function uploadDocumentsController(
 export function deleteDocumentsController(service: PortalService, documentCategoryId: string) {
 	return async (req: Request, res: Response) => {
 		const { blobStore, logger } = service;
-		const blobName = decodeBlobNameFromBase64(req.params.documentId);
+		const blobName = Buffer.from(req.params.documentId, 'base64').toString('utf8');
 		try {
-			blobStore?.deleteBlobIfExists(blobName);
+			await blobStore?.deleteBlobIfExists(blobName);
 		} catch (error) {
 			logger.error({ error, blobName }, `Error deleting file: ${blobName} from Blob store`);
 			throw new Error('Failed to delete file');

@@ -14,10 +14,6 @@ export function encodeBlobNameToBase64(blobName: string): string {
 	return Buffer.from(blobName, 'utf8').toString('base64url');
 }
 
-export function decodeBlobNameFromBase64(encodedBlobName: string): string {
-	return Buffer.from(encodedBlobName, 'base64url').toString('utf8');
-}
-
 export function formatExtensions(allowedExtensions: string[]): string {
 	const upper = allowedExtensions.map((ext) => ext.toUpperCase());
 	if (upper.length <= 1) return upper[0] || '';
