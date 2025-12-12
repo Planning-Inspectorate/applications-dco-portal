@@ -20,6 +20,9 @@ export function uploadDocumentsController(
 	return async (req: Request, res: Response) => {
 		const { blobStore, logger } = service;
 
+		const answersFromRes = getAnswersFromRes(res);
+		const documentSubCategoryId = answersFromRes.documentType;
+
 		const files = req.files as Express.Multer.File[];
 		const fileErrors = [];
 
@@ -43,7 +46,9 @@ export function uploadDocumentsController(
 		const blobAlreadyExists = await Promise.all(
 			files.map((file) => {
 				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
-				return blobStore?.doesBlobExist(`${req.session.caseReference}/${documentCategoryId}/${fileName}`);
+				return blobStore?.doesBlobExist(
+					`${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${fileName}`
+				);
 			})
 		);
 
@@ -68,9 +73,6 @@ export function uploadDocumentsController(
 				href: '#upload-form'
 			});
 		}
-
-		const answersFromRes = getAnswersFromRes(res);
-		const documentSubCategoryId = answersFromRes.documentType;
 
 		if (fileErrors.length > 0) {
 			req.session.errors = {
