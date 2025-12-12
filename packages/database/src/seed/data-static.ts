@@ -128,21 +128,14 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	SCOPING_OPINION: 'scoping-opinion',
 	FLOOD_RISK_ASSESSMENT: 'flood-risk-assessment',
 	SENSITIVE_ENVIRONMENTAL_INFORMATION: 'sensitive-environmental-information',
-	OFFSHORE_GENERATING_STATION_DETAILS: 'offshore-generating-station-details',
-	NON_OFFSHORE_GENERATING_STATION_STATEMENT: 'non-offshore-generating-station-statement',
-	OFFSHORE_CABLE_ROUTE: 'offshore-cable-route',
-	OFFSHORE_SAFETY_ZONE_STATEMENT: 'offshore-safety-zone-statement',
-	NON_OFFSHORE_CONNECTION_RESPONSIBILITY: 'non-offshore-connection-responsibility',
-	HIGHWAY_RAILWAY_LEVELS_DEPTHS_HEIGHTS: 'highway-railway-levels-depths-heights',
-	HIGHWAY_RAILWAY_CROSS_SECTIONS: 'highway-railway-cross-sections',
-	HIGHWAY_RAILWAY_DRAINAGE_OUTFALLS: 'highway-railway-drainage-outfall-details',
-	HARBOUR_FACILITIES_DCO_JUSTIFICATION: 'harbour-facilities-dco-justification',
-	PIPELINES_NAME_OWNER: 'pipelines-name-owner',
-	PIPELINES_MEASUREMENTS: 'pipelines-measurements',
-	PIPELINES_CONTENTS_CONVEYED: 'pipelines-contents-conveyed',
-	PIPELINES_GRANT_OF_RIGHTS: 'pipelines-grant-of-rights',
-	HAZARDOUS_WASTE_STATEMENT: 'hazardous-waste-statement',
-	DAM_RESERVOIR_RECREATIONAL_AMENITIES: 'dam-reservoir-recreational-amenities'
+	OFFSHORE_GENERATING_STATION: 'offshore-generating-station',
+	NON_OFFSHORE_GENERATING_STATION: 'non-offshore-generating-station',
+	HIGHWAY_OR_RAILWAY_DEVELOPMENT: 'highway-or-railway-development',
+	HARBOUR_FACILITIES: 'harbour-facilities',
+	PIPELINES: 'pipelines',
+	HAZARDOUS_WASTE_FACILITY: 'hazardous-waste-facility',
+	DAM_OR_RESERVOIR: 'dam-or-reservoir',
+	ANY_OTHER_DOCUMENTS_TO_SUPPORT_THE_APPLICATION: 'any-other-documents-to-support-the-application'
 });
 
 export const DOCUMENT_SUB_CATEGORY = [
@@ -424,80 +417,43 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION_DETAILS,
-		displayName: 'Offshore generating station - details of proposed route for offshore cables, safety zone statement',
+		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
+		displayName: 'Offshore generating station',
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION_STATEMENT,
-		displayName:
-			'Non offshore generating station - statement of responsibility for designing and building the connection',
+		id: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION,
+		displayName: 'Non offshore generating station',
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_CABLE_ROUTE,
-		displayName: 'Offshore generating station - Details of proposed route for offshore cables',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_OR_RAILWAY_DEVELOPMENT,
+		displayName: 'Highway or railway development',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_SAFETY_ZONE_STATEMENT,
-		displayName: 'Offshore generating station - Safety zone statement',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+		id: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES,
+		displayName: 'Harbour facilities',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_CONNECTION_RESPONSIBILITY,
-		displayName:
-			'Non offshore generating station - Statement of responsibility for designing and building the connection',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES,
+		displayName: 'Pipelines',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_LEVELS_DEPTHS_HEIGHTS,
-		displayName: 'Highway or railway development - Levels, depths, and heights of proposed works',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+		id: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY,
+		displayName: 'Hazardous waste facility',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_CROSS_SECTIONS,
-		displayName: 'Highway or railway development - Cross sections',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
+		id: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR,
+		displayName: 'Dam or reservoir',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RAILWAY_DRAINAGE_OUTFALLS,
-		displayName: 'Highway or railway development - Drainage outfall details',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES_DCO_JUSTIFICATION,
-		displayName: 'Harbour facilities - Statements on why the DCO is necessary',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_NAME_OWNER,
-		displayName: 'Pipelines - Name and owner',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_MEASUREMENTS,
-		displayName: 'Pipelines - Measurements of pipeline',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_CONTENTS_CONVEYED,
-		displayName: 'Pipelines - What will be conveyed by the pipeline',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.PIPELINES_GRANT_OF_RIGHTS,
-		displayName: 'Pipelines - Any grant of rights in land or consents that are required',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_STATEMENT,
-		displayName: 'Hazardous waste facility - Statement of purpose and annual capacity, final disposal, and recovery',
-		categoryId: DOCUMENT_CATEGORY_ID.OTHER
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.DAM_RESERVOIR_RECREATIONAL_AMENITIES,
-		displayName: 'Dam or reservoir - Recreational amenities',
+		id: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_DOCUMENTS_TO_SUPPORT_THE_APPLICATION,
+		displayName: 'Any other documents to support the application',
 		categoryId: DOCUMENT_CATEGORY_ID.OTHER
 	}
 ];
