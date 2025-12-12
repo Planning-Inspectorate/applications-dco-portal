@@ -41,9 +41,9 @@ export function uploadDocumentsController(
 		fileErrors.push(...fileValidationErrors);
 
 		const blobAlreadyExists = await Promise.all(
-			files.map(async (file) => {
+			files.map((file) => {
 				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
-				await blobStore?.doesBlobExist(`${req.session.caseReference}/${documentCategoryId}/${fileName}`);
+				return blobStore?.doesBlobExist(`${req.session.caseReference}/${documentCategoryId}/${fileName}`);
 			})
 		);
 
