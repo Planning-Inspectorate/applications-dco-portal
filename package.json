@@ -62,7 +62,7 @@
   "devDependencies": {
     "@commitlint/cli": "^20.2.0",
     "@commitlint/config-conventional": "^20.2.0",
-    "@cypress/grep": "^5.0.0",
+    "@cypress/grep": "^5.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
     "@types/express": "^5.0.5",
     "@types/express-session": "^1.18.2",
