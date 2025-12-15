@@ -10,7 +10,8 @@ import { createRoutes as habitatRegulationsAssessmentInformationRoutes } from '.
 import { createRoutes as landAndWorksPlansRoutes } from './land-and-works-plans/index.ts';
 import { createRoutes as landRightsInformationRoutes } from './land-rights-information/index.ts';
 import { createRoutes as statutoryNuisanceInformationRoutes } from './statutory-nuisance-information/index.ts';
-import { createRoutes as natureConservationAndEnvironmentInformation } from './nature-conservation-and-environmental-information/index.ts';
+import { createRoutes as natureConservationAndEnvironmentInformationRoutes } from './nature-conservation-and-environmental-information/index.ts';
+import { createRoutes as crownLandAccessAndRightsOfWayPlansRoutes } from './crown-land-access-and-rights-of-way-plans/index.ts';
 import { createRoutes as whitelistRoutes } from './whitelist/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
@@ -85,10 +86,14 @@ export function createRoutes(service: PortalService): IRouter {
 	);
 	router.use(
 		'/nature-conservation-and-environmental-information',
-		natureConservationAndEnvironmentInformation(
+		natureConservationAndEnvironmentInformationRoutes(
 			service,
 			APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
 		)
+	);
+	router.use(
+		'/crown-land-access-and-rights-of-way-plans',
+		crownLandAccessAndRightsOfWayPlansRoutes(service, APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS)
 	);
 
 	return router;

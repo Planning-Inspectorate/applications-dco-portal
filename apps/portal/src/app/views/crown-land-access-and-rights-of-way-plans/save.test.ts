@@ -6,9 +6,9 @@ import { buildSaveController } from './save.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { APPLICATION_SECTION_ID } from '../constants.ts';
 
-describe('nature-conservation-and-environmental-information save', () => {
+describe('crown-land-access-and-rights-of-way-plans save', () => {
 	describe('buildSaveController', () => {
-		it('should save nature conservation and environmental information journey successfully if has both natural and historic information', async () => {
+		it('should save crown land access and rights of way journey successfully if has both crown land and means of access documents', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -23,7 +23,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -33,10 +33,10 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							naturalEnvironmentInformation: 'doc-id-3,doc-id-2',
-							hasNaturalEnvironmentInformation: 'yes',
-							historicEnvironmentInformation: 'doc-id-4',
-							hasHistoricEnvironmentInformation: 'yes'
+							crownLand: 'doc-id-3,doc-id-2',
+							hasCrownLand: 'yes',
+							meansOfAccess: 'doc-id-4',
+							hasMeansOfAccess: 'yes'
 						}
 					}
 				}
@@ -47,7 +47,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -60,7 +60,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 3);
 		});
-		it('should save nature conservation and environmental information journey successfully if has only historic information document', async () => {
+		it('should save crown land access and rights of way journey successfully if has only means of access document', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -75,7 +75,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -85,9 +85,9 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no',
-							historicEnvironmentInformation: 'doc-id-4',
-							hasHistoricEnvironmentInformation: 'yes'
+							hasCrownLand: 'no',
+							meansOfAccess: 'doc-id-4',
+							hasMeansOfAccess: 'yes'
 						}
 					}
 				}
@@ -98,7 +98,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -111,7 +111,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 1);
 		});
-		it('should save nature conservation and environmental information journey successfully if has only natural information document', async () => {
+		it('should save crown land access and rights of way journey successfully if has only crown land document', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -126,7 +126,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -136,9 +136,9 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'yes',
-							naturalEnvironmentInformation: 'doc-id-1,doc-id-2',
-							hasHistoricEnvironmentInformation: 'no'
+							hasCrownLand: 'yes',
+							crownLand: 'doc-id-1,doc-id-2',
+							hasMeansOfAccess: 'no'
 						}
 					}
 				}
@@ -149,7 +149,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -162,7 +162,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
 		});
-		it('should save nature conservation and environmental information journey successfully if has neither natural or historic information', async () => {
+		it('should save crown land access and rights of way journey successfully if has neither crown land nor means of access documents', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -177,7 +177,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -187,8 +187,8 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no',
-							hasHistoricEnvironmentInformation: 'no'
+							hasCrownLand: 'no',
+							hasMeansOfAccess: 'no'
 						}
 					}
 				}
@@ -199,7 +199,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -227,7 +227,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -237,10 +237,10 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							naturalEnvironmentInformation: 'doc-id-3,doc-id-2',
-							hasNaturalEnvironmentInformation: 'no',
-							historicEnvironmentInformation: 'doc-id-4',
-							hasHistoricEnvironmentInformation: 'no'
+							crownLand: 'doc-id-3,doc-id-2',
+							hasCrownLand: 'no',
+							meansOfAccess: 'doc-id-4',
+							hasMeansOfAccess: 'no'
 						}
 					}
 				}
@@ -251,7 +251,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -272,7 +272,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -283,8 +283,8 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no',
-							hasHistoricEnvironmentInformation: 'no'
+							hasCrownLand: 'no',
+							hasMeansOfAccess: 'no'
 						}
 					}
 				}
@@ -295,7 +295,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await controller(mockReq, mockRes);
 
@@ -326,7 +326,7 @@ describe('nature-conservation-and-environmental-information save', () => {
 				}
 			};
 			const mockReq = {
-				baseUrl: '/nature-conservation-and-environmental-information',
+				baseUrl: '/crown-land-access-and-rights-of-way-plans',
 				session: {
 					caseReference: 'EN123456'
 				}
@@ -335,8 +335,8 @@ describe('nature-conservation-and-environmental-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasNaturalEnvironmentInformation: 'no',
-							hasHistoricEnvironmentInformation: 'no'
+							hasCrownLand: 'no',
+							hasMeansOfAccess: 'no'
 						}
 					}
 				}
@@ -347,10 +347,10 @@ describe('nature-conservation-and-environmental-information save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.NATURE_CONSERVATION_AND_ENVIRONMENTAL_INFORMATION
+				APPLICATION_SECTION_ID.CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS
 			);
 			await assert.rejects(() => controller(mockReq, mockRes), {
-				message: 'error saving nature conservation and environmental features journey'
+				message: 'error saving crown land access and rights of way plans journey'
 			});
 		});
 	});
