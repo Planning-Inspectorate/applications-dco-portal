@@ -24,3 +24,10 @@ export function getSupportingEvidenceIds(supportingEvidence: any[], subCategoryI
 		.map((supportingEvidence) => supportingEvidence.documentId)
 		.join(',');
 }
+
+export function getMultiSubcategorySupportingEvidenceIds(supportingEvidence: any[], subCategoryIds: string[]): string {
+	return supportingEvidence
+		.filter((supportingEvidence) => subCategoryIds.includes(supportingEvidence.subCategoryId))
+		.map((supportingEvidence) => supportingEvidence.documentId)
+		.join(',');
+}

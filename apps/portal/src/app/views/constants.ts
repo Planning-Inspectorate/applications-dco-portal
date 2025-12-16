@@ -16,7 +16,7 @@ export const APPLICATION_SECTION_ID = Object.freeze({
 	STATUTORY_NUISANCE_INFORMATION: 'statutory-nuisance-information',
 	CROWN_LAND_ACCESS_AND_RIGHTS_OF_WAY_PLANS: 'crown-land-access-and-rights-of-way-plans',
 	INFRASTRUCTURE_SPECIFIC_ADDITIONAL_INFORMATION: 'infrastructure-specific-additional-information',
-	OTHER_SUPPORT_PLANS_AND_REPORTS: 'other-support-plans-and-reports',
+	OTHER_PLANS_AND_REPORTS: 'other-plans-and-reports',
 	OTHER_CONSENTS_OR_LICENCES_DETAILS: 'other-consents-or-licences-details'
 });
 
@@ -74,8 +74,8 @@ export const APPLICATION_SECTION = [
 		displayName: 'Infrastructure-specific additional information'
 	},
 	{
-		id: APPLICATION_SECTION_ID.OTHER_SUPPORT_PLANS_AND_REPORTS,
-		displayName: 'Other support plans and reports'
+		id: APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS,
+		displayName: 'Other plans and reports'
 	},
 	{
 		id: APPLICATION_SECTION_ID.OTHER_CONSENTS_OR_LICENCES_DETAILS,
