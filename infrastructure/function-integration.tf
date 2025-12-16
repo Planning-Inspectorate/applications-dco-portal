@@ -56,6 +56,25 @@ resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
   default_message_ttl                  = var.sb_ttl.nsip_project
 }
 
+resource "azurerm_eventgrid_event_subscription" "malware_scan_results" {
+  name  = "malware-scan-results-subscription-${local.resource_suffix}"
+  scope = data.azurerm_eventgrid_topic.back_office_malware_scanning.id
+
+  azure_function_endpoint {
+    function_id                       = "${module.function_integration.app_id}/functions/malware-detection"
+    max_events_per_batch              = 1
+    preferred_batch_size_in_kilobytes = 64
+  }
+  advanced_filter {
+    string_begins_with {
+      key = "data.blobUri"
+      values = [
+        "${data.azurerm_storage_account.back_office.primary_blob_endpoint}${azurerm_storage_container.documents.name}/",
+      ]
+    }
+  }
+}
+
 resource "azurerm_role_assignment" "function_integration_secrets_user" {
   scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets User"

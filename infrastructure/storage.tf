@@ -3,6 +3,11 @@ data "azurerm_storage_account" "back_office" {
   resource_group_name = var.back_office_config.resource_group_name
 }
 
+data "azurerm_eventgrid_topic" "back_office_malware_scanning" {
+  name                = "malware-scanning-topic-${var.environment}-ukw-001"
+  resource_group_name = var.back_office_config.resource_group_name
+}
+
 # storage container for dco portal
 resource "azurerm_storage_container" "documents" {
   #TODO: Logging
