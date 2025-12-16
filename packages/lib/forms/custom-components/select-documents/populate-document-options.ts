@@ -1,14 +1,18 @@
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Request } from 'express';
 
-export async function populateDocumentOptions(req: Request, dbClient: PrismaClient, documentSubCategoryId: string) {
+export async function populateDocumentOptions(
+	req: Request,
+	dbClient: PrismaClient,
+	documentSubCategoryId: string | string[]
+) {
 	const caseData = await dbClient.case.findUnique({
 		where: { reference: req.session?.caseReference },
 		include: {
 			Documents: {
 				where: {
 					SubCategory: {
-						id: documentSubCategoryId
+						id: Array.isArray(documentSubCategoryId) ? { in: documentSubCategoryId } : documentSubCategoryId
 					}
 				}
 			}
