@@ -526,6 +526,27 @@ export const WHITELIST_USER_ROLE = [
 	}
 ];
 
+export const SCAN_RESULT_ID = Object.freeze({
+	AFFECTED: 'affected',
+	SCANNED: 'scanned',
+	PENDING: 'pending'
+});
+
+export const SCAN_RESULT = [
+	{
+		id: SCAN_RESULT_ID.AFFECTED,
+		displayName: 'Malicious'
+	},
+	{
+		id: SCAN_RESULT_ID.SCANNED,
+		displayName: 'No threats found'
+	},
+	{
+		id: SCAN_RESULT_ID.PENDING,
+		displayName: 'Scan results pending'
+	}
+];
+
 async function upsertReferenceData<TDelegate extends { upsert: (args: any) => any }, TInput extends { id: string }>({
 	delegate,
 	input
@@ -560,6 +581,8 @@ export async function seedStaticData(dbClient: PrismaClient) {
 	await Promise.all(
 		WHITELIST_USER_ROLE.map((input) => upsertReferenceData({ delegate: dbClient.whitelistUserRole, input }))
 	);
+
+	await Promise.all(SCAN_RESULT.map((input) => upsertReferenceData({ delegate: dbClient.documentScanResult, input })));
 
 	await dbClient.$queryRaw`SELECT 1`;
 	console.log('static data seed complete');

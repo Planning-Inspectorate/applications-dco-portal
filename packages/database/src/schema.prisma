@@ -133,6 +133,8 @@ model Document {
   caseId             String               @db.UniqueIdentifier
   Case               Case                 @relation(fields: [caseId], references: [id], onDelete: Cascade)
   supportingEvidence SupportingEvidence[]
+  scanResultId       String               @default("pending")
+  ScanResult         DocumentScanResult   @relation(fields: [scanResultId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model SupportingEvidence {
@@ -163,6 +165,13 @@ model DocumentSubCategory {
   SupportingEvidence SupportingEvidence[]
   categoryId         String
   Category           DocumentCategory     @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model DocumentScanResult {
+  /// unique machine-readable name, not generated, e.g. "scanned"
+  id          String     @id
+  displayName String?
+  Document    Document[]
 }
 
 model ApfpRegulation {
