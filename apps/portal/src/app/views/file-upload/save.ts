@@ -8,7 +8,7 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import type { UploadedFile } from '@pins/dco-portal-lib/forms/custom-components/file-upload/types.js';
 import { clearSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 
 export function buildSaveController({ db, logger }: PortalService, documentTypeId: string): AsyncRequestHandler {
@@ -61,6 +61,11 @@ function mapAnswersToInput(caseId: string, file: UploadedFile, answers: Record<s
 		ApfpRegulation: {
 			connect: {
 				id: answers.apfpRegulation
+			}
+		},
+		ScanResult: {
+			connect: {
+				id: SCAN_RESULT_ID.PENDING
 			}
 		},
 		Case: {
