@@ -7,5 +7,6 @@ export interface DocumentRecord {
 	isCertified: boolean;
 	SubCategory: DocumentSubCategoryCreateNestedOneWithoutDocumentInput;
 	ApfpRegulation: ApfpRegulationCreateNestedOneWithoutDocumentInput;
+	ScanResult: DocumentScanResultCreateNestedOneWithoutDocumentInput;
 	Case: CaseCreateNestedOneWithoutDocumentsInput;
 }

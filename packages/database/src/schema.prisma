@@ -133,7 +133,7 @@ model Document {
   caseId             String               @db.UniqueIdentifier
   Case               Case                 @relation(fields: [caseId], references: [id], onDelete: Cascade)
   supportingEvidence SupportingEvidence[]
-  scanResultId       String               @default("pending")
+  scanResultId       String
   ScanResult         DocumentScanResult   @relation(fields: [scanResultId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 

@@ -85,6 +85,11 @@ describe('file upload journey save controller', () => {
 							id: '5-1'
 						}
 					},
+					ScanResult: {
+						connect: {
+							id: 'pending'
+						}
+					},
 					Case: {
 						connect: {
 							id: 'case-id-1'
@@ -106,6 +111,11 @@ describe('file upload journey save controller', () => {
 					ApfpRegulation: {
 						connect: {
 							id: '5-1'
+						}
+					},
+					ScanResult: {
+						connect: {
+							id: 'pending'
 						}
 					},
 					Case: {
@@ -204,6 +214,11 @@ describe('file upload journey save controller', () => {
 							id: '5-1'
 						}
 					},
+					ScanResult: {
+						connect: {
+							id: 'pending'
+						}
+					},
 					Case: {
 						connect: {
 							id: 'case-id-1'
@@ -225,6 +240,11 @@ describe('file upload journey save controller', () => {
 					ApfpRegulation: {
 						connect: {
 							id: '5-1'
+						}
+					},
+					ScanResult: {
+						connect: {
+							id: 'pending'
 						}
 					},
 					Case: {
