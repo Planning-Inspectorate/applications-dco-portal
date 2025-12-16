@@ -14,6 +14,7 @@ import { createRoutes as natureConservationAndEnvironmentInformationRoutes } fro
 import { createRoutes as crownLandAccessAndRightsOfWayPlansRoutes } from './crown-land-access-and-rights-of-way-plans/index.ts';
 import { createRoutes as otherConsentsOrLicencesRoutes } from './other-consents-or-licenses-details/index.ts';
 import { createRoutes as environmentalImpactAssessmentInformationRoutes } from './environmental-impact-assessment/index.ts';
+import { createRoutes as otherPlansAndReportsRoutes } from './other-plans-and-reports/index.ts';
 import { createRoutes as whitelistRoutes } from './whitelist/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
@@ -106,6 +107,9 @@ export function createRoutes(service: PortalService): IRouter {
 			service,
 			APPLICATION_SECTION_ID.ENVIRONMENTAL_IMPACT_ASSESSMENT_INFORMATION
 		)
+	);
+	router.use(		'/other-plans-and-reports',
+		otherPlansAndReportsRoutes(service, APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS)
 	);
 	router.use(
 		'/other-consents-or-licences-details',

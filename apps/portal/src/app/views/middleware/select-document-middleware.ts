@@ -37,7 +37,7 @@ export function selectMultipleDocumentQuestionMiddleware({ db }: PortalService, 
 			if (!questionObj || !sectionObj) {
 				return res.redirect(journey.taskListUrl);
 			}
-			const documentOptions = await populateDocumentOptions(req, db, question);
+			const documentOptions = await populateDocumentOptions(req, db, subCategories);
 			questionObj.setOptions(documentOptions);
 		}
 		next();
