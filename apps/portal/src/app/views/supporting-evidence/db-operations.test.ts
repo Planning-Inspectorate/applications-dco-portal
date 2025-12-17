@@ -3,7 +3,11 @@
 import { describe, it, mock } from 'node:test';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import assert from 'node:assert';
-import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from './db-operations.ts';
+import {
+	deleteSubCategorySupportingEvidence,
+	deleteMultipleSubCategorySupportingEvidence,
+	saveSupportingEvidence
+} from './db-operations.ts';
 
 describe('supporting evidence db-operations', () => {
 	describe('saveSupportingEvidence', () => {
@@ -87,6 +91,50 @@ describe('supporting evidence db-operations', () => {
 							'funding-statement',
 							'book-of-reference',
 							'land-and-rights-negotiations-tracker'
+						]
+					}
+				}
+			});
+		});
+	});
+	describe('deleteMultipleSubCategorySupportingEvidence', () => {
+		it('should return answers if present in journeyResponse', async () => {
+			const transaction = {
+				supportingEvidence: {
+					deleteMany: mock.fn()
+				}
+			};
+			const caseId = 'case-id';
+
+			await deleteMultipleSubCategorySupportingEvidence(transaction, caseId, [
+				{
+					key: 'testSubcategoryGroup',
+					subCategoryIds: [
+						DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS,
+						DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT,
+						DOCUMENT_SUB_CATEGORY_ID.LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER
+					]
+				},
+				{
+					key: 'testSubcategoryGroup-2',
+					subCategoryIds: [
+						DOCUMENT_SUB_CATEGORY_ID.BOOK_OF_REFERENCE_PARTS_1_TO_5,
+						DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS
+					]
+				}
+			]);
+
+			assert.strictEqual(transaction.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.deepStrictEqual(transaction.supportingEvidence.deleteMany.mock.calls[0].arguments[0], {
+				where: {
+					caseId,
+					subCategoryId: {
+						in: [
+							'statement-of-reasons',
+							'funding-statement',
+							'land-and-rights-negotiations-tracker',
+							'book-of-reference',
+							'aspect-chapters'
 						]
 					}
 				}

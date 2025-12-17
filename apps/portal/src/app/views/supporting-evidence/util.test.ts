@@ -2,7 +2,7 @@
 
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
-import { getSupportingEvidenceIds, mapAnswersToInput } from './util.ts';
+import { getSupportingEvidenceIds, getMultiSubcategorySupportingEvidenceIds, mapAnswersToInput } from './util.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('supporting-evidence util', () => {
@@ -44,6 +44,31 @@ describe('supporting-evidence util', () => {
 		});
 		it('should return an empty string if supportingEvidence is empty', async () => {
 			assert.deepStrictEqual(getSupportingEvidenceIds([], DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT), '');
+		});
+	});
+	describe('getMultiSubcategorySupportingEvidenceIds', () => {
+		it('should return a string of all the ids that match at least one of the provided sub category ids', async () => {
+			const supportingEvidence = [
+				{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT },
+				{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS },
+				{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.APPLICATION_COVER_LETTER },
+				{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT },
+				{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN }
+			];
+
+			assert.deepStrictEqual(
+				getMultiSubcategorySupportingEvidenceIds(supportingEvidence, [
+					DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT,
+					DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS
+				]),
+				'doc-id-1,doc-id-2,doc-id-4'
+			);
+		});
+		it('should return an empty string if supportingEvidence is empty', async () => {
+			assert.deepStrictEqual(
+				getMultiSubcategorySupportingEvidenceIds([], DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT),
+				''
+			);
 		});
 	});
 });
