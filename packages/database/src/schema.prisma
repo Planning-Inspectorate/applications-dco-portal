@@ -89,6 +89,8 @@ model Case {
   otherConsentsOrLicencesDetailsStatus                  DocumentCategoryStatus @relation(name: "otherConsentsOrLicencesDetailsStatus", fields: [otherConsentsOrLicencesDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   environmentalImpactAssessmentInformationStatusId      String                 @default("not-started")
   environmentalImpactAssessmentInformationStatus        DocumentCategoryStatus @relation(name: "environmentalImpactAssessmentInformationStatus", fields: [environmentalImpactAssessmentInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  otherPlansAndReportsStatusId                          String                 @default("not-started")
+  otherPlansAndReportsStatus                            DocumentCategoryStatus @relation(name: "otherPlansAndReportsStatus", fields: [otherPlansAndReportsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -215,6 +217,7 @@ model DocumentCategoryStatus {
   crownLandAccessAndRightsOfWayPlansCases            Case[] @relation("crownLandAccessAndRightsOfWayPlansStatus")
   otherConsentsOrLicencesDetailsCases                Case[] @relation("otherConsentsOrLicencesDetailsStatus")
   environmentalImpactAssessmentInformationCases      Case[] @relation("environmentalImpactAssessmentInformationStatus")
+  otherPlansAndReportsCases                          Case[] @relation("otherPlansAndReportsStatus")
 }
 
 model ContactDetails {
