@@ -1,5 +1,5 @@
 import { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
-import type { CategoryInformation, SupportingEvidenceInput } from './types.d.ts';
+import type { CategoryInformation, MultipleCategoryInformation, SupportingEvidenceInput } from './types.d.ts';
 import { mapAnswersToInput } from './util.ts';
 
 export async function saveSupportingEvidence(
@@ -31,6 +31,23 @@ export async function deleteSubCategorySupportingEvidence(
 		where: {
 			caseId,
 			subCategoryId: { in: categories.map((c) => c.subCategoryId) }
+		}
+	});
+}
+
+export async function deleteMultipleSubCategorySupportingEvidence(
+	$tx: Prisma.TransactionClient,
+	caseId: string,
+	categories: MultipleCategoryInformation[]
+): Promise<void> {
+	await $tx.supportingEvidence.deleteMany({
+		where: {
+			caseId,
+			subCategoryId: {
+				in: categories.reduce((acc: string[], cur) => {
+					return [...acc, ...cur.subCategoryIds];
+				}, [])
+			}
 		}
 	});
 }

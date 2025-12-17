@@ -4,51 +4,53 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
+import type { MultipleCategoryInformation } from '../supporting-evidence/types.d.ts';
+import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import {
-	DOCUMENT_CATEGORY_STATUS_ID,
-	DOCUMENT_SUB_CATEGORY_ID
-} from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/db-operations.ts';
+	deleteMultipleSubCategorySupportingEvidence,
+	saveSupportingEvidence
+} from '../supporting-evidence/db-operations.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS } from './constants.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
 		const answers = getAnswersFromRes(res);
 		const caseData = await db.case.findUnique({
-			where: { reference: req.session?.caseReference }
+			where: { reference: req.session?.caseReference },
+			include: {
+				Documents: {
+					where: {
+						SubCategory: {
+							id: { in: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS }
+						}
+					}
+				}
+			}
 		});
 
 		if (!caseData) {
 			return notFoundHandler(req, res);
 		}
-		console.log(answers);
 
-		/*
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseId = caseData.id;
-				const categories: CategoryInformation[] = [
+				const categories: MultipleCategoryInformation[] = [
 					{
-						key: 'draftDevelopmentConsentOrder',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER
-					},
-					{
-						key: 'siValidationReportSuccessEmail',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL
-					},
-					{
-						key: 'explanatoryMemorandum',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
+						key: 'otherPlansDrawingsSections',
+						subCategoryIds: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
 					}
 				];
 
-				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
+				await deleteMultipleSubCategorySupportingEvidence($tx, caseId, categories);
 
-				for (const { key, subCategoryId } of categories) {
+				for (const { key } of categories) {
 					const ids = answers[key]?.split(',') ?? [];
 					for (const documentId of ids) {
-						await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
+						const fullDocument = caseData.Documents.find((doc) => doc.id === documentId);
+						if (!fullDocument) throw new Error(`could not find uploaded document id: ${documentId} in database`);
+						await saveSupportingEvidence($tx, caseId, documentId, fullDocument.subCategoryId);
 					}
 				}
 
@@ -61,7 +63,6 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			logger.error({ error }, 'error saving other plans and reports data to database');
 			throw new Error('error saving other plans and reports journey');
 		}
-			*/
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });
 		res.redirect('/');
