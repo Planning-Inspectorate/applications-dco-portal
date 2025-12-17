@@ -13,7 +13,13 @@ describe('other-plans-and-reports save', () => {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
 					findUnique: mock.fn(() => ({
-						id: 'case-id-1'
+						id: 'case-id-1',
+						Documents: [
+							{
+								id: 'doc-id-3',
+								subCategoryId: 'floor-plans'
+							}
+						]
 					})),
 					update: mock.fn()
 				},
@@ -102,12 +108,18 @@ describe('other-plans-and-reports save', () => {
 				]
 			});
 		});
-		it('should throw error is issue encountered during db transaction to save case data', async () => {
+		it('should throw error if issue encountered during db transaction to save case data', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
 					findUnique: mock.fn(() => ({
-						id: 'case-id-1'
+						id: 'case-id-1',
+						Documents: [
+							{
+								id: 'doc-id-3',
+								subCategoryId: 'floor-plans'
+							}
+						]
 					})),
 					update: mock.fn(() => {
 						throw new Prisma.PrismaClientKnownRequestError('Error', { code: 'E1' });
@@ -138,7 +150,55 @@ describe('other-plans-and-reports save', () => {
 					db: mockDb,
 					logger: mockLogger()
 				},
-				APPLICATION_SECTION_ID.OTHER_CONSENTS_OR_LICENCES_DETAILS
+				APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS
+			);
+			await assert.rejects(() => controller(mockReq, mockRes), {
+				message: 'error saving other plans and reports journey'
+			});
+		});
+		it('should throw error if answered document id cannot be found again in db', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						Documents: [
+							{
+								id: 'doc-id-1',
+								subCategoryId: 'floor-plans'
+							}
+						]
+					})),
+					update: mock.fn(() => {
+						throw new Prisma.PrismaClientKnownRequestError('Error', { code: 'E1' });
+					})
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/other-plans-and-reports',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				locals: {
+					journeyResponse: {
+						answers: {
+							otherPlansDrawingsSections: 'doc-id-3'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS
 			);
 			await assert.rejects(() => controller(mockReq, mockRes), {
 				message: 'error saving other plans and reports journey'

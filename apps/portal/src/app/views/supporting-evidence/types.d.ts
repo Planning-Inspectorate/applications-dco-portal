@@ -5,3 +5,8 @@ export interface CategoryInformation {
 	subCategoryId: string;
 	applied?: boolean;
 }
+
+export interface MultipleCategoryInformation {
+	key: string;
+	subCategoryIds: string[];
+}

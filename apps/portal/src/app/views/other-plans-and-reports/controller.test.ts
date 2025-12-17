@@ -17,13 +17,12 @@ describe('other-plans-and-reports controller', () => {
 					findUnique: mock.fn(() => ({
 						otherPlansAndReportsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [
-							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER },
-							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER },
-							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM },
-							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM },
-							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER },
-							{ documentId: 'doc-id-6', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL },
-							{ documentId: 'doc-id-7', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL }
+							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FLOOR_PLANS },
+							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FLOOR_PLANS },
+							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ELEVATION_DRAWINGS },
+							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SITE_LAYOUT_PLANS },
+							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CAR_PARKING_LANDSCAPING_ACCESS },
+							{ documentId: 'doc-id-6', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAINAGE_AND_SURFACE_WATER_MANAGEMENT }
 						]
 					}))
 				}
@@ -54,7 +53,7 @@ describe('other-plans-and-reports controller', () => {
 				caseReference: 'EN123456',
 				forms: {
 					'other-plans-and-reports': {
-						otherPlansDrawingsSections: 'doc-id-1,doc-id-2,doc-id-5'
+						otherPlansDrawingsSections: 'doc-id-1,doc-id-2,doc-id-3,doc-id-4,doc-id-5,doc-id-6'
 					}
 				}
 			});
@@ -119,7 +118,7 @@ describe('other-plans-and-reports controller', () => {
 
 			const controller = buildOtherPlansAndReportsHomePage(
 				{ db: mockDb },
-				APPLICATION_SECTION_ID.OTHER_CONSENTS_OR_LICENCES_DETAILS
+				APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS
 			);
 			await controller(mockReq, mockRes);
 
