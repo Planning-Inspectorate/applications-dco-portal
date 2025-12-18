@@ -18,6 +18,10 @@ describe('other-plans-and-reports save', () => {
 							{
 								id: 'doc-id-3',
 								subCategoryId: 'floor-plans'
+							},
+							{
+								id: 'doc-id-2',
+								subCategoryId: 'potential-main-issues-for-the-examination-pmie'
 							}
 						]
 					})),
@@ -39,7 +43,8 @@ describe('other-plans-and-reports save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							otherPlansDrawingsSections: 'doc-id-3'
+							otherPlansDrawingsSections: 'doc-id-3',
+							otherInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -61,7 +66,7 @@ describe('other-plans-and-reports save', () => {
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
 		});
 		it('should redirect to not found page if the case data is not present in db', async () => {
 			const mockDb = {
@@ -82,7 +87,8 @@ describe('other-plans-and-reports save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							otherPlansDrawingsSections: 'doc-id-3'
+							otherPlansDrawingsSections: 'doc-id-3',
+							otherInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -118,6 +124,10 @@ describe('other-plans-and-reports save', () => {
 							{
 								id: 'doc-id-3',
 								subCategoryId: 'floor-plans'
+							},
+							{
+								id: 'doc-id-2',
+								subCategoryId: 'potential-main-issues-for-the-examination-pmie'
 							}
 						]
 					})),
@@ -139,7 +149,8 @@ describe('other-plans-and-reports save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							otherPlansDrawingsSections: 'doc-id-3'
+							otherPlansDrawingsSections: 'doc-id-3',
+							otherInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -166,6 +177,10 @@ describe('other-plans-and-reports save', () => {
 							{
 								id: 'doc-id-1',
 								subCategoryId: 'floor-plans'
+							},
+							{
+								id: 'doc-id-2',
+								subCategoryId: 'potential-main-issues-for-the-examination-pmie'
 							}
 						]
 					})),
@@ -187,7 +202,8 @@ describe('other-plans-and-reports save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							otherPlansDrawingsSections: 'doc-id-3'
+							otherPlansDrawingsSections: 'doc-id-3',
+							otherInformation: 'doc-id-2'
 						}
 					}
 				}

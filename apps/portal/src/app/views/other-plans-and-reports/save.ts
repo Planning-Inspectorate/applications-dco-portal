@@ -11,7 +11,7 @@ import {
 	saveSupportingEvidence
 } from '../supporting-evidence/db-operations.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS } from './constants.ts';
+import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, OTHER_INFORMATION_SUBCATEGORY_IDS } from './constants.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
@@ -22,7 +22,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				Documents: {
 					where: {
 						SubCategory: {
-							id: { in: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS }
+							id: { in: [...OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, ...OTHER_INFORMATION_SUBCATEGORY_IDS] }
 						}
 					}
 				}
@@ -40,6 +40,10 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					{
 						key: 'otherPlansDrawingsSections',
 						subCategoryIds: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
+					},
+					{
+						key: 'otherInformation',
+						subCategoryIds: OTHER_INFORMATION_SUBCATEGORY_IDS
 					}
 				];
 
