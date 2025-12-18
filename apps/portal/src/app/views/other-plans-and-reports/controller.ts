@@ -6,7 +6,7 @@ import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getMultiSubcategorySupportingEvidenceIds } from '../supporting-evidence/util.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
-import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS } from './constants.ts';
+import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, OTHER_INFORMATION_SUBCATEGORY_IDS } from './constants.ts';
 
 export function buildOtherPlansAndReportsHomePage(
 	{ db }: PortalService,
@@ -35,7 +35,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			SupportingEvidence: {
 				where: {
 					SubCategory: {
-						id: { in: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS }
+						id: { in: [...OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, ...OTHER_INFORMATION_SUBCATEGORY_IDS] }
 					}
 				}
 			}
@@ -52,6 +52,10 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		otherPlansDrawingsSections: getMultiSubcategorySupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
+		),
+		otherInformation: getMultiSubcategorySupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			OTHER_INFORMATION_SUBCATEGORY_IDS
 		)
 	};
 }

@@ -22,13 +22,21 @@ export function selectDocumentQuestionMiddleware({ db }: PortalService) {
 	};
 }
 
-export function selectMultipleDocumentQuestionMiddleware({ db }: PortalService, documentSubCategoryIds: string[]) {
+/**
+ * @param db - PrismaClient instance
+ * @param documentSubCategoryIdGroups - Should be a lookup mapping a question url to an array of permitted DOCUMENT_SUB_CATEGORY_ID values
+ */
+export function selectMultipleDocumentQuestionMiddleware(
+	{ db }: PortalService,
+	documentSubCategoryIdGroups: Record<string, string[]>
+) {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		const { section, question } = req.params;
-		const subCategories = documentSubCategoryIds.filter((id) =>
+		const subcategoryGroup = documentSubCategoryIdGroups[question] || [];
+		const subCategories = subcategoryGroup.filter((id) =>
 			(Object.values(DOCUMENT_SUB_CATEGORY_ID) as string[]).includes(id)
 		);
-		if (subCategories.length) {
+		if (subCategories.length > 0) {
 			const { journey } = res.locals;
 
 			const sectionObj = journey.getSection(section);
