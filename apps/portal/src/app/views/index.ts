@@ -108,7 +108,8 @@ export function createRoutes(service: PortalService): IRouter {
 			APPLICATION_SECTION_ID.ENVIRONMENTAL_IMPACT_ASSESSMENT_INFORMATION
 		)
 	);
-	router.use(		'/other-plans-and-reports',
+	router.use(
+		'/other-plans-and-reports',
 		otherPlansAndReportsRoutes(service, APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS)
 	);
 	router.use(

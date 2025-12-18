@@ -16,6 +16,15 @@ export function getQuestions() {
 			fieldName: 'otherPlansDrawingsSections',
 			url: 'plans-drawings-sections',
 			validators: [new RequiredValidator()]
+		},
+		otherInformation: {
+			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
+			title: 'Other Information',
+			pageTitle: 'Other Information',
+			question: 'Which documents contain any other supporting information?',
+			fieldName: 'otherInformation',
+			url: 'other-information',
+			validators: [new RequiredValidator()]
 		}
 	};
 
