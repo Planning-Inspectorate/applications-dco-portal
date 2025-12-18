@@ -343,7 +343,7 @@ describe('home page', () => {
 						}
 					},
 					{
-						href: '/other-support-plans-and-reports',
+						href: '/other-plans-and-reports',
 						status: {
 							tag: {
 								classes: 'govuk-tag--grey',
@@ -352,7 +352,7 @@ describe('home page', () => {
 						},
 						title: {
 							classes: 'govuk-link--no-visited-state',
-							text: 'Other support plans and reports'
+							text: 'Other plans and reports'
 						}
 					},
 					{
