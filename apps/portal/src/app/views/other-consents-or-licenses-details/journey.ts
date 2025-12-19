@@ -24,6 +24,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.startMultiQuestionCondition('has-other-consents', (response: Handler) =>
 					questionHasAnswer(response, questions.hasOtherConsents, BOOLEAN_OPTIONS.YES)
 				)
+				.addQuestion(questions.otherConsentsDescription)
 				.addQuestion(questions.otherConsentsDocuments)
 				.endMultiQuestionCondition('has-other-consents')
 		],

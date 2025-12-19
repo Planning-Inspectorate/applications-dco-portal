@@ -48,7 +48,13 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
-					data: { [`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+					data: {
+						otherConsentsDescription:
+							answers.hasOtherConsents === BOOLEAN_OPTIONS.YES ? answers.otherConsentsDescription || '' : '',
+						[`${kebabCaseToCamelCase(applicationSectionId)}Status`]: {
+							connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+						}
+					}
 				});
 			});
 		} catch (error) {

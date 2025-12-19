@@ -58,6 +58,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	forms[applicationSectionId] = hasEvidence
 		? {
 				hasOtherConsents: 'yes',
+				otherConsentsDescription: caseData.otherConsentsDescription || '',
 				otherConsentsDocuments: getSupportingEvidenceIds(
 					caseData.SupportingEvidence,
 					DOCUMENT_SUB_CATEGORY_ID.CONSENTS_AND_LICENCES_REQUIRED_UNDER_OTHER_LEGISLATION

@@ -56,6 +56,7 @@ describe('other-consents-or-licences-details controller', () => {
 				forms: {
 					'other-consents-or-licences-details': {
 						hasOtherConsents: 'yes',
+						otherConsentsDescription: '',
 						otherConsentsDocuments: 'doc-id-1,doc-id-2'
 					}
 				}

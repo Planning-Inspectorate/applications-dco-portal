@@ -1,6 +1,8 @@
 // @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
+import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
+// @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
@@ -19,6 +21,21 @@ export function getQuestions() {
 			fieldName: 'hasOtherConsents',
 			url: 'has-other-consents',
 			validators: [new RequiredValidator()]
+		},
+		otherConsentsDescription: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Other Consents or Licences Description',
+			pageTitle: 'Other Consents or Licences Description',
+			question: 'Other Consents or Licences required',
+			label: 'What other consents or licences does the project require?',
+			fieldName: 'otherConsentsDescription',
+			url: 'other-consents-description',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
 		},
 		otherConsentsDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
