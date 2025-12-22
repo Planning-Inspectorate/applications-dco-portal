@@ -71,8 +71,10 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController({ db, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController(service: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
+		const { db, notifyClient, enableE2eTestEndpoints, logger } = service;
+
 		const { emailAddress, caseReference } = req.body;
 
 		const handleError = async (errors: Record<string, string>) => {
@@ -127,9 +129,16 @@ export function buildSubmitEmailController({ db, notifyClient }: PortalService):
 			return handleError({ emailAddress: 'Code already requested' });
 		}
 
-		const oneTimePassword = generateOtp();
+		const oneTimePassword = enableE2eTestEndpoints ? 'ABCDE' : generateOtp();
+
 		await saveOtp(db, emailAddress, caseReference, oneTimePassword);
-		await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
+
+		// Only send via Notify when not in test-tools mode
+		if (!enableE2eTestEndpoints) {
+			await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
+		} else {
+			logger?.info({ emailAddress, caseReference }, 'Test tools enabled: skipping Notify OTP send');
+		}
 
 		req.session.emailAddress = emailAddress;
 		req.session.caseReference = caseReference;
@@ -284,13 +293,64 @@ export function buildNoAccessPage(): AsyncRequestHandler {
 	};
 }
 
-export function buildTestLogin(): AsyncRequestHandler {
+export function buildTestSetupCase(service: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
-		const { emailAddress, caseReference } = req.body;
-		req.session.isAuthenticated = true;
-		req.session.emailAddress = emailAddress;
-		req.session.caseReference = caseReference;
+		const { db, logger } = service;
+		// Belt-and-braces: only work when test tools are enabled.
+		if (!service.enableE2eTestEndpoints) {
+			res.status(404).send();
+			return;
+		}
+		logger.info(
+			{ headerToken: req.get('x-test-tools-token'), envTokenPresent: !!process.env.TEST_TOOLS_TOKEN },
+			'test-tools token debug'
+		);
+		// Require a shared secret so the endpoint isn't callable by anyone
+		// in a shared test environment.
+		const token = req.get('x-test-tools-token');
+		const expectedToken = service.testToolsToken;
+		if (!expectedToken || token !== expectedToken) {
+			res.status(404).send();
+			return;
+		}
 
-		return res.redirect('/');
+		const { emailAddress, caseReference } = req.body as {
+			emailAddress?: string;
+			caseReference?: string;
+		};
+
+		if (!emailAddress || !caseReference) {
+			res.status(400).send('emailAddress and caseReference are required');
+			return;
+		}
+
+		await db.$transaction(async ($tx) => {
+			const caseData = await $tx.case.upsert({
+				where: { reference: caseReference },
+				// optional: keep email in sync if the case already exists
+				update: { email: emailAddress },
+				create: { reference: caseReference, email: emailAddress }
+			});
+
+			// Ensure whitelist exists so /login/sign-in won't redirect to /no-access
+			await $tx.whitelistUser.upsert({
+				where: {
+					caseReference_email: { caseReference, email: emailAddress }
+				},
+				update: {},
+				create: {
+					caseReference,
+					email: emailAddress,
+					isInitialInvitee: true,
+					UserRole: {
+						connect: { id: WHITELIST_USER_ROLE_ID.ADMIN_USER }
+					},
+					Case: { connect: { id: caseData.id } }
+				}
+			});
+		});
+
+		logger.info({ emailAddress, caseReference }, 'Test setup complete');
+		res.status(204).send();
 	};
 }

@@ -9,7 +9,7 @@ import {
 	buildSubmitHasApplicationReference,
 	buildSubmitNewCodeRequestController,
 	buildSubmitOtpController,
-	buildTestLogin
+	buildTestSetupCase
 } from './controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import type { PortalService } from '#service';
@@ -26,7 +26,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const requestNewCodePage = buildRequestNewCodePage();
 	const submitNewCodeRequestController = buildSubmitNewCodeRequestController(service);
 	const noAccessPage = buildNoAccessPage();
-	const testLogin = buildTestLogin();
+	const testSetupCase = buildTestSetupCase(service);
 
 	router.get('/application-reference-number', asyncHandler(hasApplicationReferencePage));
 	router.post('/application-reference-number', asyncHandler(submitHasApplicationReference));
@@ -37,8 +37,10 @@ export function createRoutes(service: PortalService): IRouter {
 	router.get('/request-new-code', asyncHandler(requestNewCodePage));
 	router.post('/request-new-code', asyncHandler(submitNewCodeRequestController));
 	router.get('/no-access', asyncHandler(noAccessPage));
-	//TODO - ensure only mounted in test
-	if (service.enableTestTools) router.post('/test', asyncHandler(testLogin));
+
+	if (service.enableE2eTestEndpoints) {
+		router.post('/test/setup-case', asyncHandler(testSetupCase));
+	}
 
 	return router;
 }

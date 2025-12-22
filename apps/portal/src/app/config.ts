@@ -33,7 +33,8 @@ export function loadConfig(): Config {
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER,
 		BLOB_STORE_CONNECTION_STRING,
-		ENABLE_TEST_TOOLS
+		ENABLE_E2E_TEST_ENDPOINTS,
+		TEST_TOOLS_TOKEN
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -80,8 +81,16 @@ export function loadConfig(): Config {
 			throw new Error(BLOB_STORE_CONNECTION_STRING + ' must only be used for local development');
 		}
 	}
+
 	if (!SQL_CONNECTION_STRING) {
 		throw new Error('SQL_CONNECTION_STRING is required');
+	}
+
+	const enableTestTools = ENABLE_E2E_TEST_ENDPOINTS === 'true';
+
+	// If test tools are enabled, require a shared secret token to protect test endpoints
+	if (enableTestTools && (!TEST_TOOLS_TOKEN || TEST_TOOLS_TOKEN.trim() === '')) {
+		throw new Error('TEST_TOOLS_TOKEN must be a non-empty string when ENABLE_E2E_TEST_ENDPOINTS=true');
 	}
 
 	config = {
@@ -119,7 +128,10 @@ export function loadConfig(): Config {
 		},
 		// the static directory to serve assets from (images, css, etc..)
 		staticDir: buildConfig.staticDir,
-		enableTestTools: ENABLE_TEST_TOOLS === 'true'
+
+		// test tools
+		enableE2eTestEndpoints: enableTestTools,
+		testToolsToken: TEST_TOOLS_TOKEN
 	};
 
 	return config;
