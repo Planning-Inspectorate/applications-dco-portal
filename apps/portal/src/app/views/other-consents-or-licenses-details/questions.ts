@@ -26,8 +26,14 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Other Consents or Licences Description',
 			pageTitle: 'Other Consents or Licences Description',
-			question: 'Other Consents or Licences required',
-			label: 'What other consents or licences does the project require?',
+			question: 'What other consents or licences does the project require?',
+			description: {
+				title: 'Other Consents or Licences required',
+				paragraphs: [
+					'If the project requires other consents or licences from authorities other than the Secretary of State, briefly describe them here.',
+					'Include whether you have already applied for them and explain why they might not be granted.'
+				]
+			},
 			fieldName: 'otherConsentsDescription',
 			url: 'other-consents-description',
 			validators: [
