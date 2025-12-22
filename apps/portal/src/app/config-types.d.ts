@@ -22,5 +22,6 @@ interface Config {
 		secret: string;
 	};
 	staticDir: string;
-	enableTestTools: boolean;
+	enableE2eTestEndpoints: boolean;
+	testToolsToken?: string;
 }

@@ -1,15 +1,11 @@
 import { defineConfig } from 'cypress';
 import baseConfig from './cypress.config.js';
-import 'dotenv/config';
-
-// use backoffice defaults if not set
-if (!baseConfig.e2e.baseUrl) {
-	baseConfig.e2e.baseUrl = 'https://localhost:8080/';
-}
 
 export default defineConfig({
 	e2e: {
-		...baseConfig.e2e
+		...baseConfig.e2e,
+		// local fallback if BASE_URL isn't set
+		baseUrl: baseConfig.e2e.baseUrl || 'http://localhost:8080/'
 	},
 	env: {
 		...baseConfig.env

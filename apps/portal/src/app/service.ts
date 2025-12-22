@@ -52,6 +52,10 @@ export class PortalService {
 		return this.#config.gitSha;
 	}
 
+	get nodeEnv() {
+		return this.#config.NODE_ENV;
+	}
+
 	get secureSession() {
 		return this.#config.NODE_ENV === 'production';
 	}
@@ -64,7 +68,11 @@ export class PortalService {
 		return this.#config.staticDir;
 	}
 
-	get enableTestTools() {
-		return this.#config.enableTestTools;
+	get enableE2eTestEndpoints() {
+		return this.#config.enableE2eTestEndpoints;
+	}
+
+	get testToolsToken() {
+		return this.#config.testToolsToken;
 	}
 }

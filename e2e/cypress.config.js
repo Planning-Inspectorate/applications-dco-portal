@@ -5,7 +5,11 @@ import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
 import { clearDocumentCategory } from './cypress/support/dbUtils.js';
 
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+
+// Always load env from this workspace (e2e/.env)
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 export default defineConfig({
 	e2e: {
@@ -13,19 +17,25 @@ export default defineConfig({
 			on('task', {
 				DeleteDownloads: deleteDownloads,
 				ValidateDownloadedFile: validateDownloadedFile,
-				clearDocumentCategory: clearDocumentCategory
+				clearDocumentCategory
 			});
-			// Set timezone explicitly for CI consistency
-			process.env.TZ = 'Europe/London';
 
+			process.env.TZ = 'Europe/London';
 			return config;
 		},
+
 		baseUrl: process.env.BASE_URL,
+
 		env: {
 			USER_EMAIL: process.env.USER_EMAIL,
 			PASSWORD: process.env.USER_PASSWORD,
-			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE
+			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE,
+			TEST_TOOLS_TOKEN: process.env.TEST_TOOLS_TOKEN,
+
+			SQL_CONNECTION_STRING: process.env.SQL_CONNECTION_STRING,
+			SQL_CONNECTION_STRING_ADMIN: process.env.SQL_CONNECTION_STRING_ADMIN
 		},
+
 		specPattern: `cypress/e2e/dco-portal/**/*.cy.js`,
 		supportFile: './cypress/support/e2e.js',
 		viewportHeight: 960,
