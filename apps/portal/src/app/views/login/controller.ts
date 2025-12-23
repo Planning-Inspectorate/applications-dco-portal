@@ -125,12 +125,17 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 		}
 
 		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);
-		if (otpRecord && sentInLastTenSeconds(otpRecord)) {
+
+		if (!enableE2eTestEndpoints && otpRecord && sentInLastTenSeconds(otpRecord)) {
 			return handleError({ emailAddress: 'Code already requested' });
 		}
 
-		const oneTimePassword = enableE2eTestEndpoints ? 'ABCDE' : generateOtp();
+		if (enableE2eTestEndpoints && otpRecord) {
+			// Clear existing OTP so saveOtp doesn't trip cooldown behaviour elsewhere / avoids "already requested"
+			await deleteOtp(db, emailAddress, caseReference);
+		}
 
+		const oneTimePassword = enableE2eTestEndpoints ? 'ABCDE' : generateOtp();
 		await saveOtp(db, emailAddress, caseReference, oneTimePassword);
 
 		// Only send via Notify when not in test-tools mode

@@ -6,5 +6,6 @@ declare namespace Cypress {
 		validateDownloadedFile(fileName: string): Chainable<void>;
 		getByData(value: string): Chainable<JQuery<HTMLElement>>;
 		testLogin(emailAddress: string, caseReference: string): Chainable<void>;
+		loginSession(): Chainable<void>;
 	}
 }
