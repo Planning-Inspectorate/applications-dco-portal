@@ -8,7 +8,8 @@ import {
 	buildRequestNewCodePage,
 	buildSubmitEmailController,
 	buildSubmitNewCodeRequestController,
-	buildSubmitOtpController
+	buildSubmitOtpController,
+	buildTestSetupCase
 } from './controller.ts';
 import assert from 'node:assert';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
@@ -343,6 +344,131 @@ describe('login controllers', () => {
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+		});
+		it('should use fixed ABCDE otp and skip Notify when enableE2eTestEndpoints=true', async () => {
+			const mockDb = {
+				oneTimePassword: {
+					deleteMany: mock.fn(),
+					create: mock.fn(),
+					findUnique: mock.fn(() => null)
+				},
+				nsipServiceUser: {
+					findFirst: mock.fn(() => ({
+						email: 'valid@email.com'
+					}))
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
+				}
+			};
+
+			const mockNotifyClient = {
+				sendOneTimePasswordNotification: mock.fn()
+			};
+
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
+				},
+				session: {}
+			};
+
+			const mockRes = { redirect: mock.fn() };
+
+			const controller = buildSubmitEmailController({
+				db: mockDb,
+				logger: mockLogger(),
+				notifyClient: mockNotifyClient,
+				enableE2eTestEndpoints: true
+			});
+
+			await controller(mockReq, mockRes);
+
+			// redirect to OTP page
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
+
+			// should still store an OTP record
+			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
+
+			// should be the fixed test OTP
+			const createArgs = mockDb.oneTimePassword.create.mock.calls[0].arguments[0];
+			assert.ok(createArgs?.data);
+			assert.strictEqual(createArgs.data.email, 'valid@email.com');
+			assert.strictEqual(createArgs.data.caseReference, 'EN123456');
+			assert.ok(typeof createArgs.data.hashedOtpCode === 'string' && createArgs.data.hashedOtpCode.length > 0);
+
+			// and it should NOT send via Notify in test mode
+			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+
+			// should set session values
+			assert.strictEqual(mockReq.session.emailAddress, 'valid@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+		});
+
+		it('should not block with "Code already requested" when enableE2eTestEndpoints=true (overwrites OTP)', async (ctx) => {
+			const mockDb = {
+				oneTimePassword: {
+					findUnique: mock.fn(() => ({
+						createdAt: new Date('2025-01-30T00:00:00.000Z'),
+						hashedOtpCode: 'hash',
+						otpAttempts: 0
+					})),
+					delete: mock.fn(),
+					deleteMany: mock.fn(),
+					create: mock.fn()
+				},
+				nsipServiceUser: {
+					findFirst: mock.fn(() => ({ email: 'valid@email.com' }))
+				},
+				whitelistUser: {
+					findUnique: mock.fn()
+				}
+			};
+
+			const mockNotifyClient = {
+				sendOneTimePasswordNotification: mock.fn()
+			};
+
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					emailAddress: 'valid@email.com',
+					caseReference: 'EN123456'
+				},
+				session: {}
+			};
+
+			const mockRes = { redirect: mock.fn(), render: mock.fn() };
+
+			const controller = buildSubmitEmailController({
+				db: mockDb,
+				logger: mockLogger(),
+				notifyClient: mockNotifyClient,
+				enableE2eTestEndpoints: true
+			});
+
+			await controller(mockReq, mockRes);
+
+			// Should NOT render the "code already requested" error
+			assert.strictEqual(mockRes.render.mock.callCount(), 0);
+
+			// Should proceed to enter-code
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/enter-code');
+
+			// In E2E mode we overwrite the OTP (delete + create)
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+			assert.strictEqual(mockDb.oneTimePassword.create.mock.callCount(), 1);
+
+			// Should NOT send via Notify in test mode
+			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
+
+			// Session should be set
+			assert.strictEqual(mockReq.session.emailAddress, 'valid@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
 		});
 	});
 	describe('buildEnterOtpPage', () => {
@@ -907,6 +1033,196 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				pageTitle: 'You do not have access to this service'
 			});
+		});
+	});
+	describe('buildTestSetupCase', () => {
+		it('should return 404 when enableE2eTestEndpoints is false', async () => {
+			const mockDb = {
+				$transaction: mock.fn(),
+				case: { upsert: mock.fn() },
+				whitelistUser: { upsert: mock.fn() }
+			};
+
+			const service = {
+				db: mockDb,
+				logger: mockLogger(),
+				enableE2eTestEndpoints: false,
+				testToolsToken: 'secret'
+			};
+
+			const mockReq = {
+				get: mock.fn(() => 'secret'),
+				body: { emailAddress: 'valid@email.com', caseReference: 'EN123456' }
+			};
+
+			const mockRes = {
+				status: mock.fn(() => mockRes),
+				send: mock.fn()
+			};
+
+			const controller = buildTestSetupCase(service as any);
+			await controller(mockReq as any, mockRes as any);
+
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.calls[0].arguments[0], 404);
+			assert.strictEqual(mockRes.send.mock.callCount(), 1);
+			assert.strictEqual(mockDb.$transaction.mock.callCount(), 0);
+		});
+
+		it('should return 404 when token is missing', async () => {
+			const mockDb = {
+				$transaction: mock.fn(),
+				case: { upsert: mock.fn() },
+				whitelistUser: { upsert: mock.fn() }
+			};
+
+			const service = {
+				db: mockDb,
+				logger: mockLogger(),
+				enableE2eTestEndpoints: true,
+				testToolsToken: 'secret'
+			};
+
+			const mockReq = {
+				get: mock.fn(() => undefined),
+				body: { emailAddress: 'valid@email.com', caseReference: 'EN123456' }
+			};
+
+			const mockRes = {
+				status: mock.fn(() => mockRes),
+				send: mock.fn()
+			};
+
+			const controller = buildTestSetupCase(service as any);
+			await controller(mockReq as any, mockRes as any);
+
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.calls[0].arguments[0], 404);
+			assert.strictEqual(mockRes.send.mock.callCount(), 1);
+			assert.strictEqual(mockDb.$transaction.mock.callCount(), 0);
+		});
+
+		it('should return 404 when token is incorrect', async () => {
+			const mockDb = {
+				$transaction: mock.fn(),
+				case: { upsert: mock.fn() },
+				whitelistUser: { upsert: mock.fn() }
+			};
+
+			const service = {
+				db: mockDb,
+				logger: mockLogger(),
+				enableE2eTestEndpoints: true,
+				testToolsToken: 'secret'
+			};
+
+			const mockReq = {
+				get: mock.fn(() => 'wrong-token'),
+				body: { emailAddress: 'valid@email.com', caseReference: 'EN123456' }
+			};
+
+			const mockRes = {
+				status: mock.fn(() => mockRes),
+				send: mock.fn()
+			};
+
+			const controller = buildTestSetupCase(service as any);
+			await controller(mockReq as any, mockRes as any);
+
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.calls[0].arguments[0], 404);
+			assert.strictEqual(mockRes.send.mock.callCount(), 1);
+			assert.strictEqual(mockDb.$transaction.mock.callCount(), 0);
+		});
+
+		it('should return 400 when emailAddress or caseReference missing', async () => {
+			const mockDb = {
+				$transaction: mock.fn(),
+				case: { upsert: mock.fn() },
+				whitelistUser: { upsert: mock.fn() }
+			};
+
+			const service = {
+				db: mockDb,
+				logger: mockLogger(),
+				enableE2eTestEndpoints: true,
+				testToolsToken: 'secret'
+			};
+
+			const mockReq = {
+				get: mock.fn(() => 'secret'),
+				body: { emailAddress: 'valid@email.com' } // missing caseReference
+			};
+
+			const mockRes = {
+				status: mock.fn(() => mockRes),
+				send: mock.fn()
+			};
+
+			const controller = buildTestSetupCase(service as any);
+			await controller(mockReq as any, mockRes as any);
+
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.calls[0].arguments[0], 400);
+			assert.strictEqual(mockRes.send.mock.callCount(), 1);
+			assert.strictEqual(mockRes.send.mock.calls[0].arguments[0], 'emailAddress and caseReference are required');
+			assert.strictEqual(mockDb.$transaction.mock.callCount(), 0);
+		});
+
+		it('should upsert case + whitelist and return 204 when valid', async () => {
+			const mockTx = {
+				case: {
+					upsert: mock.fn(() => ({ id: 'case-id-1' }))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+
+			const mockDb = {
+				$transaction: mock.fn((fn: any) => fn(mockTx))
+			};
+
+			const service = {
+				db: mockDb,
+				logger: mockLogger(),
+				enableE2eTestEndpoints: true,
+				testToolsToken: 'secret'
+			};
+
+			const mockReq = {
+				get: mock.fn(() => 'secret'),
+				body: { emailAddress: 'valid@email.com', caseReference: 'EN123456' }
+			};
+
+			const mockRes = {
+				status: mock.fn(() => mockRes),
+				send: mock.fn()
+			};
+
+			const controller = buildTestSetupCase(service as any);
+			await controller(mockReq as any, mockRes as any);
+
+			assert.strictEqual(mockDb.$transaction.mock.callCount(), 1);
+
+			// case upsert called
+			assert.strictEqual(mockTx.case.upsert.mock.callCount(), 1);
+			const caseUpsertArgs = mockTx.case.upsert.mock.calls[0].arguments[0];
+			assert.deepStrictEqual(caseUpsertArgs.where, { reference: 'EN123456' });
+			assert.deepStrictEqual(caseUpsertArgs.update, { email: 'valid@email.com' });
+			assert.deepStrictEqual(caseUpsertArgs.create, { reference: 'EN123456', email: 'valid@email.com' });
+
+			// whitelist upsert called
+			assert.strictEqual(mockTx.whitelistUser.upsert.mock.callCount(), 1);
+			const whitelistArgs = mockTx.whitelistUser.upsert.mock.calls[0].arguments[0];
+			assert.deepStrictEqual(whitelistArgs.where, {
+				caseReference_email: { caseReference: 'EN123456', email: 'valid@email.com' }
+			});
+
+			// response 204
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.calls[0].arguments[0], 204);
+			assert.strictEqual(mockRes.send.mock.callCount(), 1);
 		});
 	});
 });

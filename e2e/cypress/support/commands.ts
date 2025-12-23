@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+import CommonActions from '../page_object/PageAction/commonActions.js';
 
 Cypress.Commands.add('deleteDownloads', () => {
 	cy.task('DeleteDownloads');
@@ -20,4 +21,19 @@ Cypress.Commands.add('getByData', (value) => {
 
 Cypress.Commands.add('testLogin', (emailAddress, caseReference) => {
 	cy.request('POST', '/login/test', { emailAddress, caseReference });
+});
+
+Cypress.Commands.add('loginSession', () => {
+	cy.session(
+		'authenticated-user',
+		() => {
+			CommonActions.login();
+		},
+		{
+			validate() {
+				// Cheap validation that proves we're still logged in
+				cy.getCookie('session').should('exist');
+			}
+		}
+	);
 });

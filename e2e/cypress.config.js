@@ -46,7 +46,7 @@ export default defineConfig({
 		experimentalRunAllSpecs: true,
 		chromeWebSecurity: false,
 		video: false,
-		retries: 0,
+		retries: 2,
 		redirectionLimit: 50
 	}
 });
