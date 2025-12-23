@@ -42,6 +42,7 @@ model Case {
   linearSiteId             String?              @db.UniqueIdentifier
   ProjectLinearSite        LinearSite?          @relation("ProjectLinearSite", fields: [linearSiteId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   otherConsentsDescription String?              @db.NVarChar(2000)
+  notifiedOtherPeople      Boolean?
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -86,6 +87,8 @@ model Case {
   crownLandAccessAndRightsOfWayPlansStatus              DocumentCategoryStatus @relation(name: "crownLandAccessAndRightsOfWayPlansStatus", fields: [crownLandAccessAndRightsOfWayPlansStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   otherConsentsOrLicencesDetailsStatusId                String                 @default("not-started")
   otherConsentsOrLicencesDetailsStatus                  DocumentCategoryStatus @relation(name: "otherConsentsOrLicencesDetailsStatus", fields: [otherConsentsOrLicencesDetailsStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  environmentalImpactAssessmentInformationStatusId      String                 @default("not-started")
+  environmentalImpactAssessmentInformationStatus        DocumentCategoryStatus @relation(name: "environmentalImpactAssessmentInformationStatus", fields: [environmentalImpactAssessmentInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model OneTimePassword {
@@ -211,6 +214,7 @@ model DocumentCategoryStatus {
   natureConservationAndEnvironmentalInformationCases Case[] @relation("natureConservationAndEnvironmentalInformationStatus")
   crownLandAccessAndRightsOfWayPlansCases            Case[] @relation("crownLandAccessAndRightsOfWayPlansStatus")
   otherConsentsOrLicencesDetailsCases                Case[] @relation("otherConsentsOrLicencesDetailsStatus")
+  environmentalImpactAssessmentInformationCases      Case[] @relation("environmentalImpactAssessmentInformationStatus")
 }
 
 model ContactDetails {
