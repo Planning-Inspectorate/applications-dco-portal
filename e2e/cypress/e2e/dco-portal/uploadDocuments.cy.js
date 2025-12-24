@@ -3,7 +3,6 @@ import CommonActions from '../../page_object/PageAction/commonActions.js';
 import UploadDocumentsActions from '../../page_object/PageAction/uploadDocumentsActions.js';
 import UploadDocumentsLocators from '../../page_object/PageLocators/uploadDocumentsLocators.js';
 import CommonLocators from '../../page_object/PageLocators/commonLocators.js';
-import { formatAsCamelCase } from '../../support/utils/format.js';
 
 const DEFAULT_UPLOAD = 'cypress/fixtures/uploadTest.pdf';
 
