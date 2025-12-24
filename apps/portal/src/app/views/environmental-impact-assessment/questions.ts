@@ -12,9 +12,11 @@ import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/dat
 export function getQuestions() {
 	const questions = {
 		hasEnvironmentalStatement: {
+			//IT RENDERS WITH TEXT_ENTRY, JUST NOT BOOLEAN!
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Has Environmental Statement',
-			question: 'Does the project require an environmental statement?',
+			question: 'Environmental Statement',
+			html: 'views/environmental-impact-assessment/has-environmental-statement-question.html',
 			fieldName: 'hasEnvironmentalStatement',
 			url: 'has-environmental-statement',
 			validators: [new RequiredValidator()]
@@ -24,7 +26,6 @@ export function getQuestions() {
 			title: 'Non-Technical Summary',
 			question: 'Select the non-technical summary of the environmental statement?',
 			fieldName: 'nonTechnicalSummary',
-			html: 'views/environmental-impact-assessment/has-environmental-statement-question-description.html',
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
 			validators: [new RequiredValidator()]
 		}
