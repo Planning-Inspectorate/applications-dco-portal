@@ -34,7 +34,11 @@ describe('environmental-impact-assessment-information save', () => {
 					journeyResponse: {
 						answers: {
 							nonTechnicalSummary: 'doc-id-3,doc-id-2',
-							hasEnvironmentalStatement: 'yes'
+							hasEnvironmentalStatement: 'yes',
+							hasScreeningDirection: 'yes',
+							screeningDirectionDocuments: 'doc-id-4',
+							hasScopingOpinion: 'yes',
+							scopingOpinionDocuments: 'doc-id-5'
 						}
 					}
 				}
@@ -56,7 +60,7 @@ describe('environmental-impact-assessment-information save', () => {
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 4);
 		});
 		it('should save environmental impact assessment journey successfully if has environmental summary is no', async () => {
 			const mockDb = {
@@ -83,7 +87,9 @@ describe('environmental-impact-assessment-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasEnvironmentalStatement: 'no'
+							hasEnvironmentalStatement: 'no',
+							hasScreeningDirection: 'no',
+							hasScopingOpinion: 'no'
 						}
 					}
 				}
@@ -126,7 +132,9 @@ describe('environmental-impact-assessment-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasEnvironmentalStatement: 'no'
+							hasEnvironmentalStatement: 'no',
+							hasScreeningDirection: 'no',
+							hasScopingOpinion: 'no'
 						}
 					}
 				}
@@ -177,7 +185,9 @@ describe('environmental-impact-assessment-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							hasEnvironmentalStatement: 'no'
+							hasEnvironmentalStatement: 'no',
+							hasScreeningDirection: 'no',
+							hasScopingOpinion: 'no'
 						}
 					}
 				}

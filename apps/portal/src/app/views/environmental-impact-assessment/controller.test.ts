@@ -17,9 +17,15 @@ describe('environmental-impact-assessment-information controller', () => {
 					findUnique: mock.fn(() => ({
 						environmentalImpactAssessmentInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [
-							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT }
+							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY },
+							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION },
+							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION },
+							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION }
 						]
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 1)
 				}
 			};
 			const mockReq = {
@@ -48,8 +54,12 @@ describe('environmental-impact-assessment-information controller', () => {
 				caseReference: 'EN123456',
 				forms: {
 					'environmental-impact-assessment-information': {
-						environmentalImpactPlaceholder: 'doc-id-1',
-						hasEnvironmentalImpactAssessment: 'yes'
+						nonTechnicalSummary: 'doc-id-1',
+						hasEnvironmentalStatement: 'yes',
+						hasScreeningDirection: 'yes',
+						screeningDirectionDocuments: 'doc-id-2,doc-id-3',
+						hasScopingOpinion: 'yes',
+						scopingOpinionDocuments: 'doc-id-4'
 					}
 				}
 			});
@@ -61,6 +71,9 @@ describe('environmental-impact-assessment-information controller', () => {
 						environmentalImpactAssessmentInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: []
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 0)
 				}
 			};
 			const mockReq = {
@@ -89,7 +102,12 @@ describe('environmental-impact-assessment-information controller', () => {
 				caseReference: 'EN123456',
 				forms: {
 					'environmental-impact-assessment-information': {
-						hasEnvironmentalStatement: 'no'
+						hasEnvironmentalStatement: 'no',
+						hasScreeningDirection: 'no',
+						hasScopingOpinion: 'no',
+						nonTechnicalSummary: '',
+						scopingOpinionDocuments: '',
+						screeningDirectionDocuments: ''
 					}
 				}
 			});
@@ -100,6 +118,9 @@ describe('environmental-impact-assessment-information controller', () => {
 					findUnique: mock.fn(() => ({
 						environmentalImpactAssessmentInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 0)
 				}
 			};
 			const mockReq = {

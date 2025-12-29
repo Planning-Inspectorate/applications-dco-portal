@@ -27,6 +27,17 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 					questionHasAnswer(response, questions.hasEnvironmentalStatement, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.nonTechnicalSummary)
+				.endMultiQuestionCondition('environmental-statement')
+				.addQuestion(questions.hasScreeningDirection)
+				.addQuestion(questions.screeningDirectionDocuments)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.hasScreeningDirection, BOOLEAN_OPTIONS.YES)
+				)
+				.addQuestion(questions.hasScopingOpinion)
+				.addQuestion(questions.scopingOpinionDocuments)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.hasScopingOpinion, BOOLEAN_OPTIONS.YES)
+				)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
