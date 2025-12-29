@@ -31,7 +31,11 @@ export function buildEnvironmentalImpactAssessmentHomePage(
 }
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
-	const environmentalImpactDocumentIds = [DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY];
+	const environmentalImpactDocumentIds = [
+		DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
+		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
+		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+	];
 
 	const caseData = await db.case.findUnique({
 		where: { reference: req.session?.caseReference },
@@ -51,17 +55,43 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	}
 
 	const forms = req.session.forms || (req.session.forms = {});
-	const hasEvidence = (caseData?.SupportingEvidence?.length ?? 0) > 0;
 
-	forms[applicationSectionId] = hasEvidence
-		? {
-				hasEnvironmentalStatement: 'yes',
-				nonTechnicalSummary: getSupportingEvidenceIds(
-					caseData.SupportingEvidence,
-					DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
-				)
+	const [nonTechnicalSummaryCount, screeningDirectionCount, scopingOpinionCount] = await Promise.all([
+		db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
 			}
-		: {
-				hasEnvironmentalStatement: 'no'
-			};
+		}),
+		db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
+			}
+		}),
+		db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+			}
+		})
+	]);
+
+	forms[applicationSectionId] = {
+		hasEnvironmentalStatement: nonTechnicalSummaryCount > 0 ? 'yes' : 'no',
+		nonTechnicalSummary: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
+		),
+		hasScreeningDirection: screeningDirectionCount > 0 ? 'yes' : 'no',
+		screeningDirectionDocuments: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
+		),
+		hasScopingOpinion: scopingOpinionCount > 0 ? 'yes' : 'no',
+		scopingOpinionDocuments: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+		)
+	};
 }

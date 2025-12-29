@@ -31,18 +31,28 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				const categories: CategoryInformation[] = [
 					{
 						key: 'nonTechnicalSummary',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
+						applied: answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
+					},
+					{
+						key: 'screeningDirectionDocuments',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
+						applied: answers.hasScreeningDirection === BOOLEAN_OPTIONS.YES
+					},
+					{
+						key: 'scopingOpinionDocuments',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
+						applied: answers.hasScopingOpinion === BOOLEAN_OPTIONS.YES
 					}
 				];
 
 				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
 
-				if (answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES) {
-					for (const { key, subCategoryId } of categories) {
-						const ids = answers[key]?.split(',') ?? [];
-						for (const documentId of ids) {
-							await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
-						}
+				for (const { key, subCategoryId, applied } of categories) {
+					if (!applied) continue;
+					const ids = answers[key]?.split(',') ?? [];
+					for (const documentId of ids) {
+						await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
 					}
 				}
 
