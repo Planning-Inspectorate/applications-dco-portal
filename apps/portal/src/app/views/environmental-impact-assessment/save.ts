@@ -43,6 +43,52 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						key: 'scopingOpinionDocuments',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
 						applied: answers.hasScopingOpinion === BOOLEAN_OPTIONS.YES
+					},
+					{
+						key: 'introductoryChapters',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
+						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS)
+					},
+					{
+						key: 'aspectChapters',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
+						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS)
+					},
+					{
+						key: 'environmentStatementAppendices',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
+						applied: answers.otherEnvironmentalDocuments.includes(
+							DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES
+						)
+					},
+					{
+						key: 'environmentStatementFigures',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
+						applied: answers.otherEnvironmentalDocuments.includes(
+							DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES
+						)
+					},
+					{
+						key: 'modelInformation',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
+						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION)
+					},
+					{
+						key: 'anyOtherMediaInformation',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
+						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION)
+					},
+					{
+						key: 'confidentialDocuments',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
+						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS)
+					},
+					{
+						key: 'sensitiveInformation',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
+						applied: answers.otherEnvironmentalDocuments.includes(
+							DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
+						)
 					}
 				];
 

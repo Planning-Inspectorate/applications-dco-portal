@@ -1,5 +1,6 @@
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
+import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 // @ts-expect-error - due to not having @types
 import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
 // @ts-expect-error - due to not having @types
@@ -27,6 +28,64 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 					questionHasAnswer(response, questions.hasEnvironmentalStatement, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.nonTechnicalSummary)
+				.addQuestion(questions.otherEnvironmentalDocuments)
+				.addQuestion(questions.introductoryChapters)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
+					)
+				)
+				.addQuestion(questions.aspectChapters)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS)
+				)
+				.addQuestion(questions.environmentStatementAppendices)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES
+					)
+				)
+				.addQuestion(questions.environmentStatementFigures)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES
+					)
+				)
+				.addQuestion(questions.modelInformation)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION)
+				)
+				.addQuestion(questions.anyOtherMediaInformation)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION
+					)
+				)
+				.addQuestion(questions.confidentialDocuments)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+					)
+				)
+				.addQuestion(questions.sensitiveInformation)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(
+						response,
+						questions.otherEnvironmentalDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
+					)
+				)
+				//todo: make other docs questios to test
 				.endMultiQuestionCondition('environmental-statement')
 				.addQuestion(questions.hasScreeningDirection)
 				.addQuestion(questions.screeningDirectionDocuments)
