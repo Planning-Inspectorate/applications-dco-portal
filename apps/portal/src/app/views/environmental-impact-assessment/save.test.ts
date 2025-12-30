@@ -38,7 +38,17 @@ describe('environmental-impact-assessment-information save', () => {
 							hasScreeningDirection: 'yes',
 							screeningDirectionDocuments: 'doc-id-4',
 							hasScopingOpinion: 'yes',
-							scopingOpinionDocuments: 'doc-id-5'
+							scopingOpinionDocuments: 'doc-id-5',
+							otherEnvironmentalDocuments:
+								'introductory-chapters,aspect-chapters,environmental-statement-appendices,environmental-statement-figures,model-information,any-other-media-information,confidential-documents,sensitive-environmental-information',
+							introductoryChapters: 'doc-id-15',
+							aspectChapters: 'doc-id-6',
+							environmentStatementAppendices: 'doc-id-7,doc-id-8',
+							environmentStatementFigures: 'doc-id-9',
+							modelInformation: 'doc-id-10',
+							anyOtherMediaInformation: 'doc-id-11,doc-id-12',
+							confidentialDocuments: 'doc-id-13',
+							sensitiveInformation: 'doc-id-14'
 						}
 					}
 				}
@@ -60,7 +70,7 @@ describe('environmental-impact-assessment-information save', () => {
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 4);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 14);
 		});
 		it('should save environmental impact assessment journey successfully if has environmental summary is no', async () => {
 			const mockDb = {
@@ -89,7 +99,8 @@ describe('environmental-impact-assessment-information save', () => {
 						answers: {
 							hasEnvironmentalStatement: 'no',
 							hasScreeningDirection: 'no',
-							hasScopingOpinion: 'no'
+							hasScopingOpinion: 'no',
+							otherEnvironmentalDocuments: ''
 						}
 					}
 				}

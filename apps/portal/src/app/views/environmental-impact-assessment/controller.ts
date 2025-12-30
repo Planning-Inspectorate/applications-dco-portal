@@ -9,6 +9,7 @@ import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
+import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_IDS } from './constants.ts';
 
 export function buildEnvironmentalImpactAssessmentHomePage(
 	{ db }: PortalService,
@@ -34,7 +35,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	const environmentalImpactDocumentIds = [
 		DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
 		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
-		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
+		...OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_IDS
 	];
 
 	const caseData = await db.case.findUnique({
@@ -55,30 +57,33 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	}
 
 	const forms = req.session.forms || (req.session.forms = {});
+	const getEvidenceCount = (subCategoryId: string) => {
+		return db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: subCategoryId
+			}
+		});
+	};
 
 	const [nonTechnicalSummaryCount, screeningDirectionCount, scopingOpinionCount] = await Promise.all([
-		db.supportingEvidence.count({
-			where: {
-				caseId: caseData.id,
-				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
-			}
-		}),
-		db.supportingEvidence.count({
-			where: {
-				caseId: caseData.id,
-				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
-			}
-		}),
-		db.supportingEvidence.count({
-			where: {
-				caseId: caseData.id,
-				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
-			}
-		})
+		getEvidenceCount(DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY),
+		getEvidenceCount(DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION),
+		getEvidenceCount(DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION)
 	]);
 
+	const otherEnvironmentalDocumentCounts = await Promise.all(
+		OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_IDS.map(async (subCategoryId: string) => {
+			const subCategoryCount = await getEvidenceCount(subCategoryId);
+			return { count: subCategoryCount, id: subCategoryId };
+		})
+	);
+
 	forms[applicationSectionId] = {
-		hasEnvironmentalStatement: nonTechnicalSummaryCount > 0 ? 'yes' : 'no',
+		hasEnvironmentalStatement:
+			nonTechnicalSummaryCount + otherEnvironmentalDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0
+				? 'yes'
+				: 'no',
 		nonTechnicalSummary: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
@@ -92,6 +97,41 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		scopingOpinionDocuments: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+		),
+		otherEnvironmentalDocuments: populateOtherEnvironmentalDocuments(otherEnvironmentalDocumentCounts),
+		introductoryChapters: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
+		),
+		aspectChapters: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS),
+		environmentStatementAppendices: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES
+		),
+		environmentStatementFigures: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES
+		),
+		modelInformation: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION),
+		anyOtherMediaInformation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION
+		),
+		confidentialDocuments: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+		),
+		sensitiveInformation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
 		)
 	};
+}
+
+function populateOtherEnvironmentalDocuments(subCategories: { count: number; id: string }[]) {
+	let value = '';
+	for (const cat of subCategories) {
+		if (cat.count > 0) value += `${cat.id},`;
+	}
+	return value.length ? value.slice(0, -1) : value;
 }
