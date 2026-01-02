@@ -82,7 +82,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Introductory Chapters',
 			pageTitle: 'Introductory Chapters',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Introductory Chapters',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -91,7 +92,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Aspect Chapters',
 			pageTitle: 'Aspect Chapters',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Aspect Chapters',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -100,7 +102,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Environmental Statement Appendices',
 			pageTitle: 'Environmental Statement Appendices',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Environmental Statement Appendices',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
 			validators: [new RequiredValidator()]
@@ -109,7 +112,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Environmental Statement Figures',
 			pageTitle: 'Environmental Statement Figures',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Environmental Statement Figures',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
 			validators: [new RequiredValidator()]
@@ -118,7 +122,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Model Information',
 			pageTitle: 'Model Information',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Model Information',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -127,7 +132,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Any Other Media Information',
 			pageTitle: 'Any Other Media Information',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Any Other Media Information',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -136,7 +142,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Confidential Documents',
 			pageTitle: 'Confidential Documents',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Confidential Documents',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
 			validators: [new RequiredValidator()]
@@ -145,7 +152,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Sensitive Information',
 			pageTitle: 'Sensitive Information',
-			question: 'Which documents form part of the environmental statement?',
+			question: 'Sensitive Information',
+			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
 			fieldName: 'sensitiveInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
 			validators: [new RequiredValidator()]
