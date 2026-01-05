@@ -64,7 +64,7 @@ describe('whitelist controller', () => {
 				whitelistUpdateMessage: 'update message',
 				users: [
 					[
-						{ text: 'test@email.com' },
+						{ html: '<b>test@email.com</b>' },
 						{ text: 'Standard' },
 						{
 							html: '<a class="govuk-link govuk-link--no-visited-state" href="/manage-users/user-4/edit-user/user/access-level">Edit</a>'
@@ -74,7 +74,7 @@ describe('whitelist controller', () => {
 						}
 					],
 					[
-						{ text: 'bob@email.com' },
+						{ html: '<b>bob@email.com</b>' },
 						{ text: 'Admin' },
 						{
 							html: '<a class="govuk-link govuk-link--no-visited-state" href="/manage-users/user-3/edit-user/user/access-level">Edit</a>'
@@ -83,7 +83,7 @@ describe('whitelist controller', () => {
 							html: '<a class="govuk-link govuk-link--no-visited-state" href="/manage-users/user-3/remove-user">Remove</a>'
 						}
 					],
-					[{ text: 'neil@email.com' }, { text: 'Admin' }, { html: '' }, { html: '' }]
+					[{ html: '<b>neil@email.com</b>' }, { text: 'Admin' }, { html: '' }, { html: '' }]
 				]
 			});
 		});
