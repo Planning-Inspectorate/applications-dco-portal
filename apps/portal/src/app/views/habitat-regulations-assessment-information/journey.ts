@@ -22,9 +22,9 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		journeyId: applicationSectionId,
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
-				.addQuestion(questions.europeanAndRamsarSites)
+				.addQuestion(questions.hasHabitatRegulationsAssessmentReport)
 				.startMultiQuestionCondition('include-habitat-regulations-assessment-info', (response: Handler) =>
-					questionHasAnswer(response, questions.europeanAndRamsarSites, BOOLEAN_OPTIONS.YES)
+					questionHasAnswer(response, questions.hasHabitatRegulationsAssessmentReport, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.habitatRegulationsAssessmentScreeningReport)
 				.addQuestion(questions.hasReportToInformAppropriateAssessment)

@@ -41,7 +41,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 
 				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
 
-				if (answers.europeanAndRamsarSites === BOOLEAN_OPTIONS.YES) {
+				if (answers.hasHabitatRegulationsAssessmentReport === BOOLEAN_OPTIONS.YES) {
 					const ids = (answers['habitatRegulationsAssessmentScreeningReport'] ?? '').split(',').filter(Boolean);
 					for (const documentId of ids) {
 						await saveSupportingEvidence(

@@ -55,14 +55,14 @@ describe('habitat-regulations-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/habitat-regulations-assessment-information/details/european-and-ramsar-sites'
+				'/habitat-regulations-assessment-information/details/hra-report'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
 				caseReference: 'EN123456',
 				forms: {
 					'habitat-regulations-assessment-information': {
-						europeanAndRamsarSites: 'yes',
+						hasHabitatRegulationsAssessmentReport: 'yes',
 						hasReportToInformAppropriateAssessment: 'yes',
 						habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-2',
 						reportToInformAppropriateAssessment: 'doc-id-3'
@@ -110,14 +110,14 @@ describe('habitat-regulations-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/habitat-regulations-assessment-information/details/european-and-ramsar-sites'
+				'/habitat-regulations-assessment-information/details/hra-report'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
 				caseReference: 'EN123456',
 				forms: {
 					'habitat-regulations-assessment-information': {
-						europeanAndRamsarSites: 'yes',
+						hasHabitatRegulationsAssessmentReport: 'yes',
 						hasReportToInformAppropriateAssessment: 'no',
 						habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-2',
 						reportToInformAppropriateAssessment: ''
@@ -156,14 +156,14 @@ describe('habitat-regulations-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/habitat-regulations-assessment-information/details/european-and-ramsar-sites'
+				'/habitat-regulations-assessment-information/details/hra-report'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
 				caseReference: 'EN123456',
 				forms: {
 					'habitat-regulations-assessment-information': {
-						europeanAndRamsarSites: 'no'
+						hasHabitatRegulationsAssessmentReport: 'no'
 					}
 				}
 			});
@@ -195,7 +195,7 @@ describe('habitat-regulations-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/habitat-regulations-assessment-information/details/european-and-ramsar-sites'
+				'/habitat-regulations-assessment-information/details/hra-report'
 			);
 
 			assert.deepStrictEqual(mockReq.session, { caseReference: 'EN123456' });

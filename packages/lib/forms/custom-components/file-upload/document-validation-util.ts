@@ -44,6 +44,14 @@ export async function validateUploadedFile(
 		});
 	}
 
+	if (size > maxFileSize) {
+		validationErrors.push({
+			text: `${originalname}: The attachment must be smaller than 250MB`,
+			href: '#upload-form'
+		});
+		return validationErrors;
+	}
+
 	const declaredExt: string = path.extname(file.originalname).slice(1).toLowerCase();
 	if (['html', 'prj', 'gis', 'dbf', 'shp', 'shx'].includes(declaredExt)) {
 		const text: string = file.buffer.toString('utf8', 0, 200).trim();
@@ -128,13 +136,6 @@ export async function validateUploadedFile(
 		const declaredExt = mimetype.split('/')[1];
 		validationErrors.push({
 			text: `${originalname}: File signature mismatch: declared as .${declaredExt} (${mimetype}) but detected as .${ext} (${mime})`,
-			href: '#upload-form'
-		});
-	}
-
-	if (size > maxFileSize) {
-		validationErrors.push({
-			text: `${originalname}: The attachment must be smaller than 250MB`,
 			href: '#upload-form'
 		});
 	}

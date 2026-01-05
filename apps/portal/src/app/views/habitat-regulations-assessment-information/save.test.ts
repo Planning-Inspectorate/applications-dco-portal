@@ -8,7 +8,7 @@ import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 describe('habitat-regulations-assessment-information save', () => {
 	describe('buildSaveController', () => {
-		it('should save habitat regulations assessment info journey successfully if europeanAndRamsarSites is yes', async () => {
+		it('should save habitat regulations assessment info journey successfully if hasHabitatRegulationsAssessmentReport is yes', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -33,7 +33,7 @@ describe('habitat-regulations-assessment-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							europeanAndRamsarSites: 'yes',
+							hasHabitatRegulationsAssessmentReport: 'yes',
 							habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-4',
 							hasReportToInformAppropriateAssessment: 'yes',
 							reportToInformAppropriateAssessment: 'doc-id-2'
@@ -85,7 +85,7 @@ describe('habitat-regulations-assessment-information save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							europeanAndRamsarSites: 'yes',
+							hasHabitatRegulationsAssessmentReport: 'yes',
 							hasReportToInformAppropriateAssessment: 'no',
 							habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-4'
 						}
