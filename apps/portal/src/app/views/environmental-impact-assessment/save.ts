@@ -28,6 +28,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseId = caseData.id;
+				const otherEnvironmentalDocuments = answers.otherEnvironmentalDocuments || [];
 				const categories: CategoryInformation[] = [
 					{
 						key: 'nonTechnicalSummary',
@@ -47,48 +48,58 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					{
 						key: 'introductoryChapters',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
-						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'aspectChapters',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
-						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'environmentStatementAppendices',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
-						applied: answers.otherEnvironmentalDocuments.includes(
-							DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES
-						)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'environmentStatementFigures',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
-						applied: answers.otherEnvironmentalDocuments.includes(
-							DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES
-						)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'modelInformation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
-						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'anyOtherMediaInformation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
-						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'confidentialDocuments',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
-						applied: answers.otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					},
 					{
 						key: 'sensitiveInformation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
-						applied: answers.otherEnvironmentalDocuments.includes(
-							DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
-						)
+						applied:
+							otherEnvironmentalDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION) &&
+							answers.hasEnvironmentalStatement === BOOLEAN_OPTIONS.YES
 					}
 				];
 
@@ -104,7 +115,10 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
-					data: { [`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+					data: {
+						notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES ? true : false,
+						[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED
+					}
 				});
 			});
 		} catch (error) {

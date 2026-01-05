@@ -85,7 +85,6 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 						DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
 					)
 				)
-				//todo: make other docs questios to test
 				.endMultiQuestionCondition('environmental-statement')
 				.addQuestion(questions.hasScreeningDirection)
 				.addQuestion(questions.screeningDirectionDocuments)
@@ -97,6 +96,8 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(response, questions.hasScopingOpinion, BOOLEAN_OPTIONS.YES)
 				)
+				.addQuestion(questions.notifyingConsultationBodies)
+				.addQuestion(questions.notifyingOtherPeople)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
