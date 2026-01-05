@@ -7,6 +7,9 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+// @ts-expect-error - due to not having @types
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import RequiredAnswerValidator from '@pins/dco-portal-lib/forms/custom-components/required-answer-validator.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';
@@ -17,7 +20,7 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
 			title: 'Has Environmental Statement',
 			question: 'Environmental Statement',
-			html: 'views/environmental-impact-assessment/has-environmental-statement-question.html',
+			html: 'views/environmental-impact-assessment/html/has-environmental-statement-question.html',
 			fieldName: 'hasEnvironmentalStatement',
 			url: 'has-environmental-statement',
 			validators: [new RequiredValidator()]
@@ -83,7 +86,7 @@ export function getQuestions() {
 			title: 'Introductory Chapters',
 			pageTitle: 'Introductory Chapters',
 			question: 'Introductory Chapters',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -93,7 +96,7 @@ export function getQuestions() {
 			title: 'Aspect Chapters',
 			pageTitle: 'Aspect Chapters',
 			question: 'Aspect Chapters',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -103,7 +106,7 @@ export function getQuestions() {
 			title: 'Environmental Statement Appendices',
 			pageTitle: 'Environmental Statement Appendices',
 			question: 'Environmental Statement Appendices',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
 			validators: [new RequiredValidator()]
@@ -113,7 +116,7 @@ export function getQuestions() {
 			title: 'Environmental Statement Figures',
 			pageTitle: 'Environmental Statement Figures',
 			question: 'Environmental Statement Figures',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
 			validators: [new RequiredValidator()]
@@ -123,7 +126,7 @@ export function getQuestions() {
 			title: 'Model Information',
 			pageTitle: 'Model Information',
 			question: 'Model Information',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -133,7 +136,7 @@ export function getQuestions() {
 			title: 'Any Other Media Information',
 			pageTitle: 'Any Other Media Information',
 			question: 'Any Other Media Information',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -143,7 +146,7 @@ export function getQuestions() {
 			title: 'Confidential Documents',
 			pageTitle: 'Confidential Documents',
 			question: 'Confidential Documents',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
 			validators: [new RequiredValidator()]
@@ -153,9 +156,34 @@ export function getQuestions() {
 			title: 'Sensitive Information',
 			pageTitle: 'Sensitive Information',
 			question: 'Sensitive Information',
-			html: 'views/environmental-impact-assessment/optional-subcategory-subtitle.html',
+			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
 			fieldName: 'sensitiveInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
+			validators: [new RequiredValidator()]
+		},
+		notifyingConsultationBodies: {
+			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
+			title: 'Notifying Consultation Bodies',
+			pageTitle: 'Notifying Consultation Bodies',
+			html: 'views/environmental-impact-assessment/html/notifying-consultation-bodies-question.html',
+			question: 'Notifying consultation bodies',
+			fieldName: 'notifyingConsultationBodies',
+			url: 'notifying-consultation-bodies',
+			validators: [
+				new RequiredAnswerValidator({
+					requiredAnswers: [BOOLEAN_OPTIONS.YES],
+					errorMessage: 'You must notify the consultation bodies about the project before continuing'
+				})
+			]
+		},
+		notifyingOtherPeople: {
+			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
+			title: 'Notifying Other People',
+			pageTitle: 'Notifying Other People',
+			html: 'views/environmental-impact-assessment/html/notifying-other-people-question.html',
+			question: 'Notifying other people regulated identified under Regulation 11(1)(c)',
+			fieldName: 'notifyingOtherPeople',
+			url: 'notifying-other-people',
 			validators: [new RequiredValidator()]
 		}
 	};
