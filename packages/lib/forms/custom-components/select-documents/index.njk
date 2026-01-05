@@ -24,6 +24,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {% if question.options and question.options | length > 0 %}
+                {% if question.html %}
+                    {% set beforeInputsHtml = question.html %}
+                {% endif %}
                 <form action="" method="post" novalidate>
                     {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
                     {{ govukCheckboxes({
@@ -33,6 +36,11 @@
                                 text: question.question,
                                 isPageHeading: true,
                                 classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        formGroup: {
+                            beforeInputs: {
+                                html: beforeInputsHtml
                             }
                         },
                         items: question.options

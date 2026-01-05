@@ -9,22 +9,32 @@ import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
+const HRA_DESCRIPTION = `
+		<p class="govuk-body">These could include:</p>
+		<ul class="govuk-list govuk-list--bullet">
+		<li>a brief statement that the project won't affect any European or Ramsar sites</li>
+		<li>a No Significant Effects Report (NSER) where screening shows likely significant effects would not occur</li>
+		<li>an HRA report where screening shows likely significant effects would occur, including information for derogation tests where applicable</li>
+		</ul>
+		<h2 class="govuk-heading-m">Which documents relate to the HRA process?</h2>
+	`;
+
 export function getQuestions() {
 	const questions = {
-		europeanAndRamsarSites: {
+		hasHabitatRegulationsAssessmentReport: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title:
-				'Does the project include any European sites that the conservation of habitats and species regulations are relevant to the application?',
-			question:
-				'Does the project include any European sites that the conservation of habitats and species regulations are relevant to the application?',
-			fieldName: 'europeanAndRamsarSites',
-			url: 'european-and-ramsar-sites',
+			title: 'Does the project require a Habitat Regulations Assessment (HRA) report?',
+			question: 'Does the project require a Habitat Regulations Assessment (HRA) report?',
+			fieldName: 'hasHabitatRegulationsAssessmentReport',
+			hint: 'An HRA report is required if the project may have a likely significant effect on a European site or Ramsar site',
+			url: 'hra-report',
 			validators: [new RequiredValidator()]
 		},
 		habitatRegulationsAssessmentScreeningReport: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the habitat regulations assessment screening report?',
-			question: 'Which documents relate to the habitat regulations assessment screening report?',
+			title: 'Habitat Regulations Assessment (HRA) documents',
+			question: 'Habitat Regulations Assessment (HRA) documents',
+			html: HRA_DESCRIPTION,
 			fieldName: 'habitatRegulationsAssessmentScreeningReport',
 			url: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,
 			validators: [new RequiredValidator()]

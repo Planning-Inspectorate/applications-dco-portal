@@ -26,7 +26,7 @@ export function buildHabitatRegulationsAssessmentInformationHomePage(
 			await populateForm(req, res, db, applicationSectionId);
 		}
 
-		res.redirect(`${req.baseUrl}/details/european-and-ramsar-sites`);
+		res.redirect(`${req.baseUrl}/details/hra-report`);
 	};
 }
 
@@ -65,7 +65,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 
 	forms[applicationSectionId] = hasEvidence
 		? {
-				europeanAndRamsarSites: 'yes',
+				hasHabitatRegulationsAssessmentReport: 'yes',
 				habitatRegulationsAssessmentScreeningReport: getSupportingEvidenceIds(
 					caseData.SupportingEvidence,
 					DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
@@ -77,6 +77,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 				)
 			}
 		: {
-				europeanAndRamsarSites: 'no'
+				hasHabitatRegulationsAssessmentReport: 'no'
 			};
 }
