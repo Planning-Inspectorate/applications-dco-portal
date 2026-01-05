@@ -22,7 +22,7 @@ export function buildWhitelistHomePage({ db }: PortalService): AsyncRequestHandl
 		const userRows = whiteListUsers.map((user) => {
 			const { id, email, isInitialInvitee, UserRole } = user;
 			return [
-				{ text: email },
+				{ html: `<b>${email}</b>` },
 				{ text: UserRole.displayName },
 				{
 					html: isInitialInvitee
