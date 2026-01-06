@@ -7,21 +7,28 @@
 {% block dynQuestionContent %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            {% if question.html %}
+                {% set beforeInputsHtml = question.html %}
+            {% endif %}
             <form action="" method="post" novalidate>
                 {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
-                <h1 class="govuk-heading-l">
-                    {{ question.question }}
-                </h1>
-
-                {% if question.html %}
-                    {% include question.html ignore missing %}
-                {% endif %}
-
                 {% if question.interfaceType === 'radio' %}
                     {{ govukRadios({
                         classes: "govuk-radios",
                         idPrefix: question.fieldName,
                         name: question.fieldName,
+                        fieldset: {
+                            legend: {
+                                text: question.question,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        formGroup: {
+                            beforeInputs: {
+                                html: beforeInputsHtml
+                            }
+                        },
                         errorMessage: errors[question.fieldName] and {
                             text: errors[question.fieldName].msg
                         },
@@ -34,6 +41,18 @@
                         classes: "govuk-checkboxes",
                         idPrefix: question.fieldName,
                         name: question.fieldName,
+                        fieldset: {
+                            legend: {
+                                text: question.question,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        formGroup: {
+                            beforeInputs: {
+                                html: beforeInputsHtml
+                            }
+                        },
                         errorMessage: errors[question.fieldName] and {
                             text: errors[question.fieldName].msg
                         },

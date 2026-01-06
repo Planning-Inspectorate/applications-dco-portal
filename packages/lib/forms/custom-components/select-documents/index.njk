@@ -29,16 +29,15 @@
                 {% endif %}
                 <form action="" method="post" novalidate>
                     {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
-                    <h1 class="govuk-heading-l">
-                        {{ question.question }}
-                    </h1>
-
-                    {% if question.html %}
-                        {% include question.html ignore missing %}
-                    {% endif %}
-
                     {{ govukCheckboxes({
                         name: question.fieldName,
+                        fieldset: {
+                            legend: {
+                                text: question.question,
+                                isPageHeading: true,
+                                classes: "govuk-fieldset__legend--l"
+                            }
+                        },
                         formGroup: {
                             beforeInputs: {
                                 html: beforeInputsHtml

@@ -13,6 +13,7 @@ import RequiredAnswerValidator from '@pins/dco-portal-lib/forms/custom-component
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';
+import HTML_TEMPLATES from './html-templates.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -20,7 +21,7 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
 			title: 'Has Environmental Statement',
 			question: 'Environmental Statement',
-			html: 'views/environmental-impact-assessment/html/has-environmental-statement-question.html',
+			html: HTML_TEMPLATES.HAS_ENVIRONMENTAL_STATEMENT_HTML,
 			fieldName: 'hasEnvironmentalStatement',
 			url: 'has-environmental-statement',
 			validators: [new RequiredValidator()]
@@ -28,9 +29,9 @@ export function getQuestions() {
 		nonTechnicalSummary: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Non-Technical Summary',
-			question: 'Select the non-technical summary of the environmental statement?',
+			question: 'Select the non-technical summary of the environmental statement',
+			html: HTML_TEMPLATES.NON_TECHNICAL_SUMMARY_HTML,
 			fieldName: 'nonTechnicalSummary',
-			hint: 'The environmental statement must include a non-technical summary.',
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
 			validators: [new RequiredValidator()]
 		},
@@ -75,7 +76,7 @@ export function getQuestions() {
 			title: 'Other Environmental Documents',
 			pageTitle: 'Other Environmental Documents',
 			question: 'What other types of environmental statement documents have you uploaded?',
-			hint: 'Select all that apply',
+			html: HTML_TEMPLATES.SELECT_ALL_THAT_APPLY_HTML,
 			fieldName: 'otherEnvironmentalDocuments',
 			url: 'other-environmental-documents',
 			options: referenceDataToRadioOptions(OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS),
@@ -86,7 +87,7 @@ export function getQuestions() {
 			title: 'Introductory Chapters',
 			pageTitle: 'Introductory Chapters',
 			question: 'Introductory Chapters',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -96,7 +97,7 @@ export function getQuestions() {
 			title: 'Aspect Chapters',
 			pageTitle: 'Aspect Chapters',
 			question: 'Aspect Chapters',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
 			validators: [new RequiredValidator()]
@@ -106,7 +107,7 @@ export function getQuestions() {
 			title: 'Environmental Statement Appendices',
 			pageTitle: 'Environmental Statement Appendices',
 			question: 'Environmental Statement Appendices',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
 			validators: [new RequiredValidator()]
@@ -116,7 +117,7 @@ export function getQuestions() {
 			title: 'Environmental Statement Figures',
 			pageTitle: 'Environmental Statement Figures',
 			question: 'Environmental Statement Figures',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
 			validators: [new RequiredValidator()]
@@ -126,7 +127,7 @@ export function getQuestions() {
 			title: 'Model Information',
 			pageTitle: 'Model Information',
 			question: 'Model Information',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -136,7 +137,7 @@ export function getQuestions() {
 			title: 'Any Other Media Information',
 			pageTitle: 'Any Other Media Information',
 			question: 'Any Other Media Information',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -146,7 +147,7 @@ export function getQuestions() {
 			title: 'Confidential Documents',
 			pageTitle: 'Confidential Documents',
 			question: 'Confidential Documents',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
 			validators: [new RequiredValidator()]
@@ -156,7 +157,7 @@ export function getQuestions() {
 			title: 'Sensitive Information',
 			pageTitle: 'Sensitive Information',
 			question: 'Sensitive Information',
-			html: 'views/environmental-impact-assessment/html/optional-subcategory-subtitle.html',
+			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'sensitiveInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
 			validators: [new RequiredValidator()]
@@ -165,7 +166,7 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
 			title: 'Notifying Consultation Bodies',
 			pageTitle: 'Notifying Consultation Bodies',
-			html: 'views/environmental-impact-assessment/html/notifying-consultation-bodies-question.html',
+			html: HTML_TEMPLATES.NOTIFYING_CONSULTATION_BODIES_HTML,
 			question: 'Notifying consultation bodies',
 			fieldName: 'notifyingConsultationBodies',
 			url: 'notifying-consultation-bodies',
@@ -180,7 +181,7 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
 			title: 'Notifying Other People',
 			pageTitle: 'Notifying Other People',
-			html: 'views/environmental-impact-assessment/html/notifying-other-people-question.html',
+			html: HTML_TEMPLATES.NOTIFYING_OTHER_PEOPLE_HTML,
 			question: 'Notifying other people regulated identified under Regulation 11(1)(c)',
 			fieldName: 'notifyingOtherPeople',
 			url: 'notifying-other-people',
