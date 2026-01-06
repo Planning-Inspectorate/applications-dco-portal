@@ -1,0 +1,21 @@
+const SELECT_ALL_THAT_APPLY_HTML = `<div class="govuk-hint">Select all that apply</div>`;
+
+const HAS_ADDITIONAL_INFORMATION_HTML = `
+<p class="govuk-body">
+    You should refer to <a href="https://www.legislation.gov.uk/uksi/2009/2264/regulation/6/made">Regulation 6 of The Infrastructure Planning (Applications: Prescribed Forms and Procedure)
+    Regulations 2009 (opens in a new tab)</a> which sets out when additional information is needed, for example, the height of proposed
+    bridges for a new motorway.
+</p>
+
+<h2 class="govuk-heading-m">Is there any additional information required for this type of infrastructure?</h2>`;
+
+const OPTIONAL_SUBCATEGORY_SUBTITLE_HTML = `
+<h3 class="govuk-heading-s">Which documents need to be declared?</h3>
+
+${SELECT_ALL_THAT_APPLY_HTML}`;
+
+export default {
+	SELECT_ALL_THAT_APPLY_HTML,
+	HAS_ADDITIONAL_INFORMATION_HTML,
+	OPTIONAL_SUBCATEGORY_SUBTITLE_HTML
+};
