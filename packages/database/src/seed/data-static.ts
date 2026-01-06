@@ -130,7 +130,8 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	SENSITIVE_ENVIRONMENTAL_INFORMATION: 'sensitive-environmental-information',
 	OFFSHORE_GENERATING_STATION: 'offshore-generating-station',
 	NON_OFFSHORE_GENERATING_STATION: 'non-offshore-generating-station',
-	HIGHWAY_OR_RAILWAY_DEVELOPMENT: 'highway-or-railway-development',
+	HIGHWAY_RELATED_DEVELOPMENT: 'highway-related-development',
+	RAILWAY_DEVELOPMENT: 'railway-development',
 	HARBOUR_FACILITIES: 'harbour-facilities',
 	PIPELINES: 'pipelines',
 	HAZARDOUS_WASTE_FACILITY: 'hazardous-waste-facility',
@@ -427,8 +428,13 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_OR_RAILWAY_DEVELOPMENT,
-		displayName: 'Highway or railway development',
+		id: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT,
+		displayName: 'Highway related development',
+		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
+	},
+	{
+		id: DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT,
+		displayName: 'Railway development',
 		categoryId: DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	},
 	{
