@@ -19,6 +19,7 @@
     "bcrypt": "*",
     "body-parser": "*",
     "connect-redis": "*",
+    "cookie-parser": "*",
     "dotenv": "*",
     "express": "*",
     "express-session": "*",
@@ -32,6 +33,7 @@
     "redis": "*"
   },
   "devDependencies": {
+    "@types/cookie-parser": "*",
     "nodemon": "*",
     "sass": "*"
   },

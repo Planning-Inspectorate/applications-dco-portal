@@ -27,7 +27,8 @@ export function initSessionMiddleware({ redis, secure, secret }: InitSessionOpti
 		cookie: {
 			secure,
 			maxAge: 30 * 60 * 1000 // 30 minutes
-		}
+		},
+		rolling: true
 	});
 }
 

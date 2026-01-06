@@ -2,6 +2,7 @@ import { buildRouter } from './router.ts';
 import { configureNunjucks } from './nunjucks.ts';
 import bodyParser from 'body-parser';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { addLocalsConfiguration } from '#util/config-middleware.ts';
 import type { Express } from 'express';
 import { PortalService } from '#service';
@@ -48,6 +49,7 @@ export function createApp(service: PortalService): Express {
 	}
 
 	app.use(addLocalsConfiguration());
+	app.use(cookieParser());
 
 	const router = buildRouter(service);
 	// register the router, which will define any subpaths

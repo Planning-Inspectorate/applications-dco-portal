@@ -549,7 +549,10 @@ describe('login controllers', () => {
 					})
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = {
+				redirect: mock.fn(),
+				cookie: mock.fn()
+			};
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
@@ -633,7 +636,10 @@ describe('login controllers', () => {
 					})
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = {
+				redirect: mock.fn(),
+				cookie: mock.fn()
+			};
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
