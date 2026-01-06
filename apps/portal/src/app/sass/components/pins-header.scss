@@ -23,7 +23,7 @@
 	&__logo {
 		display: block;
 		width: auto;
-		height: 80px;
+		height: 32px;
 	}
 
 	.govuk-header__content {
@@ -33,4 +33,8 @@
 	.govuk-header__service-name {
 		margin-bottom: 0;
 	}
+}
+
+.logout-item {
+	margin-left: auto;
 }

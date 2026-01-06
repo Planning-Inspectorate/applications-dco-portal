@@ -165,8 +165,10 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitOtpController(service: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
+		const { db, logger } = service;
+
 		const emailAddress = req.session.emailAddress;
 		const caseReference = req.session.caseReference;
 
@@ -258,6 +260,13 @@ export function buildSubmitOtpController({ db, logger }: PortalService): AsyncRe
 			req.session.isAuthenticated = true;
 			req.session.emailAddress = emailAddress;
 			req.session.caseReference = caseReference;
+
+			res.cookie('had-session', true, {
+				httpOnly: true,
+				secure: service.secureSession,
+				sameSite: 'lax',
+				maxAge: 24 * 60 * 60 * 1000 // 1 day
+			});
 
 			logger.info('User authenticated, redirecting to the landing page');
 

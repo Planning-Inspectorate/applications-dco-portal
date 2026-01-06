@@ -5,21 +5,8 @@ import type { Handler } from 'express';
  */
 export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
-		const path = req.path;
-
-		const links = [
-			{
-				text: 'Home',
-				href: '/'
-			},
-			{
-				text: 'Another Page',
-				href: '/another-page'
-			}
-		];
-
 		res.locals.config = {
-			styleFile: 'style-1191ee0f.css',
+			styleFile: 'style-2f41dd94.css',
 			cspNonce: res.locals.cspNonce,
 			headerTitle: 'Apply for a Development Consent Order',
 			footerLinks: [
@@ -44,11 +31,9 @@ export function addLocalsConfiguration(): Handler {
 					href: '/contact'
 				}
 			],
-			primaryNavigationLinks: links.map((l) => {
-				const link = { current: false, ...l };
-				link.current = link.href === path;
-				return link;
-			})
+			signOutLink: req.session.isAuthenticated
+				? `<li class="govuk-service-navigation__item logout-item"><a href="/sign-out" class="govuk-service-navigation__link">Sign out</a></li>`
+				: ''
 		};
 		next();
 	};

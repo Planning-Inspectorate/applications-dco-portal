@@ -1,0 +1,20 @@
+{% extends "views/layouts/main.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">
+                You have been signed out
+            </h1>
+            <p class="govuk-body">Any information you have not saved or submitted has been deleted because your session was inactive for 30 minutes.</p>
+            <p class="govuk-body">You must sign back in and start a new session.</p>
+            <p class="govuk-body">For more help, email: <a class="govuk-link govuk-link--no-visited-state" href="mailto:NIEnquiries@planninginspectorate.gov.uk">NIEnquiries@planninginspectorate.gov.uk</a></p>
+
+            {{ govukButton({
+                text: 'Sign back in',
+                href: loginUrl
+            }) }}
+        </div>
+    </div>
+{% endblock %}

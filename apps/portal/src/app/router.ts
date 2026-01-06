@@ -7,6 +7,9 @@ import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/a
 import { PortalService } from '#service';
 import { cacheDisableAllCachingMiddleware, cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
 import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
+import { handleSessionTimeoutMiddleware } from './views/middleware/session.ts';
+import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { buildSessionExpiredController } from './views/session-expired/controller.ts';
 
 export function buildRouter(service: PortalService): IRouter {
 	const router = createRouter();
@@ -20,6 +23,12 @@ export function buildRouter(service: PortalService): IRouter {
 	router.use(cacheNoCacheMiddleware);
 
 	router.use('/login', cacheDisableAllCachingMiddleware, isUserUnauthenticated, loginRoutes(service));
+
+	const sessionExpiredController = buildSessionExpiredController();
+	router.get('/session-expired', asyncHandler(sessionExpiredController));
+
+	// redirect user to session timeout page if session has expired
+	router.use(handleSessionTimeoutMiddleware(service));
 
 	// all subsequent routes will require user to be authenticated
 	// place any routes that do not require user auth above here
