@@ -1,9 +1,10 @@
 // @ts-nocheck
 
 import { describe, it } from 'node:test';
-import { GovNotifyClient } from './gov-notify-client.ts';
+import { GovNotifyClient, TEAM_EMAIL_ADDRESS } from './gov-notify-client.ts';
 import { mockLogger } from '../testing/mock-logger.ts';
 import assert from 'node:assert';
+import { WHITELIST_USER_ROLE } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe(`gov-notify-client`, () => {
 	describe('sendEmail', () => {
@@ -37,7 +38,7 @@ describe(`gov-notify-client`, () => {
 			assert.strictEqual(logger.error.mock.callCount(), 1);
 		});
 	});
-	describe('sendAcknowledgePreNotification', () => {
+	describe('sendOneTimePasswordNotification', () => {
 		it('should call sendEmail with personalisation', async (ctx) => {
 			const logger = mockLogger();
 			const client = new GovNotifyClient(logger, 'key', {
@@ -55,6 +56,85 @@ describe(`gov-notify-client`, () => {
 				{
 					personalisation: {
 						oneTimePassword: 'ABCDE'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendWhitelistAddNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				whitelistAddNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendWhitelistAddNotification('email', {
+				case_reference_number: 'EN123456',
+				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendWhitelistAccessChangedNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				whitelistAccessChangedNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendWhitelistAccessChangedNotification('email', {
+				case_reference_number: 'EN123456',
+				type_of_user_changed_from: 'Admin',
+				type_of_user_changed_to: 'Standard',
+				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						type_of_user_changed_from: 'Admin',
+						type_of_user_changed_to: 'Standard',
+						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendWhitelistRemoveNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				whitelistRemoveNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendWhitelistRemoveNotification('email', {
+				case_reference_number: 'EN123456',
+				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);

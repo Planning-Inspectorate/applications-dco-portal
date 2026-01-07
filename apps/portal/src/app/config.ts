@@ -29,6 +29,9 @@ export function loadConfig(): Config {
 		GOV_NOTIFY_DISABLED,
 		GOV_NOTIFY_API_KEY,
 		GOV_NOTIFY_OTP_TEMPLATE_ID,
+		GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
+		GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
+		GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID,
 		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER,
@@ -56,7 +59,10 @@ export function loadConfig(): Config {
 	if (!govNotifyDisabled) {
 		const props = {
 			GOV_NOTIFY_API_KEY,
-			GOV_NOTIFY_OTP_TEMPLATE_ID
+			GOV_NOTIFY_OTP_TEMPLATE_ID,
+			GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
+			GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
+			GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID
 		};
 		for (const [k, v] of Object.entries(props)) {
 			if (v === undefined || v === '') {
@@ -111,7 +117,10 @@ export function loadConfig(): Config {
 			disabled: govNotifyDisabled,
 			apiKey: GOV_NOTIFY_API_KEY,
 			templateIds: {
-				oneTimePasswordNotification: GOV_NOTIFY_OTP_TEMPLATE_ID
+				oneTimePasswordNotification: GOV_NOTIFY_OTP_TEMPLATE_ID,
+				whitelistAddNotification: GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
+				whitelistAccessChangedNotification: GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
+				whitelistRemoveNotification: GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID
 			}
 		},
 		// the log level to use

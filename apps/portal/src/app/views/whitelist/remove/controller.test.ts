@@ -102,6 +102,9 @@ describe('whitelist remove user controllers', () => {
 					}))
 				}
 			};
+			const mockNotifyClient = {
+				sendWhitelistRemoveNotification: mock.fn()
+			};
 			const mockReq = {
 				params: {
 					whitelistUserId: 'whitelistUserId-1'
@@ -112,7 +115,7 @@ describe('whitelist remove user controllers', () => {
 			};
 			const mockRes = { redirect: mock.fn() };
 
-			const controller = buildSaveController({ db: mockDb });
+			const controller = buildSaveController({ db: mockDb, notifyClient: mockNotifyClient });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -124,6 +127,15 @@ describe('whitelist remove user controllers', () => {
 						'<p class="govuk-notification-banner__heading">test@email.com has been removed from the project</p><p class="govuk-body">They will no longer be able to access the service</p>'
 				}
 			});
+
+			assert.strictEqual(mockNotifyClient.sendWhitelistRemoveNotification.mock.callCount(), 1);
+			assert.deepStrictEqual(mockNotifyClient.sendWhitelistRemoveNotification.mock.calls[0].arguments, [
+				'test@email.com',
+				{
+					case_reference_number: 'EN123456',
+					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+				}
+			]);
 		});
 		it('should throw error if error encountered during data deletion', async () => {
 			const mockDb = {
@@ -139,6 +151,9 @@ describe('whitelist remove user controllers', () => {
 			const mockReq = {
 				params: {
 					whitelistUserId: 'whitelistUserId-1'
+				},
+				session: {
+					caseReference: 'EN123456'
 				}
 			};
 			const mockRes = { redirect: mock.fn() };
@@ -149,6 +164,32 @@ describe('whitelist remove user controllers', () => {
 		it('should render not found page if whitelistUserId req param not present', async () => {
 			const mockReq = {
 				params: {}
+			};
+			const mockRes = {
+				render: mock.fn(),
+				status: mock.fn()
+			};
+
+			const controller = buildSaveController({});
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/layouts/error');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Page not found',
+				messages: [
+					'If you typed the web address, check it is correct.',
+					'If you pasted the web address, check you copied the entire address.'
+				]
+			});
+		});
+		it('should render not found page if caseReference req param not present', async () => {
+			const mockReq = {
+				params: {
+					whitelistUserId: 'whitelistUserId-1'
+				},
+				session: {}
 			};
 			const mockRes = {
 				render: mock.fn(),
