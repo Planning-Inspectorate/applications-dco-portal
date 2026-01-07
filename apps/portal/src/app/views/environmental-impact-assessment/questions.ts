@@ -14,6 +14,7 @@ import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/dat
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';
 import HTML_TEMPLATES from './html-templates.ts';
+import { SELECT_ALL_THAT_APPLY_HTML } from '../common-html-templates.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -76,7 +77,7 @@ export function getQuestions() {
 			title: 'Other Environmental Documents',
 			pageTitle: 'Other Environmental Documents',
 			question: 'What other types of environmental statement documents have you uploaded?',
-			html: HTML_TEMPLATES.SELECT_ALL_THAT_APPLY_HTML,
+			html: SELECT_ALL_THAT_APPLY_HTML,
 			fieldName: 'otherEnvironmentalDocuments',
 			url: 'other-environmental-documents',
 			options: referenceDataToRadioOptions(OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS),

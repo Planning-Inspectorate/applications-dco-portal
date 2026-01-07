@@ -11,6 +11,7 @@ import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
+import { populateMultiSubcategoryCheckboxes } from '../util.ts';
 
 export function buildInfrastructureSpecificAdditionalInfoHomePage(
 	{ db }: PortalService,
@@ -35,8 +36,9 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS = DOCUMENT_SUB_CATEGORY.filter(
 		(cat) => cat.categoryId === DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
 	);
-	if (!ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS.length)
+	if (!ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS.length) {
 		throw new Error('No additional information subcategories found.');
+	}
 
 	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_IDS = ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS.map(
 		(option) => option.id
@@ -80,7 +82,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		hasAdditionalInformation:
 			additionalInfoDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0 ? 'yes' : 'no',
 		additionalInformationDescription: caseData.infrastructureAdditionalInformationDescription || '',
-		additionalInformationDocuments: populateAdditionalInformationDocuments(additionalInfoDocumentCounts),
+		additionalInformationDocuments: populateMultiSubcategoryCheckboxes(additionalInfoDocumentCounts),
 		nonOffshoreGeneratingStation: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
@@ -108,13 +110,4 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		),
 		damOrReservoir: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR)
 	};
-}
-
-//move to util
-function populateAdditionalInformationDocuments(subCategories: { count: number; id: string }[]) {
-	let value = '';
-	for (const cat of subCategories) {
-		if (cat.count > 0) value += `${cat.id},`;
-	}
-	return value.length ? value.slice(0, -1) : value;
 }

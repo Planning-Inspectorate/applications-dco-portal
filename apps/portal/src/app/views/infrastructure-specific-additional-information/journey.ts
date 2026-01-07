@@ -29,14 +29,6 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				)
 				.addQuestion(questions.additionalInformationDescription)
 				.addQuestion(questions.additionalInformationDocuments)
-				.addQuestion(questions.nonOffshoreGeneratingStation)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
-						questions.additionalInformationDocuments,
-						DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
-					)
-				)
 				.addQuestion(questions.offshoreGeneratingStation)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(

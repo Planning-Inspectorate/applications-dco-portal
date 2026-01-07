@@ -10,6 +10,7 @@ import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_IDS } from './constants.ts';
+import { populateMultiSubcategoryCheckboxes } from '../util.ts';
 
 export function buildEnvironmentalImpactAssessmentHomePage(
 	{ db }: PortalService,
@@ -98,7 +99,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
 		),
-		otherEnvironmentalDocuments: populateOtherEnvironmentalDocuments(otherEnvironmentalDocumentCounts),
+		otherEnvironmentalDocuments: populateMultiSubcategoryCheckboxes(otherEnvironmentalDocumentCounts),
 		introductoryChapters: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
@@ -126,12 +127,4 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
 		)
 	};
-}
-
-function populateOtherEnvironmentalDocuments(subCategories: { count: number; id: string }[]) {
-	let value = '';
-	for (const cat of subCategories) {
-		if (cat.count > 0) value += `${cat.id},`;
-	}
-	return value.length ? value.slice(0, -1) : value;
 }
