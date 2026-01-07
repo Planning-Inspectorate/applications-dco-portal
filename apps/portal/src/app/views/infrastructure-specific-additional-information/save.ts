@@ -16,15 +16,14 @@ import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
-		const answers = getAnswersFromRes(res);
 		const caseData = await db.case.findUnique({
 			where: { reference: req.session?.caseReference }
 		});
-
 		if (!caseData) {
 			return notFoundHandler(req, res);
 		}
 
+		const answers = getAnswersFromRes(res);
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseId = caseData.id;

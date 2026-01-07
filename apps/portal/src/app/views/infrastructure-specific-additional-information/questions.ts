@@ -16,6 +16,7 @@ import {
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import HTML_TEMPLATES from './html-templates.ts';
+import { SELECT_ALL_THAT_APPLY_HTML } from '../common-html-templates.ts';
 
 export function getQuestions() {
 	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS = DOCUMENT_SUB_CATEGORY.filter(
@@ -51,7 +52,7 @@ export function getQuestions() {
 			title: 'Additional Information Documents',
 			pageTitle: 'Additional Information Documents',
 			question: 'Which of these types of development is the project?',
-			html: HTML_TEMPLATES.SELECT_ALL_THAT_APPLY_HTML, //TODO - MOVE THIS TO SHARED HTML UTIL
+			html: SELECT_ALL_THAT_APPLY_HTML,
 			fieldName: 'additionalInformationDocuments',
 			url: 'additional-information-documents',
 			options: referenceDataToRadioOptions(ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS),

@@ -62,3 +62,11 @@ export function buildIsTaskCompleted(
 		res.redirect('/');
 	};
 }
+
+export function populateMultiSubcategoryCheckboxes(subCategories: { count: number; id: string }[]) {
+	let value = '';
+	for (const cat of subCategories) {
+		if (cat.count > 0) value += `${cat.id},`;
+	}
+	return value.length ? value.slice(0, -1) : value;
+}

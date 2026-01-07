@@ -1,4 +1,4 @@
-const SELECT_ALL_THAT_APPLY_HTML = `<div class="govuk-hint">Select all that apply</div>`;
+import { SELECT_ALL_THAT_APPLY_HTML } from '../common-html-templates.ts';
 
 const HAS_ADDITIONAL_INFORMATION_HTML = `
 <p class="govuk-body">
@@ -15,7 +15,6 @@ const OPTIONAL_SUBCATEGORY_SUBTITLE_HTML = `
 ${SELECT_ALL_THAT_APPLY_HTML}`;
 
 export default {
-	SELECT_ALL_THAT_APPLY_HTML,
 	HAS_ADDITIONAL_INFORMATION_HTML,
 	OPTIONAL_SUBCATEGORY_SUBTITLE_HTML
 };

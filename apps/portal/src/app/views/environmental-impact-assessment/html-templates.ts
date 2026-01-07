@@ -1,4 +1,4 @@
-const SELECT_ALL_THAT_APPLY_HTML = `<div class="govuk-hint">Select all that apply</div>`;
+import { SELECT_ALL_THAT_APPLY_HTML } from '../common-html-templates.ts';
 
 const HAS_ENVIRONMENTAL_STATEMENT_HTML = `
 <p class="govuk-body">
@@ -55,7 +55,6 @@ ${SELECT_ALL_THAT_APPLY_HTML}`;
 const NON_TECHNICAL_SUMMARY_HTML = `<div class="govuk-hint">The environmental statement must include a non-technical summary.</div>`;
 
 export default {
-	SELECT_ALL_THAT_APPLY_HTML,
 	HAS_ENVIRONMENTAL_STATEMENT_HTML,
 	NOTIFYING_CONSULTATION_BODIES_HTML,
 	NOTIFYING_OTHER_PEOPLE_HTML,
