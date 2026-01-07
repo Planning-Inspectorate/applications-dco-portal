@@ -8,7 +8,7 @@ import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 
 describe('whitelist edit user controller', () => {
 	describe('buildSaveController', () => {
-		it('should render enter email address page with view data', async () => {
+		it('should successfully update access level send email and redirect to whitelist landing page', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -18,10 +18,16 @@ describe('whitelist edit user controller', () => {
 					}))
 				},
 				whitelistUser: {
-					findUnique: mock.fn(),
+					findUnique: mock.fn(() => ({
+						email: 'test@email.com',
+						userRoleId: WHITELIST_USER_ROLE_ID.STANDARD_USER
+					})),
 					update: mock.fn(),
 					count: mock.fn(() => 2)
 				}
+			};
+			const mockNotifyClient = {
+				sendWhitelistAccessChangedNotification: mock.fn()
 			};
 			const mockReq = {
 				baseUrl: '/edit-user',
@@ -45,7 +51,7 @@ describe('whitelist edit user controller', () => {
 				}
 			};
 
-			const controller = buildSaveController({ db: mockDb });
+			const controller = buildSaveController({ db: mockDb, notifyClient: mockNotifyClient });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -71,6 +77,65 @@ describe('whitelist edit user controller', () => {
 						'<p class="govuk-notification-banner__heading">test@email.com is now an admin</p><p class="govuk-body">They can now manage user access on this project.</p>'
 				}
 			});
+
+			assert.strictEqual(mockNotifyClient.sendWhitelistAccessChangedNotification.mock.callCount(), 1);
+			assert.deepStrictEqual(mockNotifyClient.sendWhitelistAccessChangedNotification.mock.calls[0].arguments, [
+				'test@email.com',
+				{
+					case_reference_number: 'EN123456',
+					type_of_user_changed_from: 'Standard',
+					type_of_user_changed_to: 'Admin',
+					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+				}
+			]);
+		});
+		it('should not send email notification if access level not changed', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						caseReference: 'EN123456'
+					}))
+				},
+				whitelistUser: {
+					findUnique: mock.fn(() => ({
+						email: 'test@email.com',
+						userRoleId: WHITELIST_USER_ROLE_ID.ADMIN_USER
+					})),
+					update: mock.fn(),
+					count: mock.fn(() => 2)
+				}
+			};
+			const mockNotifyClient = {
+				sendWhitelistAccessChangedNotification: mock.fn()
+			};
+			const mockReq = {
+				baseUrl: '/edit-user',
+				params: {
+					whitelistUserId: 'whitelistUserId-1'
+				},
+				session: {
+					editUserEmailAddress: 'test@email.com',
+					emailAddress: 'bob@email.com',
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							accessLevel: WHITELIST_USER_ROLE_ID.ADMIN_USER
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController({ db: mockDb, notifyClient: mockNotifyClient });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockNotifyClient.sendWhitelistAccessChangedNotification.mock.callCount(), 0);
 		});
 		it('should throw error if error encountered whilst updating whitelist user in the database', async () => {
 			const mockDb = {
@@ -82,7 +147,10 @@ describe('whitelist edit user controller', () => {
 					}))
 				},
 				whitelistUser: {
-					findUnique: mock.fn(),
+					findUnique: mock.fn(() => ({
+						email: 'test@email.com',
+						userRoleId: WHITELIST_USER_ROLE_ID.ADMIN_USER
+					})),
 					update: mock.fn(() => {
 						throw new Error('Error', { code: 'E1' });
 					}),

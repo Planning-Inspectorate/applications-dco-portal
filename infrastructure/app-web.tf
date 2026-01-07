@@ -78,9 +78,12 @@ module "app_portal" {
     SESSION_SECRET          = local.key_vault_refs["session-secret-web"]
 
     # gov notify
-    GOV_NOTIFY_DISABLED        = var.apps_config.gov_notify.disabled
-    GOV_NOTIFY_API_KEY         = local.key_vault_refs["dcop-gov-notify-api-key"]
-    GOV_NOTIFY_OTP_TEMPLATE_ID = var.apps_config.gov_notify.templates.otp_template_id
+    GOV_NOTIFY_DISABLED                             = var.apps_config.gov_notify.disabled
+    GOV_NOTIFY_API_KEY                              = local.key_vault_refs["dcop-gov-notify-api-key"]
+    GOV_NOTIFY_OTP_TEMPLATE_ID                      = var.apps_config.gov_notify.templates.otp_template_id
+    GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID            = var.apps_config.gov_notify.templates.whitelist_add_template_id
+    GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID = var.apps_config.gov_notify.templates.whitelist_access_changed_templated_id
+    GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID         = var.apps_config.gov_notify.templates.whitelist_remove_templated_id
 
     # blob store
     BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled

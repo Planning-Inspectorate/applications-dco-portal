@@ -7,8 +7,9 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import { JOURNEY_ID } from './journey.ts';
 import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 
-export function buildSaveController({ db, logger }: PortalService): AsyncRequestHandler {
+export function buildSaveController({ db, logger, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { caseReference } = req.session;
 		if (!caseReference) {
@@ -87,6 +88,11 @@ export function buildSaveController({ db, logger }: PortalService): AsyncRequest
 			logger.error({ error }, 'error adding new user to the whitelist');
 			throw new Error('error adding new user');
 		}
+
+		notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
+			case_reference_number: caseReference,
+			relevant_team_email_address: TEAM_EMAIL_ADDRESS
+		});
 
 		addSessionData(req, req.session.caseReference as string, {
 			whitelistUpdateMessage: `<p class="govuk-notification-banner__heading">${answers.emailAddress} as been added to the project</p><p class="govuk-body">They will get an email with a link to the service.</p>`

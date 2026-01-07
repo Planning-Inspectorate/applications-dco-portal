@@ -23,6 +23,9 @@ describe('whitelist add user controller', () => {
 					count: mock.fn(() => 2)
 				}
 			};
+			const mockNotifyClient = {
+				sendWhitelistAddNotification: mock.fn()
+			};
 			const mockReq = {
 				baseUrl: '/add-user',
 				session: {
@@ -41,7 +44,7 @@ describe('whitelist add user controller', () => {
 				}
 			};
 
-			const controller = buildSaveController({ db: mockDb });
+			const controller = buildSaveController({ db: mockDb, notifyClient: mockNotifyClient });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -69,6 +72,15 @@ describe('whitelist add user controller', () => {
 						'<p class="govuk-notification-banner__heading">bob@email.com as been added to the project</p><p class="govuk-body">They will get an email with a link to the service.</p>'
 				}
 			});
+
+			assert.strictEqual(mockNotifyClient.sendWhitelistAddNotification.mock.callCount(), 1);
+			assert.deepStrictEqual(mockNotifyClient.sendWhitelistAddNotification.mock.calls[0].arguments, [
+				'bob@email.com',
+				{
+					case_reference_number: 'EN123456',
+					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+				}
+			]);
 		});
 		it('should throw error if error encountered whilst creating whitelist user in the database', async () => {
 			const mockDb = {

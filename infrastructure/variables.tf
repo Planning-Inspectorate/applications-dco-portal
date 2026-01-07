@@ -36,7 +36,10 @@ variable "apps_config" {
     gov_notify = object({
       disabled = bool
       templates = object({
-        otp_template_id = string
+        otp_template_id                       = string
+        whitelist_add_template_id             = string
+        whitelist_access_changed_templated_id = string
+        whitelist_remove_templated_id         = string
       })
     })
 
