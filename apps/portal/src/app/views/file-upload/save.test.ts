@@ -25,7 +25,8 @@ describe('file upload journey save controller', () => {
 			const mockReq = {
 				baseUrl: '/draft-dco',
 				session: {
-					caseReference: 'EN123456'
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
 				}
 			};
 			const mockRes = {
@@ -75,6 +76,7 @@ describe('file upload journey save controller', () => {
 					size: 208,
 					blobName: 'EN123456/draft-dco/test.pdf',
 					isCertified: true,
+					uploaderEmail: 'test@email.com',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -103,6 +105,7 @@ describe('file upload journey save controller', () => {
 					size: 500,
 					blobName: 'EN123456/draft-dco/plan.pdf',
 					isCertified: true,
+					uploaderEmail: 'test@email.com',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -154,7 +157,8 @@ describe('file upload journey save controller', () => {
 			const mockReq = {
 				baseUrl: '/draft-dco',
 				session: {
-					caseReference: 'EN123456'
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
 				}
 			};
 			const mockRes = {
@@ -204,6 +208,7 @@ describe('file upload journey save controller', () => {
 					size: 208,
 					blobName: 'EN123456/draft-dco/test.pdf',
 					isCertified: true,
+					uploaderEmail: 'test@email.com',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -232,6 +237,7 @@ describe('file upload journey save controller', () => {
 					size: 500,
 					blobName: 'EN123456/draft-dco/plan.pdf',
 					isCertified: true,
+					uploaderEmail: 'test@email.com',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -272,7 +278,8 @@ describe('file upload journey save controller', () => {
 			const mockReq = {
 				baseUrl: '/draft-dco',
 				session: {
-					caseReference: 'EN123456'
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
 				}
 			};
 			const mockRes = {
@@ -308,17 +315,58 @@ describe('file upload journey save controller', () => {
 				},
 				DOCUMENT_CATEGORY_ID.DRAFT_DCO
 			);
-			await assert.rejects(() => controller({}, mockRes), { message: 'error saving upload document journey' });
+			await assert.rejects(() => controller(mockReq, mockRes), { message: 'error saving upload document journey' });
+		});
+		it('should render not found page if req.session values not present', async () => {
+			const mockReq = {
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn(),
+				status: mock.fn()
+			};
+
+			const controller = buildSaveController({}, DOCUMENT_CATEGORY_ID.DRAFT_DCO);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/layouts/error');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Page not found',
+				messages: [
+					'If you typed the web address, check it is correct.',
+					'If you pasted the web address, check you copied the entire address.'
+				]
+			});
 		});
 		it('should throw if res.locals is not present', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
+				}
+			};
 			const controller = buildSaveController({}, DOCUMENT_CATEGORY_ID.DRAFT_DCO);
-			await assert.rejects(() => controller({}, {}), { message: 'journey response required' });
+			await assert.rejects(() => controller(mockReq, {}), { message: 'journey response required' });
 		});
 		it('should throw if res.locals.journeyResponse is not present', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
+				}
+			};
 			const controller = buildSaveController({}, DOCUMENT_CATEGORY_ID.DRAFT_DCO);
-			await assert.rejects(() => controller({}, { locals: {} }), { message: 'journey response required' });
+			await assert.rejects(() => controller(mockReq, { locals: {} }), { message: 'journey response required' });
 		});
 		it('should throw if answers is not an object', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456',
+					emailAddress: 'test@email.com'
+				}
+			};
 			const mockRes = {
 				locals: {
 					journeyResponse: {
@@ -327,7 +375,7 @@ describe('file upload journey save controller', () => {
 				}
 			};
 			const controller = buildSaveController({}, DOCUMENT_CATEGORY_ID.DRAFT_DCO);
-			await assert.rejects(() => controller({}, mockRes), { message: 'answers should be an object' });
+			await assert.rejects(() => controller(mockReq, mockRes), { message: 'answers should be an object' });
 		});
 	});
 });

@@ -18,7 +18,7 @@ export class GovNotifyClient {
 
 	async sendOneTimePasswordNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
 		this.logger.info('Dispatching OTP email template');
-		await this.sendEmail(this.#templateIds.oneTimePasswordNotification, email, {
+		await this.sendEmail(this.#templateIds.oneTimePasswordNotification as string, email, {
 			personalisation: personalisation
 		});
 		this.logger.info('OTP email template successfully dispatched');
@@ -26,7 +26,7 @@ export class GovNotifyClient {
 
 	async sendWhitelistAddNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
 		this.logger.info('Dispatching whitelist user added email template');
-		await this.sendEmail(this.#templateIds.whitelistAddNotification, email, {
+		await this.sendEmail(this.#templateIds.whitelistAddNotification as string, email, {
 			personalisation: personalisation
 		});
 		this.logger.info('Whitelist user added email template successfully dispatched');
@@ -37,7 +37,7 @@ export class GovNotifyClient {
 		personalisation: { [key: string]: string }
 	): Promise<void> {
 		this.logger.info('Dispatching whitelist access changed email template');
-		await this.sendEmail(this.#templateIds.whitelistAccessChangedNotification, email, {
+		await this.sendEmail(this.#templateIds.whitelistAccessChangedNotification as string, email, {
 			personalisation: personalisation
 		});
 		this.logger.info('Whitelist access changed email template successfully dispatched');
@@ -45,10 +45,18 @@ export class GovNotifyClient {
 
 	async sendWhitelistRemoveNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
 		this.logger.info('Dispatching whitelist remove email template');
-		await this.sendEmail(this.#templateIds.whitelistRemoveNotification, email, {
+		await this.sendEmail(this.#templateIds.whitelistRemoveNotification as string, email, {
 			personalisation: personalisation
 		});
 		this.logger.info('Whitelist remove email template successfully dispatched');
+	}
+
+	async sendAntiVirusFailedNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+		this.logger.info('Dispatching anti virus failed email template');
+		await this.sendEmail(this.#templateIds.antiVirusFailedNotification as string, email, {
+			personalisation: personalisation
+		});
+		this.logger.info('Anti virus failed email template successfully dispatched');
 	}
 
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {

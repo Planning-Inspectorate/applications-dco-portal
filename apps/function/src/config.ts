@@ -11,7 +11,10 @@ export function loadConfig(): Config {
 		NSIP_PROJECT_TOPIC,
 		SERVICE_USER_SUBSCRIPTION,
 		SERVICE_USER_TOPIC,
-		SQL_CONNECTION_STRING
+		SQL_CONNECTION_STRING,
+		GOV_NOTIFY_DISABLED,
+		GOV_NOTIFY_API_KEY,
+		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
 	} = process.env;
 
 	const props = {
@@ -19,7 +22,10 @@ export function loadConfig(): Config {
 		NSIP_PROJECT_TOPIC,
 		SERVICE_USER_SUBSCRIPTION,
 		SERVICE_USER_TOPIC,
-		SQL_CONNECTION_STRING
+		SQL_CONNECTION_STRING,
+		GOV_NOTIFY_DISABLED,
+		GOV_NOTIFY_API_KEY,
+		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
 	};
 
 	for (const [k, v] of Object.entries(props)) {
@@ -31,6 +37,13 @@ export function loadConfig(): Config {
 	return {
 		database: {
 			datasourceUrl: SQL_CONNECTION_STRING
+		},
+		govNotify: {
+			disabled: GOV_NOTIFY_DISABLED === 'true',
+			apiKey: GOV_NOTIFY_API_KEY || '',
+			templateIds: {
+				antiVirusFailedNotification: GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
+			}
 		},
 		logLevel: LOG_LEVEL || 'info',
 		NODE_ENV: NODE_ENV || 'development',

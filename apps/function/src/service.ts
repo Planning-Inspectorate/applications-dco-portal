@@ -3,6 +3,8 @@ import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.t
 import type { Config } from './config-types.d.ts';
 import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
 import type { Logger } from 'pino';
+import { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import { initGovNotify } from '@pins/dco-portal-lib/govnotify/index.ts';
 
 /**
  * This class encapsulates all the services and clients for the application
@@ -11,6 +13,7 @@ export class FunctionService {
 	#config: Config;
 	logger: Logger;
 	dbClient: PrismaClient;
+	notifyClient: GovNotifyClient | null;
 
 	constructor(config: Config) {
 		this.#config = config;
@@ -22,6 +25,7 @@ export class FunctionService {
 			throw new Error('database connectionString is required');
 		}
 		this.dbClient = initDatabaseClient(config, logger);
+		this.notifyClient = initGovNotify(config.govNotify, logger);
 	}
 
 	/**

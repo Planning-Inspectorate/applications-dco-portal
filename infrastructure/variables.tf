@@ -40,6 +40,7 @@ variable "apps_config" {
         whitelist_add_template_id             = string
         whitelist_access_changed_templated_id = string
         whitelist_remove_templated_id         = string
+        anti_virus_failed_template_id         = string
       })
     })
 
