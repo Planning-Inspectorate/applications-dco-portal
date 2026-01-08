@@ -37,6 +37,11 @@ module "function_integration" {
     SERVICE_USER_SUBSCRIPTION                     = azurerm_servicebus_subscription.service_user_subscription.name
     NSIP_PROJECT_TOPIC                            = data.azurerm_servicebus_topic.nsip_project.name
     NSIP_PROJECT_SUBSCRIPTION                     = azurerm_servicebus_subscription.nsip_project_subscription.name
+
+    # gov notify
+    GOV_NOTIFY_DISABLED                      = var.apps_config.gov_notify.disabled
+    GOV_NOTIFY_API_KEY                       = local.key_vault_refs["dcop-gov-notify-api-key"]
+    GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID = var.apps_config.gov_notify.templates.anti_virus_failed_template_id
   }
 }
 

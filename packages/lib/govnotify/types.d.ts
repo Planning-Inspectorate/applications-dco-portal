@@ -8,10 +8,11 @@ export interface GovNotifyOptions {
 }
 
 export interface TemplateIds {
-	oneTimePasswordNotification: string;
-	whitelistAddNotification: string;
-	whitelistAccessChangedNotification: string;
-	whitelistRemoveNotification: string;
+	oneTimePasswordNotification?: string;
+	whitelistAddNotification?: string;
+	whitelistAccessChangedNotification?: string;
+	whitelistRemoveNotification?: string;
+	antiVirusFailedNotification?: string;
 }
 
 export interface NotifyConfig {

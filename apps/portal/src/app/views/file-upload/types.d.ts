@@ -5,6 +5,7 @@ export interface DocumentRecord {
 	size?: bigint | number;
 	blobName: string;
 	isCertified: boolean;
+	uploaderEmail: string;
 	SubCategory: DocumentSubCategoryCreateNestedOneWithoutDocumentInput;
 	ApfpRegulation: ApfpRegulationCreateNestedOneWithoutDocumentInput;
 	ScanResult: DocumentScanResultCreateNestedOneWithoutDocumentInput;

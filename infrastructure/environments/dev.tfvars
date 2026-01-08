@@ -21,6 +21,7 @@ apps_config = {
       whitelist_add_template_id             = "2c382487-824b-45a7-b681-9de41cac45b8"
       whitelist_access_changed_templated_id = "427e2245-9426-4b49-8846-04d6b89ca444"
       whitelist_remove_templated_id         = "c044d6d4-52ef-4ab1-a472-c71d034eb33b"
+      anti_virus_failed_template_id         = "35f41f19-c696-4749-9617-8627b437aded"
     }
   }
   logging = {
