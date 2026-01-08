@@ -37,14 +37,18 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 						DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
 					)
 				)
-				.addQuestion(questions.nonOffshoreGeneratingStation)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('non-offshore-generating-station', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
 					)
 				)
+				.addQuestion(questions.electicityGrid)
+				.addQuestion(questions.gasFuelledGeneratingStation)
+				.addQuestion(questions.gasPipelineConnection)
+				.addQuestion(questions.nonOffshoreGeneratingStation)
+				.endMultiQuestionCondition('non-offshore-generating-station')
 				.addQuestion(questions.highwayRelatedDevelopment)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(
