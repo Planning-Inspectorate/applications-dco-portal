@@ -58,6 +58,42 @@ export function getQuestions() {
 			options: referenceDataToRadioOptions(ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS),
 			validators: [new RequiredValidator()]
 		},
+		electicityGrid: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Electricity Grid',
+			pageTitle: 'Electricity Grid',
+			question: 'Who will design and build the connection to the electricity grid?',
+			fieldName: 'electicityGrid',
+			url: 'electricity-grid',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		gasFuelledGeneratingStation: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Gas Fuelled Generating Station',
+			question: 'Gas Fuelled Generating Station',
+			fieldName: 'gasFuelledGeneratingStation',
+			url: 'gas-fuelled-generating-station',
+			validators: [new RequiredValidator()]
+		},
+		gasPipelineConnection: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Gas Pipeline Connection',
+			pageTitle: 'Gas Pipeline Connection',
+			question: 'Who will design and build the gas pipeline connection to the generating station?',
+			fieldName: 'gasPipelineConnection',
+			url: 'gas-pipeline-connection',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
 		nonOffshoreGeneratingStation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Non Offshore Generating Station',
