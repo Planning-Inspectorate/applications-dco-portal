@@ -44,7 +44,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 						DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
 					)
 				)
-				.addQuestion(questions.electicityGrid)
+				.addQuestion(questions.electricityGrid)
 				.addQuestion(questions.gasFuelledGeneratingStation)
 				.addQuestion(questions.gasPipelineConnection)
 				.addQuestion(questions.nonOffshoreGeneratingStation)

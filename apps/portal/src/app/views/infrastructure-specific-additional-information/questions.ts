@@ -58,12 +58,12 @@ export function getQuestions() {
 			options: referenceDataToRadioOptions(ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS),
 			validators: [new RequiredValidator()]
 		},
-		electicityGrid: {
+		electricityGrid: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Electricity Grid',
 			pageTitle: 'Electricity Grid',
 			question: 'Who will design and build the connection to the electricity grid?',
-			fieldName: 'electicityGrid',
+			fieldName: 'electricityGrid',
 			url: 'electricity-grid',
 			validators: [
 				new StringValidator({
