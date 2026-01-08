@@ -13,11 +13,15 @@ import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import { mapAnswersToNonOffshoreGeneratingStation } from './mappers.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
 		const caseData = await db.case.findUnique({
-			where: { reference: req.session?.caseReference }
+			where: { reference: req.session?.caseReference },
+			include: {
+				NonOffshoreGeneratingStation: true
+			}
 		});
 		if (!caseData) {
 			return notFoundHandler(req, res);
@@ -40,7 +44,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						key: 'offshoreGeneratingStation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
 						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION) &&
+							/(?:^|,)\s*(?<!non-)offshore-generating-station\s*(?=,|$)/.test(additionalInformationDocuments) &&
 							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
 					},
 					{
@@ -104,22 +108,53 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					}
 				}
 
+				// Conditionally building case update query handles updating/deleting relation models with minimal queries
+				const data = {
+					infrastructureAdditionalInformationDescription: answers.additionalInformationDescription || null,
+					notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES ? true : false,
+					[`${kebabCaseToCamelCase(applicationSectionId)}Status`]: {
+						connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
+					}
+				};
+				if (
+					additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION) &&
+					answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+				) {
+					data.NonOffshoreGeneratingStation = buildUpsertQuery(
+						mapAnswersToNonOffshoreGeneratingStation(answers, caseId)
+					);
+				} else {
+					if (caseData?.NonOffshoreGeneratingStation) {
+						await $tx.nonOffshoreGeneratingStation.delete({
+							where: { id: caseData?.NonOffshoreGeneratingStation?.id }
+						});
+					}
+				}
+
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
-					data: {
-						infrastructureAdditionalInformationDescription: answers.additionalInformationDescription || null,
-						notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES ? true : false,
-						[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED
-					}
+					data: data
 				});
 			});
 		} catch (error) {
-			console.log(error);
 			logger.error({ error }, 'error saving infrastructure specific additional information data to database');
 			throw new Error('error saving infrastructure specific additional information journey');
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });
 		res.redirect('/');
+	};
+}
+
+function buildUpsertQuery(input: Record<string, any>) {
+	return {
+		upsert: {
+			update: {
+				...input
+			},
+			create: {
+				...input
+			}
+		}
 	};
 }
