@@ -68,6 +68,34 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION,
 			validators: [new RequiredValidator()]
 		},
+		cableInstallation: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Offshore Cable Installation',
+			pageTitle: 'Offshore Cable Installation',
+			question: 'Provide details of the route and method of installation for any cable',
+			fieldName: 'cableInstallation',
+			url: 'cable-installation',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		safetyZones: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Offshore Safety Zones',
+			pageTitle: 'Offshore Safety Zones',
+			question: 'Will applications be made for safety zones?',
+			fieldName: 'safetyZones',
+			url: 'safety-zones',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
 		offshoreGeneratingStation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Offshore Generating Station',

@@ -17,7 +17,10 @@ import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
 		const caseData = await db.case.findUnique({
-			where: { reference: req.session?.caseReference }
+			where: { reference: req.session?.caseReference },
+			include: {
+				OffshoreGeneratingStation: true
+			}
 		});
 		if (!caseData) {
 			return notFoundHandler(req, res);
@@ -40,7 +43,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						key: 'offshoreGeneratingStation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
 						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION) &&
+							/(?:^|,)\s*(?<!non-)offshore-generating-station\s*(?=,|$)/.test(additionalInformationDocuments) &&
 							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
 					},
 					{
@@ -104,6 +107,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					}
 				}
 
+				//MERGE NON OFFSHORE FIRST
+
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
 					data: {
@@ -114,7 +119,6 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				});
 			});
 		} catch (error) {
-			console.log(error);
 			logger.error({ error }, 'error saving infrastructure specific additional information data to database');
 			throw new Error('error saving infrastructure specific additional information journey');
 		}
