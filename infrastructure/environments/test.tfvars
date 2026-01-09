@@ -68,6 +68,13 @@ front_door_config = {
   use_tooling = true
 }
 
+back_office_infra_config = {
+  network = {
+    name = "pins-vnet-common-test-ukw-001"
+    rg   = "pins-rg-common-test-ukw-001"
+  }
+}
+
 monitoring_config = {
   app_insights_web_test_enabled = false
   log_daily_cap                 = 0.1

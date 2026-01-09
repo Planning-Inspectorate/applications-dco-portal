@@ -94,6 +94,17 @@ variable "front_door_config" {
   })
 }
 
+variable "back_office_infra_config" {
+  description = "Config for the back office infra"
+  type = object({
+    network = object({
+      name = string
+      rg   = string
+    })
+  })
+  default = null
+}
+
 variable "health_check_eviction_time_in_min" {
   description = "The eviction time in minutes for the health check"
   type        = number

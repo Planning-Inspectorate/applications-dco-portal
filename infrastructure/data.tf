@@ -47,3 +47,11 @@ data "azurerm_virtual_network" "tooling" {
 
   provider = azurerm.tooling
 }
+
+data "azurerm_virtual_network" "back_office_vnet" {
+  # only include if configured to connect to back office
+  count = var.back_office_infra_config == null ? 0 : 1
+
+  name                = var.back_office_infra_config.network.name
+  resource_group_name = var.back_office_infra_config.network.rg
+}
