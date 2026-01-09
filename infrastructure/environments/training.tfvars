@@ -51,6 +51,13 @@ back_office_config = {
   service_bus_name     = "pins-sb-back-office-training-ukw-001"
 }
 
+back_office_infra_config = {
+  network = {
+    name = "pins-vnet-common-training-ukw-001"
+    rg   = "pins-rg-common-training-ukw-001"
+  }
+}
+
 common_config = {
   resource_group_name = "pins-rg-common-training-ukw-001"
   action_group_names = {

@@ -58,6 +58,27 @@ resource "azurerm_virtual_network_peering" "tooling_to_dcop" {
   provider = azurerm.tooling
 }
 
+# peer to back office for Service Bus connection
+resource "azurerm_virtual_network_peering" "dcop_to_back_office" {
+  # only deploy if configured to connect to back office
+  count = var.back_office_infra_config == null ? 0 : 1
+
+  name                      = "${local.org}-peer-${local.service_name}-to-back-office-${var.environment}"
+  remote_virtual_network_id = data.azurerm_virtual_network.back_office_vnet[0].id
+  resource_group_name       = azurerm_virtual_network.main.resource_group_name
+  virtual_network_name      = azurerm_virtual_network.main.name
+}
+
+resource "azurerm_virtual_network_peering" "back_office_to_dcop" {
+  # only deploy if configured to connect to back office
+  count = var.back_office_infra_config == null ? 0 : 1
+
+  name                      = "${local.org}-peer-back-office-to-${local.service_name}-${var.environment}"
+  remote_virtual_network_id = azurerm_virtual_network.main.id
+  resource_group_name       = var.back_office_infra_config.network.rg
+  virtual_network_name      = var.back_office_infra_config.network.name
+}
+
 ## DNS Zones for Azure Services
 ## Private DNS Zones exist in the tooling subscription and are shared here
 resource "azurerm_private_dns_zone_virtual_network_link" "dns_database" {
@@ -86,5 +107,3 @@ resource "azurerm_private_dns_zone_virtual_network_link" "redis_cache" {
 
   provider = azurerm.tooling
 }
-
-

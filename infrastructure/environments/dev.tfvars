@@ -50,6 +50,8 @@ back_office_config = {
   service_bus_name     = "pins-sb-back-office-dev-ukw-001"
 }
 
+back_office_infra_config = null
+
 common_config = {
   resource_group_name = "pins-rg-common-dev-ukw-001"
   action_group_names = {

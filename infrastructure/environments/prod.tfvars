@@ -15,6 +15,13 @@ back_office_config = {
   service_bus_name     = "pins-sb-back-office-prod-ukw-001"
 }
 
+back_office_infra_config = {
+  network = {
+    name = "pins-vnet-common-prod-ukw-001"
+    rg   = "pins-rg-common-prod-ukw-001"
+  }
+}
+
 environment = "prod"
 
 front_door_config = {
