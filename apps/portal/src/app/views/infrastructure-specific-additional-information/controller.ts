@@ -53,7 +53,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 						id: { in: ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_IDS }
 					}
 				}
-			}
+			},
+			NonOffshoreGeneratingStation: true
 		}
 	});
 
@@ -83,13 +84,16 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			additionalInfoDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0 ? 'yes' : 'no',
 		additionalInformationDescription: caseData.infrastructureAdditionalInformationDescription || '',
 		additionalInformationDocuments: populateMultiSubcategoryCheckboxes(additionalInfoDocumentCounts),
-		nonOffshoreGeneratingStation: getSupportingEvidenceIds(
-			caseData.SupportingEvidence,
-			DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
-		),
 		offshoreGeneratingStation: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
+		),
+		electricityGrid: caseData.NonOffshoreGeneratingStation?.electricityGrid || '',
+		gasFuelledGeneratingStation: caseData.NonOffshoreGeneratingStation?.gasFuelledGeneratingStation ? 'yes' : 'no',
+		gasPipelineConnection: caseData.NonOffshoreGeneratingStation?.gasPipelineConnection || '',
+		nonOffshoreGeneratingStation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
 		),
 		highwayRelatedDevelopment: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,

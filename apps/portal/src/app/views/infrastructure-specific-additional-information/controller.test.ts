@@ -30,7 +30,12 @@ describe('infrastructure-specific-additional-information controller', () => {
 							{ documentId: 'doc-id-10', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY },
 							{ documentId: 'doc-id-11', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR },
 							{ documentId: 'doc-id-12', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR }
-						]
+						],
+						NonOffshoreGeneratingStation: {
+							electricityGrid: 'Test Grid',
+							gasFuelledGeneratingStation: true,
+							gasPipelineConnection: 'Test Pipeline'
+						}
 					}))
 				},
 				supportingEvidence: {
@@ -67,6 +72,9 @@ describe('infrastructure-specific-additional-information controller', () => {
 						additionalInformationDescription: 'test desc',
 						additionalInformationDocuments:
 							'offshore-generating-station,non-offshore-generating-station,highway-related-development,railway-development,harbour-facilities,pipelines,hazardous-waste-facility,dam-or-reservoir',
+						electricityGrid: 'Test Grid',
+						gasFuelledGeneratingStation: 'yes',
+						gasPipelineConnection: 'Test Pipeline',
 						nonOffshoreGeneratingStation: 'doc-id-1',
 						offshoreGeneratingStation: 'doc-id-2,doc-id-3',
 						highwayRelatedDevelopment: 'doc-id-4',
@@ -84,7 +92,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 				case: {
 					findUnique: mock.fn(() => ({
 						infrastructureSpecificAdditionalInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
-						SupportingEvidence: []
+						SupportingEvidence: [],
+						NonOffshoreGeneratingStation: null
 					}))
 				},
 				supportingEvidence: {
@@ -120,6 +129,9 @@ describe('infrastructure-specific-additional-information controller', () => {
 						hasAdditionalInformation: 'no',
 						additionalInformationDescription: '',
 						additionalInformationDocuments: '',
+						electricityGrid: '',
+						gasFuelledGeneratingStation: 'no',
+						gasPipelineConnection: '',
 						nonOffshoreGeneratingStation: '',
 						offshoreGeneratingStation: '',
 						highwayRelatedDevelopment: '',
