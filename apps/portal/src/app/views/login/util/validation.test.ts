@@ -70,6 +70,7 @@ describe('login validation', () => {
 			assert.strictEqual(isValidCaseReference('WW123456'), true);
 			assert.strictEqual(isValidCaseReference('En123456'), true);
 			assert.strictEqual(isValidCaseReference('eN123456'), true);
+			assert.strictEqual(isValidCaseReference('WW1234567'), true);
 			assert.strictEqual(isValidCaseReference('E123456'), false);
 			assert.strictEqual(isValidCaseReference('E123456'), false);
 			assert.strictEqual(isValidCaseReference('E123456'), false);
@@ -77,9 +78,9 @@ describe('login validation', () => {
 			assert.strictEqual(isValidCaseReference('EN12345'), false);
 			assert.strictEqual(isValidCaseReference('EN12345.'), false);
 			assert.strictEqual(isValidCaseReference('EN12345.'), false);
-			assert.strictEqual(isValidCaseReference('EN1234567'), false);
 			assert.strictEqual(isValidCaseReference('EN12A456'), false);
 			assert.strictEqual(isValidCaseReference('123456EN'), false);
+			assert.strictEqual(isValidCaseReference('EN12345699'), false);
 		});
 	});
 });

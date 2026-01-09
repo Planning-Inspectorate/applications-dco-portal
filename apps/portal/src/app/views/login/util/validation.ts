@@ -25,5 +25,5 @@ export function sentInLastTenSeconds(otpRecord: OtpRecord) {
 }
 
 export function isValidCaseReference(caseReference: string): boolean {
-	return Boolean(caseReference) && /^(EN|BC|TR|WA|WS|WW)\d{6}$/i.test(caseReference);
+	return Boolean(caseReference) && /^(EN|BC|TR|WA|WS|WW)\d{6,7}$/i.test(caseReference);
 }

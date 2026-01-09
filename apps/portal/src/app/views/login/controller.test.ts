@@ -322,7 +322,7 @@ describe('login controllers', () => {
 			const mockReq = {
 				body: {
 					emailAddress: 'valid@email.com',
-					caseReference: 'EN1234567'
+					caseReference: 'EN12345678'
 				}
 			};
 			const mockRes = { render: mock.fn() };
