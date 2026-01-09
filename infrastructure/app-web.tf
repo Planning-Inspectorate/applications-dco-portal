@@ -29,7 +29,7 @@ module "app_portal" {
   outbound_vnet_connectivity      = true
   # public access via Front Door
   front_door_restriction = true
-  public_network_access  = true
+  public_network_access  = true 
 
   # monitoring
   action_group_ids                  = local.action_group_ids
@@ -39,7 +39,7 @@ module "app_portal" {
   health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
 
   #Easy Auth setting
-  auth_config = {
+  auth_config = var.auth_config.auth_enabled ? {
     auth_enabled           = var.auth_config.auth_enabled
     require_authentication = var.auth_config.auth_enabled
     auth_client_id         = var.auth_config.auth_client_id
@@ -49,7 +49,7 @@ module "app_portal" {
     allowed_applications = var.auth_config.application_id
     allowed_audiences    = "https://${var.web_domains.portal}/.auth/login/aad/callback"
     excluded_paths       = []
-  }
+  } : null
 
   app_settings = {
     APPLICATIONINSIGHTS_CONNECTION_STRING      = local.key_vault_refs["app-insights-connection-string"]
