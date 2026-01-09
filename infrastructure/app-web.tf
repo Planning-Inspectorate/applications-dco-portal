@@ -29,7 +29,7 @@ module "app_portal" {
   outbound_vnet_connectivity      = true
   # public access via Front Door
   front_door_restriction = true
-  public_network_access  = true
+  public_network_access  = true 
 
   # monitoring
   action_group_ids                  = local.action_group_ids
