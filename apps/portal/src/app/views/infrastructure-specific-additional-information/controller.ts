@@ -53,7 +53,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 						id: { in: ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_IDS }
 					}
 				}
-			}
+			},
+			OffshoreGeneratingStation: true
 		}
 	});
 
@@ -87,6 +88,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
 		),
+		cableInstallation: caseData.OffshoreGeneratingStation?.cableInstallation || '',
+		safetyZones: caseData.OffshoreGeneratingStation?.safetyZones || '',
 		offshoreGeneratingStation: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION

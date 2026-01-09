@@ -30,7 +30,11 @@ describe('infrastructure-specific-additional-information controller', () => {
 							{ documentId: 'doc-id-10', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY },
 							{ documentId: 'doc-id-11', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR },
 							{ documentId: 'doc-id-12', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR }
-						]
+						],
+						OffshoreGeneratingStation: {
+							cableInstallation: 'cables',
+							safetyZones: 'safety'
+						}
 					}))
 				},
 				supportingEvidence: {
@@ -68,6 +72,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						additionalInformationDocuments:
 							'offshore-generating-station,non-offshore-generating-station,highway-related-development,railway-development,harbour-facilities,pipelines,hazardous-waste-facility,dam-or-reservoir',
 						nonOffshoreGeneratingStation: 'doc-id-1',
+						cableInstallation: 'cables',
+						safetyZones: 'safety',
 						offshoreGeneratingStation: 'doc-id-2,doc-id-3',
 						highwayRelatedDevelopment: 'doc-id-4',
 						railwayDevelopment: 'doc-id-5',
@@ -84,7 +90,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 				case: {
 					findUnique: mock.fn(() => ({
 						infrastructureSpecificAdditionalInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
-						SupportingEvidence: []
+						SupportingEvidence: [],
+						OffshoreGeneratingStation: null
 					}))
 				},
 				supportingEvidence: {
@@ -121,6 +128,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						additionalInformationDescription: '',
 						additionalInformationDocuments: '',
 						nonOffshoreGeneratingStation: '',
+						cableInstallation: '',
+						safetyZones: '',
 						offshoreGeneratingStation: '',
 						highwayRelatedDevelopment: '',
 						railwayDevelopment: '',
