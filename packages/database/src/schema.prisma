@@ -48,6 +48,8 @@ model Case {
   NonOffshoreGeneratingStation                   NonOffshoreGeneratingStation? @relation("NonOffshoreGeneratingStation", fields: [nonOffshoreGeneratingStationId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   offshoreGeneratingStationId                    String?                       @db.UniqueIdentifier
   OffshoreGeneratingStation                      OffshoreGeneratingStation?    @relation("OffshoreGeneratingStation", fields: [offshoreGeneratingStationId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  highwayRelatedDevelopmentId                    String?                       @db.UniqueIdentifier
+  HighwayRelatedDevelopment                      HighwayRelatedDevelopment?    @relation("HighwayRelatedDevelopment", fields: [highwayRelatedDevelopmentId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -334,4 +336,17 @@ model OffshoreGeneratingStation {
   safetyZones       String @db.NVarChar(2000)
 
   OffshoreGeneratingStation Case[] @relation("OffshoreGeneratingStation")
+}
+
+model HighwayRelatedDevelopment {
+  id                     String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId                 String @db.UniqueIdentifier
+  groundLevels           String
+  bridgeHeights          String @db.NVarChar(2000)
+  tunnelDepths           String @db.NVarChar(2000)
+  tidalWaterLevels       String @db.NVarChar(2000)
+  heightOfStructures     String @db.NVarChar(2000)
+  drainageOutfallDetails String @db.NVarChar(2000)
+
+  HighwayRelatedDevelopment Case[] @relation("HighwayRelatedDevelopment")
 }

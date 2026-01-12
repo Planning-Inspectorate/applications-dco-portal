@@ -10,3 +10,13 @@ export interface OffshoreGeneratingStationInput {
 	safetyZones: string;
 	caseId: string;
 }
+
+export interface HighwayRelatedDevelopmentInput {
+	groundLevels: string;
+	bridgeHeights: string;
+	tunnelDepths: string;
+	tidalWaterLevels: string;
+	heightOfStructures: string;
+	drainageOutfallDetails: string;
+	caseId: string;
+}
