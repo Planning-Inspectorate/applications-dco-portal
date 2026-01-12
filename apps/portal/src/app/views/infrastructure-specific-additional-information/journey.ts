@@ -82,14 +82,17 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.railwayDrainageOutfallDetails)
 				.addQuestion(questions.railwayDevelopment)
 				.endMultiQuestionCondition('railway-development')
-				.addQuestion(questions.harbourFacilities)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('harbour-facilities', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES
 					)
 				)
+				.addQuestion(questions.whyHarbourOrderNeeded)
+				.addQuestion(questions.benefitsToSeaTransport)
+				.addQuestion(questions.harbourFacilities)
+				.endMultiQuestionCondition('harbour-facilities')
 				.addQuestion(questions.pipelines)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(response, questions.additionalInformationDocuments, DOCUMENT_SUB_CATEGORY_ID.PIPELINES)

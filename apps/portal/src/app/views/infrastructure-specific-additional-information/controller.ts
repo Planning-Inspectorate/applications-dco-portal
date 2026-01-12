@@ -48,7 +48,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			NonOffshoreGeneratingStation: true,
 			OffshoreGeneratingStation: true,
 			HighwayRelatedDevelopment: true,
-			RailwayDevelopment: true
+			RailwayDevelopment: true,
+			HarbourFacilities: true
 		}
 	});
 
@@ -111,6 +112,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT
 		),
+		whyHarbourOrderNeeded: caseData.HarbourFacilities?.whyHarbourOrderNeeded || '',
+		benefitsToSeaTransport: caseData.HarbourFacilities?.benefitsToSeaTransport || '',
 		harbourFacilities: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES

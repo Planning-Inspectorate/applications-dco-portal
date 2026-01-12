@@ -52,6 +52,8 @@ model Case {
   HighwayRelatedDevelopment                      HighwayRelatedDevelopment?    @relation("HighwayRelatedDevelopment", fields: [highwayRelatedDevelopmentId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   railwayDevelopmentId                           String?                       @db.UniqueIdentifier
   RailwayDevelopment                             RailwayDevelopment?           @relation("RailwayDevelopment", fields: [railwayDevelopmentId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  harbourFacilitiesId                            String?                       @db.UniqueIdentifier
+  HarbourFacilities                              HarbourFacilities?            @relation("HarbourFacilities", fields: [harbourFacilitiesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -364,4 +366,13 @@ model RailwayDevelopment {
   drainageOutfallDetails String @db.NVarChar(2000)
 
   RailwayDevelopment Case[] @relation("RailwayDevelopment")
+}
+
+model HarbourFacilities {
+  id                     String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId                 String @db.UniqueIdentifier
+  whyHarbourOrderNeeded  String @db.NVarChar(2000)
+  benefitsToSeaTransport String @db.NVarChar(2000)
+
+  HarbourFacilities Case[] @relation("HarbourFacilities")
 }

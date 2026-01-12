@@ -55,6 +55,10 @@ describe('infrastructure-specific-additional-information controller', () => {
 							tidalWaterLevels: 'tide',
 							heightOfStructures: 'height',
 							drainageOutfallDetails: 'drainage'
+						},
+						HarbourFacilities: {
+							whyHarbourOrderNeeded: 'its needed',
+							benefitsToSeaTransport: 'its good'
 						}
 					}))
 				},
@@ -113,6 +117,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						railwayHeightOfStructures: 'height',
 						railwayDrainageOutfallDetails: 'drainage',
 						railwayDevelopment: 'doc-id-5',
+						whyHarbourOrderNeeded: 'its needed',
+						benefitsToSeaTransport: 'its good',
 						harbourFacilities: 'doc-id-6,doc-id-7',
 						pipelines: 'doc-id-8',
 						hazardousWasteFacility: 'doc-id-9,doc-id-10',
@@ -130,7 +136,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						NonOffshoreGeneratingStation: null,
 						OffshoreGeneratingStation: null,
 						HighwayRelatedDevelopment: null,
-						RailwayDevelopment: null
+						RailwayDevelopment: null,
+						HarbourFacilities: null
 					}))
 				},
 				supportingEvidence: {
@@ -187,6 +194,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						railwayHeightOfStructures: '',
 						railwayDrainageOutfallDetails: '',
 						railwayDevelopment: '',
+						whyHarbourOrderNeeded: '',
+						benefitsToSeaTransport: '',
 						harbourFacilities: '',
 						pipelines: '',
 						hazardousWasteFacility: '',

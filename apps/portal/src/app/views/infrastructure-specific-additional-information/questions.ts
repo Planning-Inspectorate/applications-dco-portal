@@ -322,6 +322,34 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT,
 			validators: [new RequiredValidator()]
 		},
+		whyHarbourOrderNeeded: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Why is Harbour Order Needed',
+			pageTitle: 'Why is Harbour Order Needed',
+			question: 'Why is the order needed to improve, maintain or manage the harbour?',
+			fieldName: 'whyHarbourOrderNeeded',
+			url: 'why-is-order',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		benefitsToSeaTransport: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Benefits to Sea Transport',
+			pageTitle: 'Benefits to Sea Transport',
+			question: 'How will the order benefit transport by sea or recreational use of sea-going ships?',
+			fieldName: 'benefitsToSeaTransport',
+			url: 'benefits-to-sea-transport-and-recreation',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
 		harbourFacilities: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Harbour Facilities',

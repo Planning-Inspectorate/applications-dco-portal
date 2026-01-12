@@ -30,3 +30,9 @@ export interface RailwayDevelopmentInput {
 	drainageOutfallDetails: string;
 	caseId: string;
 }
+
+export interface HarbourFacilitiesInput {
+	whyHarbourOrderNeeded: string;
+	benefitsToSeaTransport: string;
+	caseId: string;
+}
