@@ -46,6 +46,8 @@ model Case {
   infrastructureAdditionalInformationDescription String?                       @db.NVarChar(2000)
   nonOffshoreGeneratingStationId                 String?                       @db.UniqueIdentifier
   NonOffshoreGeneratingStation                   NonOffshoreGeneratingStation? @relation("NonOffshoreGeneratingStation", fields: [nonOffshoreGeneratingStationId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  offshoreGeneratingStationId                    String?                       @db.UniqueIdentifier
+  OffshoreGeneratingStation                      OffshoreGeneratingStation?    @relation("OffshoreGeneratingStation", fields: [offshoreGeneratingStationId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -323,4 +325,13 @@ model NonOffshoreGeneratingStation {
   gasPipelineConnection       String  @db.NVarChar(2000)
 
   NonOffshoreGeneratingStation Case[] @relation("NonOffshoreGeneratingStation")
+}
+
+model OffshoreGeneratingStation {
+  id                String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId            String @db.UniqueIdentifier
+  cableInstallation String @db.NVarChar(2000)
+  safetyZones       String @db.NVarChar(2000)
+
+  OffshoreGeneratingStation Case[] @relation("OffshoreGeneratingStation")
 }

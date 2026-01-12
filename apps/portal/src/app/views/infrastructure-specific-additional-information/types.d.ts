@@ -4,3 +4,9 @@ export interface NonOffshoreGeneratingStationInput {
 	gasPipelineConnection: string;
 	caseId: string;
 }
+
+export interface OffshoreGeneratingStationInput {
+	cableInstallation: string;
+	safetyZones: string;
+	caseId: string;
+}

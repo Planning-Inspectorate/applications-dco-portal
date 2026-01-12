@@ -3,15 +3,14 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	DOCUMENT_CATEGORY_STATUS_ID,
-	DOCUMENT_CATEGORY_ID,
-	DOCUMENT_SUB_CATEGORY_ID,
-	DOCUMENT_SUB_CATEGORY
+	DOCUMENT_SUB_CATEGORY_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { populateMultiSubcategoryCheckboxes } from '../util.ts';
+import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
 export function buildInfrastructureSpecificAdditionalInfoHomePage(
 	{ db }: PortalService,
@@ -33,16 +32,8 @@ export function buildInfrastructureSpecificAdditionalInfoHomePage(
 }
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
-	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS = DOCUMENT_SUB_CATEGORY.filter(
-		(cat) => cat.categoryId === DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION
-	);
-	if (!ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS.length) {
-		throw new Error('No additional information subcategories found.');
-	}
-
-	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_IDS = ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS.map(
-		(option) => option.id
-	);
+	const ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_IDS =
+		getInfrastructureSpecificAdditionalInformationSubcategoryOptions().map((option) => option.id);
 
 	const caseData = await db.case.findUnique({
 		where: { reference: req.session?.caseReference },
@@ -54,7 +45,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 					}
 				}
 			},
-			NonOffshoreGeneratingStation: true
+			NonOffshoreGeneratingStation: true,
+			OffshoreGeneratingStation: true
 		}
 	});
 
@@ -84,16 +76,18 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			additionalInfoDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0 ? 'yes' : 'no',
 		additionalInformationDescription: caseData.infrastructureAdditionalInformationDescription || '',
 		additionalInformationDocuments: populateMultiSubcategoryCheckboxes(additionalInfoDocumentCounts),
-		offshoreGeneratingStation: getSupportingEvidenceIds(
-			caseData.SupportingEvidence,
-			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
-		),
 		electricityGrid: caseData.NonOffshoreGeneratingStation?.electricityGrid || '',
 		gasFuelledGeneratingStation: caseData.NonOffshoreGeneratingStation?.gasFuelledGeneratingStation ? 'yes' : 'no',
 		gasPipelineConnection: caseData.NonOffshoreGeneratingStation?.gasPipelineConnection || '',
 		nonOffshoreGeneratingStation: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION
+		),
+		cableInstallation: caseData.OffshoreGeneratingStation?.cableInstallation || '',
+		safetyZones: caseData.OffshoreGeneratingStation?.safetyZones || '',
+		offshoreGeneratingStation: getSupportingEvidenceIds(
+			caseData.SupportingEvidence,
+			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
 		),
 		highwayRelatedDevelopment: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,

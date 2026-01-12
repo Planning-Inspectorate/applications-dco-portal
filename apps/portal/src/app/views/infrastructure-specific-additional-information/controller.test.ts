@@ -35,6 +35,10 @@ describe('infrastructure-specific-additional-information controller', () => {
 							electricityGrid: 'Test Grid',
 							gasFuelledGeneratingStation: true,
 							gasPipelineConnection: 'Test Pipeline'
+						},
+						OffshoreGeneratingStation: {
+							cableInstallation: 'cables',
+							safetyZones: 'safety'
 						}
 					}))
 				},
@@ -76,6 +80,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						gasFuelledGeneratingStation: 'yes',
 						gasPipelineConnection: 'Test Pipeline',
 						nonOffshoreGeneratingStation: 'doc-id-1',
+						cableInstallation: 'cables',
+						safetyZones: 'safety',
 						offshoreGeneratingStation: 'doc-id-2,doc-id-3',
 						highwayRelatedDevelopment: 'doc-id-4',
 						railwayDevelopment: 'doc-id-5',
@@ -93,7 +99,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 					findUnique: mock.fn(() => ({
 						infrastructureSpecificAdditionalInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [],
-						NonOffshoreGeneratingStation: null
+						NonOffshoreGeneratingStation: null,
+						OffshoreGeneratingStation: null
 					}))
 				},
 				supportingEvidence: {
@@ -133,6 +140,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						gasFuelledGeneratingStation: 'no',
 						gasPipelineConnection: '',
 						nonOffshoreGeneratingStation: '',
+						cableInstallation: '',
+						safetyZones: '',
 						offshoreGeneratingStation: '',
 						highwayRelatedDevelopment: '',
 						railwayDevelopment: '',
