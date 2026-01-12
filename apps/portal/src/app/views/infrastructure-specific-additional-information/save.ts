@@ -13,14 +13,16 @@ import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { mapAnswersToNonOffshoreGeneratingStation } from './mappers.ts';
+import { mapAnswersToNonOffshoreGeneratingStation, mapAnswersToOffshoreGeneratingStation } from './mappers.ts';
+import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
 		const caseData = await db.case.findUnique({
 			where: { reference: req.session?.caseReference },
 			include: {
-				NonOffshoreGeneratingStation: true
+				NonOffshoreGeneratingStation: true,
+				OffshoreGeneratingStation: true
 			}
 		});
 		if (!caseData) {
@@ -28,73 +30,66 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 		}
 
 		const answers = getAnswersFromRes(res);
+		const additionalPrescribedInformationSubcategoryIds =
+			getInfrastructureSpecificAdditionalInformationSubcategoryOptions().map((option) => option.id);
 		try {
 			await db.$transaction(async ($tx) => {
 				const caseId = caseData.id;
 				const additionalInformationDocuments = answers.additionalInformationDocuments || [];
+				const documentAppliedLookup: Record<string, any> = {};
+				for (const id of additionalPrescribedInformationSubcategoryIds) {
+					documentAppliedLookup[id] =
+						(id === DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
+							? /(?:^|,)\s*(?<!non-)offshore-generating-station\s*(?=,|$)/.test(additionalInformationDocuments)
+							: additionalInformationDocuments.includes(id)) &&
+						answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES;
+				}
+
 				const categories: CategoryInformation[] = [
 					{
 						key: 'nonOffshoreGeneratingStation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION]
 					},
 					{
 						key: 'offshoreGeneratingStation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
-						applied:
-							/(?:^|,)\s*(?<!non-)offshore-generating-station\s*(?=,|$)/.test(additionalInformationDocuments) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION]
 					},
 					{
 						key: 'highwayRelatedDevelopment',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT]
 					},
 					{
 						key: 'railwayDevelopment',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT]
 					},
 					{
 						key: 'harbourFacilities',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES]
 					},
 					{
 						key: 'anyOtherMediaInformation',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION]
 					},
 					{
 						key: 'pipelines',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.PIPELINES,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.PIPELINES) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.PIPELINES]
 					},
 					{
 						key: 'hazardousWasteFacility',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY]
 					},
 					{
 						key: 'damOrReservoir',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR,
-						applied:
-							additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR) &&
-							answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
+						applied: documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR]
 					}
 				];
 
@@ -116,19 +111,21 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
 					}
 				};
-				if (
-					additionalInformationDocuments.includes(DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION) &&
-					answers.hasAdditionalInformation === BOOLEAN_OPTIONS.YES
-				) {
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION]) {
 					data.NonOffshoreGeneratingStation = buildUpsertQuery(
 						mapAnswersToNonOffshoreGeneratingStation(answers, caseId)
 					);
-				} else {
-					if (caseData?.NonOffshoreGeneratingStation) {
-						await $tx.nonOffshoreGeneratingStation.delete({
-							where: { id: caseData?.NonOffshoreGeneratingStation?.id }
-						});
-					}
+				} else if (caseData?.NonOffshoreGeneratingStation) {
+					await $tx.nonOffshoreGeneratingStation.delete({
+						where: { id: caseData?.NonOffshoreGeneratingStation?.id }
+					});
+				}
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION]) {
+					data.OffshoreGeneratingStation = buildUpsertQuery(mapAnswersToOffshoreGeneratingStation(answers, caseId));
+				} else if (caseData?.OffshoreGeneratingStation) {
+					await $tx.offshoreGeneratingStation.delete({
+						where: { id: caseData?.OffshoreGeneratingStation?.id }
+					});
 				}
 
 				await $tx.case.update({

@@ -29,14 +29,17 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				)
 				.addQuestion(questions.additionalInformationDescription)
 				.addQuestion(questions.additionalInformationDocuments)
-				.addQuestion(questions.offshoreGeneratingStation)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('offshore-generating-station', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
 					)
 				)
+				.addQuestion(questions.cableInstallation)
+				.addQuestion(questions.safetyZones)
+				.addQuestion(questions.offshoreGeneratingStation)
+				.endMultiQuestionCondition('offshore-generating-station')
 				.startMultiQuestionCondition('non-offshore-generating-station', (response: Handler) =>
 					questionHasAnswer(
 						response,
