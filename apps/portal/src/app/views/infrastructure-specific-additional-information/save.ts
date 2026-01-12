@@ -16,7 +16,8 @@ import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	mapAnswersToHighwayRelatedDevelopment,
 	mapAnswersToNonOffshoreGeneratingStation,
-	mapAnswersToOffshoreGeneratingStation
+	mapAnswersToOffshoreGeneratingStation,
+	mapAnswersToRailwayDevelopment
 } from './mappers.ts';
 import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
@@ -27,7 +28,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			include: {
 				NonOffshoreGeneratingStation: true,
 				OffshoreGeneratingStation: true,
-				HighwayRelatedDevelopment: true
+				HighwayRelatedDevelopment: true,
+				RailwayDevelopment: true
 			}
 		});
 		if (!caseData) {
@@ -147,6 +149,16 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					if (caseData?.HighwayRelatedDevelopment) {
 						await $tx.highwayRelatedDevelopment.delete({
 							where: { id: caseData?.HighwayRelatedDevelopment?.id }
+						});
+					}
+				}
+
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT]) {
+					data.RailwayDevelopment = buildUpsertQuery(mapAnswersToRailwayDevelopment(answers, caseId));
+				} else {
+					if (caseData?.RailwayDevelopment) {
+						await $tx.railwayDevelopment.delete({
+							where: { id: caseData?.RailwayDevelopment?.id }
 						});
 					}
 				}

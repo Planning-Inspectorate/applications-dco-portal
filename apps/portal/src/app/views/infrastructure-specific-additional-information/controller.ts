@@ -47,7 +47,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			},
 			NonOffshoreGeneratingStation: true,
 			OffshoreGeneratingStation: true,
-			HighwayRelatedDevelopment: true
+			HighwayRelatedDevelopment: true,
+			RailwayDevelopment: true
 		}
 	});
 
@@ -90,16 +91,22 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
 		),
-		groundLevels: caseData.HighwayRelatedDevelopment?.groundLevels || '',
-		bridgeHeights: caseData.HighwayRelatedDevelopment?.bridgeHeights || '',
-		tunnelDepths: caseData.HighwayRelatedDevelopment?.tunnelDepths || '',
-		tidalWaterLevels: caseData.HighwayRelatedDevelopment?.tidalWaterLevels || '',
-		heightOfStructures: caseData.HighwayRelatedDevelopment?.heightOfStructures || '',
-		drainageOutfallDetails: caseData.HighwayRelatedDevelopment?.drainageOutfallDetails || '',
+		highwayGroundLevels: caseData.HighwayRelatedDevelopment?.groundLevels || '',
+		highwayBridgeHeights: caseData.HighwayRelatedDevelopment?.bridgeHeights || '',
+		highwayTunnelDepths: caseData.HighwayRelatedDevelopment?.tunnelDepths || '',
+		highwayTidalWaterLevels: caseData.HighwayRelatedDevelopment?.tidalWaterLevels || '',
+		highwayHeightOfStructures: caseData.HighwayRelatedDevelopment?.heightOfStructures || '',
+		highwayDrainageOutfallDetails: caseData.HighwayRelatedDevelopment?.drainageOutfallDetails || '',
 		highwayRelatedDevelopment: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT
 		),
+		railwayGroundLevels: caseData.RailwayDevelopment?.groundLevels || '',
+		railwayBridgeHeights: caseData.RailwayDevelopment?.bridgeHeights || '',
+		railwayTunnelDepths: caseData.RailwayDevelopment?.tunnelDepths || '',
+		railwayTidalWaterLevels: caseData.RailwayDevelopment?.tidalWaterLevels || '',
+		railwayHeightOfStructures: caseData.RailwayDevelopment?.heightOfStructures || '',
+		railwayDrainageOutfallDetails: caseData.RailwayDevelopment?.drainageOutfallDetails || '',
 		railwayDevelopment: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT
