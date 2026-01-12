@@ -127,6 +127,15 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						where: { id: caseData?.OffshoreGeneratingStation?.id }
 					});
 				}
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION]) {
+					data.OffshoreGeneratingStation = buildUpsertQuery(mapAnswersToOffshoreGeneratingStation(answers, caseId));
+				} else {
+					if (caseData?.OffshoreGeneratingStation) {
+						await $tx.offshoreGeneratingStation.delete({
+							where: { id: caseData?.OffshoreGeneratingStation?.id }
+						});
+					}
+				}
 
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
