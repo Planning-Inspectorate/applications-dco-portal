@@ -4,7 +4,8 @@ import type {
 	NonOffshoreGeneratingStationInput,
 	OffshoreGeneratingStationInput,
 	HighwayRelatedDevelopmentInput,
-	RailwayDevelopmentInput
+	RailwayDevelopmentInput,
+	HarbourFacilitiesInput
 } from './types.d.ts';
 
 export function mapAnswersToNonOffshoreGeneratingStation(
@@ -53,6 +54,14 @@ export function mapAnswersToRailwayDevelopment(answers: Record<string, any>, cas
 		tidalWaterLevels: answers.railwayTidalWaterLevels,
 		heightOfStructures: answers.railwayHeightOfStructures,
 		drainageOutfallDetails: answers.railwayDrainageOutfallDetails,
+		caseId: caseId
+	};
+}
+
+export function mapAnswersToHarbourFacilities(answers: Record<string, any>, caseId: string): HarbourFacilitiesInput {
+	return {
+		whyHarbourOrderNeeded: answers.whyHarbourOrderNeeded,
+		benefitsToSeaTransport: answers.benefitsToSeaTransport,
 		caseId: caseId
 	};
 }

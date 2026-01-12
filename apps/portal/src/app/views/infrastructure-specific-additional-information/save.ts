@@ -17,7 +17,8 @@ import {
 	mapAnswersToHighwayRelatedDevelopment,
 	mapAnswersToNonOffshoreGeneratingStation,
 	mapAnswersToOffshoreGeneratingStation,
-	mapAnswersToRailwayDevelopment
+	mapAnswersToRailwayDevelopment,
+	mapAnswersToHarbourFacilities
 } from './mappers.ts';
 import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
@@ -29,7 +30,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				NonOffshoreGeneratingStation: true,
 				OffshoreGeneratingStation: true,
 				HighwayRelatedDevelopment: true,
-				RailwayDevelopment: true
+				RailwayDevelopment: true,
+				HarbourFacilities: true
 			}
 		});
 		if (!caseData) {
@@ -159,6 +161,16 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					if (caseData?.RailwayDevelopment) {
 						await $tx.railwayDevelopment.delete({
 							where: { id: caseData?.RailwayDevelopment?.id }
+						});
+					}
+				}
+
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES]) {
+					data.HarbourFacilities = buildUpsertQuery(mapAnswersToHarbourFacilities(answers, caseId));
+				} else {
+					if (caseData?.HarbourFacilities) {
+						await $tx.harbourFacilities.delete({
+							where: { id: caseData?.HarbourFacilities?.id }
 						});
 					}
 				}
