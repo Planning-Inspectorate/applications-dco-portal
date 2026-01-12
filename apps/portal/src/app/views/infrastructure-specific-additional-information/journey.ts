@@ -59,29 +59,29 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 						DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT
 					)
 				)
-				.addQuestion(questions.groundLevels)
-				.addQuestion(questions.bridgeHeights)
-				.addQuestion(questions.tunnelDepths)
-				.addQuestion(questions.tidalWaterLevels)
-				.addQuestion(questions.heightOfStructures)
-				.addQuestion(questions.drainageOutfallDetails)
+				.addQuestion(questions.highwayGroundLevels)
+				.addQuestion(questions.highwayBridgeHeights)
+				.addQuestion(questions.highwayTunnelDepths)
+				.addQuestion(questions.highwayTidalWaterLevels)
+				.addQuestion(questions.highwayHeightOfStructures)
+				.addQuestion(questions.highwayDrainageOutfallDetails)
 				.addQuestion(questions.highwayRelatedDevelopment)
 				.endMultiQuestionCondition('highway-related-development')
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
-						questions.additionalInformationDocuments,
-						DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT
-					)
-				)
-				.addQuestion(questions.railwayDevelopment)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('railway-development', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT
 					)
 				)
+				.addQuestion(questions.railwayGroundLevels)
+				.addQuestion(questions.railwayBridgeHeights)
+				.addQuestion(questions.railwayTunnelDepths)
+				.addQuestion(questions.railwayTidalWaterLevels)
+				.addQuestion(questions.railwayHeightOfStructures)
+				.addQuestion(questions.railwayDrainageOutfallDetails)
+				.addQuestion(questions.railwayDevelopment)
+				.endMultiQuestionCondition('railway-development')
 				.addQuestion(questions.harbourFacilities)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(

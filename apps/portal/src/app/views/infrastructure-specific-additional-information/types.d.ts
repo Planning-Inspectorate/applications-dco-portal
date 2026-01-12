@@ -20,3 +20,13 @@ export interface HighwayRelatedDevelopmentInput {
 	drainageOutfallDetails: string;
 	caseId: string;
 }
+
+export interface RailwayDevelopmentInput {
+	groundLevels: string;
+	bridgeHeights: string;
+	tunnelDepths: string;
+	tidalWaterLevels: string;
+	heightOfStructures: string;
+	drainageOutfallDetails: string;
+	caseId: string;
+}

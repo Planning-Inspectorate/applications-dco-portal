@@ -142,22 +142,22 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
 			validators: [new RequiredValidator()]
 		},
-		groundLevels: {
+		highwayGroundLevels: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 			title: 'Highway Ground Levels',
 			pageTitle: 'Highway Ground Levels',
-			question: 'What are the ground levels of the project',
-			fieldName: 'groundLevels',
-			url: 'ground-levels',
+			question: 'What are the ground levels of the project?',
+			fieldName: 'highwayGroundLevels',
+			url: 'highway-ground-levels',
 			validators: [new RequiredValidator()]
 		},
-		bridgeHeights: {
+		highwayBridgeHeights: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Highway Bridge Heights and Elevated Works',
 			pageTitle: 'Highway Bridge Heights and Elevated Works',
 			question: 'What is the height of every bridge, viaduct, aqueduct, embankment and elevated guide way?',
-			fieldName: 'bridgeHeights',
-			url: 'height-of-bridges-and-elevated-works',
+			fieldName: 'highwayBridgeHeights',
+			url: 'highway-height-of-bridges-and-elevated-works',
 			validators: [
 				new StringValidator({
 					maxLength: { maxLength: 2000 },
@@ -165,13 +165,13 @@ export function getQuestions() {
 				})
 			]
 		},
-		tunnelDepths: {
+		highwayTunnelDepths: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Highway Cutting and Tunnel Depths',
 			pageTitle: 'Highway Cutting and Tunnel Depths',
 			question: 'What is the depth of every cutting and tunnel?',
-			fieldName: 'tunnelDepths',
-			url: 'depth-of-cuttings-and-tunnels',
+			fieldName: 'highwayTunnelDepths',
+			url: 'highway-depth-of-cuttings-and-tunnels',
 			validators: [
 				new StringValidator({
 					maxLength: { maxLength: 2000 },
@@ -179,13 +179,13 @@ export function getQuestions() {
 				})
 			]
 		},
-		tidalWaterLevels: {
+		highwayTidalWaterLevels: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Highway Levels of Tidal Waters or Inland Waterways',
 			pageTitle: 'Highway Levels of Tidal Waters or Inland Waterways',
 			question: 'What are the levels of the bed of relevant tidal waters or inland waterways?',
-			fieldName: 'tidalWaterLevels',
-			url: 'levels-of-tidal-waters-or-inland-waterways',
+			fieldName: 'highwayTidalWaterLevels',
+			url: 'highway-levels-of-tidal-waters-or-inland-waterways',
 			validators: [
 				new StringValidator({
 					maxLength: { maxLength: 2000 },
@@ -193,14 +193,14 @@ export function getQuestions() {
 				})
 			]
 		},
-		heightOfStructures: {
+		highwayHeightOfStructures: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Highway Height of Structures or Devices',
 			pageTitle: 'Highway Height of Structures or Devices',
 			question:
 				'What is the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways?',
-			fieldName: 'heightOfStructures',
-			url: 'height-of-structures-or-devices',
+			fieldName: 'highwayHeightOfStructures',
+			url: 'highway-height-of-structures-or-devices',
 			validators: [
 				new StringValidator({
 					maxLength: { maxLength: 2000 },
@@ -208,13 +208,13 @@ export function getQuestions() {
 				})
 			]
 		},
-		drainageOutfallDetails: {
+		highwayDrainageOutfallDetails: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Highway Drainage Outfall Details',
 			pageTitle: 'Highway Drainage Outfall Details',
 			question: 'What are the drainage outfall details for highways?',
-			fieldName: 'drainageOutfallDetails',
-			url: 'drainage-outfall-details',
+			fieldName: 'highwayDrainageOutfallDetails',
+			url: 'highway-drainage-outfall-details',
 			validators: [
 				new StringValidator({
 					maxLength: { maxLength: 2000 },
@@ -231,6 +231,86 @@ export function getQuestions() {
 			fieldName: 'highwayRelatedDevelopment',
 			url: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT,
 			validators: [new RequiredValidator()]
+		},
+		railwayGroundLevels: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: 'Railway Ground Levels',
+			pageTitle: 'Railway Ground Levels',
+			question: 'What are the ground levels of the project?',
+			fieldName: 'railwayGroundLevels',
+			url: 'railway-ground-levels',
+			validators: [new RequiredValidator()]
+		},
+		railwayBridgeHeights: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Railway Bridge Heights and Elevated Works',
+			pageTitle: 'Railway Bridge Heights and Elevated Works',
+			question: 'What is the height of every bridge, viaduct, aqueduct, embankment and elevated guide way?',
+			fieldName: 'railwayBridgeHeights',
+			url: 'railway-height-of-bridges-and-elevated-works',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		railwayTunnelDepths: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Railway Cutting and Tunnel Depths',
+			pageTitle: 'Railway Cutting and Tunnel Depths',
+			question: 'What is the depth of every cutting and tunnel?',
+			fieldName: 'railwayTunnelDepths',
+			url: 'railway-depth-of-cuttings-and-tunnels',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		railwayTidalWaterLevels: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Railway Levels of Tidal Waters or Inland Waterways',
+			pageTitle: 'Railway Levels of Tidal Waters or Inland Waterways',
+			question: 'What are the levels of the bed of relevant tidal waters or inland waterways?',
+			fieldName: 'railwayTidalWaterLevels',
+			url: 'railway-levels-of-tidal-waters-or-inland-waterways',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		railwayHeightOfStructures: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Railway Height of Structures or Devices',
+			pageTitle: 'Railway Height of Structures or Devices',
+			question:
+				'What is the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways?',
+			fieldName: 'railwayHeightOfStructures',
+			url: 'railway-height-of-structures-or-devices',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		railwayDrainageOutfallDetails: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Railway Drainage Outfall Details',
+			pageTitle: 'Railway Drainage Outfall Details',
+			question: 'What are the drainage outfall details for railways?',
+			fieldName: 'railwayDrainageOutfallDetails',
+			url: 'railway-drainage-outfall-details',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
 		},
 		railwayDevelopment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
