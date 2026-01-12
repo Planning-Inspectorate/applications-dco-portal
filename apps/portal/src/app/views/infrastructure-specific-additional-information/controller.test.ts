@@ -39,6 +39,14 @@ describe('infrastructure-specific-additional-information controller', () => {
 						OffshoreGeneratingStation: {
 							cableInstallation: 'cables',
 							safetyZones: 'safety'
+						},
+						HighwayRelatedDevelopment: {
+							groundLevels: 'ground',
+							bridgeHeights: 'bridges',
+							tunnelDepths: 'tunnels',
+							tidalWaterLevels: 'tide',
+							heightOfStructures: 'height',
+							drainageOutfallDetails: 'drainage'
 						}
 					}))
 				},
@@ -83,6 +91,12 @@ describe('infrastructure-specific-additional-information controller', () => {
 						cableInstallation: 'cables',
 						safetyZones: 'safety',
 						offshoreGeneratingStation: 'doc-id-2,doc-id-3',
+						groundLevels: 'ground',
+						bridgeHeights: 'bridges',
+						tunnelDepths: 'tunnels',
+						tidalWaterLevels: 'tide',
+						heightOfStructures: 'height',
+						drainageOutfallDetails: 'drainage',
 						highwayRelatedDevelopment: 'doc-id-4',
 						railwayDevelopment: 'doc-id-5',
 						harbourFacilities: 'doc-id-6,doc-id-7',
@@ -100,7 +114,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						infrastructureSpecificAdditionalInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [],
 						NonOffshoreGeneratingStation: null,
-						OffshoreGeneratingStation: null
+						OffshoreGeneratingStation: null,
+						HighwayRelatedDevelopment: null
 					}))
 				},
 				supportingEvidence: {
@@ -143,6 +158,12 @@ describe('infrastructure-specific-additional-information controller', () => {
 						cableInstallation: '',
 						safetyZones: '',
 						offshoreGeneratingStation: '',
+						groundLevels: '',
+						bridgeHeights: '',
+						tunnelDepths: '',
+						tidalWaterLevels: '',
+						heightOfStructures: '',
+						drainageOutfallDetails: '',
 						highwayRelatedDevelopment: '',
 						railwayDevelopment: '',
 						harbourFacilities: '',

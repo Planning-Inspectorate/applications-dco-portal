@@ -13,7 +13,11 @@ import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { mapAnswersToNonOffshoreGeneratingStation, mapAnswersToOffshoreGeneratingStation } from './mappers.ts';
+import {
+	mapAnswersToHighwayRelatedDevelopment,
+	mapAnswersToNonOffshoreGeneratingStation,
+	mapAnswersToOffshoreGeneratingStation
+} from './mappers.ts';
 import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
@@ -22,7 +26,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			where: { reference: req.session?.caseReference },
 			include: {
 				NonOffshoreGeneratingStation: true,
-				OffshoreGeneratingStation: true
+				OffshoreGeneratingStation: true,
+				HighwayRelatedDevelopment: true
 			}
 		});
 		if (!caseData) {
@@ -133,6 +138,15 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					if (caseData?.OffshoreGeneratingStation) {
 						await $tx.offshoreGeneratingStation.delete({
 							where: { id: caseData?.OffshoreGeneratingStation?.id }
+						});
+					}
+				}
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT]) {
+					data.HighwayRelatedDevelopment = buildUpsertQuery(mapAnswersToHighwayRelatedDevelopment(answers, caseId));
+				} else {
+					if (caseData?.HighwayRelatedDevelopment) {
+						await $tx.highwayRelatedDevelopment.delete({
+							where: { id: caseData?.HighwayRelatedDevelopment?.id }
 						});
 					}
 				}

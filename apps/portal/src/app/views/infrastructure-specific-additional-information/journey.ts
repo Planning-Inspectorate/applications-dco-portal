@@ -52,7 +52,21 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.gasPipelineConnection)
 				.addQuestion(questions.nonOffshoreGeneratingStation)
 				.endMultiQuestionCondition('non-offshore-generating-station')
+				.startMultiQuestionCondition('highway-related-development', (response: Handler) =>
+					questionHasAnswer(
+						response,
+						questions.additionalInformationDocuments,
+						DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT
+					)
+				)
+				.addQuestion(questions.groundLevels)
+				.addQuestion(questions.bridgeHeights)
+				.addQuestion(questions.tunnelDepths)
+				.addQuestion(questions.tidalWaterLevels)
+				.addQuestion(questions.heightOfStructures)
+				.addQuestion(questions.drainageOutfallDetails)
 				.addQuestion(questions.highwayRelatedDevelopment)
+				.endMultiQuestionCondition('highway-related-development')
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(
 						response,

@@ -142,6 +142,86 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
 			validators: [new RequiredValidator()]
 		},
+		groundLevels: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: 'Highway Ground Levels',
+			pageTitle: 'Highway Ground Levels',
+			question: 'What are the ground levels of the project',
+			fieldName: 'groundLevels',
+			url: 'ground-levels',
+			validators: [new RequiredValidator()]
+		},
+		bridgeHeights: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Highway Bridge Heights and Elevated Works',
+			pageTitle: 'Highway Bridge Heights and Elevated Works',
+			question: 'What is the height of every bridge, viaduct, aqueduct, embankment and elevated guide way?',
+			fieldName: 'bridgeHeights',
+			url: 'height-of-bridges-and-elevated-works',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		tunnelDepths: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Highway Cutting and Tunnel Depths',
+			pageTitle: 'Highway Cutting and Tunnel Depths',
+			question: 'What is the depth of every cutting and tunnel?',
+			fieldName: 'tunnelDepths',
+			url: 'depth-of-cuttings-and-tunnels',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		tidalWaterLevels: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Highway Levels of Tidal Waters or Inland Waterways',
+			pageTitle: 'Highway Levels of Tidal Waters or Inland Waterways',
+			question: 'What are the levels of the bed of relevant tidal waters or inland waterways?',
+			fieldName: 'tidalWaterLevels',
+			url: 'levels-of-tidal-waters-or-inland-waterways',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		heightOfStructures: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Highway Height of Structures or Devices',
+			pageTitle: 'Highway Height of Structures or Devices',
+			question:
+				'What is the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways?',
+			fieldName: 'heightOfStructures',
+			url: 'height-of-structures-or-devices',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		drainageOutfallDetails: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Highway Drainage Outfall Details',
+			pageTitle: 'Highway Drainage Outfall Details',
+			question: 'What are the drainage outfall details for highways?',
+			fieldName: 'drainageOutfallDetails',
+			url: 'drainage-outfall-details',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
 		highwayRelatedDevelopment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Highway Related Development',

@@ -46,7 +46,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 				}
 			},
 			NonOffshoreGeneratingStation: true,
-			OffshoreGeneratingStation: true
+			OffshoreGeneratingStation: true,
+			HighwayRelatedDevelopment: true
 		}
 	});
 
@@ -89,6 +90,12 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION
 		),
+		groundLevels: caseData.HighwayRelatedDevelopment?.groundLevels || '',
+		bridgeHeights: caseData.HighwayRelatedDevelopment?.bridgeHeights || '',
+		tunnelDepths: caseData.HighwayRelatedDevelopment?.tunnelDepths || '',
+		tidalWaterLevels: caseData.HighwayRelatedDevelopment?.tidalWaterLevels || '',
+		heightOfStructures: caseData.HighwayRelatedDevelopment?.heightOfStructures || '',
+		drainageOutfallDetails: caseData.HighwayRelatedDevelopment?.drainageOutfallDetails || '',
 		highwayRelatedDevelopment: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT
