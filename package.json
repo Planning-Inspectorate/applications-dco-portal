@@ -61,8 +61,8 @@
     "redis": "^5.10.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.2.0",
-    "@commitlint/config-conventional": "^20.2.0",
+    "@commitlint/cli": "^20.3.0",
+    "@commitlint/config-conventional": "^20.3.0",
     "@cypress/grep": "^5.0.1",
     "@microsoft/microsoft-graph-types": "^2.43.1",
     "@types/express": "^5.0.6",
