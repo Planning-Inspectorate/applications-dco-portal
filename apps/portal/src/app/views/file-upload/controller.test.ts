@@ -7,7 +7,7 @@ import {
 	buildFileUploadHomePage
 } from './controller.ts';
 import assert from 'node:assert';
-import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { DOCUMENT_CATEGORY_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { Readable, Writable } from 'stream';
 
@@ -28,6 +28,7 @@ describe('file upload controllers', () => {
 								fileName: 'test.pdf',
 								uploadedDate: Date.now(),
 								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.SCANNED,
 								apfpRegulationId: '5-1',
 								ApfpRegulation: {
 									id: '5-1',
@@ -87,6 +88,184 @@ describe('file upload controllers', () => {
 						},
 						{
 							text: '30/01/2025 00:00'
+						},
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
+						}
+					]
+				],
+				pageTitle: 'Draft DCO',
+				showUploadButton: true,
+				uploadButtonUrl: '/draft-dco/upload/document-type',
+				isCompletedValue: 'no',
+				errorSummary: undefined,
+				errors: undefined
+			});
+		});
+		it('should render file upload home page for given document type with documents and scanning in progress tag', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'case-ref-1',
+						draftDcoStatusId: 'in-progress',
+						Documents: [
+							{
+								id: 'doc-id-1',
+								fileName: 'test.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.PENDING,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							}
+						]
+					}))
+				},
+				documentCategory: {
+					findUnique: mock.fn(() => ({
+						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						displayName: 'Draft DCO'
+					}))
+				}
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				session: {
+					caseReference: 'case-ref-1'
+				}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const controller = buildFileUploadHomePage({ db: mockDb }, 'draft-dco');
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				documentCategory: 'draftDco',
+				documents: [
+					[
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
+						},
+						{
+							text: 'Draft development consent order'
+						},
+						{
+							text: '5(1)'
+						},
+						{
+							text: 'Certified'
+						},
+						{
+							html: '<strong class="govuk-tag govuk-tag--yellow">Scanning for viruses</strong>'
+						},
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
+						}
+					]
+				],
+				pageTitle: 'Draft DCO',
+				showUploadButton: true,
+				uploadButtonUrl: '/draft-dco/upload/document-type',
+				isCompletedValue: 'no',
+				errorSummary: undefined,
+				errors: undefined
+			});
+		});
+		it('should render file upload home page for given document type with documents and failed virus scan tag', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'case-ref-1',
+						draftDcoStatusId: 'in-progress',
+						Documents: [
+							{
+								id: 'doc-id-1',
+								fileName: 'test.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.AFFECTED,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							}
+						]
+					}))
+				},
+				documentCategory: {
+					findUnique: mock.fn(() => ({
+						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						displayName: 'Draft DCO'
+					}))
+				}
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				session: {
+					caseReference: 'case-ref-1'
+				}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const controller = buildFileUploadHomePage({ db: mockDb }, 'draft-dco');
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				documentCategory: 'draftDco',
+				documents: [
+					[
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
+						},
+						{
+							text: 'Draft development consent order'
+						},
+						{
+							text: '5(1)'
+						},
+						{
+							text: 'Certified'
+						},
+						{
+							html: '<strong class="govuk-tag govuk-tag--red">Failed virus check</strong>'
 						},
 						{
 							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'

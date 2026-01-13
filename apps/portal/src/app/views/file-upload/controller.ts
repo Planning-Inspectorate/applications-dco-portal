@@ -7,7 +7,7 @@ import {
 	expressValidationErrorsToGovUkErrorList
 	// @ts-expect-error - due to not having @types
 } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { statusIdRadioButtonValue } from '../util.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { Request, Response } from 'express';
@@ -49,8 +49,18 @@ export function buildFileUploadHomePage(
 			return notFoundHandler(req, res);
 		}
 
+		const getDateUploadedContent = (scanResultId: string, uploadedDate: Date) => {
+			if (scanResultId === SCAN_RESULT_ID.PENDING) {
+				return { html: `<strong class="govuk-tag govuk-tag--yellow">Scanning for viruses</strong>` };
+			} else if (scanResultId === SCAN_RESULT_ID.AFFECTED) {
+				return { html: `<strong class="govuk-tag govuk-tag--red">Failed virus check</strong>` };
+			} else {
+				return { text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) };
+			}
+		};
+
 		const documentRows = caseData.Documents.map((document) => {
-			const { id, fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate } = document;
+			const { id, fileName, SubCategory, ApfpRegulation, isCertified, uploadedDate, scanResultId } = document;
 			return [
 				{
 					html: `<a class="govuk-link govuk-link--no-visited-state" href="${req.baseUrl}/document/download/${id}" target="_blank" rel="noreferrer">${fileName}</a>`
@@ -58,7 +68,7 @@ export function buildFileUploadHomePage(
 				{ text: SubCategory?.displayName },
 				{ text: ApfpRegulation?.displayName },
 				{ text: isCertified ? 'Certified' : 'Not certified' },
-				{ text: formatDateForDisplay(uploadedDate, { format: 'dd/MM/yyyy HH:mm' }) },
+				getDateUploadedContent(scanResultId, uploadedDate),
 				{
 					html: `<a class="govuk-link govuk-link--no-visited-state" href="${req.baseUrl}/document/delete/${id}">Remove</a>`
 				}
