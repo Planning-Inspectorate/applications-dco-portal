@@ -49,3 +49,9 @@ export interface PipelinesInput {
 	landRightsCrossingConsentsAgreement: string;
 	caseId: string;
 }
+
+export interface HazardousWasteFacilityInput {
+	whyIsFacilityNeeded: string;
+	annualCapacity: string;
+	caseId: string;
+}

@@ -105,14 +105,17 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				)
 				.addQuestion(questions.pipelines)
 				.endMultiQuestionCondition('pipelines')
-				.addQuestion(questions.hazardousWasteFacility)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('hazardous-waste-facility', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY
 					)
 				)
+				.addQuestion(questions.whyIsFacilityNeeded)
+				.addQuestion(questions.annualCapacity)
+				.addQuestion(questions.hazardousWasteFacility)
+				.endMultiQuestionCondition('hazardous-waste-facility')
 				.addQuestion(questions.damOrReservoir)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(

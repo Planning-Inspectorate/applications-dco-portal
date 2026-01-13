@@ -465,6 +465,29 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.PIPELINES,
 			validators: [new RequiredValidator()]
 		},
+		whyIsFacilityNeeded: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Why is Hazardous Waste Facility Needed',
+			pageTitle: 'Why is Hazardous Waste Facility Needed',
+			question: 'Why is the facility needed?',
+			fieldName: 'whyIsFacilityNeeded',
+			url: 'why-is-facility-needed',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		annualCapacity: {
+			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
+			title: 'Hazardous Waste Annual Capacity',
+			pageTitle: 'Hazardous Waste Annual Capacity',
+			question: 'What is the plants estimated annual capacity for disposing or recovering hazardous waste?',
+			fieldName: 'annualCapacity',
+			url: 'annual-capacity',
+			validators: [new RequiredValidator()]
+		},
 		hazardousWasteFacility: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Hazardous Waste Facility',
