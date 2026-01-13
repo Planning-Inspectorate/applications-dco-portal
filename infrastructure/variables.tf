@@ -57,6 +57,7 @@ variable "auth_config" {
     auth_client_id = string
     application_id = string
   })
+  default = null
 }
 
 variable "back_office_config" {

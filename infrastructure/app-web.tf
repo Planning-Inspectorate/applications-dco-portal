@@ -39,7 +39,7 @@ module "app_portal" {
   health_check_eviction_time_in_min = var.health_check_eviction_time_in_min
 
   #Easy Auth setting
-  auth_config = var.auth_config.auth_enabled ? {
+  auth_config = var.auth_config != null && var.auth_config.auth_enabled ? { # remove wrapping of null once testing in TEST is done
     auth_enabled           = var.auth_config.auth_enabled
     require_authentication = var.auth_config.auth_enabled
     auth_client_id         = var.auth_config.auth_client_id
