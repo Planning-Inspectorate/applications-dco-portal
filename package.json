@@ -84,7 +84,7 @@
     "puppeteer": "^24.34.0",
     "sass": "^1.97.1",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.51.0"
+    "typescript-eslint": "^8.52.0"
   },
   "lint-staged": {
     "*.js": [
