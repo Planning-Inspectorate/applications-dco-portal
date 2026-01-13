@@ -61,6 +61,17 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
+							pipelineDetails: {
+								name: 'name',
+								owner: 'owner',
+								startPoint: 'start',
+								endPoint: 'end',
+								length: 5,
+								externalDiameter: 3
+							},
+							pipelineConveyance: 'convey',
+							landRightsCrossingConsents: 'yes',
+							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'
@@ -139,6 +150,17 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: '',
+							pipelineDetails: {
+								name: '',
+								owner: '',
+								startPoint: '',
+								endPoint: '',
+								length: null,
+								externalDiameter: null
+							},
+							pipelineConveyance: '',
+							landRightsCrossingConsents: 'no',
+							landRightsCrossingConsentsAgreement: '',
 							pipelines: '',
 							hazardousWasteFacility: '',
 							damOrReservoir: ''
@@ -218,6 +240,17 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
+							pipelineDetails: {
+								name: 'name',
+								owner: 'owner',
+								startPoint: 'start',
+								endPoint: 'end',
+								length: 5,
+								externalDiameter: 3
+							},
+							pipelineConveyance: 'convey',
+							landRightsCrossingConsents: 'yes',
+							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'
@@ -293,6 +326,17 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
+							pipelineDetails: {
+								name: 'name',
+								owner: 'owner',
+								startPoint: 'start',
+								endPoint: 'end',
+								length: 5,
+								externalDiameter: 3
+							},
+							pipelineConveyance: 'convey',
+							landRightsCrossingConsents: 'yes',
+							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'

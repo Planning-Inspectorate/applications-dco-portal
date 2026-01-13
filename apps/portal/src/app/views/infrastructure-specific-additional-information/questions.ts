@@ -2,6 +2,8 @@ import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-li
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 // @ts-expect-error - due to not having @types
+import MultiFieldInputValidator from '@planning-inspectorate/dynamic-forms/src/validator/multi-field-input-validator.js';
+// @ts-expect-error - due to not having @types
 import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
@@ -359,6 +361,99 @@ export function getQuestions() {
 			fieldName: 'harbourFacilities',
 			url: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES,
 			validators: [new RequiredValidator()]
+		},
+		pipelineDetails: {
+			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
+			title: `Pipeline Details`,
+			pageTitle: `Pipeline Details`,
+			question: `Enter pipeline details`,
+			fieldName: `pipelineDetails`,
+			url: `pipeline-details`,
+			validators: [
+				new MultiFieldInputValidator({
+					fields: [
+						{
+							fieldName: `pipelineName`,
+							errorMessage: 'Please enter a name',
+							regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Name must only contain letters' },
+							minLength: { minLength: 2, minLengthMessage: 'Name must be at least 2 characters in length' }
+						},
+						{
+							fieldName: `pipelineOwner`,
+							errorMessage: 'Please enter an owner',
+							regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Owner must only contain letters' },
+							minLength: { minLength: 2, minLengthMessage: 'Owner must be at least 2 characters in length' }
+						},
+						{
+							fieldName: `pipelineStartPoint`,
+							errorMessage: 'Please enter a start point',
+							minLength: { minLength: 2, minLengthMessage: 'Start point must be at least 2 characters in length' }
+						},
+						{
+							fieldName: `pipelineEndPoint`,
+							errorMessage: 'Please enter an end point',
+							minLength: { minLength: 2, minLengthMessage: 'End point must be at least 2 characters in length' }
+						},
+						{
+							fieldName: `pipelineLength`,
+							errorMessage: 'Please enter a length',
+							regex: { regex: /^\d+$/, regexMessage: 'Length must be a number' },
+							minLength: { minLength: 2, minLengthMessage: 'Length must be at least 2 characters in length' }
+						},
+						{
+							fieldName: `pipelineExternalDiameter`,
+							errorMessage: 'Please enter an external diameter',
+							regex: { regex: /^\d+$/, regexMessage: 'Diameter must be a number' },
+							minLength: { minLength: 2, minLengthMessage: 'Diameter must be at least 2 characters in length' }
+						}
+					]
+				})
+			],
+			inputFields: [
+				{ fieldName: `pipelineName`, label: 'Name' },
+				{ fieldName: `pipelineOwner`, label: 'Owner' },
+				{ fieldName: `pipelineStartPoint`, label: 'Start point' },
+				{ fieldName: `pipelineEndPoint`, label: 'End point' },
+				{ fieldName: `pipelineLength`, label: 'Length (in kilometres)' },
+				{ fieldName: `pipelineExternalDiameter`, label: 'External diameter (in mm)' }
+			]
+		},
+		pipelineConveyance: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Pipeline Conveyance',
+			pageTitle: 'Pipeline Conveyance',
+			question: 'What will the pipeline convey?',
+			fieldName: 'pipelineConveyance',
+			url: 'what-will-pipeline-convey',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
+		landRightsCrossingConsents: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Land Rights Crossing Consents Needed',
+			pageTitle: 'Land Rights Crossing Consents Needed',
+			question: 'Are rights in land or crossing consents needed?',
+			fieldName: 'landRightsCrossingConsents',
+			url: 'land-rights-crossing-consents-needed',
+			validators: [new RequiredValidator()]
+		},
+		landRightsCrossingConsentsAgreement: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Land Rights Crossing Consents Agreement',
+			pageTitle: 'Land Rights Crossing Consents Agreement',
+			question: 'Can the rights in land or crossing consents be obtained by agreement?',
+			fieldName: 'landRightsCrossingConsentsAgreement',
+			url: 'land-rights-crossing-consents-agreement',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
 		},
 		pipelines: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,

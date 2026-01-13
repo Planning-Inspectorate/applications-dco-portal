@@ -54,6 +54,8 @@ model Case {
   RailwayDevelopment                             RailwayDevelopment?           @relation("RailwayDevelopment", fields: [railwayDevelopmentId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   harbourFacilitiesId                            String?                       @db.UniqueIdentifier
   HarbourFacilities                              HarbourFacilities?            @relation("HarbourFacilities", fields: [harbourFacilitiesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  pipelinesId                                    String?                       @db.UniqueIdentifier
+  Pipelines                                      Pipelines?                    @relation("Pipelines", fields: [pipelinesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -375,4 +377,20 @@ model HarbourFacilities {
   benefitsToSeaTransport String @db.NVarChar(2000)
 
   HarbourFacilities Case[] @relation("HarbourFacilities")
+}
+
+model Pipelines {
+  id                                  String  @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId                              String  @db.UniqueIdentifier
+  name                                String
+  owner                               String
+  startPoint                          String
+  endPoint                            String
+  length                              Int
+  externalDiameter                    Int
+  conveyance                          String  @db.NVarChar(2000)
+  landRightsCrossingConsents          Boolean
+  landRightsCrossingConsentsAgreement String? @db.NVarChar(2000)
+
+  Pipelines Case[] @relation("Pipelines")
 }

@@ -93,10 +93,18 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.benefitsToSeaTransport)
 				.addQuestion(questions.harbourFacilities)
 				.endMultiQuestionCondition('harbour-facilities')
-				.addQuestion(questions.pipelines)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('pipelines', (response: Handler) =>
 					questionHasAnswer(response, questions.additionalInformationDocuments, DOCUMENT_SUB_CATEGORY_ID.PIPELINES)
 				)
+				.addQuestion(questions.pipelineDetails)
+				.addQuestion(questions.pipelineConveyance)
+				.addQuestion(questions.landRightsCrossingConsents)
+				.addQuestion(questions.landRightsCrossingConsentsAgreement)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.landRightsCrossingConsents, BOOLEAN_OPTIONS.YES)
+				)
+				.addQuestion(questions.pipelines)
+				.endMultiQuestionCondition('pipelines')
 				.addQuestion(questions.hazardousWasteFacility)
 				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(

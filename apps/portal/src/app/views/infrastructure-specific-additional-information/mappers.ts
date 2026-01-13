@@ -5,7 +5,8 @@ import type {
 	OffshoreGeneratingStationInput,
 	HighwayRelatedDevelopmentInput,
 	RailwayDevelopmentInput,
-	HarbourFacilitiesInput
+	HarbourFacilitiesInput,
+	PipelinesInput
 } from './types.d.ts';
 
 export function mapAnswersToNonOffshoreGeneratingStation(
@@ -62,6 +63,22 @@ export function mapAnswersToHarbourFacilities(answers: Record<string, any>, case
 	return {
 		whyHarbourOrderNeeded: answers.whyHarbourOrderNeeded,
 		benefitsToSeaTransport: answers.benefitsToSeaTransport,
+		caseId: caseId
+	};
+}
+
+export function mapAnswersToPipelines(answers: Record<string, any>, caseId: string): PipelinesInput {
+	return {
+		name: answers.pipelineName,
+		owner: answers.pipelineOwner,
+		startPoint: answers.pipelineStartPoint,
+		endPoint: answers.pipelineEndPoint,
+		length: +answers.pipelineLength,
+		externalDiameter: +answers.pipelineExternalDiameter,
+		conveyance: answers.pipelineConveyance,
+		landRightsCrossingConsents: answers.landRightsCrossingConsents === BOOLEAN_OPTIONS.YES ? true : false,
+		landRightsCrossingConsentsAgreement:
+			answers.landRightsCrossingConsents === BOOLEAN_OPTIONS.YES ? answers.landRightsCrossingConsentsAgreement : null,
 		caseId: caseId
 	};
 }

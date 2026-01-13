@@ -36,3 +36,16 @@ export interface HarbourFacilitiesInput {
 	benefitsToSeaTransport: string;
 	caseId: string;
 }
+
+export interface PipelinesInput {
+	name: string;
+	owner: string;
+	startPoint: string;
+	endPoint: string;
+	length: number;
+	externalDiameter: number;
+	conveyance: string;
+	landRightsCrossingConsents: boolean;
+	landRightsCrossingConsentsAgreement: string;
+	caseId: string;
+}

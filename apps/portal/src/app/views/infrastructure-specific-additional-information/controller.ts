@@ -49,7 +49,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			OffshoreGeneratingStation: true,
 			HighwayRelatedDevelopment: true,
 			RailwayDevelopment: true,
-			HarbourFacilities: true
+			HarbourFacilities: true,
+			Pipelines: true
 		}
 	});
 
@@ -118,6 +119,15 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES
 		),
+		pipelineName: caseData.Pipelines?.name || '',
+		pipelineOwner: caseData.Pipelines?.owner || '',
+		pipelineStartPoint: caseData.Pipelines?.startPoint || '',
+		pipelineEndPoint: caseData.Pipelines?.endPoint || '',
+		pipelineLength: caseData.Pipelines?.length || null,
+		pipelineExternalDiameter: caseData.Pipelines?.externalDiameter || null,
+		pipelineConveyance: caseData.Pipelines?.conveyance || '',
+		landRightsCrossingConsents: caseData.Pipelines?.landRightsCrossingConsents ? 'yes' : 'no',
+		landRightsCrossingConsentsAgreement: caseData.Pipelines?.landRightsCrossingConsentsAgreement || '',
 		pipelines: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.PIPELINES),
 		hazardousWasteFacility: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
