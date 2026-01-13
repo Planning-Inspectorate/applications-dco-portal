@@ -116,14 +116,17 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.annualCapacity)
 				.addQuestion(questions.hazardousWasteFacility)
 				.endMultiQuestionCondition('hazardous-waste-facility')
-				.addQuestion(questions.damOrReservoir)
-				.withCondition((response: JourneyResponse) =>
+				.startMultiQuestionCondition('dam-or-reservoir', (response: Handler) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR
 					)
 				)
+				.addQuestion(questions.recreationalAmenities)
+				.addQuestion(questions.recreationalAmenitiesDescription)
+				.addQuestion(questions.damOrReservoir)
+				.endMultiQuestionCondition('dam-or-reservoir')
 				.endMultiQuestionCondition('additional-information')
 		],
 		taskListUrl: 'check-your-answers',

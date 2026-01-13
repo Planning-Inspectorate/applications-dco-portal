@@ -74,6 +74,10 @@ describe('infrastructure-specific-additional-information controller', () => {
 						HazardousWasteFacility: {
 							whyIsFacilityNeeded: 'it is',
 							annualCapacity: '3000 things'
+						},
+						DamOrReservoir: {
+							recreationalAmenities: 'yes',
+							recreationalAmenitiesDescription: 'there is a big slide'
 						}
 					}))
 				},
@@ -148,6 +152,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						whyIsFacilityNeeded: 'it is',
 						annualCapacity: '3000 things',
 						hazardousWasteFacility: 'doc-id-9,doc-id-10',
+						recreationalAmenities: 'yes',
+						recreationalAmenitiesDescription: 'there is a big slide',
 						damOrReservoir: 'doc-id-11,doc-id-12'
 					}
 				}
@@ -165,7 +171,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						RailwayDevelopment: null,
 						HarbourFacilities: null,
 						Pipelines: null,
-						HazardousWasteFacility: null
+						HazardousWasteFacility: null,
+						DamOrReservoir: null
 					}))
 				},
 				supportingEvidence: {
@@ -238,6 +245,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						whyIsFacilityNeeded: '',
 						annualCapacity: '',
 						hazardousWasteFacility: '',
+						recreationalAmenities: 'no',
+						recreationalAmenitiesDescription: '',
 						damOrReservoir: ''
 					}
 				}

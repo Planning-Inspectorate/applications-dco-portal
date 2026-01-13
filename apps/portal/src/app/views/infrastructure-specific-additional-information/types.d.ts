@@ -55,3 +55,9 @@ export interface HazardousWasteFacilityInput {
 	annualCapacity: string;
 	caseId: string;
 }
+
+export interface DamOrReservoirInput {
+	recreationalAmenities: string;
+	recreationalAmenitiesDescription: string;
+	caseId: string;
+}
