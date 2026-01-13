@@ -59,6 +59,17 @@ describe('infrastructure-specific-additional-information controller', () => {
 						HarbourFacilities: {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good'
+						},
+						Pipelines: {
+							name: 'name',
+							owner: 'owner',
+							startPoint: 'start',
+							endPoint: 'end',
+							length: 5,
+							externalDiameter: 3,
+							conveyance: 'convey',
+							landRightsCrossingConsents: true,
+							landRightsCrossingConsentsAgreement: 'test'
 						}
 					}))
 				},
@@ -120,6 +131,15 @@ describe('infrastructure-specific-additional-information controller', () => {
 						whyHarbourOrderNeeded: 'its needed',
 						benefitsToSeaTransport: 'its good',
 						harbourFacilities: 'doc-id-6,doc-id-7',
+						pipelineName: 'name',
+						pipelineOwner: 'owner',
+						pipelineStartPoint: 'start',
+						pipelineEndPoint: 'end',
+						pipelineLength: 5,
+						pipelineExternalDiameter: 3,
+						pipelineConveyance: 'convey',
+						landRightsCrossingConsents: 'yes',
+						landRightsCrossingConsentsAgreement: 'test',
 						pipelines: 'doc-id-8',
 						hazardousWasteFacility: 'doc-id-9,doc-id-10',
 						damOrReservoir: 'doc-id-11,doc-id-12'
@@ -137,7 +157,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						OffshoreGeneratingStation: null,
 						HighwayRelatedDevelopment: null,
 						RailwayDevelopment: null,
-						HarbourFacilities: null
+						HarbourFacilities: null,
+						Pipelines: null
 					}))
 				},
 				supportingEvidence: {
@@ -197,6 +218,15 @@ describe('infrastructure-specific-additional-information controller', () => {
 						whyHarbourOrderNeeded: '',
 						benefitsToSeaTransport: '',
 						harbourFacilities: '',
+						pipelineName: '',
+						pipelineOwner: '',
+						pipelineStartPoint: '',
+						pipelineEndPoint: '',
+						pipelineLength: null,
+						pipelineExternalDiameter: null,
+						pipelineConveyance: '',
+						landRightsCrossingConsents: 'no',
+						landRightsCrossingConsentsAgreement: '',
 						pipelines: '',
 						hazardousWasteFacility: '',
 						damOrReservoir: ''
