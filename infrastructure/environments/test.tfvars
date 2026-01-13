@@ -39,11 +39,11 @@ apps_config = {
   }
 }
 
-auth_config = {
-  auth_enabled   = false
-  auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
-  application_id = "b40aea38-d056-41d4-973e-8e8c1807ec76" # App Registration for DCO deployment Test
-}
+# auth_config = {
+#   auth_enabled   = false
+#   auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
+#   application_id = "b40aea38-d056-41d4-973e-8e8c1807ec76" # App Registration for DCO deployment Test
+# }
 
 back_office_config = {
   resource_group_name  = "pins-rg-back-office-test-ukw-001"

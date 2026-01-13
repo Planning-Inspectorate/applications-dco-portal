@@ -50,15 +50,15 @@ variable "apps_config" {
   })
 }
 
-variable "auth_config" {
-  description = "Config for the azure authentication dco portal"
-  type = object({
-    auth_enabled   = bool
-    auth_client_id = string
-    application_id = string
-  })
-  default = null
-}
+# variable "auth_config" {
+#   description = "Config for the azure authentication dco portal"
+#   type = object({
+#     auth_enabled   = bool
+#     auth_client_id = string
+#     application_id = string
+#   })
+#   default = null
+# }
 
 variable "back_office_config" {
   description = "config for the applications back-office resources"
