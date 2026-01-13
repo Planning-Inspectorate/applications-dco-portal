@@ -6,7 +6,8 @@ import type {
 	HighwayRelatedDevelopmentInput,
 	RailwayDevelopmentInput,
 	HarbourFacilitiesInput,
-	PipelinesInput
+	PipelinesInput,
+	HazardousWasteFacilityInput
 } from './types.d.ts';
 
 export function mapAnswersToNonOffshoreGeneratingStation(
@@ -79,6 +80,17 @@ export function mapAnswersToPipelines(answers: Record<string, any>, caseId: stri
 		landRightsCrossingConsents: answers.landRightsCrossingConsents === BOOLEAN_OPTIONS.YES ? true : false,
 		landRightsCrossingConsentsAgreement:
 			answers.landRightsCrossingConsents === BOOLEAN_OPTIONS.YES ? answers.landRightsCrossingConsentsAgreement : null,
+		caseId: caseId
+	};
+}
+
+export function mapAnswersToHazardousWasteFacility(
+	answers: Record<string, any>,
+	caseId: string
+): HazardousWasteFacilityInput {
+	return {
+		whyIsFacilityNeeded: answers.whyIsFacilityNeeded,
+		annualCapacity: answers.annualCapacity,
 		caseId: caseId
 	};
 }

@@ -70,6 +70,10 @@ describe('infrastructure-specific-additional-information controller', () => {
 							conveyance: 'convey',
 							landRightsCrossingConsents: true,
 							landRightsCrossingConsentsAgreement: 'test'
+						},
+						HazardousWasteFacility: {
+							whyIsFacilityNeeded: 'it is',
+							annualCapacity: '3000 things'
 						}
 					}))
 				},
@@ -141,6 +145,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						landRightsCrossingConsents: 'yes',
 						landRightsCrossingConsentsAgreement: 'test',
 						pipelines: 'doc-id-8',
+						whyIsFacilityNeeded: 'it is',
+						annualCapacity: '3000 things',
 						hazardousWasteFacility: 'doc-id-9,doc-id-10',
 						damOrReservoir: 'doc-id-11,doc-id-12'
 					}
@@ -158,7 +164,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						HighwayRelatedDevelopment: null,
 						RailwayDevelopment: null,
 						HarbourFacilities: null,
-						Pipelines: null
+						Pipelines: null,
+						HazardousWasteFacility: null
 					}))
 				},
 				supportingEvidence: {
@@ -228,6 +235,8 @@ describe('infrastructure-specific-additional-information controller', () => {
 						landRightsCrossingConsents: 'no',
 						landRightsCrossingConsentsAgreement: '',
 						pipelines: '',
+						whyIsFacilityNeeded: '',
+						annualCapacity: '',
 						hazardousWasteFacility: '',
 						damOrReservoir: ''
 					}

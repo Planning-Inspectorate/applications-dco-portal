@@ -56,6 +56,8 @@ model Case {
   HarbourFacilities                              HarbourFacilities?            @relation("HarbourFacilities", fields: [harbourFacilitiesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   pipelinesId                                    String?                       @db.UniqueIdentifier
   Pipelines                                      Pipelines?                    @relation("Pipelines", fields: [pipelinesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  hazardousWasteFacilityId                       String?                       @db.UniqueIdentifier
+  HazardousWasteFacility                         HazardousWasteFacility?       @relation("HazardousWasteFacility", fields: [hazardousWasteFacilityId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -393,4 +395,13 @@ model Pipelines {
   landRightsCrossingConsentsAgreement String? @db.NVarChar(2000)
 
   Pipelines Case[] @relation("Pipelines")
+}
+
+model HazardousWasteFacility {
+  id                  String @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId              String @db.UniqueIdentifier
+  whyIsFacilityNeeded String @db.NVarChar(2000)
+  annualCapacity      String
+
+  HazardousWasteFacility Case[] @relation("HazardousWasteFacility")
 }

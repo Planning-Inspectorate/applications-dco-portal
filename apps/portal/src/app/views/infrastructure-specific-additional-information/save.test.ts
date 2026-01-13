@@ -73,6 +73,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
+							whyIsFacilityNeeded: 'it is',
+							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}
@@ -162,6 +164,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							landRightsCrossingConsents: 'no',
 							landRightsCrossingConsentsAgreement: '',
 							pipelines: '',
+							whyIsFacilityNeeded: '',
+							annualCapacity: '',
 							hazardousWasteFacility: '',
 							damOrReservoir: ''
 						}
@@ -252,6 +256,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
+							whyIsFacilityNeeded: 'it is',
+							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}
@@ -338,6 +344,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
 							pipelines: 'doc-id-8',
+							whyIsFacilityNeeded: 'it is',
+							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}

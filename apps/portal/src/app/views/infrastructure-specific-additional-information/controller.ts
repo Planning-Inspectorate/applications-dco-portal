@@ -50,7 +50,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			HighwayRelatedDevelopment: true,
 			RailwayDevelopment: true,
 			HarbourFacilities: true,
-			Pipelines: true
+			Pipelines: true,
+			HazardousWasteFacility: true
 		}
 	});
 
@@ -129,6 +130,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		landRightsCrossingConsents: caseData.Pipelines?.landRightsCrossingConsents ? 'yes' : 'no',
 		landRightsCrossingConsentsAgreement: caseData.Pipelines?.landRightsCrossingConsentsAgreement || '',
 		pipelines: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.PIPELINES),
+		whyIsFacilityNeeded: caseData.HazardousWasteFacility?.whyIsFacilityNeeded || '',
+		annualCapacity: caseData.HazardousWasteFacility?.annualCapacity || '',
 		hazardousWasteFacility: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY

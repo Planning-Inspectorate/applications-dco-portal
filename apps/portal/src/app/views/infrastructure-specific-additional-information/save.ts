@@ -19,7 +19,8 @@ import {
 	mapAnswersToOffshoreGeneratingStation,
 	mapAnswersToRailwayDevelopment,
 	mapAnswersToHarbourFacilities,
-	mapAnswersToPipelines
+	mapAnswersToPipelines,
+	mapAnswersToHazardousWasteFacility
 } from './mappers.ts';
 import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
@@ -33,7 +34,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				HighwayRelatedDevelopment: true,
 				RailwayDevelopment: true,
 				HarbourFacilities: true,
-				Pipelines: true
+				Pipelines: true,
+				HazardousWasteFacility: true
 			}
 		});
 		if (!caseData) {
@@ -184,6 +186,16 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					if (caseData?.Pipelines) {
 						await $tx.pipelines.delete({
 							where: { id: caseData?.Pipelines?.id }
+						});
+					}
+				}
+
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY]) {
+					data.HazardousWasteFacility = buildUpsertQuery(mapAnswersToHazardousWasteFacility(answers, caseId));
+				} else {
+					if (caseData?.HazardousWasteFacility) {
+						await $tx.hazardousWasteFacility.delete({
+							where: { id: caseData?.HazardousWasteFacility?.id }
 						});
 					}
 				}
