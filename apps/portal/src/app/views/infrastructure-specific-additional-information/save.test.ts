@@ -61,14 +61,12 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
-							pipelineDetails: {
-								name: 'name',
-								owner: 'owner',
-								startPoint: 'start',
-								endPoint: 'end',
-								length: 5,
-								externalDiameter: 3
-							},
+							pipelineName: 'name',
+							pipelineOwner: 'owner',
+							pipelineStartPoint: 'start',
+							pipelineEndPoint: 'end',
+							pipelineLength: 5,
+							pipelineExternalDiameter: 3,
 							pipelineConveyance: 'convey',
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
@@ -76,6 +74,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyIsFacilityNeeded: 'it is',
 							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
+							recreationalAmenities: 'yes',
+							recreationalAmenitiesDescription: 'there is a big slide',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}
 					}
@@ -152,14 +152,12 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: '',
-							pipelineDetails: {
-								name: '',
-								owner: '',
-								startPoint: '',
-								endPoint: '',
-								length: null,
-								externalDiameter: null
-							},
+							pipelineName: 'name',
+							pipelineOwner: 'owner',
+							pipelineStartPoint: 'start',
+							pipelineEndPoint: 'end',
+							pipelineLength: 5,
+							pipelineExternalDiameter: 3,
 							pipelineConveyance: '',
 							landRightsCrossingConsents: 'no',
 							landRightsCrossingConsentsAgreement: '',
@@ -167,6 +165,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyIsFacilityNeeded: '',
 							annualCapacity: '',
 							hazardousWasteFacility: '',
+							recreationalAmenities: 'no',
+							recreationalAmenitiesDescription: '',
 							damOrReservoir: ''
 						}
 					}
@@ -244,14 +244,12 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
-							pipelineDetails: {
-								name: 'name',
-								owner: 'owner',
-								startPoint: 'start',
-								endPoint: 'end',
-								length: 5,
-								externalDiameter: 3
-							},
+							pipelineName: 'name',
+							pipelineOwner: 'owner',
+							pipelineStartPoint: 'start',
+							pipelineEndPoint: 'end',
+							pipelineLength: 5,
+							pipelineExternalDiameter: 3,
 							pipelineConveyance: 'convey',
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
@@ -259,6 +257,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyIsFacilityNeeded: 'it is',
 							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
+							recreationalAmenities: 'yes',
+							recreationalAmenitiesDescription: 'there is a big slide',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}
 					}
@@ -332,14 +332,12 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyHarbourOrderNeeded: 'its needed',
 							benefitsToSeaTransport: 'its good',
 							harbourFacilities: 'doc-id-6,doc-id-7',
-							pipelineDetails: {
-								name: 'name',
-								owner: 'owner',
-								startPoint: 'start',
-								endPoint: 'end',
-								length: 5,
-								externalDiameter: 3
-							},
+							pipelineName: 'name',
+							pipelineOwner: 'owner',
+							pipelineStartPoint: 'start',
+							pipelineEndPoint: 'end',
+							pipelineLength: 5,
+							pipelineExternalDiameter: 3,
 							pipelineConveyance: 'convey',
 							landRightsCrossingConsents: 'yes',
 							landRightsCrossingConsentsAgreement: 'test',
@@ -347,6 +345,8 @@ describe('infrastructure-specific-additional-information save', () => {
 							whyIsFacilityNeeded: 'it is',
 							annualCapacity: '3000 things',
 							hazardousWasteFacility: 'doc-id-9,doc-id-10',
+							recreationalAmenities: 'yes',
+							recreationalAmenitiesDescription: 'there is a big slide',
 							damOrReservoir: 'doc-id-11,doc-id-12'
 						}
 					}

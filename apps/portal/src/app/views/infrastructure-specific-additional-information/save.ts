@@ -20,7 +20,8 @@ import {
 	mapAnswersToRailwayDevelopment,
 	mapAnswersToHarbourFacilities,
 	mapAnswersToPipelines,
-	mapAnswersToHazardousWasteFacility
+	mapAnswersToHazardousWasteFacility,
+	mapAnswersToDamOrReservoir
 } from './mappers.ts';
 import { getInfrastructureSpecificAdditionalInformationSubcategoryOptions } from './util.ts';
 
@@ -35,7 +36,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				RailwayDevelopment: true,
 				HarbourFacilities: true,
 				Pipelines: true,
-				HazardousWasteFacility: true
+				HazardousWasteFacility: true,
+				DamOrReservoir: true
 			}
 		});
 		if (!caseData) {
@@ -196,6 +198,16 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					if (caseData?.HazardousWasteFacility) {
 						await $tx.hazardousWasteFacility.delete({
 							where: { id: caseData?.HazardousWasteFacility?.id }
+						});
+					}
+				}
+
+				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR]) {
+					data.DamOrReservoir = buildUpsertQuery(mapAnswersToDamOrReservoir(answers, caseId));
+				} else {
+					if (caseData?.DamOrReservoir) {
+						await $tx.damOrReservoir.delete({
+							where: { id: caseData?.DamOrReservoir?.id }
 						});
 					}
 				}

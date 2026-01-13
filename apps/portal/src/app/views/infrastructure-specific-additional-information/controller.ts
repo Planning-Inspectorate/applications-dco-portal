@@ -51,7 +51,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			RailwayDevelopment: true,
 			HarbourFacilities: true,
 			Pipelines: true,
-			HazardousWasteFacility: true
+			HazardousWasteFacility: true,
+			DamOrReservoir: true
 		}
 	});
 
@@ -136,6 +137,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY
 		),
+		recreationalAmenities: caseData.DamOrReservoir?.recreationalAmenities ? 'yes' : 'no',
+		recreationalAmenitiesDescription: caseData.DamOrReservoir?.recreationalAmenitiesDescription || '',
 		damOrReservoir: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR)
 	};
 }

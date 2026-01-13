@@ -58,6 +58,8 @@ model Case {
   Pipelines                                      Pipelines?                    @relation("Pipelines", fields: [pipelinesId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   hazardousWasteFacilityId                       String?                       @db.UniqueIdentifier
   HazardousWasteFacility                         HazardousWasteFacility?       @relation("HazardousWasteFacility", fields: [hazardousWasteFacilityId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  damOrReservoirId                               String?                       @db.UniqueIdentifier
+  DamOrReservoir                                 DamOrReservoir?               @relation("DamOrReservoir", fields: [damOrReservoirId], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   applicationFormRelatedInformationStatusId String                 @default("not-started")
   applicationFormRelatedInformationStatus   DocumentCategoryStatus @relation(name: "ApplicationFormStatus", fields: [applicationFormRelatedInformationStatusId], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -332,7 +334,7 @@ model NonOffshoreGeneratingStation {
   caseId                      String  @db.UniqueIdentifier
   electricityGrid             String  @db.NVarChar(2000)
   gasFuelledGeneratingStation Boolean
-  gasPipelineConnection       String  @db.NVarChar(2000)
+  gasPipelineConnection       String? @db.NVarChar(2000)
 
   NonOffshoreGeneratingStation Case[] @relation("NonOffshoreGeneratingStation")
 }
@@ -404,4 +406,13 @@ model HazardousWasteFacility {
   annualCapacity      String
 
   HazardousWasteFacility Case[] @relation("HazardousWasteFacility")
+}
+
+model DamOrReservoir {
+  id                               String  @id @default(dbgenerated("newid()")) @db.UniqueIdentifier
+  caseId                           String  @db.UniqueIdentifier
+  recreationalAmenities            Boolean
+  recreationalAmenitiesDescription String? @db.NVarChar(2000)
+
+  DamOrReservoir Case[] @relation("DamOrReservoir")
 }

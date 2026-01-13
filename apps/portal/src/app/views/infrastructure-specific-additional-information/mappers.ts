@@ -7,7 +7,8 @@ import type {
 	RailwayDevelopmentInput,
 	HarbourFacilitiesInput,
 	PipelinesInput,
-	HazardousWasteFacilityInput
+	HazardousWasteFacilityInput,
+	DamOrReservoirInput
 } from './types.d.ts';
 
 export function mapAnswersToNonOffshoreGeneratingStation(
@@ -91,6 +92,15 @@ export function mapAnswersToHazardousWasteFacility(
 	return {
 		whyIsFacilityNeeded: answers.whyIsFacilityNeeded,
 		annualCapacity: answers.annualCapacity,
+		caseId: caseId
+	};
+}
+
+export function mapAnswersToDamOrReservoir(answers: Record<string, any>, caseId: string): DamOrReservoirInput {
+	return {
+		recreationalAmenities: answers.recreationalAmenities,
+		recreationalAmenitiesDescription:
+			answers.recreationalAmenities === BOOLEAN_OPTIONS.YES ? answers.recreationalAmenitiesDescription : null,
 		caseId: caseId
 	};
 }

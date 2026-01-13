@@ -498,6 +498,29 @@ export function getQuestions() {
 			url: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY,
 			validators: [new RequiredValidator()]
 		},
+		recreationalAmenities: {
+			type: COMPONENT_TYPES.BOOLEAN,
+			title: 'Dam or Reservoir Recreational Amenities',
+			pageTitle: 'Dam or Reservoir Recreational Amenities',
+			question: 'Will the project include any recreational amenities?',
+			fieldName: 'recreationalAmenities',
+			url: 'recreational-amenities',
+			validators: [new RequiredValidator()]
+		},
+		recreationalAmenitiesDescription: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Dam or Reservoir Recreatonal Amenities Description',
+			pageTitle: 'Dam or Reservoir Recreatonal Amenities Description',
+			question: "Describe the project's recreational amenities",
+			fieldName: 'recreationalAmenitiesDescription',
+			url: 'describe-recreational-amenities',
+			validators: [
+				new StringValidator({
+					maxLength: { maxLength: 2000 },
+					minLength: { minLength: 2 }
+				})
+			]
+		},
 		damOrReservoir: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Dam or Reservoir',
