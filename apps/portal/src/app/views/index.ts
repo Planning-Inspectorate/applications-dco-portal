@@ -24,6 +24,7 @@ import { buildHomePage } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 import { buildSignOutController } from './sign-out/controller.ts';
+import { cleanupSessionJourneyMiddleware } from './middleware/session.ts';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -31,9 +32,10 @@ export function createRoutes(service: PortalService): IRouter {
 	const homePageController = buildHomePage(service);
 	const signOutController = buildSignOutController(service);
 	const whitelistMiddleware = buildWhitelistMiddleware(service);
+	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
 
-	router.get('/', asyncHandler(homePageController));
-	router.get('/sign-out', asyncHandler(signOutController));
+	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
+	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 

@@ -22,6 +22,7 @@ import { getApplicationSectionDisplayName } from '../util.ts';
 import { selectDocumentQuestionMiddleware } from '../middleware/select-document-middleware.ts';
 import { buildEnvironmentalImpactAssessmentHomePage } from './controller.ts';
 import { buildSaveController } from './save.ts';
+import { removeIsEditingJourneyMiddleware, someoneElseEditingJourneyMiddleware } from '../middleware/session.ts';
 
 export function createRoutes(service: PortalService, applicationSectionId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -39,9 +40,19 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 
 	const selectDocumentQuestion = selectDocumentQuestionMiddleware(service);
 
+	const someoneElseEditingJourney = someoneElseEditingJourneyMiddleware(service, applicationSectionId);
+	const removeIsEditingJourney = removeIsEditingJourneyMiddleware(service, applicationSectionId);
+
 	router.get('/', asyncHandler(environmentalImpactAssessmentHomePage));
 
-	router.get('/:section/:question', getJourneyResponse, getJourney, selectDocumentQuestion, question);
+	router.get(
+		'/:section/:question',
+		getJourneyResponse,
+		getJourney,
+		selectDocumentQuestion,
+		someoneElseEditingJourney,
+		question
+	);
 	router.post(
 		'/:section/:question',
 		getJourneyResponse,
@@ -54,7 +65,13 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
 		list(req, res, getApplicationSectionDisplayName(applicationSectionId), {})
 	);
-	router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
+	router.post(
+		'/check-your-answers',
+		getJourneyResponse,
+		getJourney,
+		removeIsEditingJourney,
+		asyncHandler(saveController)
+	);
 
 	return router;
 }

@@ -69,6 +69,46 @@ export class RedisClient {
 		const partitionManager = new PartitionManager(this.clientWrapper, sessionId, this.logger, this.prefix);
 		return new DistributedCachePlugin(this.clientWrapper, partitionManager as IPartitionManager);
 	}
+
+	async zAdd(key: string, score: number, value: string) {
+		await this.client.zAdd(key, { score, value });
+	}
+
+	async sAdd(key: string, value: string) {
+		await this.client.sAdd(key, value);
+	}
+
+	async zCard(key: string): Promise<number> {
+		return this.client.zCard(key);
+	}
+
+	async sCard(key: string): Promise<number> {
+		return this.client.sCard(key);
+	}
+
+	async zRem(key: string, value: string) {
+		await this.client.zRem(key, value);
+	}
+
+	async sRem(key: string, value: string) {
+		await this.client.sRem(key, value);
+	}
+
+	async zRemRangeByScore(key: string, min: number, max: number) {
+		await this.client.zRemRangeByScore(key, min, max);
+	}
+
+	async expire(key: string, seconds: number) {
+		await this.client.expire(key, seconds);
+	}
+
+	async del(key: string): Promise<number> {
+		return this.client.del(key);
+	}
+
+	async sMembers(key: string): Promise<string[]> {
+		return this.client.sMembers(key);
+	}
 }
 
 export interface RedisConnectionDetails {
