@@ -18,7 +18,8 @@ export function mapAnswersToNonOffshoreGeneratingStation(
 	return {
 		electricityGrid: answers.electricityGrid,
 		gasFuelledGeneratingStation: answers.gasFuelledGeneratingStation === BOOLEAN_OPTIONS.YES ? true : false,
-		gasPipelineConnection: answers.gasPipelineConnection,
+		gasPipelineConnection:
+			answers.gasFuelledGeneratingStation === BOOLEAN_OPTIONS.YES ? answers.gasPipelineConnection : null,
 		caseId: caseId
 	};
 }
