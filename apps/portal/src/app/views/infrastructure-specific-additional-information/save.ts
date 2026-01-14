@@ -127,6 +127,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
 					}
 				};
+
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION]) {
 					data.NonOffshoreGeneratingStation = buildUpsertQuery(
 						mapAnswersToNonOffshoreGeneratingStation(answers, caseId)
@@ -136,6 +137,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						where: { id: caseData?.NonOffshoreGeneratingStation?.id }
 					});
 				}
+
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION]) {
 					data.OffshoreGeneratingStation = buildUpsertQuery(mapAnswersToOffshoreGeneratingStation(answers, caseId));
 				} else if (caseData?.OffshoreGeneratingStation) {
@@ -143,73 +145,53 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						where: { id: caseData?.OffshoreGeneratingStation?.id }
 					});
 				}
-				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION]) {
-					data.OffshoreGeneratingStation = buildUpsertQuery(mapAnswersToOffshoreGeneratingStation(answers, caseId));
-				} else {
-					if (caseData?.OffshoreGeneratingStation) {
-						await $tx.offshoreGeneratingStation.delete({
-							where: { id: caseData?.OffshoreGeneratingStation?.id }
-						});
-					}
-				}
+
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT]) {
 					data.HighwayRelatedDevelopment = buildUpsertQuery(mapAnswersToHighwayRelatedDevelopment(answers, caseId));
-				} else {
-					if (caseData?.HighwayRelatedDevelopment) {
-						await $tx.highwayRelatedDevelopment.delete({
-							where: { id: caseData?.HighwayRelatedDevelopment?.id }
-						});
-					}
+				} else if (caseData?.HighwayRelatedDevelopment) {
+					await $tx.highwayRelatedDevelopment.delete({
+						where: { id: caseData?.HighwayRelatedDevelopment?.id }
+					});
 				}
 
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT]) {
 					data.RailwayDevelopment = buildUpsertQuery(mapAnswersToRailwayDevelopment(answers, caseId));
-				} else {
-					if (caseData?.RailwayDevelopment) {
-						await $tx.railwayDevelopment.delete({
-							where: { id: caseData?.RailwayDevelopment?.id }
-						});
-					}
+				} else if (caseData?.RailwayDevelopment) {
+					await $tx.railwayDevelopment.delete({
+						where: { id: caseData?.RailwayDevelopment?.id }
+					});
 				}
 
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES]) {
 					data.HarbourFacilities = buildUpsertQuery(mapAnswersToHarbourFacilities(answers, caseId));
-				} else {
-					if (caseData?.HarbourFacilities) {
-						await $tx.harbourFacilities.delete({
-							where: { id: caseData?.HarbourFacilities?.id }
-						});
-					}
+				} else if (caseData?.HarbourFacilities) {
+					await $tx.harbourFacilities.delete({
+						where: { id: caseData?.HarbourFacilities?.id }
+					});
 				}
 
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.PIPELINES]) {
 					data.Pipelines = buildUpsertQuery(mapAnswersToPipelines(answers, caseId));
-				} else {
-					if (caseData?.Pipelines) {
-						await $tx.pipelines.delete({
-							where: { id: caseData?.Pipelines?.id }
-						});
-					}
+				} else if (caseData?.Pipelines) {
+					await $tx.pipelines.delete({
+						where: { id: caseData?.Pipelines?.id }
+					});
 				}
 
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY]) {
 					data.HazardousWasteFacility = buildUpsertQuery(mapAnswersToHazardousWasteFacility(answers, caseId));
-				} else {
-					if (caseData?.HazardousWasteFacility) {
-						await $tx.hazardousWasteFacility.delete({
-							where: { id: caseData?.HazardousWasteFacility?.id }
-						});
-					}
+				} else if (caseData?.HazardousWasteFacility) {
+					await $tx.hazardousWasteFacility.delete({
+						where: { id: caseData?.HazardousWasteFacility?.id }
+					});
 				}
 
 				if (documentAppliedLookup[DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR]) {
 					data.DamOrReservoir = buildUpsertQuery(mapAnswersToDamOrReservoir(answers, caseId));
-				} else {
-					if (caseData?.DamOrReservoir) {
-						await $tx.damOrReservoir.delete({
-							where: { id: caseData?.DamOrReservoir?.id }
-						});
-					}
+				} else if (caseData?.DamOrReservoir) {
+					await $tx.damOrReservoir.delete({
+						where: { id: caseData?.DamOrReservoir?.id }
+					});
 				}
 
 				await $tx.case.update({
