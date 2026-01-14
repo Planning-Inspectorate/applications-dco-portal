@@ -24,6 +24,7 @@ import validate from '@planning-inspectorate/dynamic-forms/src/validator/validat
 // @ts-expect-error - due to not having @types
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import { removeIsEditingJourneyMiddleware, someoneElseEditingJourneyMiddleware } from '../middleware/session.ts';
+import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 export function createRoutes(service: PortalService, applicationSectionId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -33,7 +34,10 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	);
 	const getJourneyResponse = buildGetJourneyResponseFromSession(applicationSectionId);
 
-	const applicantAgentDetailsHomePage = buildApplicantAgentDetailsHomePage();
+	const applicantAgentDetailsHomePage = buildApplicantAgentDetailsHomePage(
+		service,
+		APPLICATION_SECTION_ID.APPLICANT_AND_AGENT_DETAILS
+	);
 	const saveController = buildSaveController(service, applicationSectionId);
 
 	const someoneElseEditingJourney = someoneElseEditingJourneyMiddleware(service, applicationSectionId);

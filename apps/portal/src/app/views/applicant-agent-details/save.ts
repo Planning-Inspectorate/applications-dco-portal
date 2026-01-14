@@ -38,12 +38,10 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				];
 				const agentDetails = answers.isAgent === BOOLEAN_OPTIONS.YES ? mapAnswersToContact(answers, 'agent') : null;
 
-				if (answers.isAgent === BOOLEAN_OPTIONS.NO) {
-					if (caseData?.AgentDetails) {
-						await $tx.contactDetails.delete({
-							where: { id: caseData?.AgentDetails?.id }
-						});
-					}
+				if (answers.isAgent === BOOLEAN_OPTIONS.NO && caseData?.AgentDetails) {
+					await $tx.contactDetails.delete({
+						where: { id: caseData?.AgentDetails?.id }
+					});
 				}
 
 				await $tx.case.update({
