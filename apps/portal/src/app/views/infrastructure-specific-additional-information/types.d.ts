@@ -1,7 +1,7 @@
 export interface NonOffshoreGeneratingStationInput {
 	electricityGrid: string;
 	gasFuelledGeneratingStation: boolean;
-	gasPipelineConnection: string;
+	gasPipelineConnection: string | null;
 	caseId: string;
 }
 
@@ -46,7 +46,7 @@ export interface PipelinesInput {
 	externalDiameter: number;
 	conveyance: string;
 	landRightsCrossingConsents: boolean;
-	landRightsCrossingConsentsAgreement: string;
+	landRightsCrossingConsentsAgreement: string | null;
 	caseId: string;
 }
 
@@ -58,6 +58,6 @@ export interface HazardousWasteFacilityInput {
 
 export interface DamOrReservoirInput {
 	recreationalAmenities: string;
-	recreationalAmenitiesDescription: string;
+	recreationalAmenitiesDescription: string | null;
 	caseId: string;
 }

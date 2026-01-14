@@ -50,6 +50,9 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.electricityGrid)
 				.addQuestion(questions.gasFuelledGeneratingStation)
 				.addQuestion(questions.gasPipelineConnection)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.gasFuelledGeneratingStation, BOOLEAN_OPTIONS.YES)
+				)
 				.addQuestion(questions.nonOffshoreGeneratingStation)
 				.endMultiQuestionCondition('non-offshore-generating-station')
 				.startMultiQuestionCondition('highway-related-development', (response: Handler) =>
