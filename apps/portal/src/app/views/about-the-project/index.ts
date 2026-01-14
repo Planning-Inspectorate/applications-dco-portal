@@ -23,6 +23,7 @@ import { list, question, buildSave } from '@planning-inspectorate/dynamic-forms/
 import validate from '@planning-inspectorate/dynamic-forms/src/validator/validator.js';
 // @ts-expect-error - due to not having @types
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
+import { removeIsEditingJourneyMiddleware, someoneElseEditingJourneyMiddleware } from '../middleware/session.ts';
 
 export function createRoutes(service: PortalService, applicationSectionId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -38,9 +39,19 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 
 	const selectDocumentQuestion = selectDocumentQuestionMiddleware(service);
 
+	const someoneElseEditingJourney = someoneElseEditingJourneyMiddleware(service, applicationSectionId);
+	const removeIsEditingJourney = removeIsEditingJourneyMiddleware(service, applicationSectionId);
+
 	router.get('/', asyncHandler(aboutTheProjectHomePage));
 
-	router.get('/:section/:question', getJourneyResponse, getJourney, selectDocumentQuestion, question);
+	router.get(
+		'/:section/:question',
+		getJourneyResponse,
+		getJourney,
+		selectDocumentQuestion,
+		someoneElseEditingJourney,
+		question
+	);
 	router.post(
 		'/:section/:question',
 		getJourneyResponse,
@@ -55,7 +66,13 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 			pageHeading: 'Check your answers before confirming'
 		})
 	);
-	router.post('/check-your-answers', getJourneyResponse, getJourney, asyncHandler(saveController));
+	router.post(
+		'/check-your-answers',
+		getJourneyResponse,
+		getJourney,
+		removeIsEditingJourney,
+		asyncHandler(saveController)
+	);
 
 	return router;
 }

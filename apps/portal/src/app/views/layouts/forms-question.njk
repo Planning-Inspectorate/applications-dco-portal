@@ -1,5 +1,6 @@
 {% extends "views/layouts/main.njk" %}
 
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% if not title %}
@@ -9,6 +10,14 @@
 {% endif %}
 
 {% block pageTitle %}{{ "Error: " + title if errors else title }}{% endblock %}
+
+{% block journey_banner %}
+    {% if showJourneyBanner %}
+        {{ govukNotificationBanner({
+            text: "Another user is currently making changes in this form section, you may lose any answers you provide."
+        }) }}
+    {% endif %}
+{% endblock %}
 
 {# show question content within content, overrides main content #}
 {% block content %}
