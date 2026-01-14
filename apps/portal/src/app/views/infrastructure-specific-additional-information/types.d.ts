@@ -57,7 +57,7 @@ export interface HazardousWasteFacilityInput {
 }
 
 export interface DamOrReservoirInput {
-	recreationalAmenities: string;
+	recreationalAmenities: boolean;
 	recreationalAmenitiesDescription: string | null;
 	caseId: string;
 }

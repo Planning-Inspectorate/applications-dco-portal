@@ -8,7 +8,7 @@ import { APPLICATION_SECTION_ID } from '../constants.ts';
 
 describe('infrastructure-specific-additional-information save', () => {
 	describe('buildSaveController', () => {
-		it('should save infrastructure specific additional information journey successfully if has environmental summary is yes', async () => {
+		it('should save infrastructure specific additional information journey successfully if has additional information is yes', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {
@@ -100,7 +100,101 @@ describe('infrastructure-specific-additional-information save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 12);
 		});
-		it('should save infrastructure specific additional information journey successfully if has environmental summary is no', async () => {
+		it('should delete any relation models existing data for case if has additional information is yes', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						NonOffshoreGeneratingStation: { id: 'id-1' },
+						HighwayRelatedDevelopment: { id: 'id-1' },
+						HarbourFacilities: { id: 'id-1' }
+					})),
+					update: mock.fn()
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(),
+					upsert: mock.fn()
+				},
+				nonOffshoreGeneratingStation: {
+					delete: mock.fn()
+				},
+				highwayRelatedDevelopment: {
+					delete: mock.fn()
+				},
+				harbourFacilities: {
+					delete: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/infrastructure-specific-additional-information',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							hasAdditionalInformation: 'yes',
+							additionalInformationDescription: 'test desc',
+							additionalInformationDocuments:
+								'offshore-generating-station,railway-development,pipelines,hazardous-waste-facility,dam-or-reservoir',
+							cableInstallation: 'cable',
+							safetyZones: 'safe',
+							offshoreGeneratingStation: 'doc-id-2,doc-id-3',
+							railwayGroundLevels: 'ground',
+							railwayBridgeHeights: 'bridge',
+							railwayTunnelDepths: 'tunnel',
+							railwayTidalWaterLevels: 'water',
+							railwayHeightOfStructures: 'struc',
+							railwayDrainageOutfallDetails: 'drain',
+							railwayDevelopment: 'doc-id-5',
+							pipelineName: 'name',
+							pipelineOwner: 'owner',
+							pipelineStartPoint: 'start',
+							pipelineEndPoint: 'end',
+							pipelineLength: 5,
+							pipelineExternalDiameter: 3,
+							pipelineConveyance: 'convey',
+							landRightsCrossingConsents: 'yes',
+							landRightsCrossingConsentsAgreement: 'test',
+							pipelines: 'doc-id-8',
+							whyIsFacilityNeeded: 'it is',
+							annualCapacity: '3000 things',
+							hazardousWasteFacility: 'doc-id-9,doc-id-10',
+							recreationalAmenities: 'yes',
+							recreationalAmenitiesDescription: 'there is a big slide',
+							damOrReservoir: 'doc-id-11,doc-id-12'
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.INFRASTRUCTURE_SPECIFIC_ADDITIONAL_INFORMATION
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 8);
+
+			assert.strictEqual(mockDb.nonOffshoreGeneratingStation.delete.mock.callCount(), 1);
+			assert.strictEqual(mockDb.highwayRelatedDevelopment.delete.mock.callCount(), 1);
+			assert.strictEqual(mockDb.harbourFacilities.delete.mock.callCount(), 1);
+		});
+		it('should save infrastructure specific additional information journey successfully if has additional information is no', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
 				case: {

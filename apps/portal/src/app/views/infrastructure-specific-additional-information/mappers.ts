@@ -99,7 +99,7 @@ export function mapAnswersToHazardousWasteFacility(
 
 export function mapAnswersToDamOrReservoir(answers: Record<string, any>, caseId: string): DamOrReservoirInput {
 	return {
-		recreationalAmenities: answers.recreationalAmenities,
+		recreationalAmenities: answers.recreationalAmenities === BOOLEAN_OPTIONS.YES ? true : false,
 		recreationalAmenitiesDescription:
 			answers.recreationalAmenities === BOOLEAN_OPTIONS.YES ? answers.recreationalAmenitiesDescription : null,
 		caseId: caseId

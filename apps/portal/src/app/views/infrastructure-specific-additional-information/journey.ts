@@ -128,6 +128,9 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				)
 				.addQuestion(questions.recreationalAmenities)
 				.addQuestion(questions.recreationalAmenitiesDescription)
+				.withCondition((response: JourneyResponse) =>
+					questionHasAnswer(response, questions.recreationalAmenities, BOOLEAN_OPTIONS.YES)
+				)
 				.addQuestion(questions.damOrReservoir)
 				.endMultiQuestionCondition('dam-or-reservoir')
 				.endMultiQuestionCondition('additional-information')
