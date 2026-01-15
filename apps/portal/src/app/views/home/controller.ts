@@ -44,6 +44,9 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 			yourApplication: formatTaskListItems(caseData, APPLICATION_SECTION)
 		};
 
+		console.info(caseData);
+		//Pass your submissionDate in as a string as well as a pre-computed bool: is it submission day?
+		//easy to then switch whats rendered
 		return res.render('views/home/view.njk', {
 			pageTitle: 'Application reference number',
 			taskListItems,
