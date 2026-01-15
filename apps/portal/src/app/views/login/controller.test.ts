@@ -516,6 +516,11 @@ describe('login controllers', () => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
+			const mockRedis = {
+				del: mock.fn(),
+				get: mock.fn(),
+				set: mock.fn()
+			};
 			const mockHashedOtpCode = await mockOtpCode('ABCDE');
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
@@ -554,12 +559,14 @@ describe('login controllers', () => {
 				cookie: mock.fn()
 			};
 
-			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger(), redisClient: mockRedis });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockRedis.del.mock.callCount(), 0);
 
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
@@ -591,6 +598,60 @@ describe('login controllers', () => {
 					}
 				}
 			});
+		});
+		it('should clear existing state sessions from redis', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:00.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockRedis = {
+				del: mock.fn(),
+				get: mock.fn(() => 'user_session:test@email.com'),
+				set: mock.fn()
+			};
+			const mockHashedOtpCode = await mockOtpCode('ABCDE');
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				oneTimePassword: {
+					findUnique: mock.fn(() => ({
+						hashedOtpCode: mockHashedOtpCode,
+						expiresAt: new Date('2025-01-30T00:02:00.000Z')
+					})),
+					delete: mock.fn()
+				},
+				case: {
+					upsert: mock.fn(() => ({
+						id: 'case-id-1',
+						Whitelist: []
+					}))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'ABCDE'
+				},
+				session: {
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				cookie: mock.fn()
+			};
+
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger(), redisClient: mockRedis });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRedis.get.mock.callCount(), 1);
+			assert.strictEqual(mockRedis.del.mock.callCount(), 2);
+			assert.strictEqual(mockRedis.set.mock.callCount(), 1);
 		});
 		it('should initialise case but not whitelist if already exists then redirect to landing page if valid and correct otp entered', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');

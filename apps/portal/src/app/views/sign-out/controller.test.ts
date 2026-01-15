@@ -8,6 +8,9 @@ import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 describe('sign-out controller', () => {
 	describe('buildSignOutController', () => {
 		it('should redirect to login landing page on sign out', async () => {
+			const mockRedis = {
+				del: mock.fn()
+			};
 			const mockReq = {
 				session: {
 					id: 'session-123',
@@ -30,8 +33,10 @@ describe('sign-out controller', () => {
 				redirect: mock.fn()
 			};
 
-			const controller = buildSignOutController({ logger: mockLogger() });
+			const controller = buildSignOutController({ logger: mockLogger(), redisClient: mockRedis });
 			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRedis.del.mock.callCount(), 2);
 
 			assert.strictEqual(mockRes.setHeader.mock.callCount(), 1);
 			assert.deepStrictEqual(mockRes.setHeader.mock.calls[0].arguments, ['Clear-Site-Data', '*']);
