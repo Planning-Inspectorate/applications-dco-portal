@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { PortalService } from '#service';
 import { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
+import { promisify } from 'node:util';
 
 export function handleSessionTimeoutMiddleware(service: PortalService) {
 	return async (req: Request, res: Response, next: NextFunction) => {
@@ -10,10 +11,12 @@ export function handleSessionTimeoutMiddleware(service: PortalService) {
 			return next();
 		}
 
-		await clearSessionJourneysMiddleware(redisClient, req.sessionID);
-
 		const userHadSessionBefore = req.cookies['had-session'];
 		if (!req.session?.isAuthenticated && userHadSessionBefore) {
+			await redisClient?.del(`sess:${req.sessionID}`);
+			await redisClient?.del(`user_session:${req.session.emailAddress}`);
+			await clearSessionJourneysMiddleware(redisClient, req.sessionID);
+
 			res.clearCookie('connect.sid', { path: '/' });
 			res.clearCookie('had-session', { path: '/' });
 
@@ -24,6 +27,43 @@ export function handleSessionTimeoutMiddleware(service: PortalService) {
 
 			return res.redirect('/session-expired');
 		}
+		next();
+	};
+}
+
+export function hasSessionExpired(service: PortalService) {
+	return async (req: Request, res: Response, next: NextFunction) => {
+		const { logger, redisClient } = service;
+
+		if (!redisClient) {
+			return next();
+		}
+
+		if (!req.session || !req.session.emailAddress) {
+			return next();
+		}
+
+		if (req.session.isAuthenticated) {
+			const key = `user_session:${req.session.emailAddress}`;
+			const activeSessionId = await redisClient.get(key);
+
+			if (activeSessionId !== req.sessionID) {
+				await redisClient?.del(`sess:${req.sessionID}`);
+				await redisClient?.del(`user_session:${req.session.emailAddress}`);
+
+				const sessionId = req.session.id;
+				await promisify(req.session.destroy.bind(req.session))();
+
+				logger.info({ sessionId }, 'clearing session as no longer active user session:');
+
+				return res
+					.setHeader('Clear-Site-Data', '*')
+					.clearCookie('connect.sid', { path: '/' })
+					.clearCookie('had-session', { path: '/' })
+					.redirect('/session-expired');
+			}
+		}
+
 		next();
 	};
 }

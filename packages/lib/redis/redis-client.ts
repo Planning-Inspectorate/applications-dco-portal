@@ -14,8 +14,6 @@ export class RedisClient {
 	private readonly logger: Logger;
 	private readonly client: RedisClientType;
 	readonly store: RedisStore;
-	readonly get: (key: string) => Promise<null | string>;
-	readonly set: (key: string, value: string) => void;
 	private readonly clientWrapper: MSALCacheClient;
 
 	/**
@@ -59,15 +57,20 @@ export class RedisClient {
 			prefix: this.prefix
 		});
 
-		this.get = this.client.get;
-		this.set = this.client.set;
-
 		this.clientWrapper = new MSALCacheClient(this.client);
 	}
 
 	makeCachePlugin(sessionId: string): DistributedCachePlugin {
 		const partitionManager = new PartitionManager(this.clientWrapper, sessionId, this.logger, this.prefix);
 		return new DistributedCachePlugin(this.clientWrapper, partitionManager as IPartitionManager);
+	}
+
+	async get(key: string) {
+		return await this.client.get(key);
+	}
+
+	async set(key: string, value: any) {
+		await this.client.set(key, value);
 	}
 
 	async zAdd(key: string, score: number, value: string) {

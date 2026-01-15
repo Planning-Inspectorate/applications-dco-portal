@@ -167,7 +167,7 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 
 export function buildSubmitOtpController(service: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
-		const { db, logger } = service;
+		const { db, logger, redisClient } = service;
 
 		const emailAddress = req.session.emailAddress;
 		const caseReference = req.session.caseReference;
@@ -252,7 +252,15 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 			}
 		});
 
-		req.session.regenerate((error) => {
+		const key = `user_session:${emailAddress}`;
+		const oldSessionId = await redisClient?.get(key);
+
+		if (oldSessionId) {
+			await redisClient?.del(`sess:${oldSessionId}`);
+			await redisClient?.del(key);
+		}
+
+		req.session.regenerate(async (error) => {
 			if (error) {
 				throw error;
 			}
@@ -267,6 +275,8 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 				sameSite: 'lax',
 				maxAge: 24 * 60 * 60 * 1000 // 1 day
 			});
+
+			await redisClient?.set(key, req.sessionID);
 
 			logger.info('User authenticated, redirecting to the landing page');
 
