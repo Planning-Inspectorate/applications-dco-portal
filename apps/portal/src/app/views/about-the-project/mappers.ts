@@ -3,7 +3,8 @@ import type { AboutTheProjectInput, ProjectLinearSiteInput, ProjectSingleSiteInp
 export function mapAnswersToCase(answers: Record<string, any>): AboutTheProjectInput {
 	return {
 		projectDescription: answers.description,
-		projectConsentReason: answers.consentReason
+		projectConsentReason: answers.consentReason,
+		locationDescription: answers.locationDescription
 	};
 }
 

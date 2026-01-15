@@ -32,8 +32,8 @@ describe('applicant-agent-details controller', () => {
 							}
 						},
 						CasePaymentMethod: {
-							id: 'id',
-							displayName: 'bacs'
+							id: 'bacs',
+							displayName: 'BACS'
 						},
 						paymentReference: 'ref'
 					}))
@@ -134,8 +134,8 @@ describe('applicant-agent-details controller', () => {
 							}
 						},
 						CasePaymentMethod: {
-							id: 'id',
-							displayName: 'bacs'
+							id: 'bacs',
+							displayName: 'BACS'
 						},
 						paymentReference: 'ref'
 					}))

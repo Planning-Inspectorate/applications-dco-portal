@@ -1,6 +1,7 @@
 export interface AboutTheProjectInput {
 	projectDescription: string;
 	projectConsentReason: string;
+	locationDescription: string;
 }
 
 export interface ProjectSingleSiteInput {
