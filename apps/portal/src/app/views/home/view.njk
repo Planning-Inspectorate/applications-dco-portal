@@ -1,5 +1,6 @@
 {% extends "views/layouts/main.njk" %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block pageHeading %}{% endblock %}
 
@@ -30,6 +31,16 @@
       {{ govukTaskList({
         idPrefix: "your-application",
         items: taskListItems.yourApplication
+      }) }}
+
+      <h2 class="govuk-heading-m">
+        You will be able to submit your application on Your Date Here
+      </h2>
+      <p class="govuk-body">
+        Once the application is submitted, it will be locked and you can make no further changes
+      <p>
+      {{ govukWarningText({
+          text: "If you miss this date, you'll have to agree to a new submission date with the Planning Inspectorate."
       }) }}
     </div>
   </div>
