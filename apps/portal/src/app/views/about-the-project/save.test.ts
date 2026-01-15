@@ -63,6 +63,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectSingleSite: {
 						upsert: {
@@ -137,6 +138,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectLinearSite: {
 						upsert: {
@@ -229,6 +231,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectLinearSite: {
 						upsert: {
@@ -317,6 +320,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectSingleSite: {
 						upsert: {
@@ -390,6 +394,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectSingleSite: {
 						upsert: {
@@ -414,6 +419,7 @@ describe('about the project journey save controller', () => {
 						reference: 'EN123456',
 						projectDescription: 'This is a test project description',
 						projectConsentReason: 'This is a test consent reason',
+						locationDescription: 'This is a test location description',
 						ProjectSingleSite: {
 							id: 'single-site-id'
 						}
@@ -465,6 +471,7 @@ describe('about the project journey save controller', () => {
 				data: {
 					projectDescription: 'This is a test project description',
 					projectConsentReason: 'This is a test consent reason',
+					locationDescription: 'This is a test location description',
 					aboutTheProjectStatus: { connect: { id: 'completed' } },
 					ProjectSingleSite: {
 						upsert: {

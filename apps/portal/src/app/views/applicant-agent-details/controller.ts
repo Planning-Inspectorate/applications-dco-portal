@@ -49,7 +49,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 
 	const forms = req.session.forms || (req.session.forms = {});
 
-	//TODO: Test save.ts to ensure saving all looks as expected e.g. toggle yes or no agent and see if deletese properly
 	forms[applicationSectionId] = {
 		applicantOrganisation: caseData.ApplicantDetails?.organisation || '',
 		applicantFirstName: caseData.ApplicantDetails?.firstName || '',
