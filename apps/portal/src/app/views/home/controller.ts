@@ -9,6 +9,8 @@ import {
 import { APPLICATION_SECTION } from '../constants.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+// @ts-expect-error - due to not having @types
+import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
 
 export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -44,10 +46,18 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 			yourApplication: formatTaskListItems(caseData, APPLICATION_SECTION)
 		};
 
+		const { submissionText, warningText, enableSubmissionButton } = getSubmissionDateContent(
+			caseData.anticipatedDateOfSubmission
+		);
+
 		return res.render('views/home/view.njk', {
 			pageTitle: 'Application reference number',
 			taskListItems,
-			showManageUsersLink: whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER
+			showManageUsersLink: whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER,
+			submissionText,
+			warningText,
+			enableSubmissionButton,
+			hasCaseBeenSubmitted: caseData.submissionDate !== null
 		});
 	};
 }
@@ -78,4 +88,40 @@ function formatTaskListItems(caseData: any, taskList: { id: string; displayName:
 			tag: getCategoryStatus((caseData as any)[`${kebabCaseToCamelCase(subtask.id)}StatusId`])
 		}
 	}));
+}
+
+function getSubmissionDateContent(anticipatedDateOfSubmission: Date | null): {
+	submissionText: string;
+	warningText: string;
+	enableSubmissionButton: boolean;
+} {
+	const now = new Date();
+	const dayAfterTomorrow = new Date();
+	dayAfterTomorrow.setDate(now.getDate() + 2);
+
+	if (!anticipatedDateOfSubmission) {
+		return {
+			submissionText: '',
+			warningText: '',
+			enableSubmissionButton: false
+		};
+	} else if (anticipatedDateOfSubmission < now) {
+		return {
+			submissionText: `<h2 class="govuk-heading-m">You will be able to submit you application on ${formatDateForDisplay(anticipatedDateOfSubmission)}</h2><p class="govuk-body">Once the applications is submitted, it will be locked and you can make no further changes.</p>`,
+			warningText: `If you miss this date, you'll need to agree a new submission date with the Planning Inspectorate`,
+			enableSubmissionButton: false
+		};
+	} else if (anticipatedDateOfSubmission < dayAfterTomorrow) {
+		return {
+			submissionText: `<h2 class="govuk-heading-m">Now submit your application</h2><p class="govuk-body">You can now submit your application. Once the application is submitted, it will be locked and you can make no further changes.</p>`,
+			warningText: `If you do not submit your application today, you'll need to agree a new submission date with the Planning Inspectorate`,
+			enableSubmissionButton: true
+		};
+	} else {
+		return {
+			submissionText: `<h2 class="govuk-heading-m">Your submission date has passed</h2>`,
+			warningText: `You can continue working on your application, but you cannot submit it at this time. To submit, you must contact the Planning Inspectorate to agree a new submission date.`,
+			enableSubmissionButton: false
+		};
+	}
 }

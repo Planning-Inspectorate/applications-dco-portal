@@ -16,6 +16,9 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 			const nsipProjectUpdate = {
 				caseId: message.caseId,
 				caseReference: message.caseReference,
+				...(message.anticipatedDateOfSubmission && {
+					anticipatedDateOfSubmission: message.anticipatedDateOfSubmission
+				}),
 				...(message.projectName && { projectName: message.projectName }),
 				...(message.projectDescription && { projectDescription: message.projectDescription }),
 				...(message.projectLocation && { projectLocation: message.projectLocation }),
@@ -30,6 +33,17 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 				update: nsipProjectUpdate,
 				create: nsipProjectUpdate
 			});
+
+			const caseData = await db.case.findUnique({
+				where: { reference: message.caseReference }
+			});
+
+			if (caseData) {
+				await db.case.update({
+					where: { reference: message.caseReference },
+					data: { anticipatedDateOfSubmission: message.anticipatedDateOfSubmission }
+				});
+			}
 
 			context.log('NSIP Project function run successfully');
 		} catch (error) {

@@ -1,0 +1,39 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% block pageHeading %}{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h2 class="govuk-heading-l">Declaration</h2>
+            <p class="govuk-body">By submitting this application, I confirm that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>to the best of my knowledge, the information given in this application and enclosed maps, plans and other documents are true</li>
+                <li>I have read and agree to The Planning Inspectorate's <a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/government/publications/planning-inspectorate-privacy-notices/customer-privacy-notice" target="_blank" rel="noopener noreferrer">privacy notice (opens in a new tab)</a></li>
+            </ul>
+
+            <form action="" method="post" novalidate>
+                {{ govukCheckboxes({
+                    name: "declarationConfirmation",
+                    items: [
+                        {
+                            value: "confirm",
+                            text: "I confirm that I understand and accept this declaration"
+                        }
+                    ],
+                    errorMessage: errors.declarationConfirmation and {
+                        text: errors.declarationConfirmation.msg
+                    }
+                }) }}
+
+                {{ govukButton({
+                    text: "Confirm and submit",
+                    type: "submit"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

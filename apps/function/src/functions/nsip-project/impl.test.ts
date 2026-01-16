@@ -7,6 +7,12 @@ describe('nsip project function', () => {
 	it('should save data all data from nsip project message into db when all fields received in message', async () => {
 		const mockDb = {
 			$transaction: mock.fn((fn) => fn(mockDb)),
+			case: {
+				findUnique: mock.fn(() => ({
+					reference: 'EN123456'
+				})),
+				update: mock.fn()
+			},
 			nsipProject: {
 				upsert: mock.fn()
 			}
@@ -17,6 +23,7 @@ describe('nsip project function', () => {
 		const message = {
 			caseId: '1',
 			caseReference: 'EN123456',
+			anticipatedDateOfSubmission: new Date(2025, 11, 12),
 			projectName: 'test@email.com',
 			projectDescription: 'Applicant',
 			projectLocation: 'John',
@@ -27,7 +34,7 @@ describe('nsip project function', () => {
 		const handler = buildNsipProjectFunction({ db: mockDb });
 		await handler(message, context);
 
-		assert.strictEqual(mockDb.nsipProject.upsert.mock.calls.length, 1);
+		assert.strictEqual(mockDb.nsipProject.upsert.mock.callCount(), 1);
 		assert.deepStrictEqual(mockDb.nsipProject.upsert.mock.calls[0].arguments[0], {
 			where: {
 				caseReference: 'EN123456'
@@ -35,6 +42,7 @@ describe('nsip project function', () => {
 			update: {
 				caseId: '1',
 				caseReference: 'EN123456',
+				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z'),
 				projectName: 'test@email.com',
 				projectDescription: 'Applicant',
 				projectLocation: 'John',
@@ -44,6 +52,7 @@ describe('nsip project function', () => {
 			create: {
 				caseId: '1',
 				caseReference: 'EN123456',
+				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z'),
 				projectName: 'test@email.com',
 				projectDescription: 'Applicant',
 				projectLocation: 'John',
@@ -52,11 +61,26 @@ describe('nsip project function', () => {
 			}
 		});
 
+		assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+
+		assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+		assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+			data: {
+				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z')
+			},
+			where: {
+				reference: 'EN123456'
+			}
+		});
+
 		assert.strictEqual(context.log.mock.callCount(), 1);
 	});
 	it('should save data from message into db if only mandatory fields received', async () => {
 		const mockDb = {
 			$transaction: mock.fn((fn) => fn(mockDb)),
+			case: {
+				findUnique: mock.fn()
+			},
 			nsipProject: {
 				upsert: mock.fn()
 			}
