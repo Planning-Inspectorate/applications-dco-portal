@@ -15,6 +15,7 @@ import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } f
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { mapNsipProjectToCase, mapNsipServiceUserToCase } from './mappers.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -213,10 +214,29 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 		await deleteOtp(db, emailAddress, caseReference);
 
 		await db.$transaction(async ($tx) => {
+			const [nsipProject, nsipServiceUser] = await Promise.all([
+				$tx.nsipProject.findUnique({
+					where: { caseReference: caseReference }
+				}),
+				$tx.nsipServiceUser.findUnique({
+					where: {
+						caseReference_email: {
+							caseReference: caseReference,
+							email: emailAddress
+						}
+					}
+				})
+			]);
+
 			const caseData = await $tx.case.upsert({
 				where: { reference: caseReference },
 				update: {},
-				create: { reference: caseReference, email: emailAddress },
+				create: {
+					reference: caseReference,
+					email: emailAddress,
+					...mapNsipProjectToCase(nsipProject),
+					...mapNsipServiceUserToCase(nsipServiceUser)
+				},
 				include: {
 					Whitelist: true
 				}
