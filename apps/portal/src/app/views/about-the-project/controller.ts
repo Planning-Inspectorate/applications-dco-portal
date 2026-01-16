@@ -13,16 +13,7 @@ import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
 export function buildAboutTheProjectHomePage({ db }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
-		const caseData = await db.case.findUnique({
-			where: { reference: req.session?.caseReference }
-		});
-
-		if (
-			(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
-			DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED
-		) {
-			await populateForm(req, res, db, applicationSectionId);
-		}
+		await populateForm(req, res, db, applicationSectionId);
 		res.redirect(`${req.baseUrl}/about/consent-reason`);
 	};
 }
