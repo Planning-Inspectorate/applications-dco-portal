@@ -24,18 +24,39 @@ import { buildHomePage } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 import { buildSignOutController } from './sign-out/controller.ts';
-import { cleanupSessionJourneyMiddleware } from './middleware/session.ts';
+import { cleanupSessionJourneyMiddleware, hasApplicationBeenSubmittedMiddleware } from './middleware/session.ts';
+import {
+	buildApplicationCompletePage,
+	buildDeclarationPage,
+	buildPositionInOrganisationPage,
+	buildSavePositionInOrganisation,
+	buildSubmitDeclaration
+} from './declaration/controller.ts';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const homePageController = buildHomePage(service);
 	const signOutController = buildSignOutController(service);
+
+	const positionInOrganisationPage = buildPositionInOrganisationPage();
+	const savePositionInOrganisation = buildSavePositionInOrganisation(service);
+	const declarationPage = buildDeclarationPage(service);
+	const submitDeclaration = buildSubmitDeclaration(service);
+	const applicationCompletePage = buildApplicationCompletePage(service);
+
 	const whitelistMiddleware = buildWhitelistMiddleware(service);
 	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
+	const hasApplicationBeenSubmitted = hasApplicationBeenSubmittedMiddleware(service);
 
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
+
+	router.get('/position-in-organisation', hasApplicationBeenSubmitted, asyncHandler(positionInOrganisationPage));
+	router.post('/position-in-organisation', asyncHandler(savePositionInOrganisation));
+	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
+	router.post('/declaration', asyncHandler(submitDeclaration));
+	router.get('/application-complete', hasApplicationBeenSubmitted, asyncHandler(applicationCompletePage));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 

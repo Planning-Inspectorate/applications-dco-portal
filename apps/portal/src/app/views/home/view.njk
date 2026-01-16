@@ -1,5 +1,8 @@
 {% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/task-list/macro.njk" import govukTaskList %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block pageHeading %}{% endblock %}
 
@@ -31,6 +34,22 @@
         idPrefix: "your-application",
         items: taskListItems.yourApplication
       }) }}
+
+      {% if not hasCaseBeenSubmitted %}
+          {{ submissionText | safe }}
+          {% if warningText %}
+            {{ govukWarningText({
+                text: warningText,
+                iconFallbackText: "Warning"
+            }) }}
+          {% endif %}
+          {% if enableSubmissionButton %}
+            {{ govukButton({
+                text: "Submit",
+                href: "/position-in-organisation"
+            }) }}
+          {% endif %}
+      {% endif %}
     </div>
   </div>
 {% endblock %}

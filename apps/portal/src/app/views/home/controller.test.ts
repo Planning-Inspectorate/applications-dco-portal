@@ -8,13 +8,17 @@ import { configureNunjucks } from '../../nunjucks.ts';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('home page', () => {
-	it('should render without error', async () => {
+	it('should render without error', async (ctx) => {
+		const now = new Date('2025-01-30T00:00:00.000Z');
+		ctx.mock.timers.enable({ apis: ['Date'], now });
+
 		const nunjucks = configureNunjucks();
 		const mockDb = {
 			case: {
 				findUnique: mock.fn(() => ({
 					reference: 'EN123456',
 					email: 'test@email.com',
+					anticipatedDateOfSubmission: new Date('2025-01-30T00:00:00.000Z'),
 					applicationFormRelatedInformationStatusId: 'not-started',
 					plansAndDrawingsStatusId: 'not-started',
 					draftDcoStatusId: 'in-progress',
@@ -52,6 +56,12 @@ describe('home page', () => {
 		assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 			pageTitle: 'Application reference number',
 			showManageUsersLink: false,
+			enableSubmissionButton: true,
+			hasCaseBeenSubmitted: true,
+			submissionText:
+				'<h2 class="govuk-heading-m">Now submit your application</h2><p class="govuk-body">You can now submit your application. Once the application is submitted, it will be locked and you can make no further changes.</p>',
+			warningText:
+				"If you do not submit your application today, you'll need to agree a new submission date with the Planning Inspectorate",
 			taskListItems: {
 				yourDocuments: [
 					{

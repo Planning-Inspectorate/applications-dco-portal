@@ -24,6 +24,9 @@ model Case {
   email                                          String
   createdAt                                      DateTime                      @default(now())
   modifiedAt                                     DateTime                      @updatedAt
+  anticipatedDateOfSubmission                    DateTime?
+  submissionDate                                 DateTime?
+  submitterPositionInOrganisation                String?
   Documents                                      Document[]
   SupportingEvidence                             SupportingEvidence[]
   applicantDetailsId                             String?                       @db.UniqueIdentifier

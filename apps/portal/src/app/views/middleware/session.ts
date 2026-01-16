@@ -137,3 +137,17 @@ async function clearSessionJourneysMiddleware(redisClient: RedisClient, sessionI
 
 	await redisClient.del(sessionJourneysKey);
 }
+
+export function hasApplicationBeenSubmittedMiddleware({ db }: PortalService) {
+	return async (req: Request, res: Response, next: NextFunction) => {
+		const caseData = await db.case.findUnique({
+			where: { reference: req.session.caseReference }
+		});
+
+		if (caseData?.submissionDate === null) {
+			return next();
+		}
+
+		res.redirect('/');
+	};
+}
