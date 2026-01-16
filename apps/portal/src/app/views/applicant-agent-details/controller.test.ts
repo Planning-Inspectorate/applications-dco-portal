@@ -268,7 +268,7 @@ describe('applicant-agent-details controller', () => {
 				}
 			});
 		});
-		it('should skip populateForm if status is not-started', async () => {
+		it('should not skip populateForm if status is not-started and just prepopulate with blank values', async () => {
 			const mockDb = {
 				case: {
 					findUnique: mock.fn(() => ({
@@ -298,7 +298,42 @@ describe('applicant-agent-details controller', () => {
 				'/applicant-and-agent-details/applicant/organisation'
 			);
 
-			assert.deepStrictEqual(mockReq.session, { caseReference: 'EN123456' });
+			assert.deepStrictEqual(mockReq.session, {
+				caseReference: 'EN123456',
+				forms: {
+					'applicant-and-agent-details': {
+						applicantOrganisation: '',
+						applicantFirstName: '',
+						applicantLastName: '',
+						applicantEmailAddress: '',
+						applicantPhone: '',
+						applicantAddress: {
+							addressLine1: '',
+							addressLine2: '',
+							townCity: '',
+							county: '',
+							country: '',
+							postcode: ''
+						},
+						isAgent: 'no',
+						agentOrganisation: '',
+						agentFirstName: '',
+						agentLastName: '',
+						agentEmailAddress: '',
+						agentPhone: '',
+						agentAddress: {
+							addressLine1: '',
+							addressLine2: '',
+							townCity: '',
+							county: '',
+							country: '',
+							postcode: ''
+						},
+						paymentMethod: '',
+						paymentReference: ''
+					}
+				}
+			});
 		});
 	});
 });

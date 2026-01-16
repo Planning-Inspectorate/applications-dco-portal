@@ -11,16 +11,7 @@ export function buildApplicantAgentDetailsHomePage(
 	applicationSectionId: string
 ): AsyncRequestHandler {
 	return async (req, res) => {
-		const caseData = await db.case.findUnique({
-			where: { reference: req.session?.caseReference }
-		});
-
-		if (
-			(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
-			DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED
-		) {
-			await populateForm(req, res, db, applicationSectionId);
-		}
+		await populateForm(req, res, db, applicationSectionId);
 		res.redirect(`${req.baseUrl}/applicant/organisation`);
 	};
 }

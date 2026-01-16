@@ -178,7 +178,7 @@ describe('about-the-project controller', () => {
 				}
 			});
 		});
-		it('should skip populateForm if status is not-started', async () => {
+		it('should not skip populateForm if status is not-started and just prepopulate with blank values', async () => {
 			const mockDb = {
 				case: {
 					findUnique: mock.fn(() => ({
@@ -202,7 +202,26 @@ describe('about-the-project controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/about-the-project/about/consent-reason');
 
-			assert.deepStrictEqual(mockReq.session, { caseReference: 'EN123456' });
+			assert.deepStrictEqual(mockReq.session, {
+				caseReference: 'EN123456',
+				forms: {
+					'about-the-project': {
+						consentReason: '',
+						description: '',
+						locationDescription: '',
+						singleOrLinear: PROJECT_SITE_TYPE_IDS.LINEAR,
+						easting: '',
+						northing: '',
+						startEasting: '',
+						startNorthing: '',
+						middleEasting: '',
+						middleNorthing: '',
+						endEasting: '',
+						endNorthing: '',
+						hasAssociatedDevelopments: 'no'
+					}
+				}
+			});
 		});
 	});
 });
