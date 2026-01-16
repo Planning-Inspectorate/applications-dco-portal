@@ -537,6 +537,12 @@ describe('login controllers', () => {
 						Whitelist: []
 					}))
 				},
+				nsipProject: {
+					findUnique: mock.fn(() => null)
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => null)
+				},
 				whitelistUser: {
 					upsert: mock.fn()
 				}
@@ -575,6 +581,298 @@ describe('login controllers', () => {
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.upsert.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				update: {},
+				create: {
+					reference: 'EN123456',
+					email: 'test@email.com',
+					projectDescription: null,
+					locationDescription: null
+				},
+				include: {
+					Whitelist: true
+				}
+			});
+
+			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.whitelistUser.upsert.mock.calls[0].arguments[0], {
+				where: {
+					caseReference_email: { caseReference: 'EN123456', email: 'test@email.com' }
+				},
+				update: {},
+				create: {
+					caseReference: 'EN123456',
+					email: 'test@email.com',
+					isInitialInvitee: true,
+					UserRole: {
+						connect: {
+							id: WHITELIST_USER_ROLE_ID.ADMIN_USER
+						}
+					},
+					Case: {
+						connect: {
+							id: 'case-id-1'
+						}
+					}
+				}
+			});
+		});
+		it('should initialise case with incomplete existing cbos data and whitelist then redirect to landing page if valid and correct otp entered', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:00.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockHashedOtpCode = await mockOtpCode('ABCDE');
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				oneTimePassword: {
+					findUnique: mock.fn(() => ({
+						hashedOtpCode: mockHashedOtpCode,
+						expiresAt: new Date('2025-01-30T00:02:00.000Z')
+					})),
+					delete: mock.fn()
+				},
+				case: {
+					upsert: mock.fn(() => ({
+						id: 'case-id-1',
+						Whitelist: []
+					}))
+				},
+				nsipProject: {
+					findUnique: mock.fn(() => ({
+						caseId: 'case-id-1',
+						caseReference: 'EN123456'
+					}))
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						caseReference: 'EN123456',
+						email: 'test@email.com',
+						modifiedAt: new Date()
+					}))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'ABCDE'
+				},
+				session: {
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				cookie: mock.fn()
+			};
+
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockReq.session.isAuthenticated, true);
+			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+
+			assert.deepStrictEqual(mockDb.case.upsert.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				update: {},
+				create: {
+					reference: 'EN123456',
+					email: 'test@email.com',
+					projectDescription: null,
+					locationDescription: null,
+					ApplicantDetails: {
+						create: {
+							firstName: '',
+							lastName: '',
+							emailAddress: 'test@email.com',
+							phone: '',
+							organisation: '',
+							Address: {
+								create: {
+									addressLine1: '',
+									addressLine2: '',
+									townCity: '',
+									county: '',
+									country: '',
+									postcode: ''
+								}
+							}
+						}
+					}
+				},
+				include: {
+					Whitelist: true
+				}
+			});
+
+			assert.strictEqual(mockDb.nsipProject.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.nsipServiceUser.findUnique.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.whitelistUser.upsert.mock.calls[0].arguments[0], {
+				where: {
+					caseReference_email: { caseReference: 'EN123456', email: 'test@email.com' }
+				},
+				update: {},
+				create: {
+					caseReference: 'EN123456',
+					email: 'test@email.com',
+					isInitialInvitee: true,
+					UserRole: {
+						connect: {
+							id: WHITELIST_USER_ROLE_ID.ADMIN_USER
+						}
+					},
+					Case: {
+						connect: {
+							id: 'case-id-1'
+						}
+					}
+				}
+			});
+		});
+		it('should initialise case with existing cbos data and whitelist then redirect to landing page if valid and correct otp entered', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:00.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockHashedOtpCode = await mockOtpCode('ABCDE');
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				oneTimePassword: {
+					findUnique: mock.fn(() => ({
+						hashedOtpCode: mockHashedOtpCode,
+						expiresAt: new Date('2025-01-30T00:02:00.000Z')
+					})),
+					delete: mock.fn()
+				},
+				case: {
+					upsert: mock.fn(() => ({
+						id: 'case-id-1',
+						Whitelist: []
+					}))
+				},
+				nsipProject: {
+					findUnique: mock.fn(() => ({
+						caseId: 'case-id-1',
+						caseReference: 'EN123456',
+						projectDescription: 'desc',
+						projectLocation: 'location',
+						easting: 123456,
+						northing: 123456
+					}))
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						caseReference: 'EN123456',
+						email: 'test@email.com',
+						modifiedAt: new Date(),
+						organisation: 'org',
+						firstName: 'john',
+						lastName: 'burrows',
+						telephoneNumber: '0998888888',
+						addressLine1: '38',
+						addressLine2: 'john burrows way',
+						addressTown: 'harpenden',
+						addressCounty: 'county',
+						addressCountry: 'england',
+						postcode: 'bu23 ro3'
+					}))
+				},
+				whitelistUser: {
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/login',
+				body: {
+					otpCode: 'ABCDE'
+				},
+				session: {
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456',
+					regenerate: mock.fn((callback) => {
+						callback(null);
+					})
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				cookie: mock.fn()
+			};
+
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockReq.session.regenerate.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockReq.session.isAuthenticated, true);
+			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
+			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+
+			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.upsert.mock.calls[0].arguments[0], {
+				where: { reference: 'EN123456' },
+				update: {},
+				create: {
+					reference: 'EN123456',
+					email: 'test@email.com',
+					projectDescription: 'desc',
+					locationDescription: 'location',
+					ProjectSingleSite: {
+						create: {
+							easting: 123456,
+							northing: 123456
+						}
+					},
+					ApplicantDetails: {
+						create: {
+							firstName: 'john',
+							lastName: 'burrows',
+							emailAddress: 'test@email.com',
+							phone: '0998888888',
+							organisation: 'org',
+							Address: {
+								create: {
+									addressLine1: '38',
+									addressLine2: 'john burrows way',
+									townCity: 'harpenden',
+									county: 'county',
+									country: 'england',
+									postcode: 'bu23 ro3'
+								}
+							}
+						}
+					}
+				},
+				include: {
+					Whitelist: true
+				}
+			});
+
+			assert.strictEqual(mockDb.nsipProject.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.nsipServiceUser.findUnique.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 1);
 			assert.deepStrictEqual(mockDb.whitelistUser.upsert.mock.calls[0].arguments[0], {
@@ -680,6 +978,20 @@ describe('login controllers', () => {
 						]
 					}))
 				},
+				nsipProject: {
+					findUnique: mock.fn(() => ({
+						caseId: 'case-id-1',
+						caseReference: 'EN123456'
+					}))
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						caseReference: 'EN123456',
+						email: 'test@email.com',
+						modifiedAt: new Date()
+					}))
+				},
 				whitelistUser: {
 					upsert: mock.fn()
 				}
@@ -716,6 +1028,9 @@ describe('login controllers', () => {
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.nsipProject.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.nsipServiceUser.findUnique.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.case.upsert.mock.callCount(), 1);
 			assert.strictEqual(mockDb.whitelistUser.upsert.mock.callCount(), 0);
