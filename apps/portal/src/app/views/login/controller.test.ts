@@ -922,6 +922,20 @@ describe('login controllers', () => {
 						Whitelist: []
 					}))
 				},
+				nsipProject: {
+					findUnique: mock.fn(() => ({
+						caseId: 'case-id-1',
+						caseReference: 'EN123456'
+					}))
+				},
+				nsipServiceUser: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						caseReference: 'EN123456',
+						email: 'test@email.com',
+						modifiedAt: new Date()
+					}))
+				},
 				whitelistUser: {
 					upsert: mock.fn()
 				}
