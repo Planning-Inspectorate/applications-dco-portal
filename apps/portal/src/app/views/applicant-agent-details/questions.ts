@@ -73,6 +73,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Organisation`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s organisation`,
 		fieldName: `${prefix}Organisation`,
+		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `organisation`,
 		validators: [
 			new RequiredValidator(),
@@ -88,6 +89,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Name`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s name`,
 		fieldName: `${prefix}Name`,
+		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `name`,
 		validators: [
 			new MultiFieldInputValidator({
@@ -108,6 +110,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Email Address`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s email address`,
 		fieldName: `${prefix}EmailAddress`,
+		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `email-address`,
 		validators: [
 			new RequiredValidator(),
@@ -125,6 +128,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Phone Number`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s phone number`,
 		fieldName: `${prefix}Phone`,
+		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `phone`,
 		validators: [
 			new StringValidator({
@@ -143,6 +147,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		pageTitle: `${title} Address`,
 		question: `Enter the ${title.toLocaleLowerCase()}'s address`,
 		fieldName: `${prefix}Address`,
+		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `address`,
 		fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
 		validators: [
