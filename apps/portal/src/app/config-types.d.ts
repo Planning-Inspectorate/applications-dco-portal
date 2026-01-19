@@ -1,9 +1,11 @@
 import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types';
 import { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
+import { PuppeteerConfig } from '@pins/dco-portal-lib/puppeteer/types.js';
 
 interface Config {
 	appHostname?: string;
 	blobStore: BlobStoreConfig;
+	puppeteer: PuppeteerConfig;
 	cacheControl: {
 		maxAge: string;
 	};

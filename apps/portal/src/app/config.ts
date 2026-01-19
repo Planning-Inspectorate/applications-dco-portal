@@ -106,6 +106,11 @@ export function loadConfig(): Config {
 			container: BLOB_STORE_CONTAINER,
 			connectionString: BLOB_STORE_CONNECTION_STRING
 		},
+		puppeteer: {
+			host: 'test',
+			container: 'test',
+			connectionString: 'test'
+		},
 		cacheControl: {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
 		},
