@@ -1,7 +1,5 @@
 import { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
