@@ -115,4 +115,38 @@ export class BlobStorageClient {
 		await this.checkBlobExists(blockBlobClient, blobName);
 		return await blockBlobClient.download();
 	}
+
+	async moveFolder(prefix: string) {
+		const CONCURRENCY = 10;
+
+		const sourceContainer = this.blobServiceClient.getContainerClient('dco-portal-documents');
+		const destContainer = this.blobServiceClient.getContainerClient('destination-container');
+
+		const executing = new Set();
+
+		const schedule = async (blob: BlobItem) => {
+			const task = (async () => {
+				const sourceBlob = sourceContainer.getBlobClient(blob.name);
+				const destBlob = destContainer.getBlobClient(blob.name);
+
+				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
+				await poller.pollUntilDone();
+				await sourceBlob.delete();
+				this.logger.info(`Moved: ${blob.name}`);
+			})();
+
+			executing.add(task);
+			task.finally(() => executing.delete(task));
+
+			if (executing.size >= CONCURRENCY) {
+				await Promise.race(executing);
+			}
+		};
+
+		for await (const blob of sourceContainer.listBlobsFlat({ prefix })) {
+			await schedule(blob);
+		}
+
+		await Promise.all(executing);
+	}
 }
