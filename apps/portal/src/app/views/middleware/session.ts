@@ -144,7 +144,20 @@ export function hasApplicationBeenSubmittedMiddleware({ db }: PortalService) {
 			where: { reference: req.session.caseReference }
 		});
 
-		if (caseData?.submissionDate === null) {
+		const isToday = (d: Date) => new Date(d).toDateString() === new Date().toDateString();
+
+		const isTomorrow = (d: Date) => {
+			const tomorrow = new Date();
+			tomorrow.setDate(tomorrow.getDate() + 1);
+
+			return new Date(d).toDateString() === tomorrow.toDateString();
+		};
+
+		const canSubmitApplication =
+			caseData?.anticipatedDateOfSubmission &&
+			(isToday(caseData?.anticipatedDateOfSubmission) || isTomorrow(caseData?.anticipatedDateOfSubmission));
+
+		if (caseData?.submissionDate === null && canSubmitApplication) {
 			return next();
 		}
 
