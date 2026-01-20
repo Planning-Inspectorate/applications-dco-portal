@@ -9,9 +9,9 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@azure/storage-blob": "*",
     "@azure/identity": "^4.13.0",
     "@azure/msal-node": "*",
+    "@azure/storage-blob": "*",
     "@pins/dco-portal-database": "*",
     "@planning-inspectorate/dynamic-forms": "*",
     "bcrypt": "*",
@@ -23,6 +23,7 @@
     "pdf-lib": "*",
     "pino": "*",
     "pino-pretty": "*",
+    "puppeteer-core": "^24.34.0",
     "redis": "*"
   },
   "devDependencies": {
