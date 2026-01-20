@@ -73,7 +73,7 @@
     "cookie-parser": "^1.4.7",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-cypress": "^5.2.0",
+    "eslint-plugin-cypress": "^5.2.1",
     "fs-extra": "^11.3.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
