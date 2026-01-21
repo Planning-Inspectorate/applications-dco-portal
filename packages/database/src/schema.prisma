@@ -28,6 +28,7 @@ model Case {
   anticipatedDateOfSubmission                    DateTime?
   submissionDate                                 DateTime?
   submitterPositionInOrganisation                String?
+  pdfBlobName                                    String?
   Documents                                      Document[]
   SupportingEvidence                             SupportingEvidence[]
   applicantDetailsId                             String?                       @db.UniqueIdentifier
