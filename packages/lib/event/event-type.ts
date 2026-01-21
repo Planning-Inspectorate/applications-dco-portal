@@ -1,7 +1,7 @@
 export const EventType = {
-	Create: 'Create',
-	Update: 'Delete',
-	Delete: 'Publish',
-	Publish: 'Unpublish',
-	Unpublish: 'Update'
+	CREATE: 'Create',
+	UPDATE: 'Update',
+	DELETE: 'Delete',
+	PUBLISH: 'Publish',
+	UNPUBLISH: 'Unpublish'
 };
