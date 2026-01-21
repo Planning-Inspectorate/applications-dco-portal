@@ -61,7 +61,7 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration({ db, logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
 
@@ -78,6 +78,13 @@ export function buildSubmitDeclaration({ db, logger }: PortalService): AsyncRequ
 				errorSummary: req.body.errorSummary
 			});
 			return declarationPage(req, res);
+		}
+
+		try {
+			await blobStore?.moveFolder(req.session.caseReference as string);
+		} catch (error) {
+			logger.error({ error }, 'error moving case documents to back office container in blob store');
+			throw new Error('error moving documents during case submission');
 		}
 
 		await db.case.update({

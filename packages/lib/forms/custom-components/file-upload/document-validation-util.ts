@@ -30,9 +30,14 @@ export async function validateUploadedFile(
 		});
 	}
 
-	if (originalname.includes('–') || originalname.includes('—')) {
+	if (
+		originalname.includes('–') ||
+		originalname.includes('—') ||
+		originalname.includes('_') ||
+		originalname.includes('/')
+	) {
 		validationErrors.push({
-			text: `${originalname}: The attachment name contains special characters '-' or '_'. Please remove these and try again.`,
+			text: `${originalname}: The attachment name contains special characters '-', '—', '/' or '_'. Please remove these and try again.`,
 			href: '#upload-form'
 		});
 	}

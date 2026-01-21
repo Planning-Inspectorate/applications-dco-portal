@@ -145,8 +145,11 @@ describe('declaration controllers', () => {
 					update: mock.fn()
 				}
 			};
+			const mockBlobStore = {
+				moveFolder: mock.fn()
+			};
 
-			const submitDeclaration = buildSubmitDeclaration({ db: mockDb, logger: mockLogger() });
+			const submitDeclaration = buildSubmitDeclaration({ db: mockDb, logger: mockLogger(), blobStore: mockBlobStore });
 			await submitDeclaration(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -162,6 +165,8 @@ describe('declaration controllers', () => {
 					submitterPositionInOrganisation: 'the boss'
 				}
 			});
+			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
+			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
 		});
 		it('should render declaration page with error if checkbox not selected', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');
