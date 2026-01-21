@@ -93,6 +93,10 @@ module "app_portal" {
     # dummy case whitelist
     # todo: remove once cbos integration is complete
     CASE_WHITELIST = local.key_vault_refs["dcop-case-whitelist"]
+
+    # service bus topic publish events
+    SERVICE_BUS_PUBLISH_EVENT_DISABLED = var.apps_config.service_bus_publish_event.disabled
+    DATA_SUBMISSIONS_TOPIC_HOSTNAME    = var.apps_config.service_bus_publish_event.data_submissions_topic_hostname
   }
 
   providers = {

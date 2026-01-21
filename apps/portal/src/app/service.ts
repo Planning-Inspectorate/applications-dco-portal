@@ -9,6 +9,8 @@ import { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
 import { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 import { BlobStorageClient } from '@pins/dco-portal-lib/blob-store/blob-store-client.ts';
 import { initBlobStore } from '@pins/dco-portal-lib/blob-store/index.ts';
+import { ServiceBusEventClient } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
+import { initEventClient } from '@pins/dco-portal-lib/event/index.ts';
 
 /**
  * This class encapsulates all the services and clients for the application
@@ -20,6 +22,7 @@ export class PortalService {
 	redisClient: RedisClient | null;
 	notifyClient: GovNotifyClient | null;
 	blobStoreClient: BlobStorageClient | null;
+	serviceBusEventClient: ServiceBusEventClient | null;
 
 	constructor(config: Config) {
 		this.#config = config;
@@ -29,6 +32,7 @@ export class PortalService {
 		this.redisClient = initRedis(config.session, logger);
 		this.notifyClient = initGovNotify(config.govNotify, logger);
 		this.blobStoreClient = initBlobStore(config.blobStore, logger);
+		this.serviceBusEventClient = initEventClient(config.serviceBus, logger);
 	}
 
 	get cacheControl() {

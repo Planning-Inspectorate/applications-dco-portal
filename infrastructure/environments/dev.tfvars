@@ -34,6 +34,10 @@ apps_config = {
     family   = "C"
     sku_name = "Basic"
   }
+  service_bus_publish_event = {
+    disabled                        = true  #TODO: enable publish event once dco-portal-data-submissions asb topic set up
+    data_submissions_topic_hostname = "tbc" #TODO: update hostname once dco-portal-data-submissions asb topic set up (value will come from kv)
+  }
 }
 
 alerts_enabled = false

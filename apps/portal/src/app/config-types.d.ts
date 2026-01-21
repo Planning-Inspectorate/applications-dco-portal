@@ -1,4 +1,4 @@
-import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types';
+import { NotifyConfig, ServiceBusConfig } from '@pins/dco-portal-lib/govnotify/types';
 import { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
 
 interface Config {
@@ -15,12 +15,13 @@ interface Config {
 	httpPort: number;
 	logLevel: string;
 	NODE_ENV: string;
-	srcDir: string;
+	serviceBus: ServiceBusConfig;
 	session: {
 		redisPrefix: string;
 		redis?: string;
 		secret: string;
 	};
+	srcDir: string;
 	staticDir: string;
 	enableE2eTestEndpoints: boolean;
 	testToolsToken?: string;
