@@ -159,6 +159,9 @@ export function buildDeleteDocumentAndSaveController(
 							Category: {
 								id: documentTypeId
 							}
+						},
+						Case: {
+							reference: req.session.caseReference
 						}
 					}
 				});
