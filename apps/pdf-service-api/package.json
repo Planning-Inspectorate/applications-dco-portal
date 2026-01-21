@@ -19,9 +19,9 @@
     "dotenv": "*",
     "express": "*",
     "helmet": "*",
-    "multer": "*",
     "pino": "*",
-    "pino-pretty": "*"
+    "pino-pretty": "*",
+    "puppeteer-core": "*"
   },
   "devDependencies": {
     "@types/cookie-parser": "*",

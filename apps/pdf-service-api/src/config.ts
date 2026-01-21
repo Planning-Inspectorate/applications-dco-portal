@@ -12,7 +12,7 @@ export function loadConfig(): Config {
 	dotenv.config();
 
 	//get values from environment
-	const { GIT_SHA, PORT, LOG_LEVEL, NODE_ENV, FILE_UPLOAD_PATH, FILE_MAX_SIZE_IN_BYTES } = process.env;
+	const { GIT_SHA, PORT, LOG_LEVEL, NODE_ENV, FILE_MAX_SIZE_IN_BYTES } = process.env;
 
 	let httpPort = 3000;
 	if (PORT) {
@@ -26,8 +26,7 @@ export function loadConfig(): Config {
 	config = {
 		gitSha: GIT_SHA ?? 'NO GIT SHA FOUND',
 		fileUpload: {
-			maxSizeInBytes: Number(FILE_MAX_SIZE_IN_BYTES || 1000000),
-			path: FILE_UPLOAD_PATH || '/tmp'
+			maxSizeInBytes: Number(FILE_MAX_SIZE_IN_BYTES || 1000000)
 		},
 		logLevel: LOG_LEVEL || 'info',
 		NODE_ENV: NODE_ENV || 'development',

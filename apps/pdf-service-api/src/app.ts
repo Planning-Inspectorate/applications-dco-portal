@@ -6,7 +6,6 @@ import type { Express } from 'express';
 import { PdfService } from '#service';
 import type { HelmetCspDirectives } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
 import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
-import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-requests.ts';
 
 /**
@@ -19,6 +18,13 @@ export function createApp(service: PdfService): Express {
 	//TODO - set logger to a new one made in PdfService
 	const logRequests = buildLogRequestsMiddleware(service.logger);
 	app.use(logRequests);
+
+	//limit json size to prevent large files
+	app.use(
+		express.json({
+			limit: service.fileUpload.maxSizeInBytes
+		})
+	);
 
 	// configure body-parser, to populate req.body
 	// see https://expressjs.com/en/resources/middleware/body-parser.html
