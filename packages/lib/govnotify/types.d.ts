@@ -20,3 +20,8 @@ export interface NotifyConfig {
 	apiKey: string;
 	templateIds: TemplateIds;
 }
+
+export interface ServiceBusConfig {
+	disabled: boolean;
+	hostname: string;
+}

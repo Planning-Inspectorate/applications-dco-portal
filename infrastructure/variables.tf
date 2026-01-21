@@ -47,6 +47,11 @@ variable "apps_config" {
     blob_store = object({
       disabled = bool
     })
+
+    service_bus_publish_event = object({
+      disabled                        = bool
+      data_submissions_topic_hostname = string
+    })
   })
 }
 

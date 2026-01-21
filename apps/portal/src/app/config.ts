@@ -37,7 +37,9 @@ export function loadConfig(): Config {
 		BLOB_STORE_CONTAINER,
 		BLOB_STORE_CONNECTION_STRING,
 		ENABLE_E2E_TEST_ENDPOINTS,
-		TEST_TOOLS_TOKEN
+		TEST_TOOLS_TOKEN,
+		SERVICE_BUS_PUBLISH_EVENT_DISABLED,
+		DATA_SUBMISSIONS_TOPIC_HOSTNAME
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -128,16 +130,19 @@ export function loadConfig(): Config {
 		NODE_ENV: NODE_ENV || 'development',
 		// the HTTP port to listen on
 		httpPort: httpPort,
-		// the src directory
-		srcDir: buildConfig.srcDir,
+		serviceBus: {
+			disabled: SERVICE_BUS_PUBLISH_EVENT_DISABLED === 'true',
+			hostname: DATA_SUBMISSIONS_TOPIC_HOSTNAME || ''
+		},
 		session: {
 			redisPrefix: 'portal:',
 			redis: REDIS_CONNECTION_STRING,
 			secret: SESSION_SECRET
 		},
+		// the src directory
+		srcDir: buildConfig.srcDir,
 		// the static directory to serve assets from (images, css, etc..)
 		staticDir: buildConfig.staticDir,
-
 		// test tools
 		enableE2eTestEndpoints: enableTestTools,
 		testToolsToken: TEST_TOOLS_TOKEN
