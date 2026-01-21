@@ -1,0 +1,35 @@
+{
+  "name": "pdf-service-api",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build && nodemon --watch src --ext js,ts,scss,html,njk --exec \"npm run start\"",
+    "build": "node src/util/build.ts",
+    "start": "node src/server.ts",
+    "test": "node --test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@pins/dco-portal-database": "^0.0.0",
+    "@pins/dco-portal-lib": "^0.0.0",
+    "@planning-inspectorate/dynamic-forms": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "dotenv": "*",
+    "express": "*",
+    "helmet": "*",
+    "multer": "*",
+    "pino": "*",
+    "pino-pretty": "*"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "*",
+    "nodemon": "*",
+    "sass": "*"
+  },
+  "imports": {
+    "#service": "./src/service.ts"
+  }
+}

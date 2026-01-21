@@ -1,0 +1,53 @@
+import { buildRouter } from './router.ts';
+import bodyParser from 'body-parser';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import type { Express } from 'express';
+import { PdfService } from '#service';
+import type { HelmetCspDirectives } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
+import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
+import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-requests.ts';
+
+/**
+ * @param {import('#service').PdfService} service
+ * @returns {Express}
+ */
+export function createApp(service: PdfService): Express {
+	const app = express();
+
+	//TODO - set logger to a new one made in PdfService
+	const logRequests = buildLogRequestsMiddleware(service.logger);
+	app.use(logRequests);
+
+	// configure body-parser, to populate req.body
+	// see https://expressjs.com/en/resources/middleware/body-parser.html
+	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.json());
+
+	app.use(...initContentSecurityPolicyMiddlewares(cspDirectiveDefaults));
+
+	app.use(cookieParser());
+
+	const router = buildRouter(service);
+	// register the router, which will define any subpaths
+	// any paths not defined will return 404 by default
+	app.use('/', router);
+
+	app.use(notFoundHandler);
+
+	const defaultErrorHandler = buildDefaultErrorHandlerMiddleware(service.logger);
+	// catch/handle errors last
+	app.use(defaultErrorHandler);
+
+	return app;
+}
+
+const cspDirectiveDefaults: HelmetCspDirectives = {
+	scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
+	defaultSrc: ["'self'"],
+	connectSrc: ["'self'"],
+	fontSrc: ["'self'"],
+	imgSrc: ["'self'"],
+	styleSrc: ["'self'"]
+};
