@@ -1,0 +1,109 @@
+{% extends "./main.njk" %}
+{% import "./components/core/application-row.njk" as macros %}
+
+{% block pageTitle %}
+	DCO Application Form - {{ dcoApplicationData.caseReference }}
+{% endblock %}
+
+{% block header %}
+    <header role="banner">
+        <div class="pins-header">
+            <div class="govuk-header__container pins-header__container govuk-width-container">
+                <div class="govuk-header__logo">
+                    {% include "views/layouts/components/core/pins-dual-logo.njk" %}
+                </div>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl">
+                DCO Application Form - {{ dcoApplicationData.caseReference }}
+            </h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Your Application
+            </h2>
+        </div>
+    </div>
+    {% for key, row in dcoApplicationData.application %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <h2 class="govuk-heading-l">
+                    {{ row.name }}
+                </h2>
+            </div>
+        </div>
+        {% for subKey, subRow in row.data %}
+            {{ macros.applicationRow(subRow) }}
+        {% endfor %}
+    {% endfor %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Your Documents
+            </h2>
+        </div>
+    </div>
+    {% for key, value in dcoApplicationData.documents %}
+        {% set document = {name: key, value: value} %}
+        {{ macros.applicationRow(document) }}
+    {% endfor %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Declaration
+            </h2>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <p class="govuk-body">By submitting this application, I confirm that:</p>
+            <ul>
+                <li class="govuk-body">to the best of my knowledge, the information given in this application and enclosed maps, plans and other documents are true</li>
+                <li class="govuk-body">I have read and agree to The Planning Inspectorate's privacy notice</li>
+            </ul>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">Name</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ dcoApplicationData.declaration.name }}</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">Date</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ dcoApplicationData.declaration.date }}</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">Organisation</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ dcoApplicationData.declaration.organisation }}</p>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">Position within Organisation</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ dcoApplicationData.declaration.positionInOrganisation }}</p>
+        </div>
+    </div>
+
+{% endblock %}

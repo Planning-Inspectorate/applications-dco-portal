@@ -31,6 +31,7 @@ model Case {
   submitterLastName                              String?
   submitterOrganisation                          String?
   submitterPositionInOrganisation                String?
+  pdfBlobName                                    String?
   Documents                                      Document[]
   SupportingEvidence                             SupportingEvidence[]
   applicantDetailsId                             String?                       @db.UniqueIdentifier

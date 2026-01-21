@@ -11,11 +11,15 @@
             html: "Your reference number<br><strong>" + caseReference + "</strong>"
         }) }}
 
-        <p class="govuk-body">Submitted at {{ dateSubmitted }}.</p>
+        <p class="govuk-body">Submitted at {{ dateSubmitted }}.</p>    
 
-        <p class="govuk-body">We have sent you a confirmation email. You can also download a receipt of the submission as a PDF.</p>
+        {% if canDownloadPdf %}
+            <p class="govuk-body">We have sent you a confirmation email. You can also download a copy of your application.</p>
 
-        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="" target="_blank" rel="noreferrer">Generated PDF TBC</a></p>
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/download/pdf" target="_blank" rel="noreferrer">{{ caseReference }} DCO Application PDF</a></p>
+        {% else %}
+            <p class="govuk-body">We will send you a confirmation email and a copy of your application soon.</p>
+        {% endif %}
 
         <h2 class="govuk-heading-m">What happens next</h2>
 

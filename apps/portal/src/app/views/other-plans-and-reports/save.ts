@@ -11,7 +11,10 @@ import {
 	saveSupportingEvidence
 } from '../supporting-evidence/db-operations.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-import { OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, OTHER_INFORMATION_SUBCATEGORY_IDS } from './constants.ts';
+import {
+	OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS,
+	OTHER_INFORMATION_SUBCATEGORY_IDS
+} from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {

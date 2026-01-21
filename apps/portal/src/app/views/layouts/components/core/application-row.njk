@@ -1,0 +1,23 @@
+{% macro applicationRow(row) %}
+    {% if row.nested and row.value %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <h3 class="govuk-heading-m">
+                    {{ row.name }}
+                </h3>
+            </div>
+        </div>
+        {% for key, subRow in row.value %}
+            {{ applicationRow(subRow) }}
+        {% endfor %}
+    {% else %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ row.name }}</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ row.value }}</p>
+        </div>
+    </div>
+    {% endif %}
+{% endmacro %}
