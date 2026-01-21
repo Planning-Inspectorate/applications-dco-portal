@@ -1,4 +1,4 @@
-import { buildRouter } from './router.ts';
+import { buildRouter } from './routes/index.ts';
 import bodyParser from 'body-parser';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -34,11 +34,8 @@ export function createApp(service: PdfService): Express {
 	// any paths not defined will return 404 by default
 	app.use('/', router);
 
-	app.use(notFoundHandler);
-
-	const defaultErrorHandler = buildDefaultErrorHandlerMiddleware(service.logger);
-	// catch/handle errors last
-	app.use(defaultErrorHandler);
+	//A catch-all handler to send a 404 response
+	app.use((req, res) => res.status(404));
 
 	return app;
 }

@@ -1,6 +1,7 @@
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { PdfService } from '#service';
+import { createRoutes as pdfRoutes } from './pdf.ts';
 
 export function buildRouter(service: PdfService): IRouter {
 	const router = createRouter();
@@ -19,6 +20,8 @@ export function buildRouter(service: PdfService): IRouter {
 			commit: service.gitSha
 		});
 	});
+
+	router.use('/api/v1', pdfRoutes(service));
 
 	return router;
 }

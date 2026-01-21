@@ -26,4 +26,8 @@ export class PdfService {
 	get secureSession() {
 		return this.#config.NODE_ENV === 'production';
 	}
+
+	get fileUpload() {
+		return this.#config.fileUpload;
+	}
 }
