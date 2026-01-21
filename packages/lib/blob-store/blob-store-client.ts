@@ -118,21 +118,27 @@ export class BlobStorageClient {
 
 	async moveFolder(prefix: string) {
 		const CONCURRENCY = 10;
+		const destinationContainerName = 'document-service-uploads';
 
-		const sourceContainer = this.blobServiceClient.getContainerClient('dco-portal-documents');
-		const destContainer = this.blobServiceClient.getContainerClient('destination-container');
+		const sourceContainer = this.blobServiceClient.getContainerClient(this.container);
+		const destContainer = this.blobServiceClient.getContainerClient(destinationContainerName);
+
+		this.logger.info(
+			`moveFolder - moving files with prefix: ${prefix} from '${this.container}' to '${destinationContainerName}'`
+		);
 
 		const executing = new Set();
 
 		const schedule = async (blob: BlobItem) => {
 			const task = (async () => {
 				const sourceBlob = sourceContainer.getBlobClient(blob.name);
-				const destBlob = destContainer.getBlobClient(blob.name);
+				const destBlob = destContainer.getBlobClient(`applications/${blob.name}`);
 
 				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
 				await poller.pollUntilDone();
 				await sourceBlob.delete();
-				this.logger.info(`Moved: ${blob.name}`);
+
+				this.logger.info(`Moved successfully: ${blob.name}`);
 			})();
 
 			executing.add(task);
@@ -143,10 +149,14 @@ export class BlobStorageClient {
 			}
 		};
 
-		for await (const blob of sourceContainer.listBlobsFlat({ prefix })) {
+		for await (const blob of sourceContainer.listBlobsFlat({ prefix: `${prefix}/` })) {
 			await schedule(blob);
 		}
 
 		await Promise.all(executing);
+
+		this.logger.info(
+			`moveFolder completed - moved files with prefix: ${prefix} from '${this.container}' to '${destinationContainerName}'`
+		);
 	}
 }
