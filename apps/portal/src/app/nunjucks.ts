@@ -3,6 +3,8 @@ import path from 'node:path';
 import nunjucks from 'nunjucks';
 import { loadBuildConfig } from './config.ts';
 
+let env: nunjucks.Environment | undefined;
+
 /**
  * Configure nunjucks with govuk and app folders for loading views
  */
@@ -22,7 +24,7 @@ export function configureNunjucks(): nunjucks.Environment {
 	const appDir = path.join(config.srcDir, 'app');
 
 	// configure nunjucks
-	return nunjucks.configure(
+	env = nunjucks.configure(
 		// ensure nunjucks templates can use govuk-frontend components, and templates we've defined in `web/src/app`
 		[dynamicFormsRoot, govukFrontendRoot, mojFrontendRoot, customFormsRoot, appDir],
 		{
@@ -34,4 +36,13 @@ export function configureNunjucks(): nunjucks.Environment {
 			lstripBlocks: true
 		}
 	);
+
+	return env;
+}
+
+export function getNunjucksEnv(): nunjucks.Environment {
+	if (!env) {
+		throw new Error('Nunjucks environment not configured');
+	}
+	return env;
 }

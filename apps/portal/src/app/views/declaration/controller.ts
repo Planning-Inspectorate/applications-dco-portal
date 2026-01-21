@@ -174,14 +174,10 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration({
-	db,
-	logger,
-	blobStore,
-	serviceBusEventClient
-}: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration(service: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
+		const { db, logger, blobStore, serviceBusEventClient } = service;
 
 		if (!declarationConfirmation) {
 			logger.info({ declarationConfirmation }, 'no value provided for positionInOrganisation');
@@ -289,6 +285,11 @@ export function buildSubmitDeclaration({
 			}
 		});
 
+		service.eventEmitter.emit('generatePdf', {
+			caseReference: req.session.caseReference,
+			styleFile: res.locals.config.styleFile
+		});
+
 		delete req.session.declarationFirstName;
 		delete req.session.declarationLastName;
 		delete req.session.declarationOrganisation;
@@ -310,7 +311,51 @@ export function buildApplicationCompletePage({ db }: PortalService): AsyncReques
 
 		return res.render('views/declaration/application-complete.njk', {
 			caseReference: req.session.caseReference,
+			canDownloadPdf: caseData.pdfBlobName ? true : false,
 			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
 		});
+	};
+}
+
+export function buildDownloadApplicationPdf(service: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		const { blobStore, db, logger } = service;
+		const caseReference = req.session.caseReference;
+
+		const caseData = await db.case.findUnique({
+			where: { reference: req.session.caseReference }
+		});
+
+		if (!caseData?.pdfBlobName) {
+			return notFoundHandler(req, res);
+		}
+
+		const blobName = caseData.pdfBlobName;
+		try {
+			const downloadResponse = await blobStore?.downloadBlob(blobName);
+
+			res.setHeader('Content-Type', downloadResponse?.contentType || 'application/octet-stream');
+			res.setHeader('Content-Length', downloadResponse?.contentLength || 0);
+			res.setHeader('Content-Disposition', `inline; filename="${blobName}"`);
+
+			const downloadStream = downloadResponse?.readableStreamBody;
+
+			downloadStream?.on('error', (err) => {
+				if (err?.name === 'AbortError') {
+					logger.debug({ caseReference }, 'file download cancelled');
+				} else {
+					logger.error({ err, caseReference }, 'file download stream error');
+				}
+				res.destroy(err);
+			});
+
+			downloadStream?.pipe(res);
+		} catch (error) {
+			logger.error(
+				{ error, blobName },
+				`Error downloading pdf submission file for case: ${caseReference} from Blob store`
+			);
+			throw new Error('Failed to download pdf file from blob store');
+		}
 	};
 }

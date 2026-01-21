@@ -8,7 +8,7 @@ import type { AsyncRequestHandler } from '../util/async-handler.ts';
 
 interface MonitoringRoutesOptions {
 	logger: BaseLogger;
-	dbClient: PrismaClient;
+	dbClient?: PrismaClient;
 	gitSha?: string;
 }
 
@@ -31,23 +31,25 @@ export function handleHeadHealthCheck(_: Request, response: Response) {
 
 export function buildHandleHeathCheck(
 	logger: BaseLogger,
-	dbClient: PrismaClient,
+	dbClient?: PrismaClient,
 	gitSha?: string
 ): AsyncRequestHandler {
 	return async (_, response) => {
 		let database = false;
-		try {
-			await dbClient.$queryRaw`SELECT 1`;
-			database = true;
-		} catch (e) {
-			logger.warn(e, 'database connection error');
+		if (dbClient) {
+			try {
+				await dbClient.$queryRaw`SELECT 1`;
+				database = true;
+			} catch (e) {
+				logger.warn(e, 'database connection error');
+			}
 		}
 
 		response.status(200).send({
 			status: 'OK',
 			uptime: process.uptime(),
 			commit: gitSha,
-			database: database ? 'OK' : 'ERROR' // should this be a different response code?
+			database: dbClient ? (database ? 'OK' : 'ERROR') : 'NONE'
 		});
 	};
 }

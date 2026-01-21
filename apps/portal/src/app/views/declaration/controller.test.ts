@@ -10,9 +10,11 @@ import {
 	buildSaveDeclarationName,
 	buildSaveDeclarationOrganisation,
 	buildSavePositionInOrganisation,
-	buildSubmitDeclaration
+	buildSubmitDeclaration,
+	buildDownloadApplicationPdf
 } from './controller.ts';
 import assert from 'node:assert';
+import { Readable } from 'stream';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 
 describe('declaration controllers', () => {
@@ -400,7 +402,12 @@ describe('declaration controllers', () => {
 				}
 			};
 			const mockRes = {
-				redirect: mock.fn()
+				redirect: mock.fn(),
+				locals: {
+					config: {
+						styleFile: 'path/to/stylefile.css'
+					}
+				}
 			};
 			const mockDb = {
 				case: {
@@ -501,13 +508,17 @@ describe('declaration controllers', () => {
 				sendApplicantSubmissionNotification: mock.fn(),
 				sendPinsStaffSubmissionNotification: mock.fn()
 			};
+			const mockEventEmitter = {
+				emit: mock.fn()
+			};
 
 			const submitDeclaration = buildSubmitDeclaration({
 				db: mockDb,
 				logger: mockLogger(),
 				blobStore: mockBlobStore,
 				serviceBusEventClient: mockServiceBusClient,
-				notifyClient: mockGovNotifyClient
+				notifyClient: mockGovNotifyClient,
+				eventEmitter: mockEventEmitter
 			});
 			await submitDeclaration(mockReq, mockRes);
 
@@ -611,6 +622,84 @@ describe('declaration controllers', () => {
 			]);
 			assert.deepStrictEqual(mockServiceBusClient.sendEvents.mock.calls[0].arguments[2], 'Publish');
 		});
+		it('should successfully upload a pdf to blob storage if configured', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockReq = {
+				body: {
+					declarationConfirmation: 'confirm'
+				},
+				session: {
+					caseReference: 'EN123456',
+					positionInOrganisation: 'the boss',
+					declarationFirstName: 'jeff',
+					declarationLastName: 'simmons',
+					declarationOrganisation: 'org'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				render: mock.fn(),
+				locals: {
+					config: {
+						styleFile: 'path/to/file'
+					}
+				}
+			};
+			const mockDb = {
+				case: {
+					update: mock.fn(),
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						anticipatedDateOfSubmission: new Date(2025, 11, 12)
+					}))
+				},
+				document: {
+					findMany: mock.fn(() => [
+						{ id: 'id1', Case: { id: 'caseid1' }, SubCategory: { Category: { displayName: 'jeff' } } },
+						{ id: 'id2', Case: { id: 'caseid2' }, SubCategory: { Category: { displayName: 'phil' } } }
+					])
+				}
+			};
+			const mockBlobStore = {
+				moveFolder: mock.fn()
+			};
+			const mockPdfServiceClient = {
+				generatePdf: mock.fn(() => Buffer.from('%PDF-1.4 fake pdf content'))
+			};
+			const mockEventEmitter = {
+				emit: mock.fn()
+			};
+
+			const submitDeclaration = buildSubmitDeclaration({
+				db: mockDb,
+				logger: mockLogger(),
+				eventEmitter: mockEventEmitter,
+				blobStore: mockBlobStore
+			});
+			await submitDeclaration(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/application-complete');
+
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: {
+					reference: 'EN123456'
+				},
+				data: {
+					submissionDate: new Date('2025-01-30T00:00:07.000Z'),
+					submitterPositionInOrganisation: 'the boss',
+					submitterFirstName: 'jeff',
+					submitterLastName: 'simmons',
+					submitterOrganisation: 'org'
+				}
+			});
+			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
+			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
+			assert.strictEqual(mockEventEmitter.emit.mock.callCount(), 1);
+		});
 		it('should render declaration page with error if checkbox not selected', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
@@ -672,6 +761,36 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/application-complete.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				caseReference: 'EN123456',
+				canDownloadPdf: false,
+				dateSubmitted: '12:00AM on 12 December 2025'
+			});
+		});
+		it('canDownloadPdf should be true if pdfBlobName located', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						submissionDate: new Date(2025, 11, 12),
+						pdfBlobName: 'path/to/blob'
+					}))
+				}
+			};
+
+			const applicationCompletePage = buildApplicationCompletePage({ db: mockDb });
+			await applicationCompletePage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/application-complete.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				caseReference: 'EN123456',
+				canDownloadPdf: true,
 				dateSubmitted: '12:00AM on 12 December 2025'
 			});
 		});
@@ -693,6 +812,99 @@ describe('declaration controllers', () => {
 
 			const applicationCompletePage = buildApplicationCompletePage({ db: mockDb });
 			await applicationCompletePage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.status.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/layouts/error');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Page not found',
+				messages: [
+					'If you typed the web address, check it is correct.',
+					'If you pasted the web address, check you copied the entire address.'
+				]
+			});
+		});
+	});
+	describe('buildDownloadApplicationPdf', () => {
+		it('should download the pdf stored in blob for the given case reference', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				setHeader: mock.fn()
+			};
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						pdfBlobName: 'path/to/blob'
+					}))
+				}
+			};
+
+			const mockDownloadStream = {
+				contentType: 'application/pdf',
+				contentLength: 1000,
+				readableStreamBody: {
+					on: mock.fn(),
+					pipe: mock.fn()
+				}
+			};
+			const mockBlobStore = {
+				downloadBlob: mock.fn(() => mockDownloadStream)
+			};
+
+			const downloadApplicationPdf = buildDownloadApplicationPdf({
+				blobStore: mockBlobStore,
+				db: mockDb,
+				logger: mockLogger()
+			});
+			await downloadApplicationPdf(mockReq, mockRes);
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockBlobStore.downloadBlob.mock.callCount(), 1);
+			assert.strictEqual(mockRes.setHeader.mock.callCount(), 3);
+			assert.strictEqual(mockDownloadStream.readableStreamBody.pipe.mock.callCount(), 1);
+		});
+		it('no pdf blob name for case should return page not found', async () => {
+			const mockReq = {
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				setHeader: mock.fn(),
+				render: mock.fn(),
+				status: mock.fn()
+			};
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						caseReference: 'ref'
+					}))
+				}
+			};
+
+			const mockDownloadStream = {
+				contentType: 'application/pdf',
+				contentLength: 1000,
+				readableStreamBody: {
+					on: mock.fn(),
+					pipe: mock.fn()
+				}
+			};
+			const mockBlobStore = {
+				downloadBlob: mock.fn(() => mockDownloadStream)
+			};
+			const logger = mockLogger();
+
+			const downloadApplicationPdf = buildDownloadApplicationPdf({
+				blobStore: mockBlobStore,
+				db: mockDb,
+				logger: logger
+			});
+			await downloadApplicationPdf(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.status.mock.callCount(), 1);

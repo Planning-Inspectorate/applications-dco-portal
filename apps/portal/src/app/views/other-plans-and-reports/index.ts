@@ -9,7 +9,7 @@ import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
 import { buildSaveController } from './save.ts';
 import { getApplicationSectionDisplayName } from '../util.ts';
-import { OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS } from './constants.ts';
+import { OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 // @ts-expect-error - due to not having @types
 import { buildGetJourney } from '@planning-inspectorate/dynamic-forms/src/middleware/build-get-journey.js';

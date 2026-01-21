@@ -38,7 +38,8 @@ import {
 	buildSaveDeclarationName,
 	buildSaveDeclarationOrganisation,
 	buildSavePositionInOrganisation,
-	buildSubmitDeclaration
+	buildSubmitDeclaration,
+	buildDownloadApplicationPdf
 } from './declaration/controller.ts';
 
 export function createRoutes(service: PortalService): IRouter {
@@ -57,6 +58,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const declarationPage = buildDeclarationPage(service);
 	const submitDeclaration = buildSubmitDeclaration(service);
 	const applicationCompletePage = buildApplicationCompletePage(service);
+	const downloadApplicationPdf = buildDownloadApplicationPdf(service);
 
 	const whitelistMiddleware = buildWhitelistMiddleware(service);
 	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
@@ -80,6 +82,7 @@ export function createRoutes(service: PortalService): IRouter {
 	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
 	router.post('/declaration', asyncHandler(submitDeclaration));
 	router.get('/application-complete', canViewApplicationCompletePage, asyncHandler(applicationCompletePage));
+	router.get('/download/pdf', canViewApplicationCompletePage, asyncHandler(downloadApplicationPdf));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 

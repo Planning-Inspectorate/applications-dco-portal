@@ -24,6 +24,7 @@ export function loadConfig(): Config {
 		PORT,
 		NODE_ENV,
 		REDIS_CONNECTION_STRING,
+		PDF_SERVICE_URL,
 		SESSION_SECRET,
 		SQL_CONNECTION_STRING,
 		GOV_NOTIFY_DISABLED,
@@ -110,6 +111,9 @@ export function loadConfig(): Config {
 			host: BLOB_STORE_HOST,
 			container: BLOB_STORE_CONTAINER,
 			connectionString: BLOB_STORE_CONNECTION_STRING
+		},
+		pdf: {
+			url: PDF_SERVICE_URL || 'http:/localhost:3000'
 		},
 		cacheControl: {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
