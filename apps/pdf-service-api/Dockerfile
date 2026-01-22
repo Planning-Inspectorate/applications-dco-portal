@@ -3,6 +3,13 @@ FROM node:22-alpine AS base
 
 #RUN apk update
 
+# add chromium
+RUN apk add --no-cache \
+    chromium \
+    freetype \
+    harfbuzz \
+    ttf-freefont
+
 ARG GIT_SHA
 
 WORKDIR /usr/src/app
@@ -32,8 +39,6 @@ WORKDIR /usr/src/app/apps/portal
 
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
-
-# TODO: Perhaps use `RUN npm ci --production` to shrink the size of the container
 
 EXPOSE 8080
 
