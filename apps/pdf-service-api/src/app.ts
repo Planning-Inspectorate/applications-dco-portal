@@ -15,7 +15,6 @@ import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-
 export function createApp(service: PdfService): Express {
 	const app = express();
 
-	//TODO - set logger to a new one made in PdfService
 	const logRequests = buildLogRequestsMiddleware(service.logger);
 	app.use(logRequests);
 

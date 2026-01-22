@@ -1,12 +1,8 @@
-import puppeteer from 'puppeteer-core';
+import { launchBrowser } from './browser.ts';
 
 export const generatePdf = async (html: string): Promise<Uint8Array> => {
 	try {
-		const browser = await puppeteer.launch({
-			executablePath: '/usr/bin/chromium-browser',
-			headless: true,
-			args: ['--disable-gpu', '--disable-dev-shm-usage', '--disable-setuid-sandbox', '--no-sandbox']
-		});
+		const browser = await launchBrowser();
 
 		const page = await browser.newPage();
 

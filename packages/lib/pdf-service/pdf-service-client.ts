@@ -9,8 +9,9 @@ export class PdfServiceClient {
 		this.baseUrl = baseUrl;
 	}
 
-	async generatePdf(html: string): Promise<Blob> {
+	async generatePdf(html: string): Promise<Buffer<ArrayBuffer>> {
 		const url = `${this.baseUrl}/api/v1/generate`;
+		this.logger.info('Generating pdf file');
 
 		let apiResponse;
 		try {
@@ -29,11 +30,11 @@ export class PdfServiceClient {
 		}
 
 		if (!apiResponse.ok || apiResponse.status !== 200) {
-			this.logger.debug(apiResponse, 'PdfServiceClient generatePdf API Response not Ok');
+			this.logger.error(apiResponse, 'PdfServiceClient generatePdf API Response not Ok');
 			throw new Error(apiResponse.statusText);
 		}
 
 		this.logger.info('PdfServiceClient: pdf successfully generated.');
-		return apiResponse.blob();
+		return Buffer.from(await apiResponse.arrayBuffer());
 	}
 }
