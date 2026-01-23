@@ -1,9 +1,7 @@
-import { launchBrowser } from './browser.ts';
+import type { Browser } from 'puppeteer-core';
 
-export const generatePdf = async (html: string): Promise<Uint8Array> => {
+export const generatePdf = async (browser: Browser, html: string): Promise<Uint8Array> => {
 	try {
-		const browser = await launchBrowser();
-
 		const page = await browser.newPage();
 
 		await page.setContent(html, {
@@ -20,7 +18,8 @@ export const generatePdf = async (html: string): Promise<Uint8Array> => {
 		await browser.close();
 
 		return Buffer.from(pdfBuffer);
-	} catch (err: any) {
-		throw new Error(err);
+	} catch (err) {
+		let errorMessage = err instanceof Error ? err.message : '';
+		throw new Error(errorMessage);
 	}
 };
