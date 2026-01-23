@@ -54,7 +54,7 @@ describe('home page', () => {
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments.length, 2);
 		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
 		assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-			pageTitle: 'Application reference number',
+			pageTitle: 'EN123456',
 			showManageUsersLink: false,
 			enableSubmissionButton: true,
 			hasCaseBeenSubmitted: true,

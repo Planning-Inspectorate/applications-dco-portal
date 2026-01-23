@@ -147,7 +147,7 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 		}
 
 		req.session.emailAddress = emailAddress;
-		req.session.caseReference = caseReference;
+		req.session.caseReference = caseReference.toUpperCase();
 
 		return res.redirect(`${req.baseUrl}/enter-code`);
 	};
