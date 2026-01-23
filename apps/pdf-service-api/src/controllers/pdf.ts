@@ -1,6 +1,7 @@
 import { PdfService } from '#service';
 import type { Request, Response } from 'express';
 import { generatePdf } from '../lib/generate-pdf.ts';
+import { launchBrowser } from '../lib/browser.ts';
 
 export function postGeneratePdf(service: PdfService) {
 	return async (req: Request, res: Response) => {
@@ -16,7 +17,8 @@ export function postGeneratePdf(service: PdfService) {
 		}
 
 		try {
-			const pdfBuffer = await generatePdf(html);
+			const browser = await launchBrowser(service);
+			const pdfBuffer = await generatePdf(browser, html);
 			res.contentType('application/pdf').send(pdfBuffer);
 			logger.info('Successfully generated pdf');
 		} catch (err: any) {

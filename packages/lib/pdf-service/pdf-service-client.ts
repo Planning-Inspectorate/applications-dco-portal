@@ -26,12 +26,16 @@ export class PdfServiceClient {
 		} catch (err) {
 			this.logger.error(err);
 			let errorMessage = err instanceof Error ? err.message : '';
-			throw new Error('Error during PdfServiceClient generatePdf: ' + errorMessage);
+			throw new Error('pdf-service-api generatePdf error: ' + errorMessage);
 		}
 
 		if (!apiResponse.ok || apiResponse.status !== 200) {
 			this.logger.error(apiResponse, 'PdfServiceClient generatePdf API Response not Ok');
-			throw new Error(apiResponse.statusText);
+			throw new Error(
+				apiResponse.statusText
+					? apiResponse.statusText
+					: 'pdf-service-api generatePdf error: status ' + apiResponse.status
+			);
 		}
 
 		this.logger.info('PdfServiceClient: pdf successfully generated.');

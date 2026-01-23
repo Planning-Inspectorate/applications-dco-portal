@@ -11,8 +11,6 @@ export const addCSStoHtml = async (html: string, stylesheetName: string): Promis
 
 	const currentPath = path.dirname(fileURLToPath(import.meta.url));
 	const cssFilePath = path.join(currentPath, '../pdf-service/stylesheets', stylesheetName);
-	console.log(currentPath);
-	console.log(cssFilePath);
 	const css = await fs.promises.readFile(cssFilePath, 'utf8');
 
 	return htmlArray[0] + `<head><style>${css}</style>` + htmlArray[1];
