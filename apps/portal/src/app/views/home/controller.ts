@@ -51,7 +51,7 @@ export function buildHomePage({ db }: PortalService): AsyncRequestHandler {
 		);
 
 		return res.render('views/home/view.njk', {
-			pageTitle: 'Application reference number',
+			pageTitle: req.session.caseReference,
 			taskListItems,
 			showManageUsersLink: whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER,
 			submissionText,
