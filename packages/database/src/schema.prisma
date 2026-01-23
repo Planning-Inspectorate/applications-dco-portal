@@ -270,6 +270,8 @@ model NsipProject {
   caseId        Int    @id
   caseReference String @unique
 
+  anticipatedDateOfSubmission DateTime?
+
   projectName        String?
   projectDescription String?
   projectLocation    String?
