@@ -5,6 +5,39 @@ import type { Logger } from 'pino';
 import { ALLOWED_EXTENSIONS_TEXT } from './constants.ts';
 import path from 'path';
 
+const FORBIDDEN_CHARACTERS = [
+	'?',
+	'#',
+	'%',
+	'&',
+	'=',
+	'+',
+	'@',
+	':',
+	';',
+	',',
+	'\\',
+	'/',
+	'*',
+	'"',
+	'<',
+	'>',
+	'|',
+	'$',
+	'!',
+	"'",
+	'(',
+	')',
+	'[',
+	']',
+	'{',
+	'}',
+	'^',
+	'–',
+	'—',
+	'_'
+];
+
 export async function validateUploadedFile(
 	file: Express.Multer.File,
 	logger: Logger,
@@ -30,14 +63,9 @@ export async function validateUploadedFile(
 		});
 	}
 
-	if (
-		originalname.includes('–') ||
-		originalname.includes('—') ||
-		originalname.includes('_') ||
-		originalname.includes('/')
-	) {
+	if (FORBIDDEN_CHARACTERS.some((char) => originalname.includes(char))) {
 		validationErrors.push({
-			text: `${originalname}: The attachment name contains special characters '-', '—', '/' or '_'. Please remove these and try again.`,
+			text: `${originalname}: The attachment name contains special characters that are not allowed. Please remove these and try again.`,
 			href: '#upload-form'
 		});
 	}
