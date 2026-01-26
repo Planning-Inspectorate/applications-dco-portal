@@ -37,7 +37,7 @@ module "function_integration" {
     SERVICE_USER_SUBSCRIPTION                        = azurerm_servicebus_subscription.service_user_subscription.name
     NSIP_PROJECT_TOPIC                               = data.azurerm_servicebus_topic.nsip_project.name
     NSIP_PROJECT_SUBSCRIPTION                        = azurerm_servicebus_subscription.nsip_project_subscription.name
-    DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_TOPIC        = data.azurerm_servicebus_topic.nsip_project.name
+    DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_TOPIC        = azurerm_servicebus_topic.nsip_project.name
     DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_SUBSCRIPTION = data.azurerm_servicebus_subscription.nsip_project_subscription.name
 
     # gov notify
@@ -65,7 +65,7 @@ resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
 
 resource "azurerm_servicebus_topic" "dco_portal_data_submissions_project" {
   name                = var.sb_topic_names.applications.events.dco_portal_data_submissions_project
-  namespace_id        = data.azurerm_servicebus_namespace.back_office.id # check on this data call
+  namespace_id        = data.azurerm_servicebus_namespace.back_office.id
   default_message_ttl = var.sb_ttl.default
 }
 
