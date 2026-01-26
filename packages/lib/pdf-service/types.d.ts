@@ -2,7 +2,9 @@ import { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 
 export type FullCase = Prisma.CaseGetPayload<{
 	include: {
-		SupportingEvidence: true;
+		SupportingEvidence: {
+			include: { Document: true };
+		};
 		ApplicantDetails: {
 			include: { Address: true };
 		};
@@ -20,6 +22,12 @@ export type FullCase = Prisma.CaseGetPayload<{
 		Pipelines: true;
 		HazardousWasteFacility: true;
 		DamOrReservoir: true;
+	};
+}>;
+
+export type SupportingEvidenceWithDocument = Prisma.SupportingEvidenceGetPayload<{
+	include: {
+		Document: true;
 	};
 }>;
 
