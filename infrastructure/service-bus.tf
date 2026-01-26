@@ -13,6 +13,11 @@ data "azurerm_servicebus_topic" "nsip_project" {
   namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
 }
 
+data "azurerm_servicebus_topic" "dco_portal_data_submissions_project" {
+  name         = var.sb_topic_names.dco_portal_data_submissions_project
+  namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
+}
+
 data "azurerm_private_dns_zone" "service_bus" {
   name                = "privatelink.servicebus.windows.net"
   resource_group_name = var.tooling_config.network_rg

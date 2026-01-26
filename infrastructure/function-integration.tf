@@ -31,12 +31,14 @@ module "function_integration" {
   # settings
   function_node_version = var.apps_config.functions.node_version
   app_settings = {
-    ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
-    SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"]
-    SERVICE_USER_TOPIC                            = data.azurerm_servicebus_topic.service_user.name
-    SERVICE_USER_SUBSCRIPTION                     = azurerm_servicebus_subscription.service_user_subscription.name
-    NSIP_PROJECT_TOPIC                            = data.azurerm_servicebus_topic.nsip_project.name
-    NSIP_PROJECT_SUBSCRIPTION                     = azurerm_servicebus_subscription.nsip_project_subscription.name
+    ServiceBusConnection__fullyQualifiedNamespace    = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
+    SQL_CONNECTION_STRING                            = local.key_vault_refs["sql-app-connection-string"]
+    SERVICE_USER_TOPIC                               = data.azurerm_servicebus_topic.service_user.name
+    SERVICE_USER_SUBSCRIPTION                        = azurerm_servicebus_subscription.service_user_subscription.name
+    NSIP_PROJECT_TOPIC                               = data.azurerm_servicebus_topic.nsip_project.name
+    NSIP_PROJECT_SUBSCRIPTION                        = azurerm_servicebus_subscription.nsip_project_subscription.name
+    DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_TOPIC        = data.azurerm_servicebus_topic.nsip_project.name
+    DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_SUBSCRIPTION = data.azurerm_servicebus_subscription.nsip_project_subscription.name
 
     # gov notify
     GOV_NOTIFY_DISABLED                      = var.apps_config.gov_notify.disabled
@@ -59,6 +61,12 @@ resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
   max_delivery_count                   = 1
   dead_lettering_on_message_expiration = true
   default_message_ttl                  = var.sb_ttl.nsip_project
+}
+
+resource "azurerm_servicebus_topic" "dco_portal_data_submissions_project" {
+  name                = var.sb_topic_names.applications.events.dco_portal_data_submissions_project
+  namespace_id        = data.azurerm_servicebus_namespace.back_office.id # check on this data call
+  default_message_ttl = var.sb_ttl.default
 }
 
 resource "azurerm_eventgrid_event_subscription" "malware_scan_results" {
