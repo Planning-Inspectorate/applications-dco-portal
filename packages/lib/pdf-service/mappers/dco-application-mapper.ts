@@ -8,10 +8,9 @@ import type { FullCase, SupportingEvidenceWithDocument } from '../types.js';
 
 export const mapCaseToDcoApplication = (caseData: FullCase) => {
 	caseData = caseData || {};
-	console.log(caseData);
 
 	//group evidence into categories to reduce lookup time
-	const evidenceByCategory = DOCUMENT_CATEGORY.reduce((acc: Record<string, any>, curr) => {
+	const evidenceByCategory = DOCUMENT_CATEGORY.reduce((acc: Record<string, SupportingEvidenceWithDocument[]>, curr) => {
 		acc[curr.id] = findSupportingEvidenceByCategory(caseData?.SupportingEvidence, curr.id);
 		return acc;
 	}, {});
@@ -22,6 +21,14 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 		...evidenceByCategory['reports-and-statements'],
 		...evidenceByCategory['other-documents']
 	];
+
+	const documentFilenamesByCategory = Object.keys(evidenceByCategory).reduce(
+		(acc: Record<string, string[]>, categoryId) => {
+			acc[categoryId] = evidenceByCategory[categoryId].map((evidence) => evidence.Document.fileName);
+			return acc;
+		},
+		{}
+	);
 
 	const data = {
 		caseReference: caseData.reference,
@@ -36,9 +43,7 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			crownLandAccessAndRightsOfWayPlans: mapCrownLandAccessAndRightsOfWayPlans(
 				evidenceByCategory['plans-and-drawings']
 			),
-			draftOrderAndExplanatoryMemorandum: mapDraftOrderAndExplanatoryMemorandum(
-				evidenceByCategory['draft-dco-and-explanatory-memorandum']
-			),
+			draftOrderAndExplanatoryMemorandum: mapDraftOrderAndExplanatoryMemorandum(evidenceByCategory['draft-dco']),
 			environmentalImpactAssessment: mapEnvironmentalImpactAssessment(
 				caseData,
 				evidenceByCategory['environmental-statement']
@@ -55,13 +60,17 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			otherConsentsOrLicenses: mapOtherConsentsOrLicenses(caseData, evidenceByCategory['reports-and-statements']),
 			otherPlansAndReports: mapOtherPlansAndReports(otherPlansAndReportsCategories),
 			statutoryNuisanceInformation: mapStatutoryNuisanceInformation(evidenceByCategory['reports-and-statements'])
-		}
+		},
+		documents: documentFilenamesByCategory
 	};
 
 	return data;
 };
 
-function findSupportingEvidenceByCategory(supportingEvidence: SupportingEvidenceWithDocument[], categoryId: string) {
+function findSupportingEvidenceByCategory(
+	supportingEvidence: SupportingEvidenceWithDocument[],
+	categoryId: string
+): SupportingEvidenceWithDocument[] {
 	const evidence = supportingEvidence || [];
 	return evidence.filter((evidence) => {
 		const evidenceSubcategory = DOCUMENT_SUB_CATEGORY.find((cat) => cat.id === evidence.subCategoryId);
