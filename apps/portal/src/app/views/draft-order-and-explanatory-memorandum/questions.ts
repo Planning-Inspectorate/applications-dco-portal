@@ -16,7 +16,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the draft development consent order?',
 			fieldName: 'draftDevelopmentConsentOrder',
 			url: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the draft development consent order')]
 		},
 		siValidationReportSuccessEmail: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -34,7 +34,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the Explanatory Memorandum?',
 			fieldName: 'explanatoryMemorandum',
 			url: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the explanatory memorandum')]
 		}
 	};
 
