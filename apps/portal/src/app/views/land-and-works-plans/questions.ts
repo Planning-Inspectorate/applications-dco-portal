@@ -16,7 +16,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the land plans?',
 			fieldName: 'landPlans',
 			url: DOCUMENT_SUB_CATEGORY_ID.LAND_PLANS,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the land plan')]
 		},
 		worksPlans: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -25,7 +25,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the works plan?',
 			fieldName: 'worksPlans',
 			url: DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the works plan')]
 		}
 	};
 
