@@ -17,7 +17,7 @@ export function getQuestions() {
 			question: 'Does the project include any flood risk assessments?',
 			fieldName: 'hasFloodRiskAssessment',
 			url: 'has-flood-risk-assessment',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project requires a flood risk assessment')]
 		},
 		floodRiskAssessment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -25,7 +25,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the flood risk assessment?',
 			fieldName: 'floodRiskAssessment',
 			url: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the flood risk assessment')]
 		}
 	};
 
