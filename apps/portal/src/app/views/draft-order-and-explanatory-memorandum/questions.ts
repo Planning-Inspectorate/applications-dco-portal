@@ -25,7 +25,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the SI validation report success email?',
 			fieldName: 'siValidationReportSuccessEmail',
 			url: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the SI validation report success email')]
 		},
 		explanatoryMemorandum: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
