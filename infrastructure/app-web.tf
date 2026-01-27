@@ -84,6 +84,8 @@ module "app_portal" {
     GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID            = var.apps_config.gov_notify.templates.whitelist_add_template_id
     GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID = var.apps_config.gov_notify.templates.whitelist_access_changed_templated_id
     GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID         = var.apps_config.gov_notify.templates.whitelist_remove_templated_id
+    GOV_NOTIFY_APPLICANT_SUBMISSION_TEMPLATE_ID     = var.apps_config.gov_notify.templates.applicant_submission_template_id
+    GOV_NOTIFY_PINS_STAFF_SUBMISSION_TEMPLATE_ID    = var.apps_config.gov_notify.templates.pins_staff_submission_template_id
 
     # blob store
     BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled
@@ -94,9 +96,10 @@ module "app_portal" {
     # todo: remove once cbos integration is complete
     CASE_WHITELIST = local.key_vault_refs["dcop-case-whitelist"]
 
-    # service bus topic publish events
-    SERVICE_BUS_PUBLISH_EVENT_DISABLED = var.apps_config.service_bus_publish_event.disabled
-    DATA_SUBMISSIONS_TOPIC_HOSTNAME    = var.apps_config.service_bus_publish_event.data_submissions_topic_hostname
+    # service bus
+    ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
+    SERVICE_BUS_PUBLISH_EVENT_DISABLED            = var.apps_config.service_bus_publish_event.disabled
+    DCO_PORTAL_DATA_SUBMISSIONS_TOPIC             = data.azurerm_servicebus_topic.dco_portal_data_submissions.name
   }
 
   providers = {

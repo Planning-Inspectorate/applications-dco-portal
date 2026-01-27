@@ -24,6 +24,7 @@ describe('nsip project function', () => {
 			caseId: '1',
 			caseReference: 'EN123456',
 			anticipatedDateOfSubmission: new Date(2025, 11, 12),
+			projectEmailAddress: 'pins-bo-staff@email.com',
 			projectName: 'test@email.com',
 			projectDescription: 'Applicant',
 			projectLocation: 'John',
@@ -43,6 +44,7 @@ describe('nsip project function', () => {
 				caseId: '1',
 				caseReference: 'EN123456',
 				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z'),
+				projectEmailAddress: 'pins-bo-staff@email.com',
 				projectName: 'test@email.com',
 				projectDescription: 'Applicant',
 				projectLocation: 'John',
@@ -53,6 +55,7 @@ describe('nsip project function', () => {
 				caseId: '1',
 				caseReference: 'EN123456',
 				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z'),
+				projectEmailAddress: 'pins-bo-staff@email.com',
 				projectName: 'test@email.com',
 				projectDescription: 'Applicant',
 				projectLocation: 'John',
@@ -66,7 +69,8 @@ describe('nsip project function', () => {
 		assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 		assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
 			data: {
-				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z')
+				anticipatedDateOfSubmission: new Date('2025-12-12T00:00:00.000Z'),
+				projectEmailAddress: 'pins-bo-staff@email.com'
 			},
 			where: {
 				reference: 'EN123456'

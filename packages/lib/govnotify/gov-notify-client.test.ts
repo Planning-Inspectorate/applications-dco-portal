@@ -1,10 +1,10 @@
 // @ts-nocheck
 
 import { describe, it } from 'node:test';
-import { GovNotifyClient, TEAM_EMAIL_ADDRESS } from './gov-notify-client.ts';
+import { GovNotifyClient } from './gov-notify-client.ts';
+import { TEAM_EMAIL_ADDRESS } from './constants.ts';
 import { mockLogger } from '../testing/mock-logger.ts';
 import assert from 'node:assert';
-import { WHITELIST_USER_ROLE } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe(`gov-notify-client`, () => {
 	describe('sendEmail', () => {
@@ -135,6 +135,62 @@ describe(`gov-notify-client`, () => {
 					personalisation: {
 						case_reference_number: 'EN123456',
 						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendApplicantSubmissionNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				applicantSubmissionNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendApplicantSubmissionNotification('email', 'EN123456', Buffer.alloc(10));
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						number_of_days: '28',
+						pdfLink: {
+							confirm_email_before_download: null,
+							file: 'AAAAAAAAAAAAAA==',
+							filename: 'EN123456 application form.pdf',
+							retention_period: null
+						},
+						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendPinsStaffSubmissionNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				pinsStaffSubmissionNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendPinsStaffSubmissionNotification('email', 'EN123456', Buffer.alloc(10));
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						pdfLink: {
+							confirm_email_before_download: null,
+							file: 'AAAAAAAAAAAAAA==',
+							filename: 'EN123456 application form.pdf',
+							retention_period: null
+						}
 					}
 				}
 			]);

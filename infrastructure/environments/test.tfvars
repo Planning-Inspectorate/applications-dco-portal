@@ -31,6 +31,8 @@ apps_config = {
       whitelist_access_changed_templated_id = "427e2245-9426-4b49-8846-04d6b89ca444"
       whitelist_remove_templated_id         = "c044d6d4-52ef-4ab1-a472-c71d034eb33b"
       anti_virus_failed_template_id         = "35f41f19-c696-4749-9617-8627b437aded"
+      applicant_submission_template_id      = "159285a5-b5b7-46f6-854b-ff4cfb52a400"
+      pins_staff_submission_template_id     = "fbe636c0-90e5-4a9b-9df5-6c6e953d25f0"
     }
   }
 
@@ -39,8 +41,7 @@ apps_config = {
   }
 
   service_bus_publish_event = {
-    disabled                        = true  #TODO: enable publish event once dco-portal-data-submissions asb topic set up
-    data_submissions_topic_hostname = "tbc" #TODO: update hostname once dco-portal-data-submissions asb topic set up (value will come from kv)
+    disabled = false
   }
 }
 

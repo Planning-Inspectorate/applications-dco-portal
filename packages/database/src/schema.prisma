@@ -24,6 +24,7 @@ model Case {
   email                                          String
   createdAt                                      DateTime                      @default(now())
   modifiedAt                                     DateTime                      @updatedAt
+  projectEmailAddress                            String?
   anticipatedDateOfSubmission                    DateTime?
   submissionDate                                 DateTime?
   submitterPositionInOrganisation                String?
@@ -155,6 +156,7 @@ model Document {
   uploadedDate       DateTime             @default(now())
   size               BigInt               @default(0)
   blobName           String
+  mimeType           String
   isCertified        Boolean
   uploaderEmail      String
   subCategoryId      String
@@ -271,6 +273,7 @@ model NsipProject {
   caseReference String @unique
 
   anticipatedDateOfSubmission DateTime?
+  projectEmailAddress         String?
 
   projectName        String?
   projectDescription String?

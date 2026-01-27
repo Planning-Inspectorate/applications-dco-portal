@@ -10,12 +10,14 @@ tooling_config = {
 }
 
 sb_ttl = {
-  default      = "P3D"
-  service_user = "P1D"
-  nsip_project = "P1D"
+  default                     = "P3D"
+  service_user                = "P1D"
+  nsip_project                = "P1D"
+  dco_portal_data_submissions = "P1D"
 }
 
 sb_topic_names = {
-  service_user = "service-user"
-  nsip_project = "nsip-project"
+  service_user                = "service-user"
+  nsip_project                = "nsip-project"
+  dco_portal_data_submissions = "dco-portal-data-submissions"
 }

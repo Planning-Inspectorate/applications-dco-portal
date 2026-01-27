@@ -7,7 +7,7 @@ import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
 // @ts-expect-error - due to not having @types
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
 import { JOURNEY_ID } from './journey.ts';
-import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
 export function buildSaveController({ db, logger, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -83,7 +83,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 		}
 
 		if (answers.accessLevel !== whitelistUser.userRoleId) {
-			notifyClient?.sendWhitelistAccessChangedNotification(whitelistUser.email, {
+			await notifyClient?.sendWhitelistAccessChangedNotification(whitelistUser.email, {
 				case_reference_number: caseReference,
 				type_of_user_changed_from:
 					WHITELIST_USER_ROLE.find((r) => r.id === whitelistUser.userRoleId)?.displayName ?? '',
