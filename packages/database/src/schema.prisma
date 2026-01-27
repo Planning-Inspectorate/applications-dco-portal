@@ -155,6 +155,7 @@ model Document {
   uploadedDate       DateTime             @default(now())
   size               BigInt               @default(0)
   blobName           String
+  mimeType           String
   isCertified        Boolean
   uploaderEmail      String
   subCategoryId      String

@@ -4,6 +4,7 @@ export interface DocumentRecord {
 	uploadedDate?: Date | string;
 	size?: bigint | number;
 	blobName: string;
+	mimeType: string;
 	isCertified: boolean;
 	uploaderEmail: string;
 	SubCategory: DocumentSubCategoryCreateNestedOneWithoutDocumentInput;

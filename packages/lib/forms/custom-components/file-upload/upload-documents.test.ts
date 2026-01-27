@@ -70,7 +70,8 @@ describe('upload-documents.js', () => {
 							blobNameBase64Encoded: 'RU4xMjM0NTYvZHJhZnQtZGNvL2NvbmZpZGVudGlhbC1kb2N1bWVudHMvdGVzdDQucGRm',
 							fileName: 'test4.pdf',
 							formattedSize: '222KB',
-							size: 227787
+							size: 227787,
+							mimeType: 'application/pdf'
 						}
 					]
 				}
