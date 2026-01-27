@@ -15,7 +15,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the consultation report?',
 			fieldName: 'consultationReport',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the consultation report')]
 		},
 		consultationReportAppendices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -23,7 +23,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the newspaper notices?',
 			fieldName: 'consultationReportAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the newspaper notices')]
 		}
 	};
 
