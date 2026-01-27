@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block pageTitle %}
-	DCO Application Form - {{ caseReference }}
+	DCO Application Form - {{ dcoApplicationData.caseReference }}
 {% endblock %}
 
 {% block header %}
@@ -14,32 +14,23 @@
 {% endblock %}
 
 {% block content %}
-    {% block pageHeading %}
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-full">
-                <h1 class="govuk-heading-xl">
-                    DCO Application Form - {{ caseReference }}
-                </h1>
-            </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl">
+                DCO Application Form - {{ dcoApplicationData.caseReference }}
+            </h1>
         </div>
-        <div class="govuk-grid-row">
-            <div class="govuk-grid-column-half">
-                <p class="govuk-body"> Applicant First Name</p>
-            </div>
-            <div class="govuk-grid-column-half">
-                <p class="govuk-body"> {{ application.applicantAgentDetails.applicantFirstName }}</p>
-            </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body"> Applicant First Name</p>
         </div>
-    {% endblock %}
-    {% block pageContent %}{% endblock %}
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body"> {{ dcoApplicationData.application.applicantAgentDetails.applicantFirstName }}</p>
+        </div>
+    </div>
 {% endblock %}
 
 {% block footer %}
 	include any footer njk templaktes here
-
-	<script type="module" {% if cspNonce %}nonce={{ cspNonce }}{% endif %} src="/assets/js/govuk-frontend.min.js"></script>
-	<script type="module" {% if cspNonce %}nonce={{ cspNonce }}{% endif %}>
-		import { initAll } from '/assets/js/govuk-frontend.min.js'
-		initAll()
-	</script>
 {% endblock %}

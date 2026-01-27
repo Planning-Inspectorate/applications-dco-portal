@@ -4,6 +4,18 @@ export const generatePdf = async (browser: Browser, html: string): Promise<Uint8
 	try {
 		const page = await browser.newPage();
 
+		page.on('console', (msg) => {
+			console.log('[browser console]', msg.type(), msg.text());
+		});
+
+		page.on('pageerror', (err) => {
+			console.error('[page error]', err);
+		});
+
+		page.on('requestfailed', (req) => {
+			console.error('[request failed]', req.url(), req.failure()?.errorText);
+		});
+
 		await page.setContent(html, {
 			waitUntil: 'domcontentloaded'
 		});
