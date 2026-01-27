@@ -143,14 +143,111 @@ describe('declaration controllers', () => {
 			};
 			const mockDb = {
 				case: {
-					update: mock.fn()
+					update: mock.fn(),
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						projectDescription: 'This is an important case',
+						locationDescription: 'It is a big piece of land',
+						ApplicantDetails: {
+							id: 'contact-id',
+							lastName: 'Bob',
+							phone: '0777777777777',
+							emailAddress: 'test@email.com',
+							organisation: 'Applicant Organisation',
+							Address: {
+								addressLine1: 'App line 1',
+								addressLine2: 'App line 2',
+								townCity: 'London',
+								county: 'Greater London',
+								country: 'England',
+								postcode: 'W1 1BW'
+							}
+						},
+						AgentDetails: {
+							id: 'agent-contact-id',
+							lastName: 'Bond',
+							phone: '0772757777778',
+							emailAddress: 'agent@email.com',
+							organisation: 'Agent Organisation',
+							Address: {
+								addressLine1: 'Agent Line 1',
+								addressLine2: 'Agent Line 2',
+								townCity: 'Manchester',
+								county: 'Greater Manchester',
+								country: 'England',
+								postcode: 'M1 1BW'
+							}
+						},
+						ProjectSingleSite: {
+							northing: 123456,
+							easting: 123456
+						}
+					}))
+				},
+				document: {
+					findMany: mock.fn(() => [
+						{
+							fileName: 'test.pdf',
+							size: 208,
+							formattedSize: '208B',
+							blobName: `EN123456/draft-dco/test.pdf`,
+							mimeType: 'application/pdf',
+							uploaderEmail: 'test@email.com',
+							Case: {
+								id: 'case-id-1'
+							},
+							SubCategory: {
+								displayName: 'test sub category',
+								Category: {
+									displayName: 'test category'
+								}
+							}
+						},
+						{
+							fileName: 'plan.pdf',
+							size: 500,
+							formattedSize: '500B',
+							blobName: `EN123456/draft-dco/plan.pdf`,
+							mimeType: 'application/pdf',
+							uploaderEmail: 'test@email.com',
+							Case: {
+								id: 'case-id-1'
+							},
+							SubCategory: {
+								displayName: 'test sub category',
+								Category: {
+									displayName: 'test category'
+								}
+							}
+						}
+					])
+				},
+				whitelistUser: {
+					findMany: mock.fn(() => [
+						{ email: 'user-1@email.com' },
+						{ email: 'user-2@email.com' },
+						{ email: 'user-3@email.com' }
+					])
 				}
 			};
 			const mockBlobStore = {
 				moveFolder: mock.fn()
 			};
+			const mockServiceBusClient = {
+				sendEvents: mock.fn()
+			};
+			const mockGovNotifyClient = {
+				sendApplicantSubmissionNotification: mock.fn(),
+				sendPinsStaffSubmissionNotification: mock.fn()
+			};
 
-			const submitDeclaration = buildSubmitDeclaration({ db: mockDb, logger: mockLogger(), blobStore: mockBlobStore });
+			const submitDeclaration = buildSubmitDeclaration({
+				db: mockDb,
+				logger: mockLogger(),
+				blobStore: mockBlobStore,
+				serviceBusEventClient: mockServiceBusClient,
+				notifyClient: mockGovNotifyClient
+			});
 			await submitDeclaration(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -168,6 +265,81 @@ describe('declaration controllers', () => {
 			});
 			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
 			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
+
+			assert.strictEqual(mockServiceBusClient.sendEvents.mock.callCount(), 1);
+			assert.deepStrictEqual(mockServiceBusClient.sendEvents.mock.calls[0].arguments[0], 'dco-portal-data-submissions');
+			assert.deepStrictEqual(mockServiceBusClient.sendEvents.mock.calls[0].arguments[1], [
+				{
+					mappedCaseData: {
+						case: {
+							ApplicationDetails: {
+								locationDescription: 'It is a big piece of land',
+								submissionAtInternal: new Date('2025-01-30T00:00:07.000Z')
+							},
+							Representation: {
+								representative: {
+									Address: {
+										addressLine1: 'Agent Line 1',
+										addressLine2: 'Agent Line 2',
+										country: 'England',
+										county: 'Greater Manchester',
+										postcode: 'M1 1BW',
+										town: 'Manchester'
+									},
+									email: 'agent@email.com',
+									lastName: 'Bond',
+									organisationName: 'Agent Organisation',
+									phoneNumber: '0772757777778'
+								}
+							},
+							applicant: {
+								Address: {
+									addressLine1: 'App line 1',
+									addressLine2: 'App line 2',
+									country: 'England',
+									county: 'Greater London',
+									postcode: 'W1 1BW',
+									town: 'London'
+								},
+								email: 'test@email.com',
+								jobTitle: 'the boss',
+								lastName: 'Bob',
+								organisationName: 'Applicant Organisation',
+								phoneNumber: '0777777777777'
+							},
+							description: 'This is an important case',
+							gridReference: {
+								easting: 123456,
+								northing: 123456
+							},
+							reference: 'EN123456'
+						}
+					},
+					mappedDocuments: [
+						{
+							blobStoreUrl: 'EN123456/draft-dco/test.pdf',
+							caseId: 'case-id-1',
+							documentName: 'test.pdf',
+							documentReference: 'test sub category',
+							documentSize: 208,
+							documentType: 'application/pdf',
+							folderName: 'test category',
+							username: 'test@email.com'
+						},
+						{
+							blobStoreUrl: 'EN123456/draft-dco/plan.pdf',
+							caseId: 'case-id-1',
+							documentName: 'plan.pdf',
+							documentReference: 'test sub category',
+							documentSize: 500,
+							documentType: 'application/pdf',
+							folderName: 'test category',
+							username: 'test@email.com'
+						}
+					]
+				}
+			]);
+			assert.deepStrictEqual(mockServiceBusClient.sendEvents.mock.calls[0].arguments[2], 'Publish');
 		});
 		it('should render declaration page with error if checkbox not selected', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');

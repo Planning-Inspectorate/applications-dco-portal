@@ -41,6 +41,8 @@ variable "apps_config" {
         whitelist_access_changed_templated_id = string
         whitelist_remove_templated_id         = string
         anti_virus_failed_template_id         = string
+        applicant_submission_template_id      = string
+        pins_staff_submission_template_id     = string
       })
     })
 
@@ -49,8 +51,7 @@ variable "apps_config" {
     })
 
     service_bus_publish_event = object({
-      disabled                        = bool
-      data_submissions_topic_hostname = string
+      disabled = bool
     })
   })
 }
@@ -148,17 +149,19 @@ variable "sql_config" {
 variable "sb_topic_names" {
   description = "Service bus topic names"
   type = object({
-    service_user = string
-    nsip_project = string
+    service_user                = string
+    nsip_project                = string
+    dco_portal_data_submissions = string
   })
 }
 
 variable "sb_ttl" {
   description = "Service bus TTL settings"
   type = object({
-    default      = string
-    service_user = string
-    nsip_project = string
+    default                     = string
+    service_user                = string
+    nsip_project                = string
+    dco_portal_data_submissions = string
   })
 }
 

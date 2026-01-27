@@ -7,7 +7,7 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import { JOURNEY_ID } from './journey.ts';
 import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
 export function buildSaveController({ db, logger, notifyClient }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -89,7 +89,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 			throw new Error('error adding new user');
 		}
 
-		notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
+		await notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
 			case_reference_number: caseReference,
 			relevant_team_email_address: TEAM_EMAIL_ADDRESS
 		});

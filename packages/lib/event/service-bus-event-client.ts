@@ -33,11 +33,6 @@ export class ServiceBusEventClient {
 		}));
 	};
 
-	/**
-	 * Function to publish events to Azure Service Bus Topic
-	 * example usage as in the back office:
-	 * await eventClient.sendEvents(NSIP_PROJECT, [buildNsipProjectPayload(project)], eventType);
-	 * */
 	sendEvents = async (topic: string, events: any[], eventType: string) => {
 		const traceId = this.#createTraceId();
 		const sender = this.#createSender(topic);

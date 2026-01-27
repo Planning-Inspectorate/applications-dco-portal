@@ -2,7 +2,7 @@ import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
-import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import { TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
 export function buildRemoveUserPage({ db }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -63,7 +63,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 			throw new Error('error removing user from the whitelist');
 		}
 
-		notifyClient?.sendWhitelistRemoveNotification(whitelistUser.email, {
+		await notifyClient?.sendWhitelistRemoveNotification(whitelistUser.email, {
 			case_reference_number: caseReference,
 			relevant_team_email_address: TEAM_EMAIL_ADDRESS
 		});
