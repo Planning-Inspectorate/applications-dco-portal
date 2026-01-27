@@ -18,7 +18,7 @@ export function getQuestions() {
 			question: 'Could the project affect any Crown land?',
 			fieldName: 'hasCrownLand',
 			url: 'has-crown-land',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project could affect Crown land')]
 		},
 		crownLand: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -27,7 +27,7 @@ export function getQuestions() {
 			question: 'Which documents identify the Crown land?',
 			fieldName: 'crownLand',
 			url: DOCUMENT_SUB_CATEGORY_ID.CROWN_LAND_PLAN,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to Crown land')]
 		},
 		hasMeansOfAccess: {
 			type: COMPONENT_TYPES.BOOLEAN,
@@ -36,7 +36,9 @@ export function getQuestions() {
 			question: 'Could the project require changes to access or public rights of way?',
 			fieldName: 'hasMeansOfAccess',
 			url: 'has-means-of-access',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator('Select yes if the project requires changes to access or public rights of way')
+			]
 		},
 		meansOfAccess: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -45,7 +47,7 @@ export function getQuestions() {
 			question: 'Which documents identify changes to access or public rights of way?',
 			fieldName: 'meansOfAccess',
 			url: DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to access and public rights of way changes')]
 		}
 	};
 
