@@ -18,7 +18,11 @@ export function getQuestions() {
 			question: 'Could the project affect any nature conservation, landscape, geological or water features?',
 			fieldName: 'hasNaturalEnvironmentInformation',
 			url: 'natural-environment-information',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator(
+					'Select yes if the project will affect any nature conservation, landscape, geological or water features'
+				)
+			]
 		},
 		naturalEnvironmentInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -27,7 +31,11 @@ export function getQuestions() {
 			question: 'Which documents relate to the nature conservation, landscape, geological or water features?',
 			fieldName: 'naturalEnvironmentInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator(
+					'Select the documents relating to nature conservation, landscape, geological or water features'
+				)
+			]
 		},
 		hasHistoricEnvironmentInformation: {
 			type: COMPONENT_TYPES.BOOLEAN,
@@ -36,7 +44,9 @@ export function getQuestions() {
 			question: 'Could the project affect any historic environment sites or features?',
 			fieldName: 'hasHistoricEnvironmentInformation',
 			url: 'historic-environment-information',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator('Select yes if the project will affect any historic environment sites or features')
+			]
 		},
 		historicEnvironmentInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -45,7 +55,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the historic environment sites or features?',
 			fieldName: 'historicEnvironmentInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to historic environment sites or features')]
 		}
 	};
 
