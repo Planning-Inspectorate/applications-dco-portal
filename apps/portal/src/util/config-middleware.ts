@@ -31,6 +31,8 @@ export function addLocalsConfiguration(): Handler {
 					href: '/contact'
 				}
 			],
+			serviceFeedbackLink:
+				'https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fforms.office.com.mcas.ms%2Fe%2FkPEzg1fZLx%3FMcasTsid%3D20596&McasCSRF=ed470696e3d88b7fea1c220720cea2359502eb2b52c61486d0f4d42cafdb42dd',
 			signOutLink: req.session.isAuthenticated
 				? `<li class="govuk-service-navigation__item logout-item"><a href="/sign-out" class="govuk-service-navigation__link">Sign out</a></li>`
 				: ''

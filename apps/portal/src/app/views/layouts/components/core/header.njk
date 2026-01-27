@@ -11,6 +11,15 @@
 		</div>
 	</div>
 
+    <div class="govuk-width-container">
+        {% include "views/layouts/components/core/banner.njk" %}
+    </div>
+
+    {{ govukServiceNavigation({
+        classes: 'pins-navigation',
+        navigation: config.primaryNavigationLinks
+    }) }}
+
     {{ govukServiceNavigation({
         serviceName: config.headerTitle,
         classes: 'pins-navigation',
