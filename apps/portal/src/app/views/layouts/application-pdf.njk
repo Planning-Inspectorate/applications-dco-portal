@@ -1,7 +1,7 @@
 {% extends "govuk/template.njk" %}
+{% import "./components/core/form-row.njk" as macros %}
 
 {% block head %}
-    <link rel="stylesheet" href="../stylesheets/test.css"/>
 	<meta name="referrer" content="origin">
 {% endblock %}
 
@@ -22,13 +22,31 @@
         </div>
     </div>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-            <p class="govuk-body"> Applicant First Name</p>
-        </div>
-        <div class="govuk-grid-column-one-third">
-            <p class="govuk-body"> {{ dcoApplicationData.application.applicantAgentDetails.applicantFirstName }}</p>
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Your Application
+            </h2>
         </div>
     </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-l">
+                Applicant and Agent Details
+            </h2>
+        </div>
+    </div>
+    {{ macros.formRow("Applicant Organisation", dcoApplicationData.application.applicantAgentDetails.applicantOrganisation) }}
+    {{ macros.formRow("Applicant First Name", dcoApplicationData.application.applicantAgentDetails.applicantFirstName) }}
+    {{ macros.formRow("Applicant Last Name", dcoApplicationData.application.applicantAgentDetails.applicantLastName) }}
+    {{ macros.formRow("Applicant Email", dcoApplicationData.application.applicantAgentDetails.applicantEmail) }}
+    {{ macros.formRow("Applicant Phone Number", dcoApplicationData.application.applicantAgentDetails.applicantPhone) }}
+    {{ macros.formRow("Applicant Address Line 1", dcoApplicationData.application.applicantAgentDetails.applicantAddressLine1) }}
+    {{ macros.formRow("Applicant Address Line 1", dcoApplicationData.application.applicantAgentDetails.applicantAddressLine2) }}
+    {{ macros.formRow("Applicant Town/City", dcoApplicationData.application.applicantAgentDetails.applicantTownCity) }}
+    {{ macros.formRow("Applicant County", dcoApplicationData.application.applicantAgentDetails.applicantCounty) }}
+    {{ macros.formRow("Applicant Country", dcoApplicationData.application.applicantAgentDetails.applicantCountry) }}
+    {{ macros.formRow("Applicant Postcode", dcoApplicationData.application.applicantAgentDetails.applicantPostcode) }}
+
 {% endblock %}
 
 {% block footer %}

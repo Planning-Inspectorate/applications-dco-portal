@@ -98,6 +98,7 @@ function mapApplicantAgentDetails(caseData: FullCase) {
 		applicantTownCity: caseData.ApplicantDetails?.Address?.townCity,
 		applicantCounty: caseData.ApplicantDetails?.Address?.county,
 		applicantCountry: caseData.ApplicantDetails?.Address?.country,
+		applicantPostcode: caseData.ApplicantDetails?.Address?.postcode,
 		isAgent: !!caseData.AgentDetails,
 		agentOrganisation: caseData.AgentDetails?.organisation,
 		agentFirstName: caseData.AgentDetails?.firstName,
@@ -109,6 +110,7 @@ function mapApplicantAgentDetails(caseData: FullCase) {
 		agentTownCity: caseData.AgentDetails?.Address?.townCity,
 		agentCounty: caseData.AgentDetails?.Address?.county,
 		agentCountry: caseData.AgentDetails?.Address?.country,
+		agentPostcode: caseData.AgentDetails?.Address?.postcode,
 		paymentMethod: caseData.CasePaymentMethod?.displayName
 	};
 }
