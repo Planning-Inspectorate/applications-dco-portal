@@ -1,0 +1,10 @@
+{% macro formRow(label, value) %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <p class="govuk-body">{{ label }}</p>
+    </div>
+    <div class="govuk-grid-column-one-third">
+        <p class="govuk-body">{{ value }}</p>
+    </div>
+</div>
+{% endmacro %}

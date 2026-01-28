@@ -11,6 +11,8 @@ import { BlobStorageClient } from '@pins/dco-portal-lib/blob-store/blob-store-cl
 import { initBlobStore } from '@pins/dco-portal-lib/blob-store/index.ts';
 import { ServiceBusEventClient } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
 import { initEventClient } from '@pins/dco-portal-lib/event/index.ts';
+import { initPdfService } from '@pins/dco-portal-lib/pdf-service/index.ts';
+import { PdfServiceClient } from '@pins/dco-portal-lib/pdf-service/pdf-service-client.ts';
 
 /**
  * This class encapsulates all the services and clients for the application
@@ -23,6 +25,7 @@ export class PortalService {
 	notifyClient: GovNotifyClient | null;
 	blobStoreClient: BlobStorageClient | null;
 	serviceBusEventClient: ServiceBusEventClient | null;
+	pdfServiceClient: PdfServiceClient | null;
 
 	constructor(config: Config) {
 		this.#config = config;
@@ -33,6 +36,7 @@ export class PortalService {
 		this.notifyClient = initGovNotify(config.govNotify, logger);
 		this.blobStoreClient = initBlobStore(config.blobStore, logger);
 		this.serviceBusEventClient = initEventClient(config.serviceBus, logger);
+		this.pdfServiceClient = initPdfService(config.pdf, logger);
 	}
 
 	get cacheControl() {
