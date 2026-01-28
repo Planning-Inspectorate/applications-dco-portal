@@ -6,7 +6,7 @@ import type { Handler } from 'express';
 export function addLocalsConfiguration(): Handler {
 	return (req, res, next) => {
 		res.locals.config = {
-			styleFile: 'style-edb2fbb5.css',
+			styleFile: 'style-2f41dd94.css',
 			cspNonce: res.locals.cspNonce,
 			headerTitle: 'Apply for a Development Consent Order',
 			footerLinks: [
