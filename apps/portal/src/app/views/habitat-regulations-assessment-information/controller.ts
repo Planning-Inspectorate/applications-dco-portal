@@ -32,8 +32,7 @@ export function buildHabitatRegulationsAssessmentInformationHomePage(
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
 	const habitatRegulationsAssessmentInformationDocumentIds = [
-		DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,
-		DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
+		DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
 	];
 
 	const caseData = await db.case.findUnique({
@@ -53,13 +52,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		return notFoundHandler(req, res);
 	}
 
-	const reportToInformAppropriateAssessmentCount = await db.supportingEvidence.count({
-		where: {
-			caseId: caseData.id,
-			subCategoryId: DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
-		}
-	});
-
 	const forms = req.session.forms || (req.session.forms = {});
 	const hasEvidence = (caseData?.SupportingEvidence?.length ?? 0) > 0;
 
@@ -69,11 +61,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 				habitatRegulationsAssessmentScreeningReport: getSupportingEvidenceIds(
 					caseData.SupportingEvidence,
 					DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
-				),
-				hasReportToInformAppropriateAssessment: reportToInformAppropriateAssessmentCount > 0 ? 'yes' : 'no',
-				reportToInformAppropriateAssessment: getSupportingEvidenceIds(
-					caseData.SupportingEvidence,
-					DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
 				)
 			}
 		: {
