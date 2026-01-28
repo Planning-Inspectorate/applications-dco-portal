@@ -23,7 +23,8 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 				...(message.projectDescription && { projectDescription: message.projectDescription }),
 				...(message.projectLocation && { projectLocation: message.projectLocation }),
 				...(message.easting && { easting: message.easting }),
-				...(message.northing && { northing: message.northing })
+				...(message.northing && { northing: message.northing }),
+				...(message.projectEmailAddress && { projectEmailAddress: message.projectEmailAddress })
 			};
 
 			await db.nsipProject.upsert({
@@ -41,7 +42,10 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 			if (caseData) {
 				await db.case.update({
 					where: { reference: message.caseReference },
-					data: { anticipatedDateOfSubmission: message.anticipatedDateOfSubmission }
+					data: {
+						anticipatedDateOfSubmission: message.anticipatedDateOfSubmission,
+						projectEmailAddress: message.projectEmailAddress
+					}
 				});
 			}
 

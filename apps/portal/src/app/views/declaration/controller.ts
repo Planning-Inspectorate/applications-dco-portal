@@ -10,6 +10,7 @@ import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/l
 import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
+import { DEFAULT_PROJECT_EMAIL_ADDRESS, TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -68,6 +69,7 @@ export function buildSubmitDeclaration({
 	db,
 	logger,
 	blobStore,
+	notifyClient,
 	serviceBusEventClient
 }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
@@ -88,8 +90,14 @@ export function buildSubmitDeclaration({
 			return declarationPage(req, res);
 		}
 
+		const caseReference = req.session.caseReference;
+
+		if (!caseReference) {
+			return notFoundHandler(req, res);
+		}
+
 		const caseData = await db.case.findUnique({
-			where: { reference: req.session.caseReference },
+			where: { reference: caseReference },
 			include: {
 				ApplicantDetails: {
 					include: {
@@ -120,7 +128,7 @@ export function buildSubmitDeclaration({
 		}
 
 		try {
-			await blobStore?.moveFolder(req.session.caseReference as string, db);
+			await blobStore?.moveFolder(caseReference, db);
 		} catch (error) {
 			logger.error({ error }, 'error moving case documents to back office container in blob store');
 			throw new Error('error moving documents during case submission');
@@ -158,11 +166,23 @@ export function buildSubmitDeclaration({
 		);
 
 		await db.case.update({
-			where: { reference: req.session.caseReference },
+			where: { reference: caseReference },
 			data: {
 				submissionDate: submissionDate,
 				submitterPositionInOrganisation: req.session.positionInOrganisation
 			}
+		});
+
+		notifyClient?.sendApplicantSubmissionNotification(caseData.email, {
+			number_of_days: '28',
+			case_reference_number: caseReference,
+			pdfLink: 'placeholder pdf link', //TODO: update pdf link once pdf is created and saved in blob store
+			relevant_team_email_address: TEAM_EMAIL_ADDRESS
+		});
+
+		notifyClient?.sendPinsStaffSubmissionNotification(caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS, {
+			case_reference_number: caseReference,
+			pdfLink: 'placeholder pdf link' //TODO: update pdf link once pdf is created and saved in blob store
 		});
 
 		return res.redirect('/application-complete');
