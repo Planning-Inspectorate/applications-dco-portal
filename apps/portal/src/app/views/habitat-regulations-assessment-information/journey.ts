@@ -23,16 +23,10 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.hasHabitatRegulationsAssessmentReport)
-				.startMultiQuestionCondition('include-habitat-regulations-assessment-info', (response: Handler) =>
+				.addQuestion(questions.habitatRegulationsAssessmentScreeningReport)
+				.withCondition((response: JourneyResponse) =>
 					questionHasAnswer(response, questions.hasHabitatRegulationsAssessmentReport, BOOLEAN_OPTIONS.YES)
 				)
-				.addQuestion(questions.habitatRegulationsAssessmentScreeningReport)
-				.addQuestion(questions.hasReportToInformAppropriateAssessment)
-				.addQuestion(questions.reportToInformAppropriateAssessment)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.hasReportToInformAppropriateAssessment, BOOLEAN_OPTIONS.YES)
-				)
-				.endMultiQuestionCondition('include-habitat-regulations-assessment-info')
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
