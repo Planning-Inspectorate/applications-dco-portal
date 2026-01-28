@@ -42,13 +42,15 @@ describe('file upload journey save controller', () => {
 									fileName: 'test.pdf',
 									size: 208,
 									formattedSize: '208B',
-									blobName: `EN123456/draft-dco/test.pdf`
+									blobName: `EN123456/draft-dco/test.pdf`,
+									mimeType: 'application/pdf'
 								},
 								{
 									fileName: 'plan.pdf',
 									size: 500,
 									formattedSize: '500B',
-									blobName: `EN123456/draft-dco/plan.pdf`
+									blobName: `EN123456/draft-dco/plan.pdf`,
+									mimeType: 'application/pdf'
 								}
 							]
 						}
@@ -77,6 +79,7 @@ describe('file upload journey save controller', () => {
 					blobName: 'EN123456/draft-dco/test.pdf',
 					isCertified: true,
 					uploaderEmail: 'test@email.com',
+					mimeType: 'application/pdf',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -106,6 +109,7 @@ describe('file upload journey save controller', () => {
 					blobName: 'EN123456/draft-dco/plan.pdf',
 					isCertified: true,
 					uploaderEmail: 'test@email.com',
+					mimeType: 'application/pdf',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -174,13 +178,15 @@ describe('file upload journey save controller', () => {
 									fileName: 'test.pdf',
 									size: 208,
 									formattedSize: '208B',
-									blobName: `EN123456/draft-dco/test.pdf`
+									blobName: `EN123456/draft-dco/test.pdf`,
+									mimeType: 'application/pdf'
 								},
 								{
 									fileName: 'plan.pdf',
 									size: 500,
 									formattedSize: '500B',
-									blobName: `EN123456/draft-dco/plan.pdf`
+									blobName: `EN123456/draft-dco/plan.pdf`,
+									mimeType: 'application/pdf'
 								}
 							]
 						}
@@ -209,6 +215,7 @@ describe('file upload journey save controller', () => {
 					blobName: 'EN123456/draft-dco/test.pdf',
 					isCertified: true,
 					uploaderEmail: 'test@email.com',
+					mimeType: 'application/pdf',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'
@@ -238,6 +245,7 @@ describe('file upload journey save controller', () => {
 					blobName: 'EN123456/draft-dco/plan.pdf',
 					isCertified: true,
 					uploaderEmail: 'test@email.com',
+					mimeType: 'application/pdf',
 					SubCategory: {
 						connect: {
 							id: 'draft-development-consent-order'

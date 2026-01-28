@@ -100,7 +100,8 @@ export function uploadDocumentsController(
 					size: file.size,
 					formattedSize: formatBytes(file.size),
 					blobName,
-					blobNameBase64Encoded: encodeBlobNameToBase64(blobName)
+					blobNameBase64Encoded: encodeBlobNameToBase64(blobName),
+					mimeType: file.mimetype
 				});
 			});
 

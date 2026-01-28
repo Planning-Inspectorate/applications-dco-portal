@@ -68,6 +68,7 @@ function mapAnswersToInput(
 		fileName: file.fileName,
 		size: file.size,
 		blobName: file.blobName,
+		mimeType: file.mimeType,
 		isCertified: yesNoToBoolean(answers.isCertified),
 		uploaderEmail: uploaderEmailAddress,
 		SubCategory: {

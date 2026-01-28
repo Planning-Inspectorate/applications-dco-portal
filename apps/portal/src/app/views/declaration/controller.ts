@@ -7,6 +7,9 @@ import {
 } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
+import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
+import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
 
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -61,7 +64,12 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration({
+	db,
+	logger,
+	blobStore,
+	serviceBusEventClient
+}: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
 
@@ -80,17 +88,79 @@ export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService)
 			return declarationPage(req, res);
 		}
 
+		const caseData = await db.case.findUnique({
+			where: { reference: req.session.caseReference },
+			include: {
+				ApplicantDetails: {
+					include: {
+						Address: true
+					}
+				},
+				AgentDetails: {
+					include: {
+						Address: true
+					}
+				},
+				CasePaymentMethod: true,
+				ProjectSingleSite: true,
+				ProjectLinearSite: true,
+				NonOffshoreGeneratingStation: true,
+				OffshoreGeneratingStation: true,
+				HighwayRelatedDevelopment: true,
+				RailwayDevelopment: true,
+				HarbourFacilities: true,
+				Pipelines: true,
+				HazardousWasteFacility: true,
+				DamOrReservoir: true
+			}
+		});
+
+		if (!caseData) {
+			return notFoundHandler(req, res);
+		}
+
 		try {
-			await blobStore?.moveFolder(req.session.caseReference as string);
+			await blobStore?.moveFolder(req.session.caseReference as string, db);
 		} catch (error) {
 			logger.error({ error }, 'error moving case documents to back office container in blob store');
 			throw new Error('error moving documents during case submission');
 		}
 
+		const documents = await db.document.findMany({
+			where: {
+				caseId: caseData.id,
+				scanResultId: SCAN_RESULT_ID.SCANNED
+			},
+			include: {
+				Case: true,
+				SubCategory: {
+					include: {
+						Category: true
+					}
+				}
+			}
+		});
+
+		const submissionDate = new Date();
+
+		const mappedCaseData = mapCaseDataToBackOfficeFormat(caseData, submissionDate, req.session.positionInOrganisation);
+		const mappedDocuments = mapDocumentsToBackOfficeFormat(documents);
+
+		serviceBusEventClient?.sendEvents(
+			DATA_SUBMISSIONS_TOPIC_NAME,
+			[
+				{
+					mappedCaseData,
+					mappedDocuments
+				}
+			],
+			EVENT_TYPE.PUBLISH
+		);
+
 		await db.case.update({
 			where: { reference: req.session.caseReference },
 			data: {
-				submissionDate: new Date(),
+				submissionDate: submissionDate,
 				submitterPositionInOrganisation: req.session.positionInOrganisation
 			}
 		});
