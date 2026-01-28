@@ -84,6 +84,8 @@ module "app_portal" {
     GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID            = var.apps_config.gov_notify.templates.whitelist_add_template_id
     GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID = var.apps_config.gov_notify.templates.whitelist_access_changed_templated_id
     GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID         = var.apps_config.gov_notify.templates.whitelist_remove_templated_id
+    GOV_NOTIFY_APPLICANT_SUBMISSION_TEMPLATE_ID     = var.apps_config.gov_notify.templates.applicant_submission_template_id
+    GOV_NOTIFY_PINS_STAFF_SUBMISSION_TEMPLATE_ID    = var.apps_config.gov_notify.templates.pins_staff_submission_template_id
 
     # blob store
     BLOB_STORE_DISABLED  = var.apps_config.blob_store.disabled

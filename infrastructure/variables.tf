@@ -41,6 +41,8 @@ variable "apps_config" {
         whitelist_access_changed_templated_id = string
         whitelist_remove_templated_id         = string
         anti_virus_failed_template_id         = string
+        applicant_submission_template_id      = string
+        pins_staff_submission_template_id     = string
       })
     })
 

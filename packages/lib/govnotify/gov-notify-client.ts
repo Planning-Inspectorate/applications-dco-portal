@@ -4,6 +4,7 @@ import type { Logger } from 'pino';
 import type { GovNotifyOptions, TemplateIds } from './types.d.ts';
 
 export const TEAM_EMAIL_ADDRESS = 'enquiries@planninginspectorate.gov.uk';
+export const DEFAULT_PROJECT_EMAIL_ADDRESS = 'nienquiries@planninginspectorate.gov.uk';
 
 export class GovNotifyClient {
 	#templateIds: TemplateIds;
@@ -57,6 +58,22 @@ export class GovNotifyClient {
 			personalisation: personalisation
 		});
 		this.logger.info('Anti virus failed email template successfully dispatched');
+	}
+
+	async sendApplicantSubmissionNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+		this.logger.info('Dispatching applicant data submission email template');
+		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
+			personalisation: personalisation
+		});
+		this.logger.info('Applicant data submission email template successfully dispatched');
+	}
+
+	async sendPinsStaffSubmissionNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+		this.logger.info('Dispatching Planning Inspectorate staff data submission email template');
+		await this.sendEmail(this.#templateIds.pinsStaffSubmissionNotification as string, email, {
+			personalisation: personalisation
+		});
+		this.logger.info('Planning Inspectorate staff data submission email template successfully dispatched');
 	}
 
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {
