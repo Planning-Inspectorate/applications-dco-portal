@@ -17,7 +17,7 @@ export function getQuestions() {
 			question: 'Does the project include a statutory nuisance statement?',
 			fieldName: 'hasStatutoryNuisanceStatement',
 			url: 'has-statutory-nuisance-statement',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project could cause any statutory nuisances')]
 		},
 		statutoryNuisanceStatement: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -25,7 +25,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the statutory nuisance statement?',
 			fieldName: 'statutoryNuisanceStatement',
 			url: DOCUMENT_SUB_CATEGORY_ID.STATUTORY_NUISANCE_STATEMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the statutory nuisance statement')]
 		}
 	};
 
