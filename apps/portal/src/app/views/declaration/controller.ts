@@ -7,6 +7,8 @@ import {
 } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
+import { mapCaseToDcoApplication } from '@pins/dco-portal-lib/pdf-service/mappers/dco-application-mapper.ts';
+import { addCSStoHtml } from '@pins/dco-portal-lib/util/add-css-to-html.ts';
 
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -113,5 +115,61 @@ export function buildApplicationCompletePage({ db }: PortalService): AsyncReques
 			caseReference: req.session.caseReference,
 			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
 		});
+	};
+}
+
+export function buildDownloadApplicationPdf({ db, logger, pdfServiceClient }: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		try {
+			const caseData = await db.case.findUnique({
+				where: { reference: req.session.caseReference },
+				include: {
+					SupportingEvidence: {
+						include: { Document: true }
+					},
+					ApplicantDetails: {
+						include: { Address: true }
+					},
+					AgentDetails: {
+						include: { Address: true }
+					},
+					CasePaymentMethod: true,
+					ProjectSingleSite: true,
+					ProjectLinearSite: true,
+					NonOffshoreGeneratingStation: true,
+					OffshoreGeneratingStation: true,
+					HighwayRelatedDevelopment: true,
+					RailwayDevelopment: true,
+					HarbourFacilities: true,
+					Pipelines: true,
+					HazardousWasteFacility: true,
+					DamOrReservoir: true
+				}
+			});
+			if (!pdfServiceClient) throw new Error('pdf service client not configured');
+			if (!caseData) throw new Error('case data for submission not found');
+
+			const dcoApplicationData = mapCaseToDcoApplication(caseData);
+			return res.render(
+				'views/layouts/application-pdf.njk',
+				{
+					dcoApplicationData
+				},
+				async (error, html) => {
+					if (error) {
+						throw error;
+					}
+					const pdfHtml = await addCSStoHtml(html, 'main.min.css');
+					const pdf = await pdfServiceClient.generatePdf(pdfHtml);
+
+					res.set('Content-disposition', `attachment; filename="dco-application-${req.session.caseReference}.pdf"`);
+					res.set('Content-type', 'application/pdf');
+					return res.send(pdf);
+				}
+			);
+		} catch (error) {
+			logger.error({ error }, 'error generating pdf document from submission data');
+			throw new Error('error generating pdf document from submission data');
+		}
 	};
 }
