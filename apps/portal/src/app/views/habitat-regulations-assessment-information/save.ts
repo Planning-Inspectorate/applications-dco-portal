@@ -32,10 +32,6 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					{
 						key: 'habitatRegulationsAssessmentScreeningReport',
 						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
-					},
-					{
-						key: 'reportToInformAppropriateAssessment',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
 					}
 				];
 
@@ -50,18 +46,6 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 							documentId,
 							DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
 						);
-					}
-
-					if (answers.hasReportToInformAppropriateAssessment === BOOLEAN_OPTIONS.YES) {
-						const ids = (answers['reportToInformAppropriateAssessment'] ?? '').split(',').filter(Boolean);
-						for (const documentId of ids) {
-							await saveSupportingEvidence(
-								$tx,
-								caseId,
-								documentId,
-								DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
-							);
-						}
 					}
 				}
 

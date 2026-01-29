@@ -28,7 +28,7 @@ export function getQuestions() {
 			fieldName: 'hasHabitatRegulationsAssessmentReport',
 			hint: 'An HRA report is required if the project may have a likely significant effect on a European site or Ramsar site',
 			url: 'hra-report',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project requires a Habitat Regulations Assessment report')]
 		},
 		habitatRegulationsAssessmentScreeningReport: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -37,23 +37,7 @@ export function getQuestions() {
 			html: HRA_DESCRIPTION,
 			fieldName: 'habitatRegulationsAssessmentScreeningReport',
 			url: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,
-			validators: [new RequiredValidator()]
-		},
-		hasReportToInformAppropriateAssessment: {
-			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Does the project include any report to inform appropriate assessment?',
-			question: 'Does the project include any report to inform appropriate assessment?',
-			fieldName: 'hasReportToInformAppropriateAssessment',
-			url: 'has-report-to-inform-appropriate-assessment',
-			validators: [new RequiredValidator()]
-		},
-		reportToInformAppropriateAssessment: {
-			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the report to inform appropriate assessment?',
-			question: 'Which documents relate to the report to inform appropriate assessment?',
-			fieldName: 'reportToInformAppropriateAssessment',
-			url: DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the Habitat Regulations Assessment process')]
 		}
 	};
 

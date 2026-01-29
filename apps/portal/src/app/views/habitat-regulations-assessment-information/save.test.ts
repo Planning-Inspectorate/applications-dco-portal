@@ -34,59 +34,6 @@ describe('habitat-regulations-assessment-information save', () => {
 					journeyResponse: {
 						answers: {
 							hasHabitatRegulationsAssessmentReport: 'yes',
-							habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-4',
-							hasReportToInformAppropriateAssessment: 'yes',
-							reportToInformAppropriateAssessment: 'doc-id-2'
-						}
-					}
-				}
-			};
-
-			const controller = buildSaveController(
-				{
-					db: mockDb,
-					logger: mockLogger()
-				},
-				APPLICATION_SECTION_ID.HABITAT_REGULATIONS_ASSESSMENT_INFORMATION
-			);
-			await controller(mockReq, mockRes);
-
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
-
-			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
-			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
-
-			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 3);
-		});
-		it('should not save report-to-inform-appropriate-assessment documents if no is selected on whether to include them', async () => {
-			const mockDb = {
-				$transaction: mock.fn((fn) => fn(mockDb)),
-				case: {
-					findUnique: mock.fn(() => ({
-						id: 'case-id-1'
-					})),
-					update: mock.fn()
-				},
-				supportingEvidence: {
-					deleteMany: mock.fn(),
-					upsert: mock.fn()
-				}
-			};
-			const mockReq = {
-				baseUrl: '/habitat-regulations-assessment-information',
-				session: {
-					caseReference: 'EN123456'
-				}
-			};
-			const mockRes = {
-				redirect: mock.fn(),
-				locals: {
-					journeyResponse: {
-						answers: {
-							hasHabitatRegulationsAssessmentReport: 'yes',
-							hasReportToInformAppropriateAssessment: 'no',
 							habitatRegulationsAssessmentScreeningReport: 'doc-id-1,doc-id-4'
 						}
 					}
