@@ -89,7 +89,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 			throw new Error('error adding new user');
 		}
 
-		notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
+		await notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
 			case_reference_number: caseReference,
 			relevant_team_email_address: TEAM_EMAIL_ADDRESS
 		});

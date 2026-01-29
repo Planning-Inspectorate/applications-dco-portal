@@ -25,7 +25,7 @@ model Case {
   createdAt                                      DateTime                      @default(now())
   modifiedAt                                     DateTime                      @updatedAt
   /// PINS Project email address
-  projectEmailAddress                            String
+  projectEmailAddress                            String?
   anticipatedDateOfSubmission                    DateTime?
   submissionDate                                 DateTime?
   submitterPositionInOrganisation                String?

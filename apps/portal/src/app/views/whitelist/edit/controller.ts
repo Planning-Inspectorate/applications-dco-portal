@@ -83,7 +83,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 		}
 
 		if (answers.accessLevel !== whitelistUser.userRoleId) {
-			notifyClient?.sendWhitelistAccessChangedNotification(whitelistUser.email, {
+			await notifyClient?.sendWhitelistAccessChangedNotification(whitelistUser.email, {
 				case_reference_number: caseReference,
 				type_of_user_changed_from:
 					WHITELIST_USER_ROLE.find((r) => r.id === whitelistUser.userRoleId)?.displayName ?? '',
