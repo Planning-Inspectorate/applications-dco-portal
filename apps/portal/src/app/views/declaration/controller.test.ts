@@ -220,6 +220,13 @@ describe('declaration controllers', () => {
 							}
 						}
 					])
+				},
+				whitelistUser: {
+					findMany: mock.fn(() => [
+						{ email: 'user-1@email.com' },
+						{ email: 'user-2@email.com' },
+						{ email: 'user-3@email.com' }
+					])
 				}
 			};
 			const mockBlobStore = {
@@ -228,12 +235,17 @@ describe('declaration controllers', () => {
 			const mockServiceBusClient = {
 				sendEvents: mock.fn()
 			};
+			const mockGovNotifyClient = {
+				sendApplicantSubmissionNotification: mock.fn(),
+				sendPinsStaffSubmissionNotification: mock.fn()
+			};
 
 			const submitDeclaration = buildSubmitDeclaration({
 				db: mockDb,
 				logger: mockLogger(),
 				blobStore: mockBlobStore,
-				serviceBusEventClient: mockServiceBusClient
+				serviceBusEventClient: mockServiceBusClient,
+				notifyClient: mockGovNotifyClient
 			});
 			await submitDeclaration(mockReq, mockRes);
 
@@ -325,6 +337,8 @@ describe('declaration controllers', () => {
 				}
 			]);
 			assert.deepStrictEqual(mockServiceBusClient.sendEvents.mock.calls[0].arguments[2], 'Publish');
+			assert.strictEqual(mockGovNotifyClient.sendApplicantSubmissionNotification.mock.callCount(), 3);
+			assert.strictEqual(mockGovNotifyClient.sendPinsStaffSubmissionNotification.mock.callCount(), 1);
 		});
 		it('should render declaration page with error if checkbox not selected', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');

@@ -3,6 +3,9 @@ BEGIN TRY
 BEGIN TRAN;
 
 -- AlterTable
+ALTER TABLE [dbo].[Case] ADD [projectEmailAddress] NVARCHAR(1000);
+
+-- AlterTable
 ALTER TABLE [dbo].[NsipProject] ADD [projectEmailAddress] NVARCHAR(1000);
 
 COMMIT TRAN;

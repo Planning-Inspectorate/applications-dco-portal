@@ -63,7 +63,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 			throw new Error('error removing user from the whitelist');
 		}
 
-		notifyClient?.sendWhitelistRemoveNotification(whitelistUser.email, {
+		await notifyClient?.sendWhitelistRemoveNotification(whitelistUser.email, {
 			case_reference_number: caseReference,
 			relevant_team_email_address: TEAM_EMAIL_ADDRESS
 		});
