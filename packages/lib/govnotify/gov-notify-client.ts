@@ -60,18 +60,26 @@ export class GovNotifyClient {
 		this.logger.info('Anti virus failed email template successfully dispatched');
 	}
 
-	async sendApplicantSubmissionNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+	async sendApplicantSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching applicant data submission email template');
 		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
-			personalisation: personalisation
+			personalisation: {
+				number_of_days: '28',
+				case_reference_number: caseReference,
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: 'dco-portal-sub.pdf' }), //TODO: update pdf link once pdf is created and saved in blob store
+				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+			}
 		});
 		this.logger.info('Applicant data submission email template successfully dispatched');
 	}
 
-	async sendPinsStaffSubmissionNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+	async sendPinsStaffSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching Planning Inspectorate staff data submission email template');
 		await this.sendEmail(this.#templateIds.pinsStaffSubmissionNotification as string, email, {
-			personalisation: personalisation
+			personalisation: {
+				case_reference_number: caseReference,
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: 'dco-portal-sub.pdf' }) //TODO: update pdf link once pdf is created and saved in blob store
+			}
 		});
 		this.logger.info('Planning Inspectorate staff data submission email template successfully dispatched');
 	}

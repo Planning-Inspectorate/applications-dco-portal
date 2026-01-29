@@ -10,7 +10,7 @@ import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/l
 import { SCAN_RESULT_ID, WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
-import { DEFAULT_PROJECT_EMAIL_ADDRESS, TEAM_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -182,21 +182,18 @@ export function buildSubmitDeclaration({
 
 		await Promise.all(
 			adminUsers.map((adminUser) =>
-				notifyClient?.sendApplicantSubmissionNotification(adminUser.email, {
-					number_of_days: '28',
-					case_reference_number: caseReference,
-					pdfLink: 'placeholder pdf link', //TODO: update pdf link once pdf is created and saved in blob store
-					relevant_team_email_address: TEAM_EMAIL_ADDRESS
-				})
+				notifyClient?.sendApplicantSubmissionNotification(
+					adminUser.email,
+					caseReference,
+					Buffer.alloc(10) //TODO: replace with generated pdf
+				)
 			)
 		);
 
 		await notifyClient?.sendPinsStaffSubmissionNotification(
 			caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-			{
-				case_reference_number: caseReference,
-				pdfLink: 'placeholder pdf link' //TODO: update pdf link once pdf is created and saved in blob store
-			}
+			caseReference,
+			Buffer.alloc(10) //TODO: replace with generated pdf
 		);
 
 		return res.redirect('/application-complete');

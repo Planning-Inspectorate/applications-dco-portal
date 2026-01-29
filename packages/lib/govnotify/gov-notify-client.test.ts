@@ -140,4 +140,60 @@ describe(`gov-notify-client`, () => {
 			]);
 		});
 	});
+	describe('sendApplicantSubmissionNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				applicantSubmissionNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendApplicantSubmissionNotification('email', 'EN123456', Buffer.alloc(10));
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						number_of_days: '28',
+						pdfLink: {
+							confirm_email_before_download: null,
+							file: 'AAAAAAAAAAAAAA==',
+							filename: 'dco-portal-sub.pdf',
+							retention_period: null
+						},
+						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
+	describe('sendPinsStaffSubmissionNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				pinsStaffSubmissionNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendPinsStaffSubmissionNotification('email', 'EN123456', Buffer.alloc(10));
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						pdfLink: {
+							confirm_email_before_download: null,
+							file: 'AAAAAAAAAAAAAA==',
+							filename: 'dco-portal-sub.pdf',
+							retention_period: null
+						}
+					}
+				}
+			]);
+		});
+	});
 });
