@@ -667,9 +667,6 @@ function mapHabitatRegulationsAssessmentInformation(reportsAndStatementsEvidence
 	const habitatRegulationsEvidence = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT
 	]);
-	const reportToInformEvidence = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT
-	]);
 
 	return {
 		hasHabitatRegulationsAssessmentReport: {
@@ -680,16 +677,6 @@ function mapHabitatRegulationsAssessmentInformation(reportsAndStatementsEvidence
 		habitatRegulationsAssessmentReport: {
 			name: 'Habitat Regulations Assessment Report',
 			value: habitatRegulationsEvidence.map((evidence) => evidence.Document.fileName)
-		},
-
-		hasReportToInformAppropriateAssessment: {
-			name: 'Has Report to Inform Appropriate Assessment',
-			value: reportToInformEvidence.length > 0 ? 'Yes' : 'No'
-		},
-
-		reportToInformAppropriateAssessment: {
-			name: 'Report to Inform Appropriate Assessment',
-			value: reportToInformEvidence.map((evidence) => evidence.Document.fileName)
 		}
 	};
 }

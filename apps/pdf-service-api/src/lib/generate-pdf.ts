@@ -19,7 +19,7 @@ export const generatePdf = async (browser: Browser, html: string): Promise<Uint8
 
 		return Buffer.from(pdfBuffer);
 	} catch (err) {
-		let errorMessage = err instanceof Error ? err.message : '';
+		const errorMessage = err instanceof Error ? err.message : '';
 		throw new Error(errorMessage);
 	}
 };
