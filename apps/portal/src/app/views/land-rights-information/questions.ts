@@ -18,7 +18,11 @@ export function getQuestions() {
 				'Does the project include any compulsory acquisition of land, an interest in land, or rights over land?',
 			fieldName: 'compulsoryAcquisition',
 			url: 'compulsory-acquisition',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator(
+					'Select yes if the project includes compulsory acquisition of land, an interest in land or rights over land'
+				)
+			]
 		},
 		statementOfReasons: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -26,7 +30,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the statement of reasons?',
 			fieldName: 'statementOfReasons',
 			url: DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the statement of reasons')]
 		},
 		fundingStatement: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -34,7 +38,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the funding statement?',
 			fieldName: 'fundingStatement',
 			url: DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the funding statement')]
 		},
 		bookOfReference: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -42,7 +46,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the book of reference?',
 			fieldName: 'bookOfReference',
 			url: DOCUMENT_SUB_CATEGORY_ID.BOOK_OF_REFERENCE_PARTS_1_TO_5,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the book of reference')]
 		},
 		landAndRightsNegotiationsTracker: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -50,7 +54,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the land and rights negotiations tracker?',
 			fieldName: 'landAndRightsNegotiationsTracker',
 			url: DOCUMENT_SUB_CATEGORY_ID.LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the land and rights negotiations tracker')]
 		}
 	};
 
