@@ -382,6 +382,171 @@ describe('home page', () => {
 			}
 		});
 	});
+	it('should render with submission date in the future content', async (ctx) => {
+		const now = new Date('2025-01-30T00:00:00.000Z');
+		ctx.mock.timers.enable({ apis: ['Date'], now });
+
+		const nunjucks = configureNunjucks();
+		const mockDb = {
+			case: {
+				findUnique: mock.fn(() => ({
+					reference: 'EN123456',
+					email: 'test@email.com',
+					anticipatedDateOfSubmission: new Date('2025-02-03T00:00:00.000Z'),
+					applicationFormRelatedInformationStatusId: 'not-started',
+					plansAndDrawingsStatusId: 'not-started',
+					draftDcoStatusId: 'in-progress',
+					compulsoryAcquisitionInformationStatusId: 'not-started',
+					consultationReportStatusId: 'completed',
+					reportsAndStatementsStatusId: 'not-started',
+					environmentalStatementStatusId: 'not-started',
+					additionalPrescribedInformationStatusId: 'not-started',
+					otherDocumentsStatusId: 'not-started'
+				}))
+			},
+			whitelistUser: {
+				findUnique: mock.fn(() => ({
+					userRoleId: WHITELIST_USER_ROLE_ID.STANDARD_USER
+				}))
+			}
+		};
+
+		const mockReq = {
+			session: {
+				caseReference: 'EN123456',
+				emailAddress: 'test@email.com'
+			}
+		};
+		const mockRes = {
+			render: mock.fn((view, data) => nunjucks.render(view, data))
+		};
+
+		const homePage = buildHomePage({ db: mockDb, logger: mockLogger() });
+		await assert.doesNotReject(() => homePage(mockReq, mockRes));
+
+		assert.strictEqual(mockRes.render.mock.callCount(), 1);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments.length, 2);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].enableSubmissionButton, false);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].submissionText,
+			'<h2 class="govuk-heading-m">You will be able to submit you application on 3 Feb 2025</h2><p class="govuk-body">Once the applications is submitted, it will be locked and you can make no further changes.</p>'
+		);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].warningText,
+			"If you miss this date, you'll need to agree a new submission date with the Planning Inspectorate"
+		);
+	});
+	it('should render with you can now submit content if submission date is tomorrow', async (ctx) => {
+		const now = new Date('2025-01-29T00:00:00.000Z');
+		ctx.mock.timers.enable({ apis: ['Date'], now });
+
+		const nunjucks = configureNunjucks();
+		const mockDb = {
+			case: {
+				findUnique: mock.fn(() => ({
+					reference: 'EN123456',
+					email: 'test@email.com',
+					anticipatedDateOfSubmission: new Date('2025-01-30T00:00:00.000Z'),
+					applicationFormRelatedInformationStatusId: 'not-started',
+					plansAndDrawingsStatusId: 'not-started',
+					draftDcoStatusId: 'in-progress',
+					compulsoryAcquisitionInformationStatusId: 'not-started',
+					consultationReportStatusId: 'completed',
+					reportsAndStatementsStatusId: 'not-started',
+					environmentalStatementStatusId: 'not-started',
+					additionalPrescribedInformationStatusId: 'not-started',
+					otherDocumentsStatusId: 'not-started'
+				}))
+			},
+			whitelistUser: {
+				findUnique: mock.fn(() => ({
+					userRoleId: WHITELIST_USER_ROLE_ID.STANDARD_USER
+				}))
+			}
+		};
+
+		const mockReq = {
+			session: {
+				caseReference: 'EN123456',
+				emailAddress: 'test@email.com'
+			}
+		};
+		const mockRes = {
+			render: mock.fn((view, data) => nunjucks.render(view, data))
+		};
+
+		const homePage = buildHomePage({ db: mockDb, logger: mockLogger() });
+		await assert.doesNotReject(() => homePage(mockReq, mockRes));
+
+		assert.strictEqual(mockRes.render.mock.callCount(), 1);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments.length, 2);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].enableSubmissionButton, true);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].submissionText,
+			'<h2 class="govuk-heading-m">Now submit your application</h2><p class="govuk-body">You can now submit your application. Once the application is submitted, it will be locked and you can make no further changes.</p>'
+		);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].warningText,
+			"If you do not submit your application today, you'll need to agree a new submission date with the Planning Inspectorate"
+		);
+	});
+	it('should render with submission date has passed content', async (ctx) => {
+		const now = new Date('2025-02-04T00:00:00.000Z');
+		ctx.mock.timers.enable({ apis: ['Date'], now });
+
+		const nunjucks = configureNunjucks();
+		const mockDb = {
+			case: {
+				findUnique: mock.fn(() => ({
+					reference: 'EN123456',
+					email: 'test@email.com',
+					anticipatedDateOfSubmission: new Date('2025-01-30T00:00:00.000Z'),
+					applicationFormRelatedInformationStatusId: 'not-started',
+					plansAndDrawingsStatusId: 'not-started',
+					draftDcoStatusId: 'in-progress',
+					compulsoryAcquisitionInformationStatusId: 'not-started',
+					consultationReportStatusId: 'completed',
+					reportsAndStatementsStatusId: 'not-started',
+					environmentalStatementStatusId: 'not-started',
+					additionalPrescribedInformationStatusId: 'not-started',
+					otherDocumentsStatusId: 'not-started'
+				}))
+			},
+			whitelistUser: {
+				findUnique: mock.fn(() => ({
+					userRoleId: WHITELIST_USER_ROLE_ID.STANDARD_USER
+				}))
+			}
+		};
+
+		const mockReq = {
+			session: {
+				caseReference: 'EN123456',
+				emailAddress: 'test@email.com'
+			}
+		};
+		const mockRes = {
+			render: mock.fn((view, data) => nunjucks.render(view, data))
+		};
+
+		const homePage = buildHomePage({ db: mockDb, logger: mockLogger() });
+		await assert.doesNotReject(() => homePage(mockReq, mockRes));
+
+		assert.strictEqual(mockRes.render.mock.callCount(), 1);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments.length, 2);
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/home/view.njk');
+		assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].enableSubmissionButton, false);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].submissionText,
+			'<h2 class="govuk-heading-m">Your submission date has passed</h2>'
+		);
+		assert.strictEqual(
+			mockRes.render.mock.calls[0].arguments[1].warningText,
+			'You can continue working on your application, but you cannot submit it at this time. To submit, you must contact the Planning Inspectorate to agree a new submission date.'
+		);
+	});
 	it('should render not found error page if no email present', async () => {
 		const mockReq = {
 			session: {
