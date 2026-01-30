@@ -13,6 +13,8 @@ export interface TemplateIds {
 	whitelistAccessChangedNotification?: string;
 	whitelistRemoveNotification?: string;
 	antiVirusFailedNotification?: string;
+	applicantSubmissionNotification?: string;
+	pinsStaffSubmissionNotification?: string;
 }
 
 export interface NotifyConfig {

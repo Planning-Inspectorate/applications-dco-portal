@@ -2,6 +2,16 @@ import { DefaultAzureCredential } from '@azure/identity';
 import { ServiceBusClient, type ServiceBusSender } from '@azure/service-bus';
 import type { Logger } from 'pino';
 
+export const DATA_SUBMISSIONS_TOPIC_NAME = 'dco-portal-data-submissions';
+
+export const EVENT_TYPE = {
+	CREATE: 'Create',
+	UPDATE: 'Update',
+	DELETE: 'Delete',
+	PUBLISH: 'Publish',
+	UNPUBLISH: 'Unpublish'
+};
+
 export class ServiceBusEventClient {
 	private logger: Logger;
 	private client: ServiceBusClient;
@@ -33,11 +43,6 @@ export class ServiceBusEventClient {
 		}));
 	};
 
-	/**
-	 * Function to publish events to Azure Service Bus Topic
-	 * example usage as in the back office:
-	 * await eventClient.sendEvents(NSIP_PROJECT, [buildNsipProjectPayload(project)], eventType);
-	 * */
 	sendEvents = async (topic: string, events: any[], eventType: string) => {
 		const traceId = this.#createTraceId();
 		const sender = this.#createSender(topic);

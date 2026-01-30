@@ -32,14 +32,15 @@ export function loadConfig(): Config {
 		GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
 		GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
 		GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID,
+		GOV_NOTIFY_APPLICANT_SUBMISSION_TEMPLATE_ID,
+		GOV_NOTIFY_PINS_STAFF_SUBMISSION_TEMPLATE_ID,
 		BLOB_STORE_DISABLED,
 		BLOB_STORE_HOST,
 		BLOB_STORE_CONTAINER,
 		BLOB_STORE_CONNECTION_STRING,
 		ENABLE_E2E_TEST_ENDPOINTS,
 		TEST_TOOLS_TOKEN,
-		SERVICE_BUS_PUBLISH_EVENT_DISABLED,
-		DATA_SUBMISSIONS_TOPIC_HOSTNAME
+		SERVICE_BUS_PUBLISH_EVENT_DISABLED
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -64,7 +65,9 @@ export function loadConfig(): Config {
 			GOV_NOTIFY_OTP_TEMPLATE_ID,
 			GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
 			GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
-			GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID
+			GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID,
+			GOV_NOTIFY_APPLICANT_SUBMISSION_TEMPLATE_ID,
+			GOV_NOTIFY_PINS_STAFF_SUBMISSION_TEMPLATE_ID
 		};
 		for (const [k, v] of Object.entries(props)) {
 			if (v === undefined || v === '') {
@@ -122,7 +125,9 @@ export function loadConfig(): Config {
 				oneTimePasswordNotification: GOV_NOTIFY_OTP_TEMPLATE_ID,
 				whitelistAddNotification: GOV_NOTIFY_WHITELIST_ADD_TEMPLATE_ID,
 				whitelistAccessChangedNotification: GOV_NOTIFY_WHITELIST_ACCESS_CHANGED_TEMPLATE_ID,
-				whitelistRemoveNotification: GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID
+				whitelistRemoveNotification: GOV_NOTIFY_WHITELIST_REMOVE_TEMPLATE_ID,
+				applicantSubmissionNotification: GOV_NOTIFY_APPLICANT_SUBMISSION_TEMPLATE_ID,
+				pinsStaffSubmissionNotification: GOV_NOTIFY_PINS_STAFF_SUBMISSION_TEMPLATE_ID
 			}
 		},
 		// the log level to use
@@ -132,7 +137,7 @@ export function loadConfig(): Config {
 		httpPort: httpPort,
 		serviceBus: {
 			disabled: SERVICE_BUS_PUBLISH_EVENT_DISABLED === 'true',
-			hostname: DATA_SUBMISSIONS_TOPIC_HOSTNAME || ''
+			hostname: process.env.ServiceBusConnection__fullyQualifiedNamespace || ''
 		},
 		session: {
 			redisPrefix: 'portal:',

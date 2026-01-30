@@ -11,6 +11,7 @@ import type {
 import type { Logger } from 'pino';
 import type { Readable } from 'node:stream';
 import type { BlobMetaData } from './types.d.ts';
+import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 
 const commonOptions = { retryOptions: { maxTries: 3 } };
 
@@ -116,7 +117,7 @@ export class BlobStorageClient {
 		return await blockBlobClient.download();
 	}
 
-	async moveFolder(prefix: string) {
+	async moveFolder(prefix: string, dbClient: PrismaClient) {
 		const CONCURRENCY = 10;
 		const destinationContainerName = 'document-service-uploads';
 
@@ -137,6 +138,11 @@ export class BlobStorageClient {
 				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
 				await poller.pollUntilDone();
 				await sourceBlob.delete();
+
+				await dbClient.document.updateMany({
+					where: { blobName: blob.name },
+					data: { blobName: `applications/${blob.name}` }
+				});
 
 				this.logger.info(`Moved successfully: ${blob.name}`);
 			})();
