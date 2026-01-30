@@ -85,7 +85,7 @@ export function getQuestions() {
 			fieldName: 'otherEnvironmentalDocuments',
 			url: 'other-environmental-documents',
 			options: referenceDataToRadioOptions(OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS),
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		introductoryChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -95,7 +95,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		aspectChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -105,7 +105,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		environmentStatementAppendices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -115,7 +115,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		environmentStatementFigures: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -125,7 +125,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		modelInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -135,7 +135,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		anyOtherMediaInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -145,7 +145,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		confidentialDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -155,7 +155,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		sensitiveInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -165,7 +165,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'sensitiveInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
-			validators: [new RequiredValidator()]
+			validators: []
 		},
 		notifyingConsultationBodies: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
@@ -176,10 +176,10 @@ export function getQuestions() {
 			fieldName: 'notifyingConsultationBodies',
 			url: 'notifying-consultation-bodies',
 			validators: [
-				new RequiredValidator('Select yes if you’ve notified the consultation bodies'),
 				new RequiredAnswerValidator({
 					requiredAnswers: [BOOLEAN_OPTIONS.YES],
-					errorMessage: 'You must notify the consultation bodies about the project'
+					emptyAnswerErrorMessage: 'Select yes if you’ve notified the consultation bodies',
+					requiredAnswerErrorMessage: 'You must notify the consultation bodies about the project'
 				})
 			]
 		},

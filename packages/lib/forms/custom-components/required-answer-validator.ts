@@ -5,34 +5,44 @@ import BaseValidator from '@planning-inspectorate/dynamic-forms/src/validator/ba
 import OptionsQuestion from '@planning-inspectorate/dynamic-forms/src/questions/options-question.js';
 
 export default class RequiredAnswerValidator extends BaseValidator {
-	errorMessage: string;
+	emptyAnswerErrorMessage: string;
+	requiredAnswerErrorMessage: string;
 	requiredAnswers: string[];
 
-	constructor(opts: { errorMessage?: string; requiredAnswers: string[] }) {
+	constructor(opts: {
+		emptyAnswerErrorMessage?: string;
+		requiredAnswerErrorMessage?: string;
+		requiredAnswers: string[];
+	}) {
 		super();
 
 		if (!opts.requiredAnswers) throw new Error('Required answers validator needs required answers');
 		this.requiredAnswers = opts.requiredAnswers;
 
-		if (opts.errorMessage) {
-			this.errorMessage = opts.errorMessage;
+		if (opts.emptyAnswerErrorMessage) {
+			this.emptyAnswerErrorMessage = opts.emptyAnswerErrorMessage;
 		} else {
-			this.errorMessage = 'You must select a valid answer';
+			this.emptyAnswerErrorMessage = 'You must select an answer';
+		}
+
+		if (opts.requiredAnswerErrorMessage) {
+			this.requiredAnswerErrorMessage = opts.requiredAnswerErrorMessage;
+		} else {
+			this.requiredAnswerErrorMessage = 'You must select a valid answer';
 		}
 	}
 
-	//TODO: allow required and required answer to be validated together
-
 	validate(questionObj: OptionsQuestion) {
 		return body(questionObj.fieldName)
+			.notEmpty()
+			.withMessage(this.emptyAnswerErrorMessage)
 			.custom((value) => {
-				if (!value) return false;
 				if (Array.isArray(value)) {
 					return this.requiredAnswers.every((required) => value.includes(required));
 				} else {
 					return value === this.requiredAnswers[0];
 				}
 			})
-			.withMessage(this.errorMessage);
+			.withMessage(this.requiredAnswerErrorMessage);
 	}
 }
