@@ -21,6 +21,8 @@ export default class RequiredAnswerValidator extends BaseValidator {
 		}
 	}
 
+	//TODO: allow required and required answer to be validated together
+
 	validate(questionObj: OptionsQuestion) {
 		return body(questionObj.fieldName)
 			.custom((value) => {
