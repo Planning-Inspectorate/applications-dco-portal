@@ -60,25 +60,47 @@ export class GovNotifyClient {
 		this.logger.info('Anti virus failed email template successfully dispatched');
 	}
 
+	// example usage:
+	// const adminUsers = await db.whitelistUser.findMany({
+	// 			where: {
+	// 				caseId: caseData.id,
+	// 				userRoleId: WHITELIST_USER_ROLE_ID.ADMIN_USER
+	// 			}
+	// 		});
+	// await Promise.all(
+	// 			adminUsers.map((adminUser) =>
+	// 				notifyClient?.sendApplicantSubmissionNotification(
+	// 					adminUser.email,
+	// 					caseReference,
+	// 					Buffer.alloc(10) //TODO: replace with generated pdf
+	// 				)
+	// 			)
+	// 		);
 	async sendApplicantSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching applicant data submission email template');
 		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
 			personalisation: {
 				number_of_days: '28',
 				case_reference_number: caseReference,
-				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: 'dco-portal-sub.pdf' }), //TODO: update pdf link once pdf is created and saved in blob store
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }), //TODO: update pdf link once pdf is created and saved in blob store
 				relevant_team_email_address: TEAM_EMAIL_ADDRESS
 			}
 		});
 		this.logger.info('Applicant data submission email template successfully dispatched');
 	}
 
+	// example usage:
+	// await notifyClient?.sendPinsStaffSubmissionNotification(
+	// 			caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
+	// 			caseReference,
+	// 			Buffer.alloc(10) //TODO: replace with generated pdf
+	// 		);
 	async sendPinsStaffSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching Planning Inspectorate staff data submission email template');
 		await this.sendEmail(this.#templateIds.pinsStaffSubmissionNotification as string, email, {
 			personalisation: {
 				case_reference_number: caseReference,
-				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: 'dco-portal-sub.pdf' }) //TODO: update pdf link once pdf is created and saved in blob store
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }) //TODO: update pdf link once pdf is created and saved in blob store
 			}
 		});
 		this.logger.info('Planning Inspectorate staff data submission email template successfully dispatched');

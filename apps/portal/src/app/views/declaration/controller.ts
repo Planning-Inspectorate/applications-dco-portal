@@ -173,29 +173,6 @@ export function buildSubmitDeclaration({
 			}
 		});
 
-		const adminUsers = await db.whitelistUser.findMany({
-			where: {
-				caseId: caseData.id,
-				userRoleId: WHITELIST_USER_ROLE_ID.ADMIN_USER
-			}
-		});
-
-		await Promise.all(
-			adminUsers.map((adminUser) =>
-				notifyClient?.sendApplicantSubmissionNotification(
-					adminUser.email,
-					caseReference,
-					Buffer.alloc(10) //TODO: replace with generated pdf
-				)
-			)
-		);
-
-		await notifyClient?.sendPinsStaffSubmissionNotification(
-			caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-			caseReference,
-			Buffer.alloc(10) //TODO: replace with generated pdf
-		);
-
 		return res.redirect('/application-complete');
 	};
 }

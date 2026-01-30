@@ -160,7 +160,7 @@ describe(`gov-notify-client`, () => {
 						pdfLink: {
 							confirm_email_before_download: null,
 							file: 'AAAAAAAAAAAAAA==',
-							filename: 'dco-portal-sub.pdf',
+							filename: 'EN123456 application form.pdf',
 							retention_period: null
 						},
 						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
@@ -188,7 +188,7 @@ describe(`gov-notify-client`, () => {
 						pdfLink: {
 							confirm_email_before_download: null,
 							file: 'AAAAAAAAAAAAAA==',
-							filename: 'dco-portal-sub.pdf',
+							filename: 'EN123456 application form.pdf',
 							retention_period: null
 						}
 					}
