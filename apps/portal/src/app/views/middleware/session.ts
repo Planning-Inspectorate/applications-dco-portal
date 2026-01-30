@@ -164,3 +164,17 @@ export function hasApplicationBeenSubmittedMiddleware({ db }: PortalService) {
 		res.redirect('/');
 	};
 }
+
+export function canViewApplicationCompletePageMiddleware({ db }: PortalService) {
+	return async (req: Request, res: Response, next: NextFunction) => {
+		const caseData = await db.case.findUnique({
+			where: { reference: req.session.caseReference }
+		});
+
+		if (caseData?.submissionDate !== null) {
+			return next();
+		}
+
+		res.redirect('/');
+	};
+}

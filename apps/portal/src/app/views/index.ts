@@ -24,7 +24,11 @@ import { buildHomePage } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 import { buildSignOutController } from './sign-out/controller.ts';
-import { cleanupSessionJourneyMiddleware, hasApplicationBeenSubmittedMiddleware } from './middleware/session.ts';
+import {
+	canViewApplicationCompletePageMiddleware,
+	cleanupSessionJourneyMiddleware,
+	hasApplicationBeenSubmittedMiddleware
+} from './middleware/session.ts';
 import {
 	buildApplicationCompletePage,
 	buildDeclarationPage,
@@ -48,6 +52,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const whitelistMiddleware = buildWhitelistMiddleware(service);
 	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
 	const hasApplicationBeenSubmitted = hasApplicationBeenSubmittedMiddleware(service);
+	const canViewApplicationCompletePage = canViewApplicationCompletePageMiddleware(service);
 
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
@@ -56,7 +61,7 @@ export function createRoutes(service: PortalService): IRouter {
 	router.post('/position-in-organisation', asyncHandler(savePositionInOrganisation));
 	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
 	router.post('/declaration', asyncHandler(submitDeclaration));
-	router.get('/application-complete', hasApplicationBeenSubmitted, asyncHandler(applicationCompletePage));
+	router.get('/application-complete', canViewApplicationCompletePage, asyncHandler(applicationCompletePage));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 
