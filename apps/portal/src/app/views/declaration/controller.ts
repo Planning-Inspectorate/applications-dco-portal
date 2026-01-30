@@ -63,7 +63,12 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration({
+	db,
+	logger,
+	blobStore,
+	pdfServiceClient
+}: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
 
@@ -87,6 +92,70 @@ export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService)
 		} catch (error) {
 			logger.error({ error }, 'error moving case documents to back office container in blob store');
 			throw new Error('error moving documents during case submission');
+		}
+
+		//skip pdf generation if required services not configured
+		if (pdfServiceClient && blobStore) {
+			try {
+				const caseData = await db.case.findUnique({
+					where: { reference: req.session.caseReference },
+					include: {
+						SupportingEvidence: {
+							include: { Document: true }
+						},
+						ApplicantDetails: {
+							include: { Address: true }
+						},
+						AgentDetails: {
+							include: { Address: true }
+						},
+						CasePaymentMethod: true,
+						ProjectSingleSite: true,
+						ProjectLinearSite: true,
+						NonOffshoreGeneratingStation: true,
+						OffshoreGeneratingStation: true,
+						HighwayRelatedDevelopment: true,
+						RailwayDevelopment: true,
+						HarbourFacilities: true,
+						Pipelines: true,
+						HazardousWasteFacility: true,
+						DamOrReservoir: true
+					}
+				});
+				if (!caseData?.anticipatedDateOfSubmission)
+					throw new Error('anticipated date of submission is missing from case data');
+
+				const dcoApplicationData = mapCaseToDcoApplication(caseData);
+				res.render(
+					'views/layouts/application-pdf.njk',
+					{
+						dcoApplicationData
+					},
+					async (error, html) => {
+						if (error) {
+							throw error;
+						}
+						const pdfHtml = await addCSStoHtml(html, 'main.min.css');
+						const pdf = await pdfServiceClient.generatePdf(pdfHtml);
+
+						if (!Buffer.isBuffer(pdf) || pdf.length === 0) {
+							throw new Error('PDF generation returned an invalid or empty buffer');
+						}
+
+						const blobName = getPdfBlobName(req.session.caseReference as string, caseData.anticipatedDateOfSubmission!);
+						try {
+							await blobStore.deleteBlobIfExists(blobName);
+						} catch {
+							logger.info('no existing pdf to delete prior to upload');
+						}
+
+						await blobStore.upload(pdf, 'application/pdf', blobName);
+					}
+				);
+			} catch (error) {
+				logger.error({ error }, 'error generating pdf document from submission data');
+				throw new Error('error generating pdf document from submission data');
+			}
 		}
 
 		await db.case.update({
@@ -118,58 +187,47 @@ export function buildApplicationCompletePage({ db }: PortalService): AsyncReques
 	};
 }
 
-export function buildDownloadApplicationPdf({ db, logger, pdfServiceClient }: PortalService): AsyncRequestHandler {
+export function buildDownloadApplicationPdf({ blobStore, db, logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
+		const caseReference = req.session.caseReference;
+		let blobName;
 		try {
 			const caseData = await db.case.findUnique({
-				where: { reference: req.session.caseReference },
-				include: {
-					SupportingEvidence: {
-						include: { Document: true }
-					},
-					ApplicantDetails: {
-						include: { Address: true }
-					},
-					AgentDetails: {
-						include: { Address: true }
-					},
-					CasePaymentMethod: true,
-					ProjectSingleSite: true,
-					ProjectLinearSite: true,
-					NonOffshoreGeneratingStation: true,
-					OffshoreGeneratingStation: true,
-					HighwayRelatedDevelopment: true,
-					RailwayDevelopment: true,
-					HarbourFacilities: true,
-					Pipelines: true,
-					HazardousWasteFacility: true,
-					DamOrReservoir: true
-				}
+				where: { reference: req.session.caseReference }
 			});
-			if (!pdfServiceClient) throw new Error('pdf service client not configured');
-			if (!caseData) throw new Error('case data for submission not found');
+			if (!blobStore) throw new Error('blob store not configured');
+			if (!caseData?.anticipatedDateOfSubmission) throw new Error('anticipated submission date not found');
 
-			const dcoApplicationData = mapCaseToDcoApplication(caseData);
-			return res.render(
-				'views/layouts/application-pdf.njk',
-				{
-					dcoApplicationData
-				},
-				async (error, html) => {
-					if (error) {
-						throw error;
-					}
-					const pdfHtml = await addCSStoHtml(html, 'main.min.css');
-					const pdf = await pdfServiceClient.generatePdf(pdfHtml);
+			blobName = getPdfBlobName(caseReference as string, caseData.anticipatedDateOfSubmission);
+			const downloadResponse = await blobStore.downloadBlob(blobName);
+			if (!downloadResponse) throw new Error('pdf blob not found');
 
-					res.set('Content-disposition', `attachment; filename="dco-application-${req.session.caseReference}.pdf"`);
-					res.set('Content-type', 'application/pdf');
-					return res.send(pdf);
+			res.setHeader('Content-Type', downloadResponse.contentType || 'application/octet-stream');
+			res.setHeader('Content-Length', downloadResponse.contentLength || 0);
+			res.setHeader('Content-Disposition', `inline; filename="${blobName}"`);
+
+			const downloadStream = downloadResponse.readableStreamBody;
+
+			downloadStream?.on('error', (err) => {
+				if (err?.name === 'AbortError') {
+					logger.debug({ caseReference }, 'file download cancelled');
+				} else {
+					logger.error({ err, caseReference }, 'file download stream error');
 				}
-			);
+				res.destroy(err);
+			});
+
+			downloadStream?.pipe(res);
 		} catch (error) {
-			logger.error({ error }, 'error generating pdf document from submission data');
-			throw new Error('error generating pdf document from submission data');
+			logger.error({ error, blobName }, `Error downloading pdf submission file: ${blobName} from Blob store`);
+			throw new Error('Failed to download pdf file from blob store');
 		}
 	};
+}
+
+function getPdfBlobName(caseReference: string, anticipatedDateOfSubmission: Date): string {
+	if (!caseReference || !anticipatedDateOfSubmission) throw new Error('Case reference or anticipated date ');
+	const normalisedAnticipatedDateOfSubmission = new Date(anticipatedDateOfSubmission as Date);
+	normalisedAnticipatedDateOfSubmission.setHours(0, 0, 0, 0);
+	return `${caseReference}/data-submissions/${normalisedAnticipatedDateOfSubmission.toISOString().slice(0, 10)}-submission.pdf`;
 }
