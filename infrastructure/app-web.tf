@@ -139,7 +139,7 @@ resource "azurerm_key_vault_secret" "web_session_secret" {
 }
 
 resource "azurerm_servicebus_topic" "dco_portal_data_submissions_project" {
-  name                = var.sb_topic_names.applications.events.dco_portal_data_submissions_project
+  name                = var.sb_topic_names.dco_portal_data_submissions_project
   namespace_id        = data.azurerm_servicebus_namespace.back_office_sb.id
   default_message_ttl = var.sb_ttl.default
 }
