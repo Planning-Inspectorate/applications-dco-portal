@@ -51,8 +51,7 @@ variable "apps_config" {
     })
 
     service_bus_publish_event = object({
-      disabled                        = bool
-      data_submissions_topic_hostname = string
+      disabled = bool
     })
   })
 }
@@ -150,17 +149,19 @@ variable "sql_config" {
 variable "sb_topic_names" {
   description = "Service bus topic names"
   type = object({
-    service_user = string
-    nsip_project = string
+    service_user                        = string
+    nsip_project                        = string
+    dco_portal_data_submissions_project = string
   })
 }
 
 variable "sb_ttl" {
   description = "Service bus TTL settings"
   type = object({
-    default      = string
-    service_user = string
-    nsip_project = string
+    default                             = string
+    service_user                        = string
+    nsip_project                        = string
+    dco_portal_data_submissions_project = string
   })
 }
 

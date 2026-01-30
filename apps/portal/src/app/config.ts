@@ -41,7 +41,7 @@ export function loadConfig(): Config {
 		ENABLE_E2E_TEST_ENDPOINTS,
 		TEST_TOOLS_TOKEN,
 		SERVICE_BUS_PUBLISH_EVENT_DISABLED,
-		DATA_SUBMISSIONS_TOPIC_HOSTNAME
+		DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_TOPIC
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
@@ -138,7 +138,7 @@ export function loadConfig(): Config {
 		httpPort: httpPort,
 		serviceBus: {
 			disabled: SERVICE_BUS_PUBLISH_EVENT_DISABLED === 'true',
-			hostname: DATA_SUBMISSIONS_TOPIC_HOSTNAME || ''
+			hostname: process.env.ServiceBusConnection__fullyQualifiedNamespace || ''
 		},
 		session: {
 			redisPrefix: 'portal:',

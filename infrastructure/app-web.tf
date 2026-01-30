@@ -96,9 +96,10 @@ module "app_portal" {
     # todo: remove once cbos integration is complete
     CASE_WHITELIST = local.key_vault_refs["dcop-case-whitelist"]
 
-    # service bus topic publish events
-    SERVICE_BUS_PUBLISH_EVENT_DISABLED = var.apps_config.service_bus_publish_event.disabled
-    DATA_SUBMISSIONS_TOPIC_HOSTNAME    = var.apps_config.service_bus_publish_event.data_submissions_topic_hostname
+    # service bus
+    ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
+    SERVICE_BUS_PUBLISH_EVENT_DISABLED            = var.apps_config.service_bus_publish_event.disabled
+    DCO_PORTAL_DATA_SUBMISSIONS_PROJECT_TOPIC     = data.azurerm_servicebus_topic.dco_portal_data_submissions_project.name
   }
 
   providers = {
@@ -135,4 +136,10 @@ resource "azurerm_key_vault_secret" "web_session_secret" {
   content_type = "session-secret"
 
   tags = local.tags
+}
+
+resource "azurerm_servicebus_topic" "dco_portal_data_submissions_project" {
+  name                = var.sb_topic_names.applications.events.dco_portal_data_submissions_project
+  namespace_id        = data.azurerm_servicebus_namespace.back_office_sb.id
+  default_message_ttl = var.sb_ttl.default
 }
