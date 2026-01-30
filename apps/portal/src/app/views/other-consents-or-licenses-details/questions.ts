@@ -20,7 +20,7 @@ export function getQuestions() {
 			question: 'Does the project require other consents or licences?',
 			fieldName: 'hasOtherConsents',
 			url: 'has-other-consents',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project requires other consents or licences')]
 		},
 		otherConsentsDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -31,9 +31,16 @@ export function getQuestions() {
 			fieldName: 'otherConsentsDescription',
 			url: 'other-consents-description',
 			validators: [
+				new RequiredValidator('Enter the consents and licences needed by the project'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Consents and licences description must be 2000 characters or less'
+					},
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Consents and licences description must be 2 characters or more'
+					}
 				})
 			]
 		},
@@ -44,7 +51,7 @@ export function getQuestions() {
 			question: 'Which documents identify the other consents or licences?',
 			fieldName: 'otherConsentsDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSENTS_AND_LICENCES_REQUIRED_UNDER_OTHER_LEGISLATION,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the other consents and licences')]
 		}
 	};
 
