@@ -7,10 +7,9 @@ import {
 } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
-import { SCAN_RESULT_ID, WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/service-bus-event-client.ts';
-import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -69,7 +68,6 @@ export function buildSubmitDeclaration({
 	db,
 	logger,
 	blobStore,
-	notifyClient,
 	serviceBusEventClient
 }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
