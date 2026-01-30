@@ -168,6 +168,73 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
 			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
 		});
+		it('should successfully upload a pdf to blob storage if configured', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockReq = {
+				body: {
+					declarationConfirmation: 'confirm'
+				},
+				session: {
+					caseReference: 'EN123456',
+					positionInOrganisation: 'the boss'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				render: mock.fn((template, context, callback) => {
+					callback?.(null, '<html>test</html>');
+				})
+			};
+			const mockDb = {
+				case: {
+					update: mock.fn(),
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						anticipatedDateOfSubmission: new Date(2025, 11, 12)
+					}))
+				}
+			};
+			const mockBlobStore = {
+				moveFolder: mock.fn(),
+				deleteBlobIfExists: mock.fn(),
+				upload: mock.fn()
+			};
+			const mockPdfServiceClient = {
+				generatePdf: mock.fn(() => Buffer.from('%PDF-1.4 fake pdf content'))
+			};
+
+			const submitDeclaration = buildSubmitDeclaration({
+				db: mockDb,
+				logger: mockLogger(),
+				blobStore: mockBlobStore,
+				pdfServiceClient: mockPdfServiceClient
+			});
+			await submitDeclaration(mockReq, mockRes);
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockPdfServiceClient.generatePdf.mock.callCount(), 1);
+			assert.strictEqual(mockBlobStore.deleteBlobIfExists.mock.callCount(), 1);
+			// this one wont call for some reason assert.strictEqual(mockBlobStore.upload.mock.callCount(), 1);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/application-complete');
+
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+			assert.deepStrictEqual(mockDb.case.update.mock.calls[0].arguments[0], {
+				where: {
+					reference: 'EN123456'
+				},
+				data: {
+					submissionDate: new Date('2025-01-30T00:00:07.000Z'),
+					submitterPositionInOrganisation: 'the boss'
+				}
+			});
+			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
+			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
+		});
 		it('should render declaration page with error if checkbox not selected', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });

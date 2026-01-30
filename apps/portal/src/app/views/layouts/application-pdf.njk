@@ -1,0 +1,68 @@
+{% extends "govuk/template.njk" %}
+{% import "./components/core/application-row.njk" as macros %}
+
+{% block head %}
+	<meta name="referrer" content="origin">
+{% endblock %}
+
+{% block pageTitle %}
+	DCO Application Form - {{ dcoApplicationData.caseReference }}
+{% endblock %}
+
+<header role="banner">
+	<div class="pins-header">
+		<div class="govuk-header__container pins-header__container govuk-width-container">
+			<div class="govuk-header__logo">
+				<span class="govuk-header__logotype">
+					{% include "views/layouts/components/core/pins-dual-logo.njk" %}
+				</span>
+			</div>
+		</div>
+	</div>
+</header>
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl">
+                DCO Application Form - {{ dcoApplicationData.caseReference }}
+            </h1>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Your Application
+            </h2>
+        </div>
+    </div>
+    {% for key, row in dcoApplicationData.application %}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-one-third">
+                <h2 class="govuk-heading-l">
+                    {{ row.name }}
+                </h2>
+            </div>
+        </div>
+        {% for subKey, subRow in row.data %}
+            {{ macros.applicationRow(subRow) }}
+        {% endfor %}
+    {% endfor %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h2 class="govuk-heading-l">
+                Your Documents
+            </h2>
+        </div>
+    </div>
+    {% for key, value in dcoApplicationData.documents %}
+        {% set document = {name: key, value: value} %}
+        {{ macros.applicationRow(document) }}
+    {% endfor %}
+
+{% endblock %}
+
+{% block footer %}
+	{% include "views/layouts/components/core/footer.njk" %}
+{% endblock %}
