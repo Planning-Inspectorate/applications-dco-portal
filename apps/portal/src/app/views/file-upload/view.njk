@@ -15,33 +15,41 @@
                         {{ pageTitle }}
                     </h2>
                     <h3 class="govuk-heading-m">Documents uploaded</h3>
+                    {% set headers = [
+                        {
+                            text: 'Document'
+                        },
+                        {
+                            text: 'Document type'
+                        },
+                        {
+                            text: 'APFP regulation'
+                        },
+                        {
+                            text: 'Certification'
+                        },
+                        {
+                            text: 'Date uploaded'
+                        },
+                        {
+                            text: 'Remove'
+                        }
+                    ] %}
                     {% if documents.length > 0 %}
-                        {% set headers = [
-                            {
-                                text: 'Document'
-                            },
-                            {
-                                text: 'Document type'
-                            },
-                            {
-                                text: 'APFP regulation'
-                            },
-                            {
-                                text: 'Certification'
-                            },
-                            {
-                                text: 'Date uploaded'
-                            },
-                            {
-                                text: 'Remove'
-                            }
-                        ] %}
                         {{ govukTable({
                             head: headers,
                             rows: documents
                         }) }}
                     {% else %}
                         <p class="govuk-body">This category contains 0 document(s).</p>
+                    {% endif %}
+
+                    {% if affectedDocuments.length > 0 %}
+                        <h3 class="govuk-heading-m">You must remove these documents</h3>
+                        {{ govukTable({
+                            head: headers,
+                            rows: affectedDocuments
+                        }) }}
                     {% endif %}
 
                     {% if showUploadButton %}
