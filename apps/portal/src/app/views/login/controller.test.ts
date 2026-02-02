@@ -253,6 +253,7 @@ describe('login controllers', () => {
 				sendOneTimePasswordNotification: mock.fn()
 			};
 			const mockReq = {
+				baseUrl: '/login',
 				body: {
 					emailAddress: 'invalid.com'
 				}
@@ -266,18 +267,18 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				pageTitle: 'Sign-in',
-				backLinkUrl: 'undefined/application-reference-number',
+				backLinkUrl: '/login/application-reference-number',
 				caseReferenceHintText:
 					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
 				caseReferenceQuestionText: 'Application reference number',
 				emailQuestionText: 'Email address',
 				errors: {
-					emailAddress: { msg: 'Invalid email address' },
-					caseReference: { msg: 'You must provide a valid case reference' }
+					emailAddress: { msg: 'Enter a valid email address' },
+					caseReference: { msg: 'Enter a valid application reference number' }
 				},
 				errorSummary: [
-					{ text: 'Invalid email address', href: '#emailAddress' },
-					{ text: 'You must provide a valid case reference', href: '#caseReference' }
+					{ text: 'Enter a valid email address', href: '#emailAddress' },
+					{ text: 'Enter a valid application reference number', href: '#caseReference' }
 				]
 			});
 
@@ -288,6 +289,7 @@ describe('login controllers', () => {
 				sendOneTimePasswordNotification: mock.fn()
 			};
 			const mockReq = {
+				baseUrl: '/login',
 				body: {
 					emailAddress: 'invalid.com',
 					caseReference: 'EN123456'
@@ -302,15 +304,17 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				pageTitle: 'Sign-in',
-				backLinkUrl: 'undefined/application-reference-number',
+				backLinkUrl: '/login/application-reference-number',
 				caseReferenceHintText:
 					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
 				caseReferenceQuestionText: 'Application reference number',
 				emailQuestionText: 'Email address',
 				errors: {
-					emailAddress: { msg: 'Invalid email address' }
+					emailAddress: { msg: 'Enter an email address in the correct format, like name@example.com' }
 				},
-				errorSummary: [{ text: 'Invalid email address', href: '#emailAddress' }]
+				errorSummary: [
+					{ text: 'Enter an email address in the correct format, like name@example.com', href: '#emailAddress' }
+				]
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
@@ -320,6 +324,7 @@ describe('login controllers', () => {
 				sendOneTimePasswordNotification: mock.fn()
 			};
 			const mockReq = {
+				baseUrl: '/login',
 				body: {
 					emailAddress: 'valid@email.com',
 					caseReference: 'EN12345678'
@@ -334,13 +339,13 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/email.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				pageTitle: 'Sign-in',
-				backLinkUrl: 'undefined/application-reference-number',
+				backLinkUrl: '/login/application-reference-number',
 				caseReferenceHintText:
 					'You can find this in the email inviting you to sign in to this service. For example, EN012345',
 				caseReferenceQuestionText: 'Application reference number',
 				emailQuestionText: 'Email address',
-				errors: { caseReference: { msg: 'You must provide a valid case reference' } },
-				errorSummary: [{ text: 'You must provide a valid case reference', href: '#caseReference' }]
+				errors: { caseReference: { msg: 'Enter an application reference number in the correct format' } },
+				errorSummary: [{ text: 'Enter an application reference number in the correct format', href: '#caseReference' }]
 			});
 
 			assert.strictEqual(mockNotifyClient.sendOneTimePasswordNotification.mock.callCount(), 0);
@@ -474,7 +479,15 @@ describe('login controllers', () => {
 	describe('buildEnterOtpPage', () => {
 		it('should render enter otp page with view data', async () => {
 			const mockReq = {
-				baseUrl: '/login'
+				baseUrl: '/login',
+				session: {
+					cases: {
+						EN123456: {
+							showNewCodeMessage: true
+						}
+					},
+					caseReference: 'EN123456'
+				}
 			};
 			const mockRes = { render: mock.fn() };
 
@@ -485,12 +498,16 @@ describe('login controllers', () => {
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
-				backLinkUrl: '/login/sign-in'
+				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: true
 			});
 		});
 		it('should render enter otp page with errors if in view data', async () => {
 			const mockReq = {
-				baseUrl: '/login'
+				baseUrl: '/login',
+				session: {
+					caseReference: 'EN123456'
+				}
 			};
 			const mockRes = { render: mock.fn() };
 			const viewData = {
@@ -506,6 +523,7 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
 				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: false,
 				errors: { otpCode: { msg: 'Error message' } },
 				errorSummary: [{ text: 'Error message', href: '#otpCode' }]
 			});
@@ -1083,8 +1101,9 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
 				backLinkUrl: '/login/sign-in',
-				errors: { otpCode: { msg: 'Provided OTP does not match stored OTP' } },
-				errorSummary: [{ text: 'Provided OTP does not match stored OTP', href: '#otpCode' }]
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'Enter the code we sent to your email address' } },
+				errorSummary: [{ text: 'Enter the code we sent to your email address', href: '#otpCode' }]
 			});
 		});
 		it('should redirect back to enter email page if email address and case reference not in session', async (ctx) => {
@@ -1141,13 +1160,25 @@ describe('login controllers', () => {
 					caseReference: 'EN123456'
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = { render: mock.fn() };
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/request-new-code');
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				questionText: 'Enter the code we sent to your email address',
+				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'This code has expired. Get a new code' } },
+				errorSummary: [
+					{
+						text: 'This code has expired. Get a new code',
+						href: '/login/request-new-code'
+					}
+				]
+			});
 		});
 		it('should redirect to request new code number of attempts is equal to 4', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
@@ -1174,13 +1205,25 @@ describe('login controllers', () => {
 					caseReference: 'EN123456'
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = { render: mock.fn() };
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/request-new-code');
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				questionText: 'Enter the code we sent to your email address',
+				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'This code has expired. Get a new code' } },
+				errorSummary: [
+					{
+						text: 'This code has expired. Get a new code',
+						href: '/login/request-new-code'
+					}
+				]
+			});
 		});
 		it('should redirect back to enter otp page if record not returned from db', async () => {
 			const mockDb = {
@@ -1198,13 +1241,25 @@ describe('login controllers', () => {
 					caseReference: 'EN123456'
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = { render: mock.fn() };
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/request-new-code');
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				questionText: 'Enter the code we sent to your email address',
+				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'This code has expired. Get a new code' } },
+				errorSummary: [
+					{
+						text: 'This code has expired. Get a new code',
+						href: '/login/request-new-code'
+					}
+				]
+			});
 		});
 		it('should redirect back to enter otp page if the otp has expired', async (ctx) => {
 			const now = new Date('2025-01-30T00:05:00.000Z');
@@ -1230,13 +1285,25 @@ describe('login controllers', () => {
 					caseReference: 'EN123456'
 				}
 			};
-			const mockRes = { redirect: mock.fn() };
+			const mockRes = { render: mock.fn() };
 
 			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger() });
 			await controller(mockReq, mockRes);
 
-			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/login/request-new-code');
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/login/otp.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				questionText: 'Enter the code we sent to your email address',
+				backLinkUrl: '/login/sign-in',
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'This code has expired. Get a new code' } },
+				errorSummary: [
+					{
+						text: 'This code has expired. Get a new code',
+						href: '/login/request-new-code'
+					}
+				]
+			});
 		});
 		it('should redirect back to enter otp page when otp code contains numbers', async () => {
 			const mockDb = {
@@ -1265,8 +1332,9 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
 				backLinkUrl: '/login/sign-in',
-				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
-				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'Enter the code we sent to your email address' } },
+				errorSummary: [{ text: 'Enter the code we sent to your email address', href: '#otpCode' }]
 			});
 		});
 		it('should redirect back to enter otp page when otp code is empty', async () => {
@@ -1295,8 +1363,9 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
 				backLinkUrl: '/login/sign-in',
-				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
-				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'Enter the code we sent to your email address' } },
+				errorSummary: [{ text: 'Enter the code we sent to your email address', href: '#otpCode' }]
 			});
 		});
 		it('should redirect back to enter otp page when otp code is longer than 5 chars', async () => {
@@ -1325,8 +1394,9 @@ describe('login controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				questionText: 'Enter the code we sent to your email address',
 				backLinkUrl: '/login/sign-in',
-				errors: { otpCode: { msg: 'Provided OTP failed validation' } },
-				errorSummary: [{ text: 'Provided OTP failed validation', href: '#otpCode' }]
+				showNewCodeMessage: false,
+				errors: { otpCode: { msg: 'Enter the code we sent to your email address' } },
+				errorSummary: [{ text: 'Enter the code we sent to your email address', href: '#otpCode' }]
 			});
 		});
 	});

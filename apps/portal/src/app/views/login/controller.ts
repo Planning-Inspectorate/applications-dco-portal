@@ -16,6 +16,7 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapNsipProjectToCase, mapNsipServiceUserToCase } from './mappers.ts';
+import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -37,7 +38,7 @@ export function buildSubmitHasApplicationReference({ logger }: PortalService): A
 			logger.info({ hasReferenceNumber }, 'no value provided for hasReferenceNumber');
 
 			req.body.errors = {
-				hasReferenceNumber: { msg: 'You must select an answer' }
+				hasReferenceNumber: { msg: 'Select yes if you have an application reference number' }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
@@ -94,17 +95,25 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 
 		if (!isValidEmailAddress(emailAddress) && !isValidCaseReference(caseReference)) {
 			return handleError({
-				emailAddress: 'Invalid email address',
-				caseReference: 'You must provide a valid case reference'
+				emailAddress: 'Enter a valid email address',
+				caseReference: 'Enter a valid application reference number'
 			});
 		}
 
+		if (!emailAddress) {
+			return handleError({ emailAddress: 'Enter an email address' });
+		}
+
 		if (!isValidEmailAddress(emailAddress)) {
-			return handleError({ emailAddress: 'Invalid email address' });
+			return handleError({ emailAddress: 'Enter an email address in the correct format, like name@example.com' });
+		}
+
+		if (!caseReference) {
+			return handleError({ caseReference: 'Enter an application reference number' });
 		}
 
 		if (!isValidCaseReference(caseReference)) {
-			return handleError({ caseReference: 'You must provide a valid case reference' });
+			return handleError({ caseReference: 'Enter an application reference number in the correct format' });
 		}
 
 		const [serviceUser, whitelistUser] = await Promise.all([
@@ -158,9 +167,13 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
  */
 export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
+		const showNewCodeMessage = readSessionData(req, req.session.caseReference as string, 'showNewCodeMessage', false);
+		clearSessionData(req, req.session.caseReference as string, 'showNewCodeMessage');
+
 		return res.render('views/login/otp.njk', {
 			questionText: 'Enter the code we sent to your email address',
 			backLinkUrl: `${req.baseUrl}/sign-in`,
+			showNewCodeMessage,
 			...viewData
 		});
 	};
@@ -198,17 +211,34 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 		const otpRecord = await getOtpRecord(db, emailAddress, caseReference);
 
 		if (!isValidOtpCode(otpCode)) {
-			return handleOtpError('Provided OTP failed validation');
+			return handleOtpError('Enter the code we sent to your email address');
 		}
 
 		if (!isValidOtpRecord(otpRecord)) {
-			return res.redirect(`${req.baseUrl}/request-new-code`);
+			const message = 'This code has expired. Get a new code';
+			req.body.errors = {
+				otpCode: { msg: 'This code has expired. Get a new code' }
+			};
+			req.body.errorSummary = [
+				{
+					text: message,
+					href: `${req.baseUrl}/request-new-code`
+				}
+			];
+
+			logger.info({ otpCode, emailAddress }, message);
+
+			const enterOtpPage = buildEnterOtpPage({
+				errors: req.body.errors,
+				errorSummary: req.body.errorSummary
+			});
+			return enterOtpPage(req, res);
 		}
 
 		const isMatch = await bcrypt.compare(otpCode.trim().toUpperCase(), otpRecord?.hashedOtpCode);
 		if (!isMatch) {
 			await incrementOtpAttempts(db, emailAddress, caseReference);
-			return handleOtpError('Provided OTP does not match stored OTP');
+			return handleOtpError('Enter the code we sent to your email address');
 		}
 
 		await deleteOtp(db, emailAddress, caseReference);
@@ -323,6 +353,7 @@ export function buildSubmitNewCodeRequestController({ db, notifyClient }: Portal
 			const oneTimePassword = generateOtp();
 			await saveOtp(db, emailAddress, caseReference, oneTimePassword);
 			await notifyClient?.sendOneTimePasswordNotification(emailAddress, { oneTimePassword });
+			addSessionData(req, req.session.caseReference as string, { showNewCodeMessage: true });
 			return res.redirect(`${req.baseUrl}/enter-code`);
 		}
 		res.redirect(`${req.baseUrl}/sign-in`);
