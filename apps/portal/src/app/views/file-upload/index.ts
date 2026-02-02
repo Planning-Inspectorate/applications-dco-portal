@@ -5,7 +5,8 @@ import type { IRouter } from 'express';
 import {
 	buildDeleteDocumentAndSaveController,
 	buildDownloadDocumentController,
-	buildFileUploadHomePage
+	buildFileUploadHomePage,
+	isFileUploadSectionCompletedController
 } from './controller.ts';
 import { uploadDocumentQuestion } from '../middleware/file-upload-middleware.ts';
 import { createJourney } from './journey.ts';
@@ -24,7 +25,7 @@ import validate from '@planning-inspectorate/dynamic-forms/src/validator/validat
 // @ts-expect-error - due to not having @types
 import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
 import type { Handler, Request } from 'express';
-import { getDocumentCategoryDisplayName, buildIsTaskCompleted } from '../util.ts';
+import { getDocumentCategoryDisplayName } from '../util.ts';
 import { buildSaveController } from './save.ts';
 import multer from 'multer';
 import {
@@ -46,7 +47,7 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 	const getJourneyResponse = buildGetJourneyResponseFromSession(documentTypeId);
 
 	const fileUploadHomePage = buildFileUploadHomePage(service, documentTypeId);
-	const isFileUploadSectionCompleted = buildIsTaskCompleted(service, documentTypeId, buildFileUploadHomePage);
+	const isFileUploadSectionCompleted = isFileUploadSectionCompletedController(service, documentTypeId);
 	const saveController = buildSaveController(service, documentTypeId);
 	const downloadDocumentController = buildDownloadDocumentController(service);
 	const deleteDocumentAndSaveController = buildDeleteDocumentAndSaveController(service, documentTypeId);
