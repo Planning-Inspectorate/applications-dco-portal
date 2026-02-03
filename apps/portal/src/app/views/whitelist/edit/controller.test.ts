@@ -223,7 +223,7 @@ describe('whitelist edit user controller', () => {
 				EN123456: {
 					whitelistError: [
 						{
-							text: 'You are trying to assign admin rights to a user when there are already a maximum of 3',
+							text: 'There can only be 3 admins, select standard or change another user’s access level',
 							href: '#'
 						}
 					]
