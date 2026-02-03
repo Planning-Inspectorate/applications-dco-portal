@@ -20,7 +20,7 @@ export function getQuestions() {
 			fieldName: 'accessLevel',
 			url: 'access-level',
 			options: referenceDataToRadioOptionsWithHintText(USER_ROLES),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select standard or admin access level')]
 		}
 	};
 

@@ -21,11 +21,11 @@ export function getQuestions() {
 			fieldName: 'emailAddress',
 			url: 'email-address',
 			validators: [
-				new RequiredValidator(),
+				new RequiredValidator('Enter an email address'),
 				new StringValidator({
 					regex: {
 						regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-						regexMessage: 'Please enter a valid email address'
+						regexMessage: 'Enter an email address in the correct format, like name@example.com'
 					}
 				})
 			]
@@ -39,7 +39,7 @@ export function getQuestions() {
 			fieldName: 'accessLevel',
 			url: 'access-level',
 			options: referenceDataToRadioOptionsWithHintText(USER_ROLES),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select standard or admin access level')]
 		}
 	};
 
