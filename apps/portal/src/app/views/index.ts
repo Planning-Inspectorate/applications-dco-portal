@@ -20,7 +20,7 @@ import { createRoutes as whitelistRoutes } from './whitelist/index.ts';
 import { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
-import { buildHomePage } from './home/controller.ts';
+import { buildHomePage, buildSubmitHomePageController } from './home/controller.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 import { buildSignOutController } from './sign-out/controller.ts';
@@ -41,6 +41,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const homePageController = buildHomePage(service);
+	const submitHomePageController = buildSubmitHomePageController(service);
 	const signOutController = buildSignOutController(service);
 
 	const positionInOrganisationPage = buildPositionInOrganisationPage();
@@ -55,6 +56,7 @@ export function createRoutes(service: PortalService): IRouter {
 	const canViewApplicationCompletePage = canViewApplicationCompletePageMiddleware(service);
 
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
+	router.post('/', asyncHandler(submitHomePageController));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
 
 	router.get('/position-in-organisation', hasApplicationBeenSubmitted, asyncHandler(positionInOrganisationPage));

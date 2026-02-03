@@ -37,17 +37,19 @@
 
       {% if not hasCaseBeenSubmitted %}
           {{ submissionText | safe }}
-          {% if warningText %}
-            {{ govukWarningText({
-                text: warningText,
-                iconFallbackText: "Warning"
-            }) }}
-          {% endif %}
+          {{ govukWarningText({
+              text: warningText,
+              iconFallbackText: "Warning"
+          }) }}
+          {{ submissionInformation | safe }}
           {% if enableSubmissionButton %}
-            {{ govukButton({
-                text: "Submit",
-                href: "/position-in-organisation"
-            }) }}
+            <form action="" method="post" novalidate>
+                <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                {{ govukButton({
+                    text: "Submit",
+                    type: "submit"
+                }) }}
+            </form>
           {% endif %}
       {% endif %}
     </div>
