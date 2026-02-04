@@ -33,7 +33,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.HAS_ADDITIONAL_INFORMATION_HTML,
 			fieldName: 'hasAdditionalInformation',
 			url: 'additional-information',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if additional information is required')]
 		},
 		additionalInformationDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -43,9 +43,16 @@ export function getQuestions() {
 			fieldName: 'additionalInformationDescription',
 			url: 'additional-information-description',
 			validators: [
+				new RequiredValidator('Enter the additional information description'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Additional information description must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Additional information description must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -58,7 +65,7 @@ export function getQuestions() {
 			fieldName: 'additionalInformationDocuments',
 			url: 'additional-information-documents',
 			options: referenceDataToRadioOptions(ADDITIONAL_INFORMATION_DOCUMENTS_SUBCATEGORY_OPTIONS),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the type of development')]
 		},
 		electricityGrid: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -68,9 +75,18 @@ export function getQuestions() {
 			fieldName: 'electricityGrid',
 			url: 'electricity-grid',
 			validators: [
+				new RequiredValidator('Enter who will design and build the connection to the electricity grid'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Who will design and build the connection to the electricity grid must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Who will design and build the connection to the electricity grid must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -80,7 +96,7 @@ export function getQuestions() {
 			question: 'Gas Fuelled Generating Station',
 			fieldName: 'gasFuelledGeneratingStation',
 			url: 'gas-fuelled-generating-station',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project is a gas fuelled generating station')]
 		},
 		gasPipelineConnection: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -90,9 +106,16 @@ export function getQuestions() {
 			fieldName: 'gasPipelineConnection',
 			url: 'gas-pipeline-connection',
 			validators: [
+				new RequiredValidator('Enter who will design and build the gas pipeline connection'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Who will design and build the gas pipeline connection must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Who will design and build the gas pipeline connection must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -104,7 +127,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'nonOffshoreGeneratingStation',
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		cableInstallation: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -114,9 +137,18 @@ export function getQuestions() {
 			fieldName: 'cableInstallation',
 			url: 'cable-installation',
 			validators: [
+				new RequiredValidator('Enter the details of the route and method of installation for any cable'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Details of the route and method of installation for any cable must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Details of the route and method of installation for any cable must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -128,9 +160,16 @@ export function getQuestions() {
 			fieldName: 'safetyZones',
 			url: 'safety-zones',
 			validators: [
+				new RequiredValidator('Enter whether you will apply for safety zones'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Statement about applications for safety zones must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Statement about applications for safety zones must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -142,7 +181,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'offshoreGeneratingStation',
 			url: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		highwayGroundLevels: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
@@ -151,7 +190,7 @@ export function getQuestions() {
 			question: 'What are the ground levels of the project?',
 			fieldName: 'highwayGroundLevels',
 			url: 'highway-ground-levels',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Enter the ground levels of the project')]
 		},
 		highwayBridgeHeights: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -161,9 +200,20 @@ export function getQuestions() {
 			fieldName: 'highwayBridgeHeights',
 			url: 'highway-height-of-bridges-and-elevated-works',
 			validators: [
+				new RequiredValidator(
+					'Enter the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way'
+				),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Information about the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Information about the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -175,9 +225,16 @@ export function getQuestions() {
 			fieldName: 'highwayTunnelDepths',
 			url: 'highway-depth-of-cuttings-and-tunnels',
 			validators: [
+				new RequiredValidator('Enter the depth of every cutting and tunnel'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Information about the depth of every cutting and tunnel must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Information about the depth of every cutting and tunnel must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -189,9 +246,16 @@ export function getQuestions() {
 			fieldName: 'highwayTidalWaterLevels',
 			url: 'highway-levels-of-tidal-waters-or-inland-waterways',
 			validators: [
+				new RequiredValidator('Enter the bed levels of relevant tidal waters or inland waterways'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Bed levels of relevant tidal waters or inland waterways must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Bed levels of relevant tidal waters or inland waterways must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -204,9 +268,20 @@ export function getQuestions() {
 			fieldName: 'highwayHeightOfStructures',
 			url: 'highway-height-of-structures-or-devices',
 			validators: [
+				new RequiredValidator(
+					'Enter the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways'
+				),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Information about the height of every tidal and inland waterway bed structure or device must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Information about the height of every tidal and inland waterway bed structure or device must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -218,9 +293,16 @@ export function getQuestions() {
 			fieldName: 'highwayDrainageOutfallDetails',
 			url: 'highway-drainage-outfall-details',
 			validators: [
+				new RequiredValidator('Enter the drainage outfall details for highways '),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Drainage outfall details for highways must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Drainage outfall details for highways must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -232,7 +314,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'highwayRelatedDevelopment',
 			url: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		railwayGroundLevels: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
@@ -241,7 +323,7 @@ export function getQuestions() {
 			question: 'What are the ground levels of the project?',
 			fieldName: 'railwayGroundLevels',
 			url: 'railway-ground-levels',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Enter the ground levels of the project')]
 		},
 		railwayBridgeHeights: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -251,9 +333,20 @@ export function getQuestions() {
 			fieldName: 'railwayBridgeHeights',
 			url: 'railway-height-of-bridges-and-elevated-works',
 			validators: [
+				new RequiredValidator(
+					'Enter the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way'
+				),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Information about the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Information about the heights of every bridge, viaduct, aqueduct, embankment and elevated guide way must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -265,9 +358,16 @@ export function getQuestions() {
 			fieldName: 'railwayTunnelDepths',
 			url: 'railway-depth-of-cuttings-and-tunnels',
 			validators: [
+				new RequiredValidator('Enter the depth of every cutting and tunnel'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Information about the depth of every cutting and tunnel must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Information about the depth of every cutting and tunnel must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -279,9 +379,18 @@ export function getQuestions() {
 			fieldName: 'railwayTidalWaterLevels',
 			url: 'railway-levels-of-tidal-waters-or-inland-waterways',
 			validators: [
+				new RequiredValidator('Enter the levels of the bed of relevant tidal waters or inland waterways'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'The levels of the bed of relevant tidal waters or inland waterways must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'The levels of the bed of relevant tidal waters or inland waterways must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -294,9 +403,20 @@ export function getQuestions() {
 			fieldName: 'railwayHeightOfStructures',
 			url: 'railway-height-of-structures-or-devices',
 			validators: [
+				new RequiredValidator(
+					'Enter the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways'
+				),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Information about the height of every tidal and inland waterway bed structure or device must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Information about the height of every tidal and inland waterway bed structure or device must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -308,9 +428,16 @@ export function getQuestions() {
 			fieldName: 'railwayDrainageOutfallDetails',
 			url: 'railway-drainage-outfall-details',
 			validators: [
+				new RequiredValidator('Enter the drainage outfall details for railways'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Drainage outfall details for railways must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Drainage outfall details for railways must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -322,7 +449,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'railwayDevelopment',
 			url: DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		whyHarbourOrderNeeded: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -332,9 +459,18 @@ export function getQuestions() {
 			fieldName: 'whyHarbourOrderNeeded',
 			url: 'why-is-order',
 			validators: [
+				new RequiredValidator('Enter why the order is needed to improve, maintain or manage the harbour'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Why the order is needed to improve, maintain or manage the harbour must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Why the order is needed to improve, maintain or manage the harbour must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -346,9 +482,20 @@ export function getQuestions() {
 			fieldName: 'benefitsToSeaTransport',
 			url: 'benefits-to-sea-transport-and-recreation',
 			validators: [
+				new RequiredValidator(
+					'Enter how the order will benefit transport by sea or recreational use of sea-going ships'
+				),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'How the order will benefit transport by sea or recreational use of sea-going ships must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'How the order will benefit transport by sea or recreational use of sea-going ships must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -360,7 +507,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'harbourFacilities',
 			url: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		pipelineDetails: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
@@ -374,35 +521,41 @@ export function getQuestions() {
 					fields: [
 						{
 							fieldName: `pipelineName`,
-							errorMessage: 'Please enter a name',
+							required: true,
+							errorMessage: 'Enter the pipeline’s name',
 							regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Name must only contain letters' },
 							minLength: { minLength: 2, minLengthMessage: 'Name must be at least 2 characters in length' }
 						},
 						{
 							fieldName: `pipelineOwner`,
-							errorMessage: 'Please enter an owner',
+							required: true,
+							errorMessage: 'Enter the pipeline’s owner',
 							regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Owner must only contain letters' },
 							minLength: { minLength: 2, minLengthMessage: 'Owner must be at least 2 characters in length' }
 						},
 						{
 							fieldName: `pipelineStartPoint`,
-							errorMessage: 'Please enter a start point',
+							required: true,
+							errorMessage: 'Enter the pipeline’s start point',
 							minLength: { minLength: 2, minLengthMessage: 'Start point must be at least 2 characters in length' }
 						},
 						{
 							fieldName: `pipelineEndPoint`,
-							errorMessage: 'Please enter an end point',
+							required: true,
+							errorMessage: 'Enter the pipeline’s end point',
 							minLength: { minLength: 2, minLengthMessage: 'End point must be at least 2 characters in length' }
 						},
 						{
 							fieldName: `pipelineLength`,
-							errorMessage: 'Please enter a length',
+							required: true,
+							errorMessage: 'Enter the pipeline’s length',
 							regex: { regex: /^\d+$/, regexMessage: 'Length must be a number' },
 							minLength: { minLength: 2, minLengthMessage: 'Length must be at least 2 characters in length' }
 						},
 						{
 							fieldName: `pipelineExternalDiameter`,
-							errorMessage: 'Please enter an external diameter',
+							required: true,
+							errorMessage: 'Enter the pipeline’s external diameter',
 							regex: { regex: /^\d+$/, regexMessage: 'Diameter must be a number' },
 							minLength: { minLength: 2, minLengthMessage: 'Diameter must be at least 2 characters in length' }
 						}
@@ -426,9 +579,16 @@ export function getQuestions() {
 			fieldName: 'pipelineConveyance',
 			url: 'what-will-pipeline-convey',
 			validators: [
+				new RequiredValidator('Enter what the pipeline will convey'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'What the pipeline will convey must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'What the pipeline will convey must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -439,7 +599,7 @@ export function getQuestions() {
 			question: 'Are rights in land or crossing consents needed?',
 			fieldName: 'landRightsCrossingConsents',
 			url: 'land-rights-crossing-consents-needed',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project needs rights in land or crossing consents')]
 		},
 		landRightsCrossingConsentsAgreement: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -449,9 +609,18 @@ export function getQuestions() {
 			fieldName: 'landRightsCrossingConsentsAgreement',
 			url: 'land-rights-crossing-consents-agreement',
 			validators: [
+				new RequiredValidator('Enter whether parties can obtain rights in land or crossing consents by agreement'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage:
+							'Whether the rights in land or crossing consents can be obtained by agreement must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage:
+							'Whether the rights in land or crossing consents can be obtained by agreement must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -463,7 +632,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'pipelines',
 			url: DOCUMENT_SUB_CATEGORY_ID.PIPELINES,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		whyIsFacilityNeeded: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -473,9 +642,16 @@ export function getQuestions() {
 			fieldName: 'whyIsFacilityNeeded',
 			url: 'why-is-facility-needed',
 			validators: [
+				new RequiredValidator('Enter why this facility is needed'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Why this facility is needed must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Why this facility is needed must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -486,7 +662,9 @@ export function getQuestions() {
 			question: 'What is the plants estimated annual capacity for disposing or recovering hazardous waste?',
 			fieldName: 'annualCapacity',
 			url: 'annual-capacity',
-			validators: [new RequiredValidator()]
+			validators: [
+				new RequiredValidator('Enter the plant’s estimated capacity for disposing or recovering hazardous waste')
+			]
 		},
 		hazardousWasteFacility: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -496,7 +674,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'hazardousWasteFacility',
 			url: DOCUMENT_SUB_CATEGORY_ID.HAZARDOUS_WASTE_FACILITY,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		},
 		recreationalAmenities: {
 			type: COMPONENT_TYPES.BOOLEAN,
@@ -505,7 +683,7 @@ export function getQuestions() {
 			question: 'Will the project include any recreational amenities?',
 			fieldName: 'recreationalAmenities',
 			url: 'recreational-amenities',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project includes recreational amenities')]
 		},
 		recreationalAmenitiesDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
@@ -515,9 +693,16 @@ export function getQuestions() {
 			fieldName: 'recreationalAmenitiesDescription',
 			url: 'describe-recreational-amenities',
 			validators: [
+				new RequiredValidator('Enter a description of the project’s recreational amenities'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Recreational amenities description must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Recreational amenities description must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -529,7 +714,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'damOrReservoir',
 			url: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select which documents provide additional information')]
 		}
 	};
 
