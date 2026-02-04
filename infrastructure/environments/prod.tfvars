@@ -1,3 +1,19 @@
+apps_config = {
+
+  gov_notify = {
+    disabled = false
+    templates = {
+      otp_template_id                       = "a7c1706f-1034-41d9-b140-cae078db2898"
+      whitelist_add_template_id             = "f331a1b6-607a-4447-a821-1004c451e9a7"
+      whitelist_access_changed_templated_id = "b005c9ca-244d-4768-b712-eaec96d61dee"
+      whitelist_remove_templated_id         = "52219fa3-81dd-45ca-94c7-6464a8051e2b"
+      anti_virus_failed_template_id         = "3109e0d2-987a-412a-891a-f13a24948c9a"
+    }
+  }
+
+}
+
+
 auth_config = {
   auth_enabled   = false
   auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
