@@ -14,11 +14,11 @@ describe('applicant-agent-details questions', () => {
 				assert.ok(key.startsWith(prefix));
 			}
 		});
-		it('should use title for question and title fields', () => {
+		it('should use title and prefix where appropriate with casing', () => {
 			const questions = contactDetailsQuestions(prefix, title);
 			for (const question of Object.values(questions)) {
 				assert.ok(question.title.startsWith(title));
-				assert.ok(question.question.includes(title.toLowerCase()));
+				assert.ok(question.question.includes(prefix));
 			}
 		});
 	});

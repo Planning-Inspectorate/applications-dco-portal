@@ -32,7 +32,7 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.addressLine1) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 
 		return validator
@@ -46,7 +46,7 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.addressLine2) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 
 		return validator
@@ -60,7 +60,7 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.townCity) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 		return validator
 			.isLength({ min: super.townCityMinLength, max: super.townCityMaxLength })
@@ -73,7 +73,7 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.county) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 
 		return validator
@@ -87,15 +87,15 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.postcode) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 
 		return validator
 			.isLength({ min: super.postcodeMinLength, max: super.postcodeMaxLength })
 			.bail()
-			.withMessage(`${fieldLabel} must be between ${super.postcodeMinLength} and ${super.postcodeMaxLength} characters`)
+			.withMessage(`Enter a valid ${fieldLabel.toLocaleLowerCase()}`)
 			.custom((postcode) => {
-				return validatePostcode(postcode);
+				return validatePostcode(postcode, `Enter a valid ${fieldLabel.toLocaleLowerCase()}`);
 			});
 	}
 
@@ -104,7 +104,7 @@ export default class FullAddressValidator extends AddressValidator {
 		if (!this.requiredFields?.country) {
 			validator.optional({ checkFalsy: true });
 		} else {
-			validator.notEmpty().withMessage(`Enter a ${fieldLabel.toLocaleLowerCase()}`);
+			validator.notEmpty().withMessage(`Enter ${fieldLabel.toLocaleLowerCase()}`);
 		}
 
 		return validator

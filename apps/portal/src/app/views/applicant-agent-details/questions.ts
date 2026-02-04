@@ -29,7 +29,7 @@ export function getQuestions() {
 			fieldName: 'paymentMethod',
 			url: 'payment-method',
 			options: referenceDataToRadioOptions(PAYMENT_METHOD),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select BACS, CHAPS or cheque')]
 		},
 		paymentReference: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
@@ -39,7 +39,7 @@ export function getQuestions() {
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
 			validators: [
-				new RequiredValidator(),
+				new RequiredValidator('Enter the payment reference'),
 				new StringValidator({
 					maxLength: { maxLength: 18, maxLengthMessage: 'Payment reference must be 18 characters or less.' }
 				})
@@ -52,7 +52,7 @@ export function getQuestions() {
 			question: 'Are you an agent acting on behalf of the applicant?',
 			fieldName: 'isAgent',
 			url: 'is-agent',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if you are an agent acting on behalf of the applicant')]
 		}
 	};
 
@@ -71,15 +71,19 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `${title} Organisation`,
 		pageTitle: `${title} Organisation`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s organisation`,
+		question: `Enter the ${prefix}'s organisation`,
 		fieldName: `${prefix}Organisation`,
 		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `organisation`,
 		validators: [
-			new RequiredValidator(),
+			new RequiredValidator(prefix === 'applicant' ? `Enter the ${prefix}’s organisation` : 'Enter your organisation'),
 			new StringValidator({
-				maxLength: { maxLength: 30 },
-				regex: { regex: /^[A-Za-z ]+$/, regexMessage: 'Organisation name can only contain letters and spaces' }
+				maxLength: { maxLength: 250, maxLengthMessage: 'Organisation must be 250 characters or less' },
+				regex: {
+					regex: /^[A-Za-z0-9'-, ]+$/,
+					regexMessage:
+						'Organisation must only contain letters a to z, numbers, apostrophes, hyphens, commas and spaces'
+				}
 			})
 		]
 	};
@@ -87,15 +91,33 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
 		title: `${title} Name`,
 		pageTitle: `${title} Name`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s name`,
+		question: `Enter the ${prefix}'s name`,
 		fieldName: `${prefix}Name`,
 		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `name`,
 		validators: [
 			new MultiFieldInputValidator({
 				fields: [
-					{ fieldName: `${prefix}FirstName`, errorMessage: 'Please enter a first name', required: true },
-					{ fieldName: `${prefix}LastName`, errorMessage: 'Please enter a last name', required: true }
+					{
+						fieldName: `${prefix}FirstName`,
+						errorMessage: prefix === 'applicant' ? `Enter the ${prefix}’s first name` : 'Enter your first name',
+						required: true,
+						regex: {
+							regex: /^[A-Za-z'-]+$/,
+							regexMessage: 'First name must only contain letters a to z, apostrophes and hyphens'
+						},
+						maxLength: { maxLength: 250, minLengthMessage: 'First name must be 250 characters or less' }
+					},
+					{
+						fieldName: `${prefix}LastName`,
+						errorMessage: prefix === 'applicant' ? `Enter the ${prefix}’s last name` : 'Enter your last name',
+						required: true,
+						regex: {
+							regex: /^[A-Za-z'-]+$/,
+							regexMessage: 'Last name must only contain letters a to z, apostrophes and hyphens'
+						},
+						maxLength: { maxLength: 250, minLengthMessage: 'Last name must be 250 characters or less' }
+					}
 				]
 			})
 		],
@@ -108,16 +130,16 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `${title} Email Address`,
 		pageTitle: `${title} Email Address`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s email address`,
+		question: `Enter the ${prefix}'s email address`,
 		fieldName: `${prefix}EmailAddress`,
 		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `email-address`,
 		validators: [
-			new RequiredValidator(),
+			new RequiredValidator('Enter an email address'),
 			new StringValidator({
 				regex: {
 					regex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-					regexMessage: 'Please enter a valid email address'
+					regexMessage: 'Enter an email address in the correct format, like name@example.com'
 				}
 			})
 		]
@@ -126,17 +148,17 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `${title} Phone Number`,
 		pageTitle: `${title} Phone Number`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s phone number`,
+		question: `Enter the ${prefix}'s phone number`,
 		fieldName: `${prefix}Phone`,
 		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `phone`,
 		validators: [
+			new RequiredValidator('Enter a phone number'),
 			new StringValidator({
-				maxLength: { maxLength: 15, maxLengthMessage: 'Phone number must be 15 characters or less' },
-				minLength: { minLength: 8, minLengthMessage: 'Phone number must be 8 characters or more' },
 				regex: {
 					regex: /^\+?\d{1,3}?[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-					regexMessage: 'Please enter a valid phone number'
+					regexMessage:
+						'Enter a phone number in the correct format, like 01632 960 001, 07700 900 982 or +44 808 157 0192'
 				}
 			})
 		]
@@ -145,7 +167,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		type: CUSTOM_COMPONENTS.FULL_ADDRESS,
 		title: `${title} Address`,
 		pageTitle: `${title} Address`,
-		question: `Enter the ${title.toLocaleLowerCase()}'s address`,
+		question: `Enter the ${prefix}'s address`,
 		fieldName: `${prefix}Address`,
 		html: prefix === 'applicant' ? 'views/prepopulated-data-template.html' : undefined,
 		url: `address`,
