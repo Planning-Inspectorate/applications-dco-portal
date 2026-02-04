@@ -26,9 +26,16 @@ export function getQuestions() {
 			html: 'views/prepopulated-data-template.html',
 			url: 'description',
 			validators: [
+				new RequiredValidator('Enter a project description'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Project description must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Project description must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -40,9 +47,16 @@ export function getQuestions() {
 			fieldName: 'consentReason',
 			url: 'consent-reason',
 			validators: [
+				new RequiredValidator('Enter an explanation for why the project requires development consent'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Explanation must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Explanation must be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -55,9 +69,16 @@ export function getQuestions() {
 			html: 'views/prepopulated-data-template.html',
 			url: 'location-description',
 			validators: [
+				new RequiredValidator('Enter the project location or route'),
 				new StringValidator({
-					maxLength: { maxLength: 2000 },
-					minLength: { minLength: 2 }
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Location or route description must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Location or route description be 2000 characters or less'
+					}
 				})
 			]
 		},
@@ -69,7 +90,7 @@ export function getQuestions() {
 			fieldName: 'singleOrLinear',
 			url: 'single-or-linear',
 			options: referenceDataToRadioOptions(PROJECT_SITE_TYPES),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select if the site is single or linear')]
 		},
 		singleGridReferences: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
@@ -84,15 +105,15 @@ export function getQuestions() {
 					fields: [
 						{
 							fieldName: `easting`,
-							errorMessage: 'Please enter easting grid references',
+							errorMessage: 'Enter an easting grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Easting grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `northing`,
-							errorMessage: 'Please enter northing grid references',
+							errorMessage: 'Enter a northing grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Northing grid reference must be 6 digits' }
 						}
 					]
 				})
@@ -114,39 +135,39 @@ export function getQuestions() {
 					fields: [
 						{
 							fieldName: `startEasting`,
-							errorMessage: 'Please enter a start easting grid reference',
+							errorMessage: 'Enter the start easting grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Start easting grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `startNorthing`,
-							errorMessage: 'Please enter a start northing grid reference',
+							errorMessage: 'Enter the start northing grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Start northing grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `middleEasting`,
-							errorMessage: 'Please enter a middle easting grid reference',
+							errorMessage: 'Enter the middle easting grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Middle easting grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `middleNorthing`,
-							errorMessage: 'Please enter a middle northing grid reference',
+							errorMessage: 'Enter the middle northing grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Middle northing grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `endEasting`,
-							errorMessage: 'Please enter an end easting grid references',
+							errorMessage: 'Enter the end easting grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'End easting grid reference must be 6 digits' }
 						},
 						{
 							fieldName: `endNorthing`,
-							errorMessage: 'Please enter an end northing grid references',
+							errorMessage: 'Enter the end northing grid reference',
 							required: true,
-							regex: { regex: /^[0-9]{6}$/, regexMessage: 'Please enter a 6 digit numeric grid reference' }
+							regex: { regex: /^[0-9]{6}$/, regexMessage: 'End northing grid reference must be 6 digits' }
 						}
 					]
 				})
@@ -182,7 +203,7 @@ export function getQuestions() {
 			question: 'Does the project include any associated developments?',
 			fieldName: 'hasAssociatedDevelopments',
 			url: 'has-associated-developments',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the project includes any associated developments')]
 		},
 		associatedDevelopments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -191,7 +212,7 @@ export function getQuestions() {
 			question: 'Which documents relate to the associated developments?',
 			fieldName: 'associatedDevelopments',
 			url: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT,
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the documents relating to the associated developments')]
 		}
 	};
 
