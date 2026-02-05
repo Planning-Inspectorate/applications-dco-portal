@@ -20,20 +20,18 @@ export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHand
 export function buildSavePositionInOrganisation({ logger }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { positionInOrganisation } = req.body;
-		const regex = /^(?=.*[A-Za-z])[A-Za-z ]+$/;
-
 		if (!positionInOrganisation) {
 			logger.info({ positionInOrganisation }, 'no value provided for positionInOrganisation');
 
 			req.body.errors = {
-				positionInOrganisation: { msg: 'You must select an answer' }
+				positionInOrganisation: { msg: 'Enter your position in your organisation' }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
-		} else if (!regex.test(positionInOrganisation)) {
+		} else if (positionInOrganisation.length > 250) {
 			logger.info({ positionInOrganisation }, 'invalid value provided for positionInOrganisation');
 
 			req.body.errors = {
-				positionInOrganisation: { msg: 'Your answer must contain only letters' }
+				positionInOrganisation: { msg: 'Organisation must be 250 characters or less' }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		}
@@ -69,7 +67,7 @@ export function buildSubmitDeclaration({ db, logger, blobStore }: PortalService)
 			logger.info({ declarationConfirmation }, 'no value provided for positionInOrganisation');
 
 			req.body.errors = {
-				declarationConfirmation: { msg: 'You must confirm that you understand and accept this declaration' }
+				declarationConfirmation: { msg: 'You must confirm you understand and accept the declaration' }
 			};
 			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 

@@ -67,11 +67,11 @@ describe('declaration controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				backLinkUrl: '/',
 				errors: {
-					positionInOrganisation: { msg: 'You must select an answer' }
+					positionInOrganisation: { msg: 'Enter your position in your organisation' }
 				},
 				errorSummary: [
 					{
-						text: 'You must select an answer',
+						text: 'Enter your position in your organisation',
 						href: '#positionInOrganisation'
 					}
 				]
@@ -80,7 +80,8 @@ describe('declaration controllers', () => {
 		it('should render position in org page with error if invalid value provided', async () => {
 			const mockReq = {
 				body: {
-					positionInOrganisation: 'the boss 123'
+					positionInOrganisation:
+						'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long org name'
 				},
 				session: {}
 			};
@@ -96,11 +97,11 @@ describe('declaration controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				backLinkUrl: '/',
 				errors: {
-					positionInOrganisation: { msg: 'Your answer must contain only letters' }
+					positionInOrganisation: { msg: 'Organisation must be 250 characters or less' }
 				},
 				errorSummary: [
 					{
-						text: 'Your answer must contain only letters',
+						text: 'Organisation must be 250 characters or less',
 						href: '#positionInOrganisation'
 					}
 				]
@@ -193,11 +194,11 @@ describe('declaration controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				backLinkUrl: '/position-in-organisation',
 				errors: {
-					declarationConfirmation: { msg: 'You must confirm that you understand and accept this declaration' }
+					declarationConfirmation: { msg: 'You must confirm you understand and accept the declaration' }
 				},
 				errorSummary: [
 					{
-						text: 'You must confirm that you understand and accept this declaration',
+						text: 'You must confirm you understand and accept the declaration',
 						href: '#declarationConfirmation'
 					}
 				]
