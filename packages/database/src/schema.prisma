@@ -27,6 +27,9 @@ model Case {
   projectEmailAddress                            String?
   anticipatedDateOfSubmission                    DateTime?
   submissionDate                                 DateTime?
+  submitterFirstName                             String?
+  submitterLastName                              String?
+  submitterOrganisation                          String?
   submitterPositionInOrganisation                String?
   Documents                                      Document[]
   SupportingEvidence                             SupportingEvidence[]
