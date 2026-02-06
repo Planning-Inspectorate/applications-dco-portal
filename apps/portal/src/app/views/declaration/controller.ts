@@ -11,10 +11,121 @@ import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.t
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/constants.ts';
 
+export function buildDeclarationNamePage(viewData = {}): AsyncRequestHandler {
+	return async (req, res) => {
+		return res.render('views/declaration/your-name.njk', {
+			backLinkUrl: `/`,
+			declarationFirstName: req.session.declarationFirstName,
+			declarationLastName: req.session.declarationLastName,
+			...viewData
+		});
+	};
+}
+
+export function buildSaveDeclarationName({ logger }: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		const { declarationFirstName, declarationLastName } = req.body;
+		req.body.errors = {};
+
+		if (!declarationFirstName) {
+			logger.info({ declarationFirstName, declarationLastName }, 'no value provided for declarationFirstName');
+			req.body.errors.declarationFirstName = { msg: 'Enter your first name' };
+		} else if (!/^[a-zA-Z'-]+$/.test(declarationFirstName)) {
+			logger.info({ declarationLastName }, 'invalid value provided for declarationFirstName');
+			req.body.errors.declarationFirstName = {
+				msg: 'First name must only contain letters a to z, apostrophes and hyphens'
+			};
+		}
+
+		if (!declarationLastName) {
+			logger.info({ declarationLastName }, 'no value provided for declarationLastName');
+			req.body.errors.declarationLastName = { msg: 'Enter your last name' };
+		} else if (!/^[a-zA-Z'-]+$/.test(declarationLastName)) {
+			logger.info({ declarationLastName }, 'invalid value provided for declarationLastName');
+			req.body.errors.declarationLastName = {
+				msg: 'Last name must only contain letters a to z, apostrophes and hyphens'
+			};
+		}
+
+		if (Object.keys(req.body.errors).length > 0) {
+			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const declarationNamePage = buildDeclarationNamePage({
+				errors: req.body.errors,
+				errorSummary: req.body.errorSummary,
+				declarationFirstName,
+				declarationLastName
+			});
+			return declarationNamePage(req, res);
+		}
+
+		req.session.declarationFirstName = declarationFirstName;
+		req.session.declarationLastName = declarationLastName;
+
+		return res.redirect('/declaration/organisation');
+	};
+}
+
+export function buildDeclarationOrganisationPage(viewData = {}): AsyncRequestHandler {
+	return async (req, res) => {
+		return res.render('views/declaration/your-organisation.njk', {
+			backLinkUrl: `/declaration/name`,
+			declarationOrganisation: req.session.declarationOrganisation,
+			...viewData
+		});
+	};
+}
+
+export function buildSaveDeclarationOrganisation({ logger }: PortalService): AsyncRequestHandler {
+	return async (req, res) => {
+		const { declarationOrganisation } = req.body;
+		if (!declarationOrganisation) {
+			logger.info({ declarationOrganisation }, 'no value provided for declarationOrganisation');
+
+			req.body.errors = {
+				declarationOrganisation: { msg: 'Enter your organisation' }
+			};
+			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+		} else if (declarationOrganisation.length > 250) {
+			logger.info({ declarationOrganisation }, 'invalid value provided for declarationOrganisation');
+
+			req.body.errors = {
+				declarationOrganisation: { msg: 'Organisation must be 250 characters or less' }
+			};
+			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+		} else if (!/^[a-zA-Z0-9',\-\s]+$/.test(declarationOrganisation)) {
+			logger.info(
+				{ declarationOrganisation },
+				'value provided for declarationOrganisation contains invalid characters'
+			);
+
+			req.body.errors = {
+				declarationOrganisation: {
+					msg: 'Organisation must only contain letters a to z, numbers, apostrophes, hyphens, commas and spaces'
+				}
+			};
+			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+		}
+
+		if (req.body.errors) {
+			const declarationOrganisationPage = buildDeclarationOrganisationPage({
+				errors: req.body.errors,
+				errorSummary: req.body.errorSummary,
+				declarationOrganisation
+			});
+			return declarationOrganisationPage(req, res);
+		}
+
+		req.session.declarationOrganisation = declarationOrganisation;
+
+		return res.redirect('/declaration/position-in-organisation');
+	};
+}
+
 export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
 		return res.render('views/declaration/position-in-org.njk', {
-			backLinkUrl: `/`,
+			backLinkUrl: `/declaration/organisation`,
+			positionInOrganisation: req.session.positionInOrganisation,
 			...viewData
 		});
 	};
@@ -42,7 +153,8 @@ export function buildSavePositionInOrganisation({ logger }: PortalService): Asyn
 		if (req.body.errors) {
 			const positionInOrganisationPage = buildPositionInOrganisationPage({
 				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errorSummary: req.body.errorSummary,
+				positionInOrganisation
 			});
 			return positionInOrganisationPage(req, res);
 		}
@@ -56,7 +168,7 @@ export function buildSavePositionInOrganisation({ logger }: PortalService): Asyn
 export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
 		return res.render('views/declaration/declaration.njk', {
-			backLinkUrl: `/position-in-organisation`,
+			backLinkUrl: `/declaration/position-in-organisation`,
 			...viewData
 		});
 	};
@@ -150,24 +262,37 @@ export function buildSubmitDeclaration({
 		const mappedCaseData = mapCaseDataToBackOfficeFormat(caseData, submissionDate, req.session.positionInOrganisation);
 		const mappedDocuments = mapDocumentsToBackOfficeFormat(documents);
 
-		serviceBusEventClient?.sendEvents(
-			DATA_SUBMISSIONS_TOPIC_NAME,
-			[
-				{
-					mappedCaseData,
-					mappedDocuments
-				}
-			],
-			EVENT_TYPE.PUBLISH
-		);
+		try {
+			serviceBusEventClient?.sendEvents(
+				DATA_SUBMISSIONS_TOPIC_NAME,
+				[
+					{
+						mappedCaseData,
+						mappedDocuments
+					}
+				],
+				EVENT_TYPE.PUBLISH
+			);
+		} catch (error) {
+			logger.error({ error }, 'error sending event to service bus topic');
+			throw new Error('error sending event to service bus topic');
+		}
 
 		await db.case.update({
 			where: { reference: caseReference },
 			data: {
 				submissionDate: submissionDate,
+				submitterFirstName: req.session.declarationFirstName,
+				submitterLastName: req.session.declarationLastName,
+				submitterOrganisation: req.session.declarationOrganisation,
 				submitterPositionInOrganisation: req.session.positionInOrganisation
 			}
 		});
+
+		delete req.session.declarationFirstName;
+		delete req.session.declarationLastName;
+		delete req.session.declarationOrganisation;
+		delete req.session.positionInOrganisation;
 
 		return res.redirect('/application-complete');
 	};

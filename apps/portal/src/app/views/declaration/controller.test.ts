@@ -3,8 +3,12 @@
 import { describe, it, mock } from 'node:test';
 import {
 	buildApplicationCompletePage,
+	buildDeclarationNamePage,
+	buildDeclarationOrganisationPage,
 	buildDeclarationPage,
 	buildPositionInOrganisationPage,
+	buildSaveDeclarationName,
+	buildSaveDeclarationOrganisation,
 	buildSavePositionInOrganisation,
 	buildSubmitDeclaration
 } from './controller.ts';
@@ -12,19 +16,270 @@ import assert from 'node:assert';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 
 describe('declaration controllers', () => {
+	describe('buildDeclarationNamePage', () => {
+		it('should render your name page', async () => {
+			const mockReq = { session: {} };
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const declarationNamePage = buildDeclarationNamePage();
+			await declarationNamePage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-name.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				declarationFirstName: undefined,
+				declarationLastName: undefined
+			});
+		});
+	});
+	describe('buildSaveDeclarationName', () => {
+		it('should save users first and last name to session and redirect to you org page', async () => {
+			const mockReq = {
+				body: {
+					declarationFirstName: 'test',
+					declarationLastName: 'name'
+				},
+				session: {}
+			};
+			const mockRes = {
+				redirect: mock.fn()
+			};
+
+			const saveDeclarationName = buildSaveDeclarationName({});
+			await saveDeclarationName(mockReq, mockRes);
+
+			assert.strictEqual(mockReq.session.declarationFirstName, 'test');
+			assert.strictEqual(mockReq.session.declarationLastName, 'name');
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/declaration/organisation');
+		});
+		it('should render your name page with error if no value provided', async () => {
+			const mockReq = {
+				body: {
+					declarationFirstName: '',
+					declarationLastName: ''
+				},
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const saveDeclarationName = buildSaveDeclarationName({ logger: mockLogger() });
+			await saveDeclarationName(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-name.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				declarationFirstName: '',
+				declarationLastName: '',
+				errors: {
+					declarationFirstName: { msg: 'Enter your first name' },
+					declarationLastName: { msg: 'Enter your last name' }
+				},
+				errorSummary: [
+					{
+						href: '#declarationFirstName',
+						text: 'Enter your first name'
+					},
+					{
+						href: '#declarationLastName',
+						text: 'Enter your last name'
+					}
+				]
+			});
+		});
+		it('should render your name page with error if invalid value provided', async () => {
+			const mockReq = {
+				body: {
+					declarationFirstName: '123',
+					declarationLastName: '456'
+				},
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const saveDeclarationName = buildSaveDeclarationName({ logger: mockLogger() });
+			await saveDeclarationName(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-name.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/',
+				declarationFirstName: '123',
+				declarationLastName: '456',
+				errors: {
+					declarationFirstName: { msg: 'First name must only contain letters a to z, apostrophes and hyphens' },
+					declarationLastName: { msg: 'Last name must only contain letters a to z, apostrophes and hyphens' }
+				},
+				errorSummary: [
+					{
+						href: '#declarationFirstName',
+						text: 'First name must only contain letters a to z, apostrophes and hyphens'
+					},
+					{
+						href: '#declarationLastName',
+						text: 'Last name must only contain letters a to z, apostrophes and hyphens'
+					}
+				]
+			});
+		});
+	});
+	describe('buildDeclarationOrganisationPage', () => {
+		it('should render your organisation page', async () => {
+			const mockReq = { session: {} };
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const declarationOrganisationPage = buildDeclarationOrganisationPage();
+			await declarationOrganisationPage(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-organisation.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/declaration/name',
+				declarationOrganisation: undefined
+			});
+		});
+	});
+	describe('buildSaveDeclarationOrganisation', () => {
+		it('should save users org to session and redirect to position in org page', async () => {
+			const mockReq = {
+				body: {
+					declarationOrganisation: 'the org'
+				},
+				session: {}
+			};
+			const mockRes = {
+				redirect: mock.fn()
+			};
+
+			const saveDeclarationOrganisation = buildSaveDeclarationOrganisation({});
+			await saveDeclarationOrganisation(mockReq, mockRes);
+
+			assert.strictEqual(mockReq.session.declarationOrganisation, 'the org');
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/declaration/position-in-organisation');
+		});
+		it('should render your org page with error if no value provided', async () => {
+			const mockReq = {
+				body: {
+					declarationOrganisation: ''
+				},
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const saveDeclarationOrganisation = buildSaveDeclarationOrganisation({ logger: mockLogger() });
+			await saveDeclarationOrganisation(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-organisation.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/declaration/name',
+				declarationOrganisation: '',
+				errors: {
+					declarationOrganisation: { msg: 'Enter your organisation' }
+				},
+				errorSummary: [
+					{
+						href: '#declarationOrganisation',
+						text: 'Enter your organisation'
+					}
+				]
+			});
+		});
+		it('should render your org page with error if invalid value provided', async () => {
+			const mockReq = {
+				body: {
+					declarationOrganisation: 'inv@lid n@me$'
+				},
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const saveDeclarationOrganisation = buildSaveDeclarationOrganisation({ logger: mockLogger() });
+			await saveDeclarationOrganisation(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-organisation.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/declaration/name',
+				declarationOrganisation: 'inv@lid n@me$',
+				errors: {
+					declarationOrganisation: {
+						msg: 'Organisation must only contain letters a to z, numbers, apostrophes, hyphens, commas and spaces'
+					}
+				},
+				errorSummary: [
+					{
+						href: '#declarationOrganisation',
+						text: 'Organisation must only contain letters a to z, numbers, apostrophes, hyphens, commas and spaces'
+					}
+				]
+			});
+		});
+		it('should render your org page with error if value provided exceeds 250 characters', async () => {
+			const mockReq = {
+				body: {
+					declarationOrganisation:
+						'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long org name'
+				},
+				session: {}
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const saveDeclarationOrganisation = buildSaveDeclarationOrganisation({ logger: mockLogger() });
+			await saveDeclarationOrganisation(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/your-organisation.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				backLinkUrl: '/declaration/name',
+				declarationOrganisation:
+					'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long org name',
+				errors: {
+					declarationOrganisation: { msg: 'Organisation must be 250 characters or less' }
+				},
+				errorSummary: [
+					{
+						href: '#declarationOrganisation',
+						text: 'Organisation must be 250 characters or less'
+					}
+				]
+			});
+		});
+	});
 	describe('buildPositionInOrganisationPage', () => {
 		it('should render position in org page', async () => {
+			const mockReq = { session: {} };
 			const mockRes = {
 				render: mock.fn()
 			};
 
 			const positionInOrganisationPage = buildPositionInOrganisationPage();
-			await positionInOrganisationPage({}, mockRes);
+			await positionInOrganisationPage(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/position-in-org.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				backLinkUrl: '/'
+				backLinkUrl: '/declaration/organisation',
+				positionInOrganisation: undefined
 			});
 		});
 	});
@@ -65,7 +320,7 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/position-in-org.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				backLinkUrl: '/',
+				backLinkUrl: '/declaration/organisation',
 				errors: {
 					positionInOrganisation: { msg: 'Enter your position in your organisation' }
 				},
@@ -74,14 +329,15 @@ describe('declaration controllers', () => {
 						text: 'Enter your position in your organisation',
 						href: '#positionInOrganisation'
 					}
-				]
+				],
+				positionInOrganisation: ''
 			});
 		});
 		it('should render position in org page with error if invalid value provided', async () => {
 			const mockReq = {
 				body: {
 					positionInOrganisation:
-						'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long org name'
+						'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long position in org'
 				},
 				session: {}
 			};
@@ -95,7 +351,7 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/position-in-org.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				backLinkUrl: '/',
+				backLinkUrl: '/declaration/organisation',
 				errors: {
 					positionInOrganisation: { msg: 'Organisation must be 250 characters or less' }
 				},
@@ -104,7 +360,9 @@ describe('declaration controllers', () => {
 						text: 'Organisation must be 250 characters or less',
 						href: '#positionInOrganisation'
 					}
-				]
+				],
+				positionInOrganisation:
+					'A really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really really long position in org'
 			});
 		});
 	});
@@ -120,7 +378,7 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/declaration.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				backLinkUrl: '/position-in-organisation'
+				backLinkUrl: '/declaration/position-in-organisation'
 			});
 		});
 	});
@@ -135,6 +393,9 @@ describe('declaration controllers', () => {
 				},
 				session: {
 					caseReference: 'EN123456',
+					declarationFirstName: 'test',
+					declarationLastName: 'name',
+					declarationOrganisation: 'the org',
 					positionInOrganisation: 'the boss'
 				}
 			};
@@ -260,9 +521,18 @@ describe('declaration controllers', () => {
 				},
 				data: {
 					submissionDate: new Date('2025-01-30T00:00:07.000Z'),
+					submitterFirstName: 'test',
+					submitterLastName: 'name',
+					submitterOrganisation: 'the org',
 					submitterPositionInOrganisation: 'the boss'
 				}
 			});
+
+			assert.strictEqual(mockReq.session.declarationFirstName, undefined);
+			assert.strictEqual(mockReq.session.declarationLastName, undefined);
+			assert.strictEqual(mockReq.session.declarationOrganisation, undefined);
+			assert.strictEqual(mockReq.session.positionInOrganisation, undefined);
+
 			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
 			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
 
@@ -364,7 +634,7 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/declaration/declaration.njk');
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
-				backLinkUrl: '/position-in-organisation',
+				backLinkUrl: '/declaration/position-in-organisation',
 				errors: {
 					declarationConfirmation: { msg: 'You must confirm you understand and accept the declaration' }
 				},

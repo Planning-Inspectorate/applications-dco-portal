@@ -1,0 +1,48 @@
+{% extends "views/layouts/main.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block pageHeading %}{% endblock %}
+{% block pageContent %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">What is your name?</h1>
+            <div id="multi-field-hint" class="govuk-hint">This will act as your signature</div>
+            <form action="" method="post" novalidate>
+                {{ govukInput({
+                    label: {
+                        text: "First name",
+                        classes: "govuk-label--s",
+                        isPageHeading: true
+                    },
+                    id: "declaration-first-name",
+                    name: "declarationFirstName",
+                    value: declarationFirstName,
+                    errorMessage: errors.declarationFirstName and {
+                        text: errors.declarationFirstName.msg
+                    }
+                }) }}
+
+                {{ govukInput({
+                    label: {
+                        text: "Last name",
+                        classes: "govuk-label--s",
+                        isPageHeading: true
+                    },
+                    id: "declaration-last-name",
+                    name: "declarationLastName",
+                    value: declarationLastName,
+                    errorMessage: errors.declarationLastName and {
+                        text: errors.declarationLastName.msg
+                    }
+                }) }}
+
+                {{ govukButton({
+                    text: "Continue",
+                    type: "submit"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
