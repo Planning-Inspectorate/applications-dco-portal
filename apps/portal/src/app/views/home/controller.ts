@@ -110,7 +110,7 @@ export function buildSubmitHomePageController(service: PortalService): AsyncRequ
 			return homePageController(req, res);
 		}
 
-		res.redirect('/position-in-organisation');
+		res.redirect('/declaration/name');
 	};
 }
 

@@ -673,7 +673,7 @@ describe('views/home/controller.ts', () => {
 			await submitHomePageController(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
-			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/position-in-organisation');
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/declaration/name');
 		});
 		it('should return error and render homepage with error if not all mandatory sections completed', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');

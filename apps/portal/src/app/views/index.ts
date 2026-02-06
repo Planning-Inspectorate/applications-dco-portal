@@ -31,8 +31,12 @@ import {
 } from './middleware/session.ts';
 import {
 	buildApplicationCompletePage,
+	buildDeclarationNamePage,
+	buildDeclarationOrganisationPage,
 	buildDeclarationPage,
 	buildPositionInOrganisationPage,
+	buildSaveDeclarationName,
+	buildSaveDeclarationOrganisation,
 	buildSavePositionInOrganisation,
 	buildSubmitDeclaration
 } from './declaration/controller.ts';
@@ -44,6 +48,10 @@ export function createRoutes(service: PortalService): IRouter {
 	const submitHomePageController = buildSubmitHomePageController(service);
 	const signOutController = buildSignOutController(service);
 
+	const declarationNamePage = buildDeclarationNamePage();
+	const saveDeclarationName = buildSaveDeclarationName(service);
+	const declarationOrganisationPage = buildDeclarationOrganisationPage();
+	const saveDeclarationOrganisation = buildSaveDeclarationOrganisation(service);
 	const positionInOrganisationPage = buildPositionInOrganisationPage();
 	const savePositionInOrganisation = buildSavePositionInOrganisation(service);
 	const declarationPage = buildDeclarationPage(service);
@@ -59,8 +67,16 @@ export function createRoutes(service: PortalService): IRouter {
 	router.post('/', asyncHandler(submitHomePageController));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
 
-	router.get('/position-in-organisation', hasApplicationBeenSubmitted, asyncHandler(positionInOrganisationPage));
-	router.post('/position-in-organisation', asyncHandler(savePositionInOrganisation));
+	router.get('/declaration/name', hasApplicationBeenSubmitted, asyncHandler(declarationNamePage));
+	router.post('/declaration/name', asyncHandler(saveDeclarationName));
+	router.get('/declaration/organisation', hasApplicationBeenSubmitted, asyncHandler(declarationOrganisationPage));
+	router.post('/declaration/organisation', asyncHandler(saveDeclarationOrganisation));
+	router.get(
+		'/declaration/position-in-organisation',
+		hasApplicationBeenSubmitted,
+		asyncHandler(positionInOrganisationPage)
+	);
+	router.post('/declaration/position-in-organisation', asyncHandler(savePositionInOrganisation));
 	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
 	router.post('/declaration', asyncHandler(submitDeclaration));
 	router.get('/application-complete', canViewApplicationCompletePage, asyncHandler(applicationCompletePage));

@@ -10,15 +10,15 @@
             <form action="" method="post" novalidate>
                 {{ govukInput({
                     label: {
-                        text: "What is your position in your organisation?",
+                        text: "What is your organisation?",
                         classes: "govuk-label--l",
                         isPageHeading: true
                     },
-                    id: "position-in-organisation",
-                    name: "positionInOrganisation",
-                    value: positionInOrganisation,
-                    errorMessage: errors.positionInOrganisation and {
-                        text: errors.positionInOrganisation.msg
+                    id: "declaration-organisation",
+                    name: "declarationOrganisation",
+                    value: declarationOrganisation,
+                    errorMessage: errors.declarationOrganisation and {
+                        text: errors.declarationOrganisation.msg
                     }
                 }) }}
 

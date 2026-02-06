@@ -2,13 +2,16 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block pageHeading %}{% endblock %}
-
 {% block pageContent %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 class="govuk-heading-l">Declaration</h2>
+            {{ govukInsetText({
+                text: "Your declaration will be linked to the email address you used to sign in. This helps us identify who submitted the application. We will take your typed name as your signature."
+            }) }}
             <p class="govuk-body">By submitting this application, I confirm that:</p>
             <ul class="govuk-list govuk-list--bullet">
                 <li>to the best of my knowledge, the information given in this application and enclosed maps, plans and other documents are true</li>
