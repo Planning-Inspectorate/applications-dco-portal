@@ -1,9 +1,11 @@
 import { NotifyConfig, ServiceBusConfig } from '@pins/dco-portal-lib/govnotify/types';
 import { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
+import { PdfServiceConfig } from '@pins/dco-portal-lib/pdf-service/types.js';
 
 interface Config {
 	appHostname?: string;
 	blobStore: BlobStoreConfig;
+	pdf: PdfServiceConfig;
 	cacheControl: {
 		maxAge: string;
 	};
