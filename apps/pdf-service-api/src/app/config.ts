@@ -24,7 +24,7 @@ export function loadConfig(): Config {
 	}
 
 	config = {
-		gitSha: GIT_SHA ?? 'NO GIT SHA FOUND',
+		gitSha: GIT_SHA,
 		fileUpload: {
 			maxSizeInBytes: Number(FILE_MAX_SIZE_IN_BYTES || 1000000)
 		},
