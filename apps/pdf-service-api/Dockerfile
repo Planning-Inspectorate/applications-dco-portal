@@ -25,9 +25,6 @@ RUN npm ci --loglevel notice --workspace=pdf-service-api --ignore-scripts
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
 
-RUN npm run build --workspace=pdf-service-api
-RUN npm run db-generate
-
 # --------------------------------
 
 # Stage 2/2 - App run
@@ -35,7 +32,7 @@ FROM base
 
 ARG GIT_SHA
 
-WORKDIR /usr/src/app/apps/portal
+WORKDIR /usr/src/app/apps/pdf-service-api
 
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
