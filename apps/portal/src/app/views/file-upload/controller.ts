@@ -296,7 +296,10 @@ export function isFileUploadSectionCompletedController(service: PortalService, j
 			const fileUploadHomePage = buildFileUploadHomePage(service, journeyId, {
 				errors: {
 					[sectionCompletedFieldName]: {
-						msg: 'Uploaded files have failed virus scan. Remove the affected file and upload a different version.'
+						msg:
+							affectedDocuments.length > 1
+								? 'There are problems with 1 or more files'
+								: `${affectedDocuments[0]} contains a virus. Remove the file and upload a different version.`
 					}
 				},
 				errorSummary: affectedDocuments.map((fileName) => {
