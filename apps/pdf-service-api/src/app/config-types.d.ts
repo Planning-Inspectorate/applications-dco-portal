@@ -1,5 +1,5 @@
 export interface Config {
-	gitSha: string;
+	gitSha?: string;
 	fileUpload: {
 		maxSizeInBytes: number;
 	};
