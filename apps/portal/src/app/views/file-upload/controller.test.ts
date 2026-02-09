@@ -909,7 +909,236 @@ describe('file upload controllers', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
 		});
-		it('should redirect to document page with errors if any documents have failed virus scan', async (ctx) => {
+		it('should redirect to document page with errors if a single document has failed virus scan', async (ctx) => {
+			const now = new Date('2025-01-30T00:00:07.000Z');
+			ctx.mock.timers.enable({ apis: ['Date'], now });
+
+			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						Documents: [
+							{
+								id: 'doc-id-1',
+								fileName: 'test.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.SCANNED,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							},
+							{
+								id: 'doc-id-2',
+								fileName: 'test-2.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.SCANNED,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							},
+							{
+								id: 'doc-id-3',
+								fileName: 'test-3.pdf',
+								uploadedDate: Date.now(),
+								isCertified: true,
+								scanResultId: SCAN_RESULT_ID.AFFECTED,
+								apfpRegulationId: '5-1',
+								ApfpRegulation: {
+									id: '5-1',
+									displayName: '5(1)'
+								},
+								subCategoryId: 'draft-development-consent-order',
+								SubCategory: {
+									id: 'draft-development-consent-order',
+									displayName: 'Draft development consent order',
+									Category: {
+										id: 'draft-dco',
+										displayName: 'Draft DCO'
+									}
+								}
+							}
+						]
+					}))
+				},
+				documentCategory: {
+					findUnique: mock.fn(() => ({
+						id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						displayName: 'Draft DCO'
+					}))
+				},
+				document: {
+					findMany: mock.fn(() => [
+						{
+							id: 'doc-id-1',
+							fileName: 'test.pdf',
+							uploadedDate: Date.now(),
+							isCertified: true,
+							scanResultId: SCAN_RESULT_ID.SCANNED,
+							apfpRegulationId: '5-1',
+							ApfpRegulation: {
+								id: '5-1',
+								displayName: '5(1)'
+							},
+							subCategoryId: 'draft-development-consent-order',
+							SubCategory: {
+								id: 'draft-development-consent-order',
+								displayName: 'Draft development consent order',
+								Category: {
+									id: 'draft-dco',
+									displayName: 'Draft DCO'
+								}
+							}
+						},
+						{
+							id: 'doc-id-2',
+							fileName: 'test-2.pdf',
+							uploadedDate: Date.now(),
+							isCertified: true,
+							scanResultId: SCAN_RESULT_ID.SCANNED,
+							apfpRegulationId: '5-1',
+							ApfpRegulation: {
+								id: '5-1',
+								displayName: '5(1)'
+							},
+							subCategoryId: 'draft-development-consent-order',
+							SubCategory: {
+								id: 'draft-development-consent-order',
+								displayName: 'Draft development consent order',
+								Category: {
+									id: 'draft-dco',
+									displayName: 'Draft DCO'
+								}
+							}
+						},
+						{
+							id: 'doc-id-3',
+							fileName: 'test-3.pdf',
+							uploadedDate: Date.now(),
+							isCertified: true,
+							scanResultId: SCAN_RESULT_ID.AFFECTED,
+							apfpRegulationId: '5-1',
+							ApfpRegulation: {
+								id: '5-1',
+								displayName: '5(1)'
+							},
+							subCategoryId: 'draft-development-consent-order',
+							SubCategory: {
+								id: 'draft-development-consent-order',
+								displayName: 'Draft development consent order',
+								Category: {
+									id: 'draft-dco',
+									displayName: 'Draft DCO'
+								}
+							}
+						}
+					])
+				}
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				session: {
+					isAuthenticated: true,
+					emailAddress: 'test@email.com',
+					caseReference: 'EN123456'
+				},
+				body: { draftDcoIsCompleted: 'yes' }
+			};
+			const mockRes = {
+				render: mock.fn()
+			};
+
+			const controller = isFileUploadSectionCompletedController({ db: mockDb }, 'draft-dco');
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.render.mock.callCount(), 1);
+			assert.strictEqual(mockRes.render.mock.calls[0].arguments[0], 'views/file-upload/view.njk');
+			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
+				pageTitle: 'Draft DCO',
+				documentCategory: 'draftDco',
+				documents: [
+					[
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-1" target="_blank" rel="noreferrer">test.pdf</a>'
+						},
+						{ text: 'Draft development consent order' },
+						{ text: '5(1)' },
+						{ text: 'Certified' },
+						{ text: '30/01/2025 00:00' },
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-1">Remove</a>'
+						}
+					],
+					[
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/download/doc-id-2" target="_blank" rel="noreferrer">test-2.pdf</a>'
+						},
+						{ text: 'Draft development consent order' },
+						{ text: '5(1)' },
+						{ text: 'Certified' },
+						{
+							text: '30/01/2025 00:00'
+						},
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-2">Remove</a>'
+						}
+					]
+				],
+				affectedDocuments: [
+					[
+						{ text: 'test-3.pdf' },
+						{ text: 'Draft development consent order' },
+						{ text: '5(1)' },
+						{ text: 'Certified' },
+						{
+							html: '<strong class="govuk-tag govuk-tag--red">Failed virus check</strong>'
+						},
+						{
+							html: '<a class="govuk-link govuk-link--no-visited-state" href="/draft-dco/document/delete/doc-id-3">Remove</a>'
+						}
+					]
+				],
+				showUploadButton: true,
+				uploadButtonUrl: '/draft-dco/upload/document-type',
+				backLinkUrl: '/',
+				isCompletedValue: '',
+				errors: {
+					draftDcoIsCompleted: {
+						msg: 'test-3.pdf contains a virus. Remove the file and upload a different version.'
+					}
+				},
+				errorSummary: [
+					{
+						text: 'test-3.pdf contains a virus. Remove the file and upload a different version.',
+						href: '#draftDcoIsCompleted'
+					}
+				]
+			});
+		});
+		it('should redirect to document page with errors when multiple documents have failed virus scan', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:07.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
@@ -1125,7 +1354,7 @@ describe('file upload controllers', () => {
 				isCompletedValue: '',
 				errors: {
 					draftDcoIsCompleted: {
-						msg: 'Uploaded files have failed virus scan. Remove the affected file and upload a different version.'
+						msg: 'There are problems with 1 or more files'
 					}
 				},
 				errorSummary: [
