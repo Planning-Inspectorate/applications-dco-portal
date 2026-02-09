@@ -37,6 +37,6 @@ WORKDIR /usr/src/app/apps/pdf-service-api
 ENV NODE_ENV=production
 ENV GIT_SHA=$GIT_SHA
 
-EXPOSE 8080
+EXPOSE 3000
 
 ENTRYPOINT npm run start
