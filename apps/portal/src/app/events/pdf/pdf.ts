@@ -5,7 +5,10 @@ import { getNunjucksEnv } from '../../nunjucks.ts';
 import fs from 'fs';
 import type { GeneratePdfInput } from './types.d.ts';
 
-export async function generatePdf(service: PortalService, data: GeneratePdfInput) {
+export async function generatePdf(
+	service: PortalService,
+	data: GeneratePdfInput
+): Promise<Buffer<ArrayBuffer> | undefined> {
 	const { pdfServiceClient, blobStore, db, logger } = service;
 
 	const caseData = await db.case.findUnique({
@@ -38,6 +41,7 @@ export async function generatePdf(service: PortalService, data: GeneratePdfInput
 
 	const dcoApplicationData = mapCaseToDcoApplication(caseData);
 	const env = getNunjucksEnv();
+	let pdfBuffer: Buffer<ArrayBuffer> | undefined;
 	env.render(
 		'views/layouts/application-pdf.njk',
 		{
@@ -52,9 +56,9 @@ export async function generatePdf(service: PortalService, data: GeneratePdfInput
 			}
 			const cssPath = `${service.staticDir}/${data.styleFile}`;
 			const pdfHtml = await addCSStoHtml(html, cssPath, logger);
-			const pdf = await pdfServiceClient?.generatePdf(pdfHtml);
+			pdfBuffer = await pdfServiceClient?.generatePdf(pdfHtml);
 
-			if (!Buffer.isBuffer(pdf) || pdf.length === 0) {
+			if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
 				throw new Error('PDF generation returned an invalid or empty buffer');
 			}
 
@@ -67,7 +71,7 @@ export async function generatePdf(service: PortalService, data: GeneratePdfInput
 			}
 
 			logger.info('Uploading generated pdf to blob: ' + blobName);
-			await blobStore?.upload(pdf, 'application/pdf', blobName);
+			await blobStore?.upload(pdfBuffer, 'application/pdf', blobName);
 
 			await db.case.update({
 				where: { reference: data.caseReference },
@@ -75,6 +79,7 @@ export async function generatePdf(service: PortalService, data: GeneratePdfInput
 			});
 		}
 	);
+	return pdfBuffer;
 }
 
 /**

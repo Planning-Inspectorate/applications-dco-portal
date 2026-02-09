@@ -311,7 +311,7 @@ export function buildApplicationCompletePage({ db }: PortalService): AsyncReques
 
 		return res.render('views/declaration/application-complete.njk', {
 			caseReference: req.session.caseReference,
-			canDownloadPdf: caseData.pdfBlobName ? true : false,
+			canDownloadPdf: !!caseData.pdfBlobName,
 			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
 		});
 	};

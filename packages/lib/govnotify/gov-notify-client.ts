@@ -58,22 +58,6 @@ export class GovNotifyClient {
 		this.logger.info('Anti virus failed email template successfully dispatched');
 	}
 
-	// example usage:
-	// const adminUsers = await db.whitelistUser.findMany({
-	// 			where: {
-	// 				caseId: caseData.id,
-	// 				userRoleId: WHITELIST_USER_ROLE_ID.ADMIN_USER
-	// 			}
-	// 		});
-	// await Promise.all(
-	// 			adminUsers.map((adminUser) =>
-	// 				notifyClient?.sendApplicantSubmissionNotification(
-	// 					adminUser.email,
-	// 					caseReference,
-	// 					Buffer.alloc(10) //TODO: replace with generated pdf
-	// 				)
-	// 			)
-	// 		);
 	async sendApplicantSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching applicant data submission email template');
 		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
@@ -87,12 +71,6 @@ export class GovNotifyClient {
 		this.logger.info('Applicant data submission email template successfully dispatched');
 	}
 
-	// example usage:
-	// await notifyClient?.sendPinsStaffSubmissionNotification(
-	// 			caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-	// 			caseReference,
-	// 			Buffer.alloc(10) //TODO: replace with generated pdf
-	// 		);
 	async sendPinsStaffSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
 		this.logger.info('Dispatching Planning Inspectorate staff data submission email template');
 		await this.sendEmail(this.#templateIds.pinsStaffSubmissionNotification as string, email, {
