@@ -41,6 +41,8 @@ import {
 	buildSubmitDeclaration,
 	buildDownloadApplicationPdf
 } from './declaration/controller.ts';
+import { buildContactPage } from './contact/controller.ts';
+import { buildCookiesPage } from './cookies/controller.ts';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
@@ -48,6 +50,8 @@ export function createRoutes(service: PortalService): IRouter {
 	const homePageController = buildHomePage(service);
 	const submitHomePageController = buildSubmitHomePageController(service);
 	const signOutController = buildSignOutController(service);
+	const contactPage = buildContactPage();
+	const cookiesPage = buildCookiesPage();
 
 	const declarationNamePage = buildDeclarationNamePage();
 	const saveDeclarationName = buildSaveDeclarationName(service);
@@ -68,6 +72,8 @@ export function createRoutes(service: PortalService): IRouter {
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
 	router.post('/', asyncHandler(submitHomePageController));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
+	router.get('/contact', asyncHandler(contactPage));
+	router.get('/cookies', asyncHandler(cookiesPage));
 
 	router.get('/declaration/name', hasApplicationBeenSubmitted, asyncHandler(declarationNamePage));
 	router.post('/declaration/name', asyncHandler(saveDeclarationName));
