@@ -2,7 +2,6 @@ import * as CFB from 'cfb';
 import { fileTypeFromBuffer } from 'file-type';
 import { PDFDocument } from 'pdf-lib';
 import type { Logger } from 'pino';
-import { ALLOWED_EXTENSIONS_TEXT } from './constants.ts';
 import path from 'path';
 
 const FORBIDDEN_CHARACTERS = [
@@ -48,9 +47,9 @@ export async function validateUploadedFile(
 	let validationErrors = [];
 	const { originalname, mimetype, buffer, size } = file;
 
-	if (typeof size !== 'number' || size <= 0) {
+	if (size <= 0) {
 		validationErrors.push({
-			text: `${originalname}: The attachment is empty`,
+			text: `${originalname} is empty`,
 			href: '#upload-form'
 		});
 		return validationErrors;
@@ -58,28 +57,28 @@ export async function validateUploadedFile(
 
 	if (originalname.length > 255) {
 		validationErrors.push({
-			text: `${originalname}: The attachment name exceeds the 255 character limit`,
+			text: `${originalname}: the file name must be 255 characters or less`,
 			href: '#upload-form'
 		});
 	}
 
 	if (FORBIDDEN_CHARACTERS.some((char) => originalname.includes(char))) {
 		validationErrors.push({
-			text: `${originalname}: The attachment name contains special characters that are not allowed. Please remove these and try again.`,
+			text: `${originalname}: the file name must only include letters a to z, numbers, full stops and spaces`,
 			href: '#upload-form'
 		});
 	}
 
 	if (!allowedMimeTypes.includes(mimetype)) {
 		validationErrors.push({
-			text: `${originalname}: The attachment must be ${ALLOWED_EXTENSIONS_TEXT}`,
+			text: `${originalname}: the file must be an approved format`,
 			href: '#upload-form'
 		});
 	}
 
 	if (size > maxFileSize) {
 		validationErrors.push({
-			text: `${originalname}: The attachment must be smaller than 250MB`,
+			text: `${originalname} must be smaller than 250MB`,
 			href: '#upload-form'
 		});
 		return validationErrors;
@@ -96,35 +95,35 @@ export async function validateUploadedFile(
 			!text.toLowerCase().includes('<!doctype html')
 		) {
 			validationErrors.push({
-				text: `${originalname}: The attachment is not a valid .html file`,
+				text: `${originalname} has contents that aren’t valid for the file type`,
 				href: '#upload-form'
 			});
 		}
 
 		if (declaredExt === 'prj' && !(text.startsWith('PROJCS[') || text.startsWith('GEOGCS['))) {
 			validationErrors.push({
-				text: `${originalname}: The attachment is not a valid .prj file`,
+				text: `${originalname} has contents that aren’t valid for the file type`,
 				href: '#upload-form'
 			});
 		}
 
 		if (declaredExt === 'gis' && !/coordinate|longitude|latitude/i.test(text)) {
 			validationErrors.push({
-				text: `${originalname}: The attachment is not a valid .gis file`,
+				text: `${originalname} has contents that aren’t valid for the file type`,
 				href: '#upload-form'
 			});
 		}
 
 		if (declaredExt === 'dbf' && !['03', '83', '8B', '8E'].includes(header.slice(0, 2))) {
 			validationErrors.push({
-				text: `${originalname}: The attachment is not a valid .dbf file`,
+				text: `${originalname} has contents that aren’t valid for the file type`,
 				href: '#upload-form'
 			});
 		}
 
 		if ((declaredExt === 'shp' || declaredExt === 'shx') && !header.startsWith('0000270A')) {
 			validationErrors.push({
-				text: `${originalname}: The attachment is not a valid .shp or .shx file`,
+				text: `${originalname} has contents that aren’t valid for the file type`,
 				href: '#upload-form'
 			});
 		}
@@ -145,7 +144,7 @@ export async function validateUploadedFile(
 
 	if ((ext === 'pdf' || mime === 'application/pdf') && (await isPdfPasswordProtected(buffer, logger))) {
 		validationErrors.push({
-			text: `${originalname}: File must not be password protected`,
+			text: `${originalname} is password protected`,
 			href: '#upload-form'
 		});
 	}
@@ -154,7 +153,7 @@ export async function validateUploadedFile(
 	// common users include older Microsoft Office files such as .doc and .xls
 	if ((ext === 'cfb' || mime === 'application/x-cfb') && isDocOrXlsEncrypted(buffer, logger)) {
 		validationErrors.push({
-			text: `${originalname}: File must not be password protected`,
+			text: `${originalname} is password protected`,
 			href: '#upload-form'
 		});
 	}
@@ -166,9 +165,8 @@ export async function validateUploadedFile(
 		(!new Set([...allowedMimeTypes, 'application/x-cfb']).has(mime) ||
 			!new Set([...allowedFileExtensions, 'cfb']).has(ext))
 	) {
-		const declaredExt = mimetype.split('/')[1];
 		validationErrors.push({
-			text: `${originalname}: File signature mismatch: declared as .${declaredExt} (${mimetype}) but detected as .${ext} (${mime})`,
+			text: `${originalname} has contents that aren’t valid for the file type`,
 			href: '#upload-form'
 		});
 	}

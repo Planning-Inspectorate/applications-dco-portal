@@ -315,7 +315,7 @@ describe('applicant-agent-details controller', () => {
 							country: '',
 							postcode: ''
 						},
-						isAgent: 'no',
+						isAgent: '',
 						agentOrganisation: '',
 						agentFirstName: '',
 						agentLastName: '',
