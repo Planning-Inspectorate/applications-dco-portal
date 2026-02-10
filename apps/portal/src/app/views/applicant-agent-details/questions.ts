@@ -103,7 +103,7 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 						errorMessage: prefix === 'applicant' ? `Enter the ${prefix}’s first name` : 'Enter your first name',
 						required: true,
 						regex: {
-							regex: /^[A-Za-z'-]+$/,
+							regex: /^[A-Za-z' -]+$/,
 							regexMessage: 'First name must only contain letters a to z, apostrophes and hyphens'
 						},
 						maxLength: { maxLength: 250, minLengthMessage: 'First name must be 250 characters or less' }
