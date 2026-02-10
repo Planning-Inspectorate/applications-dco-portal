@@ -38,7 +38,9 @@ module "app_pdf" {
 
 
   app_settings = {
-    NODE_ENV = var.apps_config.node_environment
+    NODE_ENV  = var.apps_config.node_environment
+    PORT      = 3000
+    LOG_LEVEL = var.apps_config.logging.level
   }
 
   providers = {
