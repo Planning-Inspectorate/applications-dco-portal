@@ -27,7 +27,7 @@ export function getQuestions(documentTypeId: string) {
 			options: referenceDataToRadioOptions(
 				DOCUMENT_SUB_CATEGORY.filter((subCategory) => subCategory.categoryId === documentTypeId)
 			),
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select the document type')]
 		},
 		apfpRegulation: {
 			type: COMPONENT_TYPES.SELECT,
@@ -36,7 +36,7 @@ export function getQuestions(documentTypeId: string) {
 			hint: 'APFP refers to the Infrastructure Planning (Applications: Prescribed Forms and Procedure) Regulations 2009.',
 			fieldName: 'apfpRegulation',
 			url: 'regulation',
-			validators: [new RequiredValidator()],
+			validators: [new RequiredValidator('Select the APFP regulation')],
 			options: [{ text: '', value: '' }, ...APFP_REGULATION.map((t) => ({ text: t.displayName, value: t.id }))]
 		},
 		isCertified: {
@@ -45,7 +45,7 @@ export function getQuestions(documentTypeId: string) {
 			question: 'Is the document certified?',
 			fieldName: 'isCertified',
 			url: 'document-certified',
-			validators: [new RequiredValidator()]
+			validators: [new RequiredValidator('Select yes if the document is certified')]
 		},
 		fileUpload: {
 			type: CUSTOM_COMPONENTS.FILE_UPLOAD,
@@ -58,7 +58,7 @@ export function getQuestions(documentTypeId: string) {
 			maxFileSizeValue: MAX_FILE_SIZE,
 			maxFileSizeString: '100MB',
 			documentTypeId,
-			validators: [new DocumentUploadValidator('fileUpload')]
+			validators: [new DocumentUploadValidator('fileUpload', 'Select a file to upload')]
 		}
 	};
 

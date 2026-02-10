@@ -44,19 +44,24 @@ export function uploadDocumentsController(
 		fileErrors.push(...fileValidationErrors);
 
 		const blobAlreadyExists = await Promise.all(
-			files.map((file) => {
+			files.map(async (file) => {
 				const fileName = Buffer.from(file.originalname, 'latin1').toString('utf8');
-				return blobStore?.doesBlobExist(
+				const exists = await blobStore?.doesBlobExist(
 					`${req.session.caseReference}/${documentCategoryId}/${documentSubCategoryId}/${fileName}`
 				);
+				return { fileName, exists };
 			})
 		);
 
-		if (blobAlreadyExists.some(Boolean)) {
-			fileErrors.push({
-				text: 'Attachment with this name has already been uploaded',
-				href: '#upload-form'
-			});
+		if (blobAlreadyExists.length > 0) {
+			blobAlreadyExists
+				.filter((blob) => blob.exists)
+				.forEach((blob) => {
+					fileErrors.push({
+						text: `You’ve already uploaded ${blob.fileName}. Upload a file with a different name.`,
+						href: '#upload-form'
+					});
+				});
 		}
 
 		const sessionFilesUploadedSoFar: Express.Multer.File[] =
@@ -74,9 +79,10 @@ export function uploadDocumentsController(
 			});
 		}
 
-		if (fileErrors.length > 0) {
+		const numberOfFileErrors = fileErrors.length;
+		if (numberOfFileErrors > 0) {
 			req.session.errors = {
-				'upload-form': { msg: 'Errors encountered during file upload' }
+				'upload-form': { msg: numberOfFileErrors > 1 ? 'There are problems with 1 or more files' : fileErrors[0].text }
 			};
 			req.session.errorSummary = fileErrors;
 		} else {
@@ -87,7 +93,7 @@ export function uploadDocumentsController(
 					await blobStore?.uploadStream(Readable.from(file.buffer), file.mimetype, blobName);
 				} catch (error) {
 					logger.error({ error }, `Error uploading file: ${fileName} to blob store`);
-					throw new Error(`Failed to upload file: ${fileName}`);
+					throw new Error(`${fileName} could not be uploaded – try again`);
 				}
 			}
 

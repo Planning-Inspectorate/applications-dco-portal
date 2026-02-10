@@ -140,7 +140,7 @@ describe('upload-documents.js', () => {
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco/upload/upload-documents');
 			assert.deepStrictEqual(mockReq.session.errors, {
 				'upload-form': {
-					msg: 'Errors encountered during file upload'
+					msg: 'Total file size of all attachments must not exceed 1GB'
 				}
 			});
 			assert.deepStrictEqual(mockReq.session.errorSummary, [
@@ -208,7 +208,7 @@ describe('upload-documents.js', () => {
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco/upload/upload-documents');
 			assert.deepStrictEqual(mockReq.session.errors, {
 				'upload-form': {
-					msg: 'Errors encountered during file upload'
+					msg: 'You can only upload up to 3 files at a time'
 				}
 			});
 			assert.deepStrictEqual(mockReq.session.errorSummary, [
@@ -276,12 +276,178 @@ describe('upload-documents.js', () => {
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco/upload/upload-documents');
 			assert.deepStrictEqual(mockReq.session.errors, {
 				'upload-form': {
-					msg: 'Errors encountered during file upload'
+					msg: 'You’ve already uploaded test4.pdf. Upload a file with a different name.'
 				}
 			});
 			assert.deepStrictEqual(mockReq.session.errorSummary, [
 				{
-					text: 'Attachment with this name has already been uploaded',
+					text: 'You’ve already uploaded test4.pdf. Upload a file with a different name.',
+					href: '#upload-form'
+				}
+			]);
+			assert.strictEqual(mockBlobStore.uploadStream.mock.callCount(), 0);
+		});
+		it('should return multiple errors if the multiple files being uploaded already exist in blob store', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 350
+			};
+			const file1 = {
+				originalname: 'test6.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 350
+			};
+			const file2 = {
+				originalname: 'test5.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 350
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				files: [file, file1, file2],
+				session: {
+					caseReference: 'EN123456',
+					files: {
+						'draft-dco': {
+							uploadedFiles: [{ originalname: 'test1.pdf', size: 173647723 }]
+						}
+					}
+				},
+				body: {}
+			};
+			const mockRes = {
+				locals: {
+					journeyResponse: {
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
+					}
+				},
+				redirect: mock.fn()
+			};
+
+			const mockBlobStore = {
+				doesBlobExist: mock.fn(() => true),
+				uploadStream: mock.fn()
+			};
+
+			const mockLogger = {
+				info: mock.fn(),
+				error: mock.fn()
+			};
+
+			const controller = uploadDocumentsController(
+				{ blobStore: mockBlobStore, logger: mockLogger },
+				DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+				ALLOWED_EXTENSIONS,
+				ALLOWED_MIME_TYPES,
+				MAX_FILE_SIZE
+			);
+
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco/upload/upload-documents');
+			assert.deepStrictEqual(mockReq.session.errors, {
+				'upload-form': {
+					msg: 'There are problems with 1 or more files'
+				}
+			});
+			assert.deepStrictEqual(mockReq.session.errorSummary, [
+				{
+					text: 'You’ve already uploaded test4.pdf. Upload a file with a different name.',
+					href: '#upload-form'
+				},
+				{
+					text: 'You’ve already uploaded test6.pdf. Upload a file with a different name.',
+					href: '#upload-form'
+				},
+				{
+					text: 'You’ve already uploaded test5.pdf. Upload a file with a different name.',
+					href: '#upload-form'
+				}
+			]);
+			assert.strictEqual(mockBlobStore.uploadStream.mock.callCount(), 0);
+		});
+		it('should return error for multiple errors', async () => {
+			const fakePdfContent = '%PDF-1.4\n%âãÏÓ\n1 0 obj\n<< /Type /Catalog >>\nendobj\ntrailer\n<<>>\n%%EOF';
+			const file1 = {
+				originalname: 'test4.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 0
+			};
+			const file2 = {
+				originalname: 'test5.pdf',
+				mimetype: 'application/pdf',
+				buffer: Buffer.from(fakePdfContent, 'utf-8'),
+				size: 0
+			};
+			const mockReq = {
+				baseUrl: '/draft-dco',
+				files: [file1, file2],
+				session: {
+					caseReference: 'EN123456',
+					files: {
+						'draft-dco': {
+							uploadedFiles: [{ originalname: 'test1.pdf', size: 173647723 }]
+						}
+					}
+				},
+				body: {}
+			};
+			const mockRes = {
+				locals: {
+					journeyResponse: {
+						journeyId: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+						answers: {
+							documentType: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
+						}
+					}
+				},
+				redirect: mock.fn()
+			};
+
+			const mockBlobStore = {
+				doesBlobExist: mock.fn(() => false),
+				uploadStream: mock.fn()
+			};
+
+			const mockLogger = {
+				info: mock.fn(),
+				error: mock.fn()
+			};
+
+			const controller = uploadDocumentsController(
+				{ blobStore: mockBlobStore, logger: mockLogger },
+				DOCUMENT_CATEGORY_ID.DRAFT_DCO,
+				ALLOWED_EXTENSIONS,
+				ALLOWED_MIME_TYPES,
+				MAX_FILE_SIZE
+			);
+
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/draft-dco/upload/upload-documents');
+			assert.deepStrictEqual(mockReq.session.errors, {
+				'upload-form': {
+					msg: 'There are problems with 1 or more files'
+				}
+			});
+			assert.deepStrictEqual(mockReq.session.errorSummary, [
+				{
+					text: 'test4.pdf is empty',
+					href: '#upload-form'
+				},
+				{
+					text: 'test5.pdf is empty',
 					href: '#upload-form'
 				}
 			]);

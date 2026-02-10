@@ -40,7 +40,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment must be smaller than 250MB'
+						text: 'test4.pdf must be smaller than 250MB'
 					}
 				]
 			);
@@ -60,7 +60,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment must be PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
+						text: 'test4.pdf: the file must be an approved format'
 					}
 				]
 			);
@@ -119,7 +119,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: File signature mismatch: declared as .pdf (application/pdf) but detected as .bmp (image/bmp)'
+						text: 'test4.pdf has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -139,7 +139,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.bmp: The attachment must be PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
+						text: 'test4.bmp: the file must be an approved format'
 					}
 				]
 			);
@@ -174,7 +174,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: File must not be password protected'
+						text: 'test4.pdf is password protected'
 					}
 				]
 			);
@@ -251,7 +251,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment is empty'
+						text: 'test4.pdf is empty'
 					}
 				]
 			);
@@ -271,7 +271,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment is empty'
+						text: 'test4.pdf is empty'
 					}
 				]
 			);
@@ -290,7 +290,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.html: The attachment is not a valid .html file'
+						text: 'test4.html has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -310,7 +310,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.pdf: The attachment is empty'
+						text: 'test4.pdf: Could not determine file type from signature'
 					}
 				]
 			);
@@ -329,7 +329,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.prj: The attachment is not a valid .prj file'
+						text: 'test4.prj has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -348,7 +348,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.dbf: The attachment is not a valid .dbf file'
+						text: 'test4.dbf has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -367,7 +367,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.shp: The attachment is not a valid .shp or .shx file'
+						text: 'test4.shp has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -386,7 +386,7 @@ describe('./lib/forms/custom-components/file-upload/document-validation-util.js'
 				[
 					{
 						href: '#upload-form',
-						text: 'test4.shx: The attachment is not a valid .shp or .shx file'
+						text: 'test4.shx has contents that aren’t valid for the file type'
 					}
 				]
 			);
@@ -450,7 +450,7 @@ async function assertFileIsRejectedAsEncrypted(buffer) {
 		[
 			{
 				href: '#upload-form',
-				text: 'test4.doc: File must not be password protected'
+				text: 'test4.doc is password protected'
 			}
 		]
 	);

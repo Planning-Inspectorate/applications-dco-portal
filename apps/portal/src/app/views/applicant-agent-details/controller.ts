@@ -3,6 +3,8 @@ import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handle
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
+import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
+import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function buildApplicantAgentDetailsHomePage(
 	{ db }: PortalService,
@@ -37,6 +39,9 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	}
 
 	const forms = req.session.forms || (req.session.forms = {});
+	const isSectionComplete =
+		(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] ===
+		DOCUMENT_CATEGORY_STATUS_ID.COMPLETED;
 
 	forms[applicationSectionId] = {
 		applicantOrganisation: caseData.ApplicantDetails?.organisation || '',
@@ -52,7 +57,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			country: caseData.ApplicantDetails?.Address?.country || '',
 			postcode: caseData.ApplicantDetails?.Address?.postcode || ''
 		},
-		isAgent: caseData.AgentDetails ? 'yes' : 'no',
+		isAgent: caseData.AgentDetails ? 'yes' : isSectionComplete ? 'no' : '',
 		agentOrganisation: caseData.AgentDetails?.organisation || '',
 		agentFirstName: caseData.AgentDetails?.firstName || '',
 		agentLastName: caseData.AgentDetails?.lastName || '',
