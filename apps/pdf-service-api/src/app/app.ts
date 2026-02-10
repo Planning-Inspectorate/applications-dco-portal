@@ -40,7 +40,10 @@ export function createApp(service: PdfService): Express {
 	app.use('/', router);
 
 	//A catch-all handler to send a 404 response
-	app.use((req, res) => res.status(404));
+	app.use((req, res) => {
+		res.status(404);
+		res.send({ error: 'Not found' });
+	});
 
 	return app;
 }
