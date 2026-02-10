@@ -15,7 +15,7 @@ import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } f
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { mapNsipProjectToCase, mapNsipServiceUserToCase } from './mappers.ts';
+import { mapNsipProjectToCase, mapNsipServiceUserToCase, mapNsipToQuestionWasPrepopulated } from './mappers.ts';
 import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
@@ -243,64 +243,62 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 
 		await deleteOtp(db, emailAddress, caseReference);
 
-		await db.$transaction(async ($tx) => {
-			const [nsipProject, nsipServiceUser] = await Promise.all([
-				$tx.nsipProject.findUnique({
-					where: { caseReference: caseReference }
-				}),
-				$tx.nsipServiceUser.findUnique({
-					where: {
-						caseReference_email: {
-							caseReference: caseReference,
-							email: emailAddress
-						}
+		const [nsipProject, nsipServiceUser] = await Promise.all([
+			db.nsipProject.findUnique({
+				where: { caseReference: caseReference }
+			}),
+			db.nsipServiceUser.findUnique({
+				where: {
+					caseReference_email: {
+						caseReference: caseReference,
+						email: emailAddress
 					}
-				})
-			]);
-
-			const caseData = await $tx.case.upsert({
-				where: { reference: caseReference },
-				update: {},
-				create: {
-					reference: caseReference,
-					email: emailAddress,
-					...mapNsipProjectToCase(nsipProject),
-					...mapNsipServiceUserToCase(nsipServiceUser)
-				},
-				include: {
-					Whitelist: true
 				}
-			});
+			})
+		]);
 
-			if (caseData.Whitelist.length === 0) {
-				logger.info('Setting up case whitelist');
-
-				await $tx.whitelistUser.upsert({
-					where: {
-						caseReference_email: {
-							caseReference,
-							email: emailAddress
-						}
-					},
-					update: {},
-					create: {
-						caseReference,
-						email: emailAddress,
-						isInitialInvitee: true,
-						UserRole: {
-							connect: {
-								id: WHITELIST_USER_ROLE_ID.ADMIN_USER
-							}
-						},
-						Case: {
-							connect: {
-								id: caseData.id
-							}
-						}
-					}
-				});
+		const caseData = await db.case.upsert({
+			where: { reference: caseReference },
+			update: {},
+			create: {
+				reference: caseReference,
+				email: emailAddress,
+				...mapNsipProjectToCase(nsipProject),
+				...mapNsipServiceUserToCase(nsipServiceUser)
+			},
+			include: {
+				Whitelist: true
 			}
 		});
+
+		if (caseData.Whitelist.length === 0) {
+			logger.info('Setting up case whitelist');
+
+			await db.whitelistUser.upsert({
+				where: {
+					caseReference_email: {
+						caseReference,
+						email: emailAddress
+					}
+				},
+				update: {},
+				create: {
+					caseReference,
+					email: emailAddress,
+					isInitialInvitee: true,
+					UserRole: {
+						connect: {
+							id: WHITELIST_USER_ROLE_ID.ADMIN_USER
+						}
+					},
+					Case: {
+						connect: {
+							id: caseData.id
+						}
+					}
+				}
+			});
+		}
 
 		const key = `user_session:${emailAddress}`;
 		const oldSessionId = await redisClient?.get(key);
@@ -318,6 +316,7 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 			req.session.isAuthenticated = true;
 			req.session.emailAddress = emailAddress;
 			req.session.caseReference = caseReference;
+			req.session.cbosPopulated = mapNsipToQuestionWasPrepopulated(nsipProject, nsipServiceUser, caseData);
 
 			res.cookie('had-session', true, {
 				httpOnly: true,

@@ -12,5 +12,6 @@ declare module 'express-session' {
 		caseReference?: string;
 		otp?: string;
 		isAuthenticated?: boolean;
+		cbosPopulated?: Record<string, boolean>;
 	}
 }

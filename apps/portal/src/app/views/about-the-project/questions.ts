@@ -22,7 +22,6 @@ export function getQuestions() {
 			pageTitle: 'Project Description',
 			question: 'Describe the Project',
 			fieldName: 'description',
-			html: 'views/prepopulated-data-template.html',
 			url: 'description',
 			validators: [
 				new RequiredValidator('Enter a project description'),
@@ -65,7 +64,6 @@ export function getQuestions() {
 			pageTitle: 'Project Location Description',
 			question: 'Describe the location or route of the project',
 			fieldName: 'locationDescription',
-			html: 'views/prepopulated-data-template.html',
 			url: 'location-description',
 			validators: [
 				new RequiredValidator('Enter the project location or route'),
@@ -97,7 +95,6 @@ export function getQuestions() {
 			pageTitle: `Single Site Grid References`,
 			question: `Enter grid references`,
 			fieldName: `singleSiteGridReferences`,
-			html: 'views/prepopulated-data-template.html',
 			url: `grid-references-single-site`,
 			validators: [
 				new MultiFieldInputValidator({
