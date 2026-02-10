@@ -15,6 +15,19 @@ import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-
 export function createApp(service: PdfService): Express {
 	const app = express();
 
+	app.use((req, res, next) => {
+		console.log('HOST:', req.headers.host);
+		console.log('METHOD:', req.method);
+		console.log('URL:', req.originalUrl);
+
+		res.on('finish', () => {
+			console.log('STATUS:', res.statusCode);
+			console.log('--------------------------');
+		});
+
+		next();
+	});
+
 	const logRequests = buildLogRequestsMiddleware(service.logger);
 	app.use(logRequests);
 
