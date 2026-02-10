@@ -26,4 +26,23 @@ describe('about the project journey', () => {
 		const questionsDefined = sections.every((s: any) => s.questions.every((q: any) => q !== undefined));
 		assert.strictEqual(questionsDefined, true);
 	});
+	it('cbos prepopulated questions should have the requisite html property', () => {
+		const mockReq = {
+			params: { id: 'project-1' },
+			baseUrl: '/about-the-project',
+			session: { cbosPopulated: { singleGridReferences: true, description: false, locationDescription: true } }
+		};
+		const questions = getQuestions();
+		const answers = {};
+		const response = new JourneyResponse('about-the-project', 'sess-id', answers);
+		// @ts-expect-error - due to mock req not matching Request type
+		const journey = createJourney('about-the-project', questions, response, mockReq);
+		const sections = journey.sections;
+
+		const questionsWithHtml = sections.reduce(
+			(acc: number, s: any) => (acc += s.questions.filter((q: any) => !!q.html).length),
+			0
+		);
+		assert.strictEqual(questionsWithHtml, 2);
+	});
 });

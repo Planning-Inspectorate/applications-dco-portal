@@ -14,6 +14,13 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
 
+	if (req.session?.cbosPopulated) {
+		for (const populatedQuestionKey of Object.keys(req.session.cbosPopulated)) {
+			if (req.session.cbosPopulated[populatedQuestionKey] && questions[populatedQuestionKey])
+				questions[populatedQuestionKey].html = 'views/prepopulated-data-template.html';
+		}
+	}
+
 	const applicationSectionDisplayName = getApplicationSectionDisplayName(applicationSectionId);
 
 	return new Journey({
