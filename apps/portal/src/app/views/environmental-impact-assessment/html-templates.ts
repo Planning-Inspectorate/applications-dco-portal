@@ -8,10 +8,10 @@ const HAS_ENVIRONMENTAL_STATEMENT_HTML = `
 
 <p class="govuk-body">
 	To see if the project requires an EIA, you should refer to
-	<a href="https://www.legislation.gov.uk/uksi/2017/572/contents"
+	<a class="govuk-link govuk-link--no-visited-state" href="https://www.legislation.gov.uk/uksi/2017/572/contents"
 		>The Infrastructure Planning (Environmental Impact Assessment) Regulations 2017 (opens in new tab)</a
 	>. Where the transitional provisions apply, you should refer to
-	<a href="https://www.legislation.gov.uk/uksi/2009/2263/contents/made"
+	<a class="govuk-link govuk-link--no-visited-state" href="https://www.legislation.gov.uk/uksi/2009/2263/contents/made"
 		>The Infrastructure Planning (Environmental Impact Assessment) Regulations 2009 (opens in new tab)</a
 	>.
 </p>
@@ -31,7 +31,7 @@ const NOTIFYING_CONSULTATION_BODIES_HTML = `
 
 const NOTIFYING_OTHER_PEOPLE_HTML = `
 <p class="govuk-body">
-	<a href="https://www.legislation.gov.uk/uksi/2017/572/regulation/11"
+	<a class="govuk-link govuk-link--no-visited-state" href="https://www.legislation.gov.uk/uksi/2017/572/regulation/11"
 		>Regulation 11(1)(c) of the Infrastructure Planning (Environmental Impact Assessment) Regulations 2017 (opens in a
 		new tab)</a
 	>
