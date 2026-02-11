@@ -530,32 +530,19 @@ describe('login controllers', () => {
 		});
 	});
 	describe('buildSubmitOtpController', () => {
-		const expectedCbosPopulatedSessionData = [
-			'description',
-			'locationDescription',
-			'singleGridReferences',
-			'applicantOrganisation',
-			'applicantName',
-			'applicantEmailAddress',
-			'applicantPhone',
-			'applicantAddress'
-		].reduce((acc: Record<string, boolean>, curr: any) => {
-			acc[curr] = false;
-			return acc;
-		}, {});
-		const expectedPopulatedCbosPopulatedSessionData = [
-			'description',
-			'locationDescription',
-			'singleGridReferences',
-			'applicantOrganisation',
-			'applicantName',
-			'applicantEmailAddress',
-			'applicantPhone',
-			'applicantAddress'
-		].reduce((acc: Record<string, boolean>, curr: any) => {
-			acc[curr] = true;
-			return acc;
-		}, {});
+		/**
+		 * helper function to emulate the output of mapNsipToQuestionWasPrepopulated for testing
+		 */
+		const getCbosPopulatedSessionData = (populated: boolean) => ({
+			description: populated,
+			locationDescription: populated,
+			singleGridReferences: populated,
+			applicantOrganisation: populated,
+			applicantName: populated,
+			applicantEmailAddress: populated,
+			applicantPhone: populated,
+			applicantAddress: populated
+		});
 
 		it('should initialise case and whitelist then redirect to landing page if valid and correct otp entered', async (ctx) => {
 			const now = new Date('2025-01-30T00:00:00.000Z');
@@ -622,7 +609,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
 			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
-			assert.deepStrictEqual(mockReq.session.cbosPopulated, expectedCbosPopulatedSessionData);
+			assert.deepStrictEqual(mockReq.session.cbosPopulated, getCbosPopulatedSessionData(false));
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
@@ -730,7 +717,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
 			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
-			assert.deepStrictEqual(mockReq.session.cbosPopulated, expectedCbosPopulatedSessionData);
+			assert.deepStrictEqual(mockReq.session.cbosPopulated, getCbosPopulatedSessionData(false));
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
@@ -877,7 +864,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
 			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
-			assert.deepStrictEqual(mockReq.session.cbosPopulated, expectedPopulatedCbosPopulatedSessionData);
+			assert.deepStrictEqual(mockReq.session.cbosPopulated, getCbosPopulatedSessionData(true));
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
@@ -1088,7 +1075,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
 			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
-			assert.deepStrictEqual(mockReq.session.cbosPopulated, expectedCbosPopulatedSessionData);
+			assert.deepStrictEqual(mockReq.session.cbosPopulated, getCbosPopulatedSessionData(false));
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);
 
