@@ -234,6 +234,7 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 		try {
 			await blobStore?.moveFolder(caseReference, db);
 		} catch (error) {
+			console.error(error);
 			logger.error({ error }, 'error moving case documents to back office container in blob store');
 			throw new Error('error moving documents during case submission');
 		}

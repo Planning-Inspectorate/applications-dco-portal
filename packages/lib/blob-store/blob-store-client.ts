@@ -123,6 +123,7 @@ export class BlobStorageClient {
 
 		const sourceContainer = this.blobServiceClient.getContainerClient(this.container);
 		const destContainer = this.blobServiceClient.getContainerClient(destinationContainerName);
+		await destContainer.createIfNotExists();
 
 		this.logger.info(
 			`moveFolder - moving files with prefix: ${prefix} from '${this.container}' to '${destinationContainerName}'`
@@ -136,7 +137,11 @@ export class BlobStorageClient {
 				const destBlob = destContainer.getBlobClient(`applications/${blob.name}`);
 
 				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
-				await poller.pollUntilDone();
+				const pollerResult = await poller.pollUntilDone();
+				if (pollerResult.copyStatus !== 'success') {
+					this.logger.error(`Copy failed for ${blob.name}`);
+				}
+
 				await sourceBlob.delete();
 
 				await dbClient.document.updateMany({
