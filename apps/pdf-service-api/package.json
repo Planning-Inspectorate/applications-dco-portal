@@ -11,22 +11,18 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@pins/dco-portal-database": "^0.0.0",
     "@pins/dco-portal-lib": "^0.0.0",
-    "@planning-inspectorate/dynamic-forms": "*",
     "body-parser": "*",
     "cookie-parser": "*",
     "dotenv": "*",
     "express": "*",
     "helmet": "*",
     "pino": "*",
-    "pino-pretty": "*",
     "puppeteer-core": "*"
   },
   "devDependencies": {
     "@types/cookie-parser": "*",
-    "nodemon": "*",
-    "sass": "*"
+    "nodemon": "*"
   },
   "imports": {
     "#service": "./src/app/service.ts"
