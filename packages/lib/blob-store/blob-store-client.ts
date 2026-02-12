@@ -135,6 +135,7 @@ export class BlobStorageClient {
 				const sourceBlob = sourceContainer.getBlobClient(blob.name);
 				const destBlob = destContainer.getBlobClient(`applications/${blob.name}`);
 
+				console.log(`begin copy from source url ${sourceBlob.url} to destination url ${destBlob.url}`);
 				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
 				await poller.pollUntilDone();
 				const props = await destBlob.getProperties();
