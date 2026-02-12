@@ -36,11 +36,14 @@ export async function generatePdf(
 			DamOrReservoir: true
 		}
 	});
-	if (!caseData?.anticipatedDateOfSubmission)
+	if (!caseData?.anticipatedDateOfSubmission) {
+		console.error('no anticipated date of submission found');
 		throw new Error('anticipated date of submission is missing from case data');
+	}
 
 	const dcoApplicationData = mapCaseToDcoApplication(caseData);
 	const env = getNunjucksEnv();
+	console.log('rendering');
 	let pdfBuffer: Buffer<ArrayBuffer> | undefined;
 	env.render(
 		'views/layouts/application-pdf.njk',
@@ -52,6 +55,7 @@ export async function generatePdf(
 				throw error;
 			}
 			if (!html) {
+				console.error('html markup generation failed');
 				throw new Error('html markup generation failed');
 			}
 			const cssPath = `${service.staticDir}/${data.styleFile}`;
@@ -63,13 +67,16 @@ export async function generatePdf(
 			}
 
 			const blobName = getPdfBlobName(data.caseReference as string, caseData.anticipatedDateOfSubmission!);
+			console.log('attempting to delete pdf at blob: ' + blobName);
 			logger.info('Attempting to delete pdf at blob: ' + blobName);
 			try {
 				await blobStore?.deleteBlobIfExists(blobName);
 			} catch {
+				console.log('no existing pdf to delete prior to upload');
 				logger.info('no existing pdf to delete prior to upload');
 			}
 
+			console.log('Uploading generated pdf to blob: ' + blobName);
 			logger.info('Uploading generated pdf to blob: ' + blobName);
 			await blobStore?.upload(pdfBuffer, 'application/pdf', blobName);
 
