@@ -10,7 +10,7 @@ import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 export function buildAboutTheProjectHomePage({ db }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
 		await populateForm(req, res, db, applicationSectionId);
-		res.redirect(`${req.baseUrl}/about/consent-reason`);
+		res.redirect(`${req.baseUrl}/about/description`);
 	};
 }
 

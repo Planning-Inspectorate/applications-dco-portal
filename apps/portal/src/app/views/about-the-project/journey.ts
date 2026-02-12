@@ -23,8 +23,8 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		journeyId: applicationSectionId,
 		sections: [
 			new Section(applicationSectionDisplayName, 'about')
-				.addQuestion(questions.consentReason)
 				.addQuestion(questions.description)
+				.addQuestion(questions.consentReason)
 				.addQuestion(questions.locationDescription)
 				.addQuestion(questions.singleOrLinear)
 				.addQuestion(questions.singleGridReferences)
