@@ -285,6 +285,7 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 			}
 		});
 
+		console.log('now emitting the event');
 		service.eventEmitter.emit('generatePdf', {
 			caseReference: req.session.caseReference,
 			styleFile: res.locals.config.styleFile
