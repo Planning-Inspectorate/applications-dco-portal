@@ -37,11 +37,16 @@ export class ServiceBusEventClient {
 		const traceId = this.#createTraceId();
 		const sender = this.#createSender(topic);
 
+		console.log(`Publishing ${events.length} events to topic ${topic} with type ${eventType} and trace id ${traceId}`);
 		this.logger.info(
 			`Publishing ${events.length} events to topic ${topic} with type ${eventType} and trace id ${traceId}`
 		);
 
 		await sender.sendMessages(this.#transformMessagesToSend(events, traceId, eventType));
+
+		console.log(
+			`event successfully sent to service bus topic events: ${events}, traceId: ${traceId}, eventType: ${eventType}`
+		);
 
 		return events;
 	};
