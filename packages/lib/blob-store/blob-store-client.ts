@@ -137,6 +137,14 @@ export class BlobStorageClient {
 
 				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
 				await poller.pollUntilDone();
+				const props = await destBlob.getProperties();
+
+				if (props.copyStatus !== 'success') {
+					console.error(
+						`copy failed: blob name: ${blob.name}, status: ${props.copyStatus}, description: ${props.copyStatusDescription}, copyId: ${props.copyId}`
+					);
+				}
+
 				await sourceBlob.delete();
 
 				await dbClient.document.updateMany({
