@@ -63,6 +63,9 @@ module "app_portal" {
     # database connection
     SQL_CONNECTION_STRING = local.key_vault_refs["sql-app-connection-string"]
 
+    # Pdf-service-api URL
+    PDF_SERVICE_URL = "https://${module.app_pdf.default_site_hostname}"
+
     # retries
     RETRY_MAX_ATTEMPTS = "3"
     # got default retry codes
