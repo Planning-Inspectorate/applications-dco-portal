@@ -133,17 +133,14 @@ export class BlobStorageClient {
 		const schedule = async (blob: BlobItem) => {
 			const task = (async () => {
 				const sourceBlob = sourceContainer.getBlobClient(blob.name);
-				const destBlob = destContainer.getBlobClient(`applications/${blob.name}`);
+				const destBlob = destContainer.getBlobClient(`application/${blob.name}`);
 
-				console.log(`begin copy from source url ${sourceBlob.url} to destination url ${destBlob.url}`);
-				const poller = await destBlob.beginCopyFromURL(sourceBlob.url);
-				await poller.pollUntilDone();
-				const props = await destBlob.getProperties();
+				const copyJob = await destBlob.beginCopyFromURL(sourceBlob.url);
+				const result = await copyJob.pollUntilDone();
 
-				if (props.copyStatus !== 'success') {
-					console.error(
-						`copy failed: blob name: ${blob.name}, status: ${props.copyStatus}, description: ${props.copyStatusDescription}, copyId: ${props.copyId}`
-					);
+				if (result.copyStatus !== 'success') {
+					this.logger.info(`Blob could not be moved: ${blob.name}`);
+					throw new Error(`Blob could not be moved: ${blob.name}`);
 				}
 
 				await sourceBlob.delete();
