@@ -33,3 +33,10 @@ resource "azurerm_private_dns_zone_virtual_network_link" "service_bus" {
 
   provider = azurerm.tooling
 }
+
+#rbac for portal app to publish service bus topics
+resource "azurerm_role_assignment" "portal_servicebus_datasender" {
+  scope                = data.azurerm_servicebus_topic.dco_portal_data_submissions.id
+  role_definition_name = "Azure Service Bus Data Sender"
+  principal_id         = module.app_portal.principal_id
+}
