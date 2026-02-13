@@ -1,7 +1,4 @@
-// @ts-expect-error - due to not having @types
-import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
-// @ts-expect-error - due to not having @types
-import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
+import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
 import type { Handler, Request } from 'express';
 
 export const JOURNEY_ID = 'edit-user';

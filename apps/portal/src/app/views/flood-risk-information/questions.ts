@@ -5,7 +5,6 @@ import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validato
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-// @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 

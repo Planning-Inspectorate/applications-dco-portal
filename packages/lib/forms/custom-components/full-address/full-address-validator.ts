@@ -3,9 +3,8 @@ import AddressValidator, {
 	validatePostcode
 	// @ts-expect-error - due to not having @types
 } from '@planning-inspectorate/dynamic-forms/src/validator/address-validator.js';
-// @ts-expect-error - due to not having @types
-import { Question } from '@planning-inspectorate/dynamic-forms/src/questions/question.js';
 import type { AddressValidatorOpts } from './types.d.ts';
+import FullAddressQuestion from './question.js';
 
 export default class FullAddressValidator extends AddressValidator {
 	declare requiredFields?: { [key: string]: boolean };
@@ -14,7 +13,7 @@ export default class FullAddressValidator extends AddressValidator {
 		super(opts);
 	}
 
-	validate(questionObj: Question) {
+	validate(questionObj: FullAddressQuestion) {
 		const { fieldName, addressLabels } = questionObj;
 		return [
 			this.#addressLine1Rule(fieldName, addressLabels.addressLine1),

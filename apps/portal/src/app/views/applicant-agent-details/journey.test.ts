@@ -2,8 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
-// @ts-expect-error - due to not having @types
-import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
+import { JourneyResponse } from '@planning-inspectorate/dynamic-forms';
 import type { Handler, Request } from 'express';
 
 describe('applicant agent details journey', () => {

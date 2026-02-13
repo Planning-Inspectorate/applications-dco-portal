@@ -1,11 +1,4 @@
-// @ts-expect-error - due to not having @types
-import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
-// @ts-expect-error - due to not having @types
-import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
-// @ts-expect-error - due to not having @types
-import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
+import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import type { Handler, Request } from 'express';
@@ -28,18 +21,12 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.locationDescription)
 				.addQuestion(questions.singleOrLinear)
 				.addQuestion(questions.singleGridReferences)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.SINGLE)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.SINGLE))
 				.addQuestion(questions.linearGridReferences)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.LINEAR)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.LINEAR))
 				.addQuestion(questions.hasAssociatedDevelopments)
 				.addQuestion(questions.associatedDevelopments)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.hasAssociatedDevelopments, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.hasAssociatedDevelopments, BOOLEAN_OPTIONS.YES))
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

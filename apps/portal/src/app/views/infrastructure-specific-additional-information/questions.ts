@@ -9,7 +9,6 @@ import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-// @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import {
 	DOCUMENT_CATEGORY_ID,
