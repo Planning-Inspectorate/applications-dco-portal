@@ -56,7 +56,7 @@ export function mapCaseDataToBackOfficeFormat(
 export function mapDocumentsToBackOfficeFormat(documents: DocumentsWithCaseAndSubCategory[]) {
 	return documents.map((document) => ({
 		documentName: document.fileName,
-		documentSize: document.size,
+		documentSize: document.size != null ? BigInt(document.size).toString() : '',
 		documentType: document.mimeType,
 		blobStoreUrl: document.blobName,
 		caseId: document.Case.id,
