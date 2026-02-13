@@ -43,7 +43,7 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Has Screening Opinion or Direction',
 			pageTitle: 'Has Screening Opinion or Direction',
-			question: 'Have you sought or recieved a screening opinion or direction?',
+			question: 'Have you sought or received a screening opinion or direction?',
 			fieldName: 'hasScreeningDirection',
 			url: 'has-screening-opinion-or-direction',
 			validators: [new RequiredValidator('Select yes if you have sought or received a screening opinion or direction')]
