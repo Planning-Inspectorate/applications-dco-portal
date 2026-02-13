@@ -14,13 +14,13 @@ export class PdfServiceClient {
 		this.logger.info('Generating pdf file');
 
 		let apiResponse;
+		console.log('url');
+		console.log(url);
+		console.log('body');
+		console.log(JSON.stringify({ html }));
 		try {
 			apiResponse = await fetch(url, {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/pdf'
-				},
 				body: JSON.stringify({ html })
 			});
 		} catch (err) {
@@ -29,6 +29,8 @@ export class PdfServiceClient {
 			throw new Error('pdf-service-api generatePdf error: ' + errorMessage);
 		}
 
+		console.log('api response');
+		console.log(apiResponse);
 		if (!apiResponse.ok || apiResponse.status !== 200) {
 			this.logger.error(apiResponse, 'PdfServiceClient generatePdf API Response not Ok');
 			throw new Error(
