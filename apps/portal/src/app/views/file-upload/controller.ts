@@ -283,6 +283,9 @@ export function isFileUploadSectionCompletedController(service: PortalService, j
 
 		const caseDocuments = await db.document.findMany({
 			where: {
+				SubCategory: {
+					categoryId: journeyId
+				},
 				Case: {
 					reference: req.session.caseReference
 				}
