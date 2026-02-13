@@ -209,7 +209,7 @@ describe('about-the-project controller', () => {
 						consentReason: '',
 						description: '',
 						locationDescription: '',
-						singleOrLinear: PROJECT_SITE_TYPE_IDS.LINEAR,
+						singleOrLinear: null,
 						easting: '',
 						northing: '',
 						startEasting: '',
