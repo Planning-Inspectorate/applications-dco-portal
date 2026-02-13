@@ -36,13 +36,18 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		return notFoundHandler(req, res);
 	}
 
+	const gridReferencesType = caseData.ProjectSingleSite
+		? PROJECT_SITE_TYPE_IDS.SINGLE
+		: caseData.ProjectLinearSite
+			? PROJECT_SITE_TYPE_IDS.LINEAR
+			: null;
 	const forms = req.session.forms || (req.session.forms = {});
 	const hasEvidence = (caseData?.SupportingEvidence?.length ?? 0) > 0;
 	const standardFields = {
 		consentReason: caseData.projectConsentReason || '',
 		description: caseData.projectDescription || '',
 		locationDescription: caseData.locationDescription || '',
-		singleOrLinear: caseData.ProjectSingleSite ? PROJECT_SITE_TYPE_IDS.SINGLE : PROJECT_SITE_TYPE_IDS.LINEAR,
+		singleOrLinear: gridReferencesType,
 		easting: String(caseData.ProjectSingleSite?.easting || ''),
 		northing: String(caseData.ProjectSingleSite?.northing || ''),
 		startEasting: String(caseData.ProjectLinearSite?.startEasting || ''),
