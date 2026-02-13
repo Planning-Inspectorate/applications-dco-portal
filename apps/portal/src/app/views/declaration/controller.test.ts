@@ -602,7 +602,7 @@ describe('declaration controllers', () => {
 							caseId: 'case-id-1',
 							documentName: 'test.pdf',
 							documentReference: 'test sub category',
-							documentSize: 208,
+							documentSize: '208',
 							documentType: 'application/pdf',
 							folderName: 'test category',
 							username: 'test@email.com'
@@ -612,7 +612,7 @@ describe('declaration controllers', () => {
 							caseId: 'case-id-1',
 							documentName: 'plan.pdf',
 							documentReference: 'test sub category',
-							documentSize: 500,
+							documentSize: '500',
 							documentType: 'application/pdf',
 							folderName: 'test category',
 							username: 'test@email.com'
