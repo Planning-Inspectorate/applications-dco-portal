@@ -1,9 +1,4 @@
-// @ts-expect-error - due to not having @types
-import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
-// @ts-expect-error - due to not having @types
-import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
-// @ts-expect-error - due to not having @types
-import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
+import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
 // @ts-expect-error - due to not having @types
 import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
 // @ts-expect-error - due to not having @types
@@ -50,9 +45,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.electricityGrid)
 				.addQuestion(questions.gasFuelledGeneratingStation)
 				.addQuestion(questions.gasPipelineConnection)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.gasFuelledGeneratingStation, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.gasFuelledGeneratingStation, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.nonOffshoreGeneratingStation)
 				.endMultiQuestionCondition('non-offshore-generating-station')
 				.startMultiQuestionCondition('highway-related-development', (response: Handler) =>
@@ -103,9 +96,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.pipelineConveyance)
 				.addQuestion(questions.landRightsCrossingConsents)
 				.addQuestion(questions.landRightsCrossingConsentsAgreement)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.landRightsCrossingConsents, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.landRightsCrossingConsents, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.pipelines)
 				.endMultiQuestionCondition('pipelines')
 				.startMultiQuestionCondition('hazardous-waste-facility', (response: Handler) =>
@@ -128,9 +119,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				)
 				.addQuestion(questions.recreationalAmenities)
 				.addQuestion(questions.recreationalAmenitiesDescription)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.recreationalAmenities, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.recreationalAmenities, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.damOrReservoir)
 				.endMultiQuestionCondition('dam-or-reservoir')
 				.endMultiQuestionCondition('additional-information')

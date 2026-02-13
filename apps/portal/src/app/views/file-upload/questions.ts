@@ -4,7 +4,6 @@ import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validato
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-// @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 // @ts-expect-error - due to not having @types
 import DocumentUploadValidator from '@planning-inspectorate/dynamic-forms/src/validator/document-upload-validator.js';

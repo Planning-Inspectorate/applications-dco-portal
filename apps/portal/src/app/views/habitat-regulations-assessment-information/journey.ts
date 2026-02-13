@@ -1,11 +1,4 @@
-// @ts-expect-error - due to not having @types
-import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
-// @ts-expect-error - due to not having @types
-import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
-// @ts-expect-error - due to not having @types
-import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
+import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import type { Handler, Request } from 'express';
@@ -24,9 +17,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.hasHabitatRegulationsAssessmentReport)
 				.addQuestion(questions.habitatRegulationsAssessmentScreeningReport)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.hasHabitatRegulationsAssessmentReport, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.hasHabitatRegulationsAssessmentReport, BOOLEAN_OPTIONS.YES))
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

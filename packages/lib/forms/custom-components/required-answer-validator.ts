@@ -1,5 +1,4 @@
 import { body } from 'express-validator';
-// @ts-expect-error - due to not having @types
 import BaseValidator from '@planning-inspectorate/dynamic-forms/src/validator/base-validator.js';
 // @ts-expect-error - due to not having @types
 import OptionsQuestion from '@planning-inspectorate/dynamic-forms/src/questions/options-question.js';

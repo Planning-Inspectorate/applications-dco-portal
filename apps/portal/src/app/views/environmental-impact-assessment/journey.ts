@@ -1,16 +1,11 @@
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-// @ts-expect-error - due to not having @types
-import { Journey } from '@planning-inspectorate/dynamic-forms/src/journey/journey.js';
-// @ts-expect-error - due to not having @types
-import { Section } from '@planning-inspectorate/dynamic-forms/src/section.js';
+import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
 // @ts-expect-error - due to not having @types
 import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
 // @ts-expect-error - due to not having @types
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
-// @ts-expect-error - due to not having @types
-import { JourneyResponse } from '@planning-inspectorate/dynamic-forms/src/journey/journey-response.js';
 
 export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
@@ -30,57 +25,45 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.nonTechnicalSummary)
 				.addQuestion(questions.otherEnvironmentalDocuments)
 				.addQuestion(questions.introductoryChapters)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
-						questions.otherEnvironmentalDocuments,
-						DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
-					)
+				.withCondition(
+					whenQuestionHasAnswer(questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS)
 				)
 				.addQuestion(questions.aspectChapters)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS)
+				.withCondition(
+					whenQuestionHasAnswer(questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS)
 				)
 				.addQuestion(questions.environmentStatementAppendices)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
+				.withCondition(
+					whenQuestionHasAnswer(
 						questions.otherEnvironmentalDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES
 					)
 				)
 				.addQuestion(questions.environmentStatementFigures)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
+				.withCondition(
+					whenQuestionHasAnswer(
 						questions.otherEnvironmentalDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES
 					)
 				)
 				.addQuestion(questions.modelInformation)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION)
+				.withCondition(
+					whenQuestionHasAnswer(questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION)
 				)
 				.addQuestion(questions.anyOtherMediaInformation)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
+				.withCondition(
+					whenQuestionHasAnswer(
 						questions.otherEnvironmentalDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION
 					)
 				)
 				.addQuestion(questions.confidentialDocuments)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
-						questions.otherEnvironmentalDocuments,
-						DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS
-					)
+				.withCondition(
+					whenQuestionHasAnswer(questions.otherEnvironmentalDocuments, DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS)
 				)
 				.addQuestion(questions.sensitiveInformation)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(
-						response,
+				.withCondition(
+					whenQuestionHasAnswer(
 						questions.otherEnvironmentalDocuments,
 						DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
 					)
@@ -88,14 +71,10 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.endMultiQuestionCondition('environmental-statement')
 				.addQuestion(questions.hasScreeningDirection)
 				.addQuestion(questions.screeningDirectionDocuments)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.hasScreeningDirection, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.hasScreeningDirection, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.hasScopingOpinion)
 				.addQuestion(questions.scopingOpinionDocuments)
-				.withCondition((response: JourneyResponse) =>
-					questionHasAnswer(response, questions.hasScopingOpinion, BOOLEAN_OPTIONS.YES)
-				)
+				.withCondition(whenQuestionHasAnswer(questions.hasScopingOpinion, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.notifyingConsultationBodies)
 				.addQuestion(questions.notifyingOtherPeople)
 		],

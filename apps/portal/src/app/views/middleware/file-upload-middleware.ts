@@ -3,11 +3,11 @@ import type { Request, Response, NextFunction } from 'express';
 export async function uploadDocumentQuestion(req: Request, res: Response, next: NextFunction) {
 	const uploadDocumentQuestionUrls = ['upload-documents'];
 	if (uploadDocumentQuestionUrls.includes(req.params.question)) {
-		const { section, question } = req.params;
+		const { section } = req.params;
 		const { journey } = res.locals;
 
 		const sectionObj = journey.getSection(section);
-		const questionObj = journey.getQuestionBySectionAndName(section, question);
+		const questionObj = journey.getQuestionByParams(req.params);
 
 		if (!questionObj || !sectionObj) {
 			return res.redirect(journey.taskListUrl);

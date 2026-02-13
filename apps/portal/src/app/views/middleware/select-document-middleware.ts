@@ -10,7 +10,7 @@ export function selectDocumentQuestionMiddleware({ db }: PortalService) {
 			const { journey } = res.locals;
 
 			const sectionObj = journey.getSection(section);
-			const questionObj = journey.getQuestionBySectionAndName(section, question);
+			const questionObj = journey.getQuestionByParams(req.params);
 
 			if (!questionObj || !sectionObj) {
 				return res.redirect(journey.taskListUrl);
@@ -40,7 +40,7 @@ export function selectMultipleDocumentQuestionMiddleware(
 			const { journey } = res.locals;
 
 			const sectionObj = journey.getSection(section);
-			const questionObj = journey.getQuestionBySectionAndName(section, question);
+			const questionObj = journey.getQuestionByParams(req.params);
 
 			if (!questionObj || !sectionObj) {
 				return res.redirect(journey.taskListUrl);

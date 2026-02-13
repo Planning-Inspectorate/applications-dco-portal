@@ -8,7 +8,6 @@ import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-// @ts-expect-error - due to not having @types
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import FullAddressValidator from '@pins/dco-portal-lib/forms/custom-components/full-address/full-address-validator.ts';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
