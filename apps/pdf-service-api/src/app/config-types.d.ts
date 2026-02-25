@@ -1,7 +1,7 @@
 export interface Config {
 	gitSha?: string;
 	fileUpload: {
-		maxSizeInBytes: number;
+		maxSize: string;
 	};
 	logLevel: string;
 	NODE_ENV: string;

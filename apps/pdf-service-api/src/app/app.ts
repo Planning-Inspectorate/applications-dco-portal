@@ -21,7 +21,7 @@ export function createApp(service: PdfService): Express {
 	//limit json size to prevent large files
 	app.use(
 		express.json({
-			limit: service.fileUpload.maxSizeInBytes
+			limit: service.fileUpload.maxSize
 		})
 	);
 
