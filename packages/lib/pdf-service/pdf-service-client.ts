@@ -16,11 +16,17 @@ export class PdfServiceClient {
 		let apiResponse;
 		console.log('url');
 		console.log(url);
-		console.log('body');
-		console.log(JSON.stringify({ html }));
+		console.log('body type and length');
+		const bo = JSON.stringify({ html });
+		console.log(typeof bo);
+		console.log(bo.length);
 		try {
 			apiResponse = await fetch(url, {
 				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/pdf'
+				},
 				body: JSON.stringify({ html })
 			});
 		} catch (err) {
@@ -32,6 +38,13 @@ export class PdfServiceClient {
 		console.log('api response');
 		console.log(apiResponse);
 		if (!apiResponse.ok || apiResponse.status !== 200) {
+			try {
+				console.log('error body');
+				const bodyJson = await apiResponse.text();
+				console.log(bodyJson);
+			} catch (err) {
+				console.log(err);
+			}
 			this.logger.error(apiResponse, 'PdfServiceClient generatePdf API Response not Ok');
 			throw new Error(
 				apiResponse.statusText
