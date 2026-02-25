@@ -270,7 +270,6 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 				EVENT_TYPE.PUBLISH
 			);
 		} catch (error) {
-			console.error('error thrown when sending event to service bus topic: ' + error);
 			logger.error({ error }, 'error sending event to service bus topic');
 			throw new Error('error sending event to service bus topic');
 		}
@@ -286,7 +285,6 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 			}
 		});
 
-		console.log('now emitting the event to generatePdf');
 		service.eventEmitter.emit('generatePdf', {
 			caseReference: req.session.caseReference,
 			styleFile: res.locals.config.styleFile

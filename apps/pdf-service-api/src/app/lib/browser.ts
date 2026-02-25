@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer-core';
 
 export async function launchBrowser(service: PdfService) {
 	switch (service.nodeEnv) {
-		case 'development':
+		case 'local':
 			return puppeteer.launch({
 				channel: 'chrome',
 				headless: true,
