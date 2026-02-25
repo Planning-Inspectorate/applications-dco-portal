@@ -8,7 +8,8 @@ export function addLocalsConfiguration(): Handler {
 		res.locals.config = {
 			styleFile: 'style-edb2fbb5.css',
 			cspNonce: res.locals.cspNonce,
-			headerTitle: 'Apply for a Development Consent Order',
+			headerTitle: 'Apply for and manage your infrastructure project',
+			serviceUrl: '/',
 			footerLinks: [
 				{
 					text: 'Terms and conditions',
