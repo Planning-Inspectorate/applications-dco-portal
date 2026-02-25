@@ -29,7 +29,7 @@ export function loadConfig(): Config {
 			maxSize: FILE_MAX_SIZE_IN_BYTES || '3mb'
 		},
 		logLevel: LOG_LEVEL || 'info',
-		NODE_ENV: NODE_ENV || 'development',
+		NODE_ENV: NODE_ENV || 'local',
 		httpPort: httpPort
 	};
 

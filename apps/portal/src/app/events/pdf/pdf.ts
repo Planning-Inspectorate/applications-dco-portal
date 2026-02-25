@@ -43,49 +43,50 @@ export async function generatePdf(
 
 	const dcoApplicationData = mapCaseToDcoApplication(caseData);
 	const env = getNunjucksEnv();
-	console.log('rendering');
-	let pdfBuffer: Buffer<ArrayBuffer> | undefined;
-	env.render(
-		'views/layouts/application-pdf.njk',
-		{
-			dcoApplicationData
-		},
-		async (error, html) => {
-			if (error) {
-				throw error;
-			}
-			if (!html) {
-				console.error('html markup generation failed');
-				throw new Error('html markup generation failed');
-			}
-			const cssPath = `${service.staticDir}/${data.styleFile}`;
-			const pdfHtml = await addCSStoHtml(html, cssPath, logger);
-			pdfBuffer = await pdfServiceClient?.generatePdf(pdfHtml);
 
-			if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
-				throw new Error('PDF generation returned an invalid or empty buffer');
+	const html = await new Promise<string>((resolve, reject) => {
+		env.render(
+			'views/layouts/application-pdf.njk',
+			{
+				dcoApplicationData
+			},
+			(error, html) => {
+				if (error) {
+					return reject(error);
+				}
+				if (!html) {
+					console.error('html markup generation failed');
+					return reject(new Error('html markup generation failed'));
+				}
+				resolve(html);
 			}
+		);
+	});
 
-			const blobName = getPdfBlobName(data.caseReference as string, caseData.anticipatedDateOfSubmission!);
-			console.log('attempting to delete pdf at blob: ' + blobName);
-			logger.info('Attempting to delete pdf at blob: ' + blobName);
-			try {
-				await blobStore?.deleteBlobIfExists(blobName);
-			} catch {
-				console.log('no existing pdf to delete prior to upload');
-				logger.info('no existing pdf to delete prior to upload');
-			}
+	const cssPath = `${service.staticDir}/${data.styleFile}`;
+	const pdfHtml = await addCSStoHtml(html, cssPath, logger);
+	const pdfBuffer = await pdfServiceClient?.generatePdf(pdfHtml);
 
-			console.log('Uploading generated pdf to blob: ' + blobName);
-			logger.info('Uploading generated pdf to blob: ' + blobName);
-			await blobStore?.upload(pdfBuffer, 'application/pdf', blobName);
+	if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
+		throw new Error('PDF generation returned an invalid or empty buffer');
+	}
 
-			await db.case.update({
-				where: { reference: data.caseReference },
-				data: { pdfBlobName: blobName }
-			});
-		}
-	);
+	const blobName = getPdfBlobName(data.caseReference as string, caseData.anticipatedDateOfSubmission!);
+	logger.info('Attempting to delete pdf at blob: ' + blobName);
+	try {
+		await blobStore?.deleteBlobIfExists(blobName);
+	} catch {
+		logger.info('no existing pdf to delete prior to upload');
+	}
+
+	logger.info('Uploading generated pdf to blob: ' + blobName);
+	await blobStore?.upload(pdfBuffer, 'application/pdf', blobName);
+
+	await db.case.update({
+		where: { reference: data.caseReference },
+		data: { pdfBlobName: blobName }
+	});
+
 	return pdfBuffer;
 }
 

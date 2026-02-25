@@ -9,7 +9,6 @@ export function postGeneratePdf(service: PdfService) {
 		const logger = service.logger;
 
 		logger.info('POST request to generate pdf');
-		logger.debug({ body: req.body }, 'html to convert to pdf:');
 
 		if (!html || typeof html !== 'string') {
 			logger.error('Error: Stringified html is required');
@@ -20,10 +19,8 @@ export function postGeneratePdf(service: PdfService) {
 			const browser = await launchBrowser(service);
 			const pdfBuffer = await generatePdf(browser, html);
 			res.contentType('application/pdf').send(pdfBuffer);
-			console.log('Pdf generated successfully');
 			logger.info('Successfully generated pdf');
 		} catch (err: any) {
-			console.error(err);
 			logger.error({ err }, 'Failed to download pdf');
 			res.status(500).send({
 				message: err?.message || 'An error occurred'
