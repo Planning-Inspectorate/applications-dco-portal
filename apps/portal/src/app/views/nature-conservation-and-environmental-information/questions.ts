@@ -15,6 +15,7 @@ export function getQuestions() {
 			title: 'Natural Environment Information',
 			pageTitle: 'Natural Environment Information',
 			question: 'Could the project affect any nature conservation, landscape, geological or water features?',
+			hint: 'For example, habitats of protected species, water bodies within a river basin management plan',
 			fieldName: 'hasNaturalEnvironmentInformation',
 			url: 'natural-environment-information',
 			validators: [
@@ -28,6 +29,7 @@ export function getQuestions() {
 			title: 'Natural Environment Information Documents',
 			pageTitle: 'Natural Environment Information Documents',
 			question: 'Which documents relate to the nature conservation, landscape, geological or water features?',
+			hint: 'Select all that apply',
 			fieldName: 'naturalEnvironmentInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
 			validators: [
@@ -41,6 +43,7 @@ export function getQuestions() {
 			title: 'Historic Environment Information',
 			pageTitle: 'Historic Environment Information',
 			question: 'Could the project affect any historic environment sites or features?',
+			hint: 'For example, scheduled monuments, World Heritage sites, listed buildings or registered battlefields',
 			fieldName: 'hasHistoricEnvironmentInformation',
 			url: 'historic-environment-information',
 			validators: [
@@ -52,6 +55,7 @@ export function getQuestions() {
 			title: 'Historic Environment Information Documents',
 			pageTitle: 'Historic Environment Information Documents',
 			question: 'Which documents relate to the historic environment sites or features?',
+			hint: 'Select all that apply',
 			fieldName: 'historicEnvironmentInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES,
 			validators: [new RequiredValidator('Select the documents relating to historic environment sites or features')]

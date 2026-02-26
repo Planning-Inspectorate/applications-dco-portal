@@ -8,7 +8,7 @@ export default class SelectDocuments extends CheckboxQuestion {
 		this.viewFolder = 'custom-components/select-documents';
 		this.html = params.html;
 		this.options = [];
-		this.html = params.html;
+		this.hint = params.hint;
 	}
 
 	setOptions(options) {
