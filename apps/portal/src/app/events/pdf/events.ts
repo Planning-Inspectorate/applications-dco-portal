@@ -3,6 +3,7 @@ import type { GeneratePdfInput } from './types.d.ts';
 import { generatePdf } from './pdf.ts';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 
 export function bindPdfEvents(service: PortalService) {
 	const { db, eventEmitter, pdfServiceClient, blobStore, notifyClient, logger } = service;
@@ -47,7 +48,13 @@ export function bindPdfEvents(service: PortalService) {
 
 			await Promise.all([
 				...adminUsers.map((adminUser) =>
-					notifyClient?.sendApplicantSubmissionNotification(adminUser.email, caseReference, pdfBuffer)
+					notifyClient?.sendApplicantSubmissionNotification(
+						adminUser.email,
+						caseReference,
+						pdfBuffer,
+						formatDateForDisplay(caseData.submissionDate as Date, { format: 'd MMMM yyyy' }),
+						caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+					)
 				),
 				notifyClient?.sendPinsStaffSubmissionNotification(
 					caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,

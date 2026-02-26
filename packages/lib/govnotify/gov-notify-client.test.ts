@@ -2,9 +2,9 @@
 
 import { describe, it } from 'node:test';
 import { GovNotifyClient } from './gov-notify-client.ts';
-import { TEAM_EMAIL_ADDRESS } from './constants.ts';
 import { mockLogger } from '../testing/mock-logger.ts';
 import assert from 'node:assert';
+import { DEFAULT_PROJECT_EMAIL_ADDRESS } from './constants.ts';
 
 describe(`gov-notify-client`, () => {
 	describe('sendEmail', () => {
@@ -70,7 +70,7 @@ describe(`gov-notify-client`, () => {
 			ctx.mock.method(client, 'sendEmail', () => {});
 			await client.sendWhitelistAddNotification('email', {
 				case_reference_number: 'EN123456',
-				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
 			});
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
 			const args = client.sendEmail.mock.calls[0].arguments;
@@ -80,7 +80,7 @@ describe(`gov-notify-client`, () => {
 				{
 					personalisation: {
 						case_reference_number: 'EN123456',
-						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);
@@ -97,7 +97,7 @@ describe(`gov-notify-client`, () => {
 				case_reference_number: 'EN123456',
 				type_of_user_changed_from: 'Admin',
 				type_of_user_changed_to: 'Standard',
-				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
 			});
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
 			const args = client.sendEmail.mock.calls[0].arguments;
@@ -109,7 +109,7 @@ describe(`gov-notify-client`, () => {
 						case_reference_number: 'EN123456',
 						type_of_user_changed_from: 'Admin',
 						type_of_user_changed_to: 'Standard',
-						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);
@@ -124,7 +124,7 @@ describe(`gov-notify-client`, () => {
 			ctx.mock.method(client, 'sendEmail', () => {});
 			await client.sendWhitelistRemoveNotification('email', {
 				case_reference_number: 'EN123456',
-				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
 			});
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
 			const args = client.sendEmail.mock.calls[0].arguments;
@@ -134,7 +134,7 @@ describe(`gov-notify-client`, () => {
 				{
 					personalisation: {
 						case_reference_number: 'EN123456',
-						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);
@@ -147,7 +147,13 @@ describe(`gov-notify-client`, () => {
 				applicantSubmissionNotification: 'template-id-1'
 			});
 			ctx.mock.method(client, 'sendEmail', () => {});
-			await client.sendApplicantSubmissionNotification('email', 'EN123456', Buffer.alloc(10));
+			await client.sendApplicantSubmissionNotification(
+				'email',
+				'EN123456',
+				Buffer.alloc(10),
+				'26 February 2026',
+				DEFAULT_PROJECT_EMAIL_ADDRESS
+			);
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
 			const args = client.sendEmail.mock.calls[0].arguments;
 			assert.deepStrictEqual(args, [
@@ -156,14 +162,14 @@ describe(`gov-notify-client`, () => {
 				{
 					personalisation: {
 						case_reference_number: 'EN123456',
-						number_of_days: '28',
 						pdfLink: {
 							confirm_email_before_download: null,
 							file: 'AAAAAAAAAAAAAA==',
 							filename: 'EN123456 application form.pdf',
 							retention_period: null
 						},
-						relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+						submission_date: '26 February 2026',
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);

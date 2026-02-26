@@ -78,7 +78,7 @@ describe('whitelist add user controller', () => {
 				'bob@email.com',
 				{
 					case_reference_number: 'EN123456',
-					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 				}
 			]);
 		});

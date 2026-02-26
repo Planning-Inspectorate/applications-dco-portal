@@ -95,6 +95,11 @@ describe('whitelist remove user controllers', () => {
 	describe('buildSaveController', () => {
 		it('should render enter email address page with view data', async () => {
 			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456'
+					}))
+				},
 				whitelistUser: {
 					delete: mock.fn(),
 					findUnique: mock.fn(() => ({
@@ -133,12 +138,18 @@ describe('whitelist remove user controllers', () => {
 				'test@email.com',
 				{
 					case_reference_number: 'EN123456',
-					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 				}
 			]);
 		});
 		it('should throw error if error encountered during data deletion', async () => {
 			const mockDb = {
+				case: {
+					findUnique: mock.fn(() => ({
+						reference: 'EN123456',
+						projectEmailAddress: 'test@email.com'
+					}))
+				},
 				whitelistUser: {
 					delete: mock.fn(() => {
 						throw new Error('Error', { code: 'E1' });

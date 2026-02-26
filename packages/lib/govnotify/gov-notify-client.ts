@@ -2,7 +2,6 @@
 import { NotifyClient } from 'notifications-node-client';
 import type { Logger } from 'pino';
 import type { GovNotifyOptions, TemplateIds } from './types.d.ts';
-import { RESPOND_WITHIN_DAYS, TEAM_EMAIL_ADDRESS } from './constants.ts';
 
 export class GovNotifyClient {
 	#templateIds: TemplateIds;
@@ -58,14 +57,20 @@ export class GovNotifyClient {
 		this.logger.info('Anti virus failed email template successfully dispatched');
 	}
 
-	async sendApplicantSubmissionNotification(email: string, caseReference: string, pdfFile: Buffer): Promise<void> {
+	async sendApplicantSubmissionNotification(
+		email: string,
+		caseReference: string,
+		pdfFile: Buffer,
+		submissionDate: string,
+		projectEmailAddress: string
+	): Promise<void> {
 		this.logger.info('Dispatching applicant data submission email template');
 		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
 			personalisation: {
-				number_of_days: RESPOND_WITHIN_DAYS,
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }),
 				case_reference_number: caseReference,
-				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }), //TODO: update pdf link once pdf is created and saved in blob store
-				relevant_team_email_address: TEAM_EMAIL_ADDRESS
+				submission_date: submissionDate,
+				relevant_team_email_address: projectEmailAddress
 			}
 		});
 		this.logger.info('Applicant data submission email template successfully dispatched');
@@ -76,7 +81,7 @@ export class GovNotifyClient {
 		await this.sendEmail(this.#templateIds.pinsStaffSubmissionNotification as string, email, {
 			personalisation: {
 				case_reference_number: caseReference,
-				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }) //TODO: update pdf link once pdf is created and saved in blob store
+				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` })
 			}
 		});
 		this.logger.info('Planning Inspectorate staff data submission email template successfully dispatched');
