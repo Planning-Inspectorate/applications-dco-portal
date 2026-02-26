@@ -53,14 +53,17 @@ export function buildHomePage({ db }: PortalService, viewData = {}): AsyncReques
 			yourApplication: formatTaskListItems(caseData, APPLICATION_SECTION)
 		};
 
+		const isAuthenticatedUserAdmin = whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER;
+
 		const { submissionText, warningText, submissionInformation, enableSubmissionButton } = getSubmissionDateContent(
-			caseData.anticipatedDateOfSubmission
+			caseData.anticipatedDateOfSubmission,
+			isAuthenticatedUserAdmin
 		);
 
 		return res.render('views/home/view.njk', {
 			pageTitle: req.session.caseReference,
 			taskListItems,
-			showManageUsersLink: whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER,
+			showManageUsersLink: isAuthenticatedUserAdmin,
 			submissionText,
 			warningText,
 			submissionInformation,
@@ -147,7 +150,10 @@ function formatTaskListItems(caseData: any, taskList: { id: string; displayName:
 	});
 }
 
-function getSubmissionDateContent(anticipatedDateOfSubmission: Date | null): {
+function getSubmissionDateContent(
+	anticipatedDateOfSubmission: Date | null,
+	isUserAdmin: boolean
+): {
 	submissionText: string;
 	warningText: string;
 	submissionInformation: string;
@@ -179,7 +185,7 @@ function getSubmissionDateContent(anticipatedDateOfSubmission: Date | null): {
 			submissionText: `<h2 class="govuk-heading-m">Now submit your application</h2><p class="govuk-body">You can now submit your application. Once the application is submitted, it will be locked and you can make no further changes.</p>`,
 			warningText: `If you do not submit your application today, you'll need to agree a new submission date with the Planning Inspectorate`,
 			submissionInformation: '',
-			enableSubmissionButton: true
+			enableSubmissionButton: isUserAdmin
 		};
 	} else if (today < normalisedAnticipatedDateOfSubmission) {
 		return {
