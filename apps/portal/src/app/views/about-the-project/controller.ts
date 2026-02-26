@@ -1,9 +1,13 @@
 import { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import {
+	DOCUMENT_SUB_CATEGORY_ID,
+	DOCUMENT_CATEGORY_STATUS_ID
+} from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
+import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 
@@ -58,17 +62,28 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		endNorthing: String(caseData.ProjectLinearSite?.endNorthing || '')
 	};
 
-	forms[applicationSectionId] = hasEvidence
-		? {
+	const alreadyStartedSection =
+		(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
+		DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED;
+	let associatedDevelopmentsFields;
+	if (alreadyStartedSection) {
+		if (hasEvidence) {
+			associatedDevelopmentsFields = {
 				hasAssociatedDevelopments: 'yes',
 				associatedDevelopments: getSupportingEvidenceIds(
 					caseData.SupportingEvidence,
 					DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
-				),
-				...standardFields
-			}
-		: {
-				hasAssociatedDevelopments: 'no',
-				...standardFields
+				)
 			};
+		} else {
+			associatedDevelopmentsFields = {
+				hasAssociatedDevelopments: 'no'
+			};
+		}
+	}
+
+	forms[applicationSectionId] = {
+		...associatedDevelopmentsFields,
+		...standardFields
+	};
 }
