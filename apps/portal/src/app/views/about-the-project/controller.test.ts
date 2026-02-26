@@ -178,7 +178,7 @@ describe('about-the-project controller', () => {
 				}
 			});
 		});
-		it('should not skip populateForm if status is not-started and just prepopulate with blank values', async () => {
+		it('should not skip populateForm if status is not-started and not populate associated developments', async () => {
 			const mockDb = {
 				case: {
 					findUnique: mock.fn(() => ({
@@ -217,8 +217,7 @@ describe('about-the-project controller', () => {
 						middleEasting: '',
 						middleNorthing: '',
 						endEasting: '',
-						endNorthing: '',
-						hasAssociatedDevelopments: 'no'
+						endNorthing: ''
 					}
 				}
 			});
