@@ -117,6 +117,11 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 					where: { reference: req.session.caseReference },
 					data: {
 						notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES,
+						notifyingConsultationBodies: answers.notifyingConsultationBodies === BOOLEAN_OPTIONS.YES,
+						whyNotNotifyingConsultationBodies:
+							answers.notifyingConsultationBodies === BOOLEAN_OPTIONS.NO
+								? answers.whyNotNotifyingConsultationBodies
+								: null,
 						[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`]: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED
 					}
 				});

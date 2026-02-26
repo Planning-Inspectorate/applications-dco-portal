@@ -571,7 +571,7 @@ function mapEnvironmentalImpactAssessment(
 	return {
 		hasEnvironmentalStatement: {
 			name: 'Has Environmental Statement',
-			value: caseData.notifiedOtherPeople ? 'Yes' : 'No'
+			value: nonTechnicalSummaryEvidence.length ? 'Yes' : 'No'
 		},
 
 		nonTechnicalSummary: {
@@ -639,9 +639,19 @@ function mapEnvironmentalImpactAssessment(
 			value: sensitiveInfoEvidence.map((evidence) => evidence.Document.fileName)
 		},
 
+		notifyingConsultationBodies: {
+			name: 'Notifying Consultation Bodies',
+			value: caseData.notifyingConsultationBodies ? 'Yes' : 'No'
+		},
+
+		whyNotNotifyingConsultationBodies: {
+			name: 'Why Not Notifying Consultation Bodies',
+			value: caseData.whyNotNotifyingConsultationBodies
+		},
+
 		notifyingOtherPeople: {
 			name: 'Notifying Other People',
-			value: !!caseData.notifiedOtherPeople
+			value: caseData.notifiedOtherPeople ? 'Yes' : 'No'
 		}
 	};
 }

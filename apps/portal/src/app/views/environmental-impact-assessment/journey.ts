@@ -76,6 +76,8 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.scopingOpinionDocuments)
 				.withCondition(whenQuestionHasAnswer(questions.hasScopingOpinion, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.notifyingConsultationBodies)
+				.addQuestion(questions.whyNotNotifyingConsultationBodies)
+				.withCondition(whenQuestionHasAnswer(questions.notifyingConsultationBodies, BOOLEAN_OPTIONS.NO))
 				.addQuestion(questions.notifyingOtherPeople)
 		],
 		taskListUrl: 'check-your-answers',
