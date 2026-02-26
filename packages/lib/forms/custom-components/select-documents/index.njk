@@ -31,6 +31,7 @@
                     {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
                     {{ govukCheckboxes({
                         name: question.fieldName,
+                        hint: question.hint and { text: question.hint },
                         fieldset: {
                             legend: {
                                 text: question.question,
