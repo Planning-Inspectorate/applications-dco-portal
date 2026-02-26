@@ -85,7 +85,7 @@ describe('whitelist edit user controller', () => {
 					case_reference_number: 'EN123456',
 					type_of_user_changed_from: 'Standard',
 					type_of_user_changed_to: 'Admin',
-					relevant_team_email_address: 'enquiries@planninginspectorate.gov.uk'
+					relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 				}
 			]);
 		});
