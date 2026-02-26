@@ -51,6 +51,8 @@ model Case {
   ProjectLinearSite                              LinearSite?                   @relation("ProjectLinearSite", fields: [linearSiteId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   otherConsentsDescription                       String?                       @db.NVarChar(2000)
   notifiedOtherPeople                            Boolean?
+  notifyingConsultationBodies                    Boolean?
+  whyNotNotifyingConsultationBodies              String?                       @db.NVarChar(2000)
   infrastructureAdditionalInformationDescription String?                       @db.NVarChar(2000)
   nonOffshoreGeneratingStationId                 String?                       @db.UniqueIdentifier
   NonOffshoreGeneratingStation                   NonOffshoreGeneratingStation? @relation("NonOffshoreGeneratingStation", fields: [nonOffshoreGeneratingStationId], references: [id], onDelete: SetNull, onUpdate: NoAction)

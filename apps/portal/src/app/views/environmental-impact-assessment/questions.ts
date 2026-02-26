@@ -2,13 +2,12 @@ import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-li
 // @ts-expect-error - due to not having @types
 import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 // @ts-expect-error - due to not having @types
+import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
+// @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 // @ts-expect-error - due to not having @types
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
-import RequiredAnswerValidator from '@pins/dco-portal-lib/forms/custom-components/required-answer-validator.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';
@@ -174,11 +173,28 @@ export function getQuestions() {
 			question: 'Notifying consultation bodies',
 			fieldName: 'notifyingConsultationBodies',
 			url: 'notifying-consultation-bodies',
+			validators: [new RequiredValidator("Select yes if you've notified the consultation bodies")]
+		},
+		whyNotNotifyingConsultationBodies: {
+			type: COMPONENT_TYPES.TEXT_ENTRY,
+			title: 'Explain Why Not Notifying Consultation Bodies',
+			pageTitle: 'Explain Why Not Notifying Consultation Bodies',
+			question: 'Explain why you have not notified the consultation bodies about the project',
+			fieldName: 'whyNotNotifyingConsultationBodies',
+			url: 'explain-why-not-notified-consultation-bodies',
 			validators: [
-				new RequiredAnswerValidator({
-					requiredAnswers: [BOOLEAN_OPTIONS.YES],
-					emptyAnswerErrorMessage: 'Select yes if you’ve notified the consultation bodies',
-					requiredAnswerErrorMessage: 'You must notify the consultation bodies about the project'
+				new RequiredValidator(
+					'Enter an explanation for why you have not notified the consultation bodies about the project'
+				),
+				new StringValidator({
+					minLength: {
+						minLength: 2,
+						minLengthMessage: 'Explanation must be 2 characters or more'
+					},
+					maxLength: {
+						maxLength: 2000,
+						maxLengthMessage: 'Explanation must be 2000 characters or less'
+					}
 				})
 			]
 		},

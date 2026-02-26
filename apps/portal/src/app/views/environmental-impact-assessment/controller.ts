@@ -125,6 +125,8 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 		sensitiveInformation: getSupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION
-		)
+		),
+		notifyingConsultationBodies: caseData.notifyingConsultationBodies ? 'yes' : 'no',
+		whyNotNotifyingConsultationBodies: caseData.whyNotNotifyingConsultationBodies || ''
 	};
 }
