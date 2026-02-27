@@ -64,7 +64,7 @@ export function getQuestions() {
 }
 
 export function contactDetailsQuestions(prefix: string, title: string) {
-	const questions: Record<string, QuestionProps | FullAddressProps> = {};
+	const questions: Record<string, unknown> = {};
 
 	questions[`${prefix}Organisation`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
@@ -173,5 +173,5 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 		]
 	};
 
-	return questions;
+	return questions as Record<string, QuestionProps | FullAddressProps>;
 }
