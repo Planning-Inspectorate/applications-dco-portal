@@ -165,16 +165,18 @@ export function hasApplicationBeenSubmittedMiddleware({ db }: PortalService) {
 	};
 }
 
-export function canViewApplicationCompletePageMiddleware({ db }: PortalService) {
-	return async (req: Request, res: Response, next: NextFunction) => {
-		const caseData = await db.case.findUnique({
-			where: { reference: req.session.caseReference }
-		});
+export function canViewApplicationCompletePageMiddleware(req: Request, res: Response, next: NextFunction) {
+	if (req.session?.applicationComplete) {
+		return next();
+	}
 
-		if (caseData?.submissionDate !== null) {
-			return next();
-		}
+	res.redirect('/');
+}
 
-		res.redirect('/');
-	};
+export function isApplicationCompleteMiddleware(req: Request, res: Response, next: NextFunction) {
+	if (req.session.applicationComplete) {
+		return res.redirect('/application-complete');
+	}
+
+	next();
 }
