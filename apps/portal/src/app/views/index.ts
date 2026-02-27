@@ -44,14 +44,15 @@ import {
 import { buildContactPage } from './contact/controller.ts';
 import { buildCookiesPage } from './cookies/controller.ts';
 
-export function createRoutes(service: PortalService): IRouter {
+/**
+ * routes that are only accessible when the application has not been submitted
+ * these will be affected by isApplicationCompleteMiddleware
+ */
+export function createSubmissionRestrictedRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
 
 	const homePageController = buildHomePage(service);
 	const submitHomePageController = buildSubmitHomePageController(service);
-	const signOutController = buildSignOutController(service);
-	const contactPage = buildContactPage();
-	const cookiesPage = buildCookiesPage();
 
 	const declarationNamePage = buildDeclarationNamePage();
 	const saveDeclarationName = buildSaveDeclarationName(service);
@@ -61,19 +62,14 @@ export function createRoutes(service: PortalService): IRouter {
 	const savePositionInOrganisation = buildSavePositionInOrganisation(service);
 	const declarationPage = buildDeclarationPage(service);
 	const submitDeclaration = buildSubmitDeclaration(service);
-	const applicationCompletePage = buildApplicationCompletePage(service);
-	const downloadApplicationPdf = buildDownloadApplicationPdf(service);
 
 	const whitelistMiddleware = buildWhitelistMiddleware(service);
 	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
+
 	const hasApplicationBeenSubmitted = hasApplicationBeenSubmittedMiddleware(service);
-	const canViewApplicationCompletePage = canViewApplicationCompletePageMiddleware(service);
 
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
 	router.post('/', asyncHandler(submitHomePageController));
-	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
-	router.get('/contact', asyncHandler(contactPage));
-	router.get('/cookies', asyncHandler(cookiesPage));
 
 	router.get('/declaration/name', hasApplicationBeenSubmitted, asyncHandler(declarationNamePage));
 	router.post('/declaration/name', asyncHandler(saveDeclarationName));
@@ -87,8 +83,6 @@ export function createRoutes(service: PortalService): IRouter {
 	router.post('/declaration/position-in-organisation', asyncHandler(savePositionInOrganisation));
 	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
 	router.post('/declaration', asyncHandler(submitDeclaration));
-	router.get('/application-complete', canViewApplicationCompletePage, asyncHandler(applicationCompletePage));
-	router.get('/download/pdf', canViewApplicationCompletePage, asyncHandler(downloadApplicationPdf));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
 
@@ -179,6 +173,29 @@ export function createRoutes(service: PortalService): IRouter {
 			APPLICATION_SECTION_ID.INFRASTRUCTURE_SPECIFIC_ADDITIONAL_INFORMATION
 		)
 	);
+
+	return router;
+}
+
+/**
+ * routes that accessible regardless of if the application has been submitted or not
+ */
+export function createSubmissionSafeRoutes(service: PortalService): IRouter {
+	const router = createRouter({ mergeParams: true });
+
+	const contactPage = buildContactPage();
+	const cookiesPage = buildCookiesPage();
+	const applicationCompletePage = buildApplicationCompletePage(service);
+	const downloadApplicationPdf = buildDownloadApplicationPdf(service);
+	const signOutController = buildSignOutController(service);
+
+	const cleanupSessionJourney = cleanupSessionJourneyMiddleware(service);
+
+	router.get('/contact', asyncHandler(contactPage));
+	router.get('/cookies', asyncHandler(cookiesPage));
+	router.get('/application-complete', canViewApplicationCompletePageMiddleware, asyncHandler(applicationCompletePage));
+	router.get('/download/pdf', canViewApplicationCompletePageMiddleware, asyncHandler(downloadApplicationPdf));
+	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));
 
 	return router;
 }

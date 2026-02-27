@@ -1075,6 +1075,7 @@ describe('login controllers', () => {
 			assert.strictEqual(mockReq.session.isAuthenticated, true);
 			assert.strictEqual(mockReq.session.emailAddress, 'test@email.com');
 			assert.strictEqual(mockReq.session.caseReference, 'EN123456');
+			assert.strictEqual(mockReq.session.applicationComplete, false);
 			assert.deepStrictEqual(mockReq.session.cbosPopulated, getCbosPopulatedSessionData(false));
 
 			assert.strictEqual(mockDb.oneTimePassword.delete.mock.callCount(), 1);

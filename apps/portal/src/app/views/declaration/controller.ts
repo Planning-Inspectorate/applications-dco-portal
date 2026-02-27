@@ -295,6 +295,8 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 		delete req.session.declarationOrganisation;
 		delete req.session.positionInOrganisation;
 
+		req.session.applicationComplete = true;
+
 		return res.redirect('/application-complete');
 	};
 }

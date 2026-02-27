@@ -317,6 +317,7 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 			req.session.emailAddress = emailAddress;
 			req.session.caseReference = caseReference;
 			req.session.cbosPopulated = mapNsipToQuestionWasPrepopulated(nsipProject, nsipServiceUser, caseData);
+			req.session.applicationComplete = !!caseData.submissionDate;
 
 			res.cookie('had-session', true, {
 				httpOnly: true,

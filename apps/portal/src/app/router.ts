@@ -1,9 +1,13 @@
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
-import { createRoutes as appRoutes } from './views/index.ts';
+import {
+	createSubmissionRestrictedRoutes as submissionRestrictedAppRoutes,
+	createSubmissionSafeRoutes as submissionSafeAppRoutes
+} from './views/index.ts';
 import { createRoutes as loginRoutes } from './views/login/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/auth.ts';
+import { isApplicationCompleteMiddleware } from './views/middleware/session.ts';
 import { PortalService } from '#service';
 import { cacheDisableAllCachingMiddleware, cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
 import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
@@ -35,7 +39,12 @@ export function buildRouter(service: PortalService): IRouter {
 	// place any routes that do not require user auth above here
 	router.use(isUserAuthenticated);
 
-	router.use('/', appRoutes(service));
+	router.use('/', submissionSafeAppRoutes(service));
+
+	// all subsequent routes require an incomplete application
+	// if the application is complete, any routes here will redirect to the application complete page
+	router.use('/', isApplicationCompleteMiddleware, submissionRestrictedAppRoutes(service));
+
 	router.use('/error', createErrorRoutes(service));
 
 	return router;

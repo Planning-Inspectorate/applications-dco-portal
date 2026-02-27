@@ -543,6 +543,7 @@ describe('declaration controllers', () => {
 			assert.strictEqual(mockReq.session.declarationLastName, undefined);
 			assert.strictEqual(mockReq.session.declarationOrganisation, undefined);
 			assert.strictEqual(mockReq.session.positionInOrganisation, undefined);
+			assert.strictEqual(mockReq.session.applicationComplete, true);
 
 			assert.strictEqual(mockBlobStore.moveFolder.mock.callCount(), 1);
 			assert.strictEqual(mockBlobStore.moveFolder.mock.calls[0].arguments[0], 'EN123456');
