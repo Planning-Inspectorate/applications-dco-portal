@@ -17,6 +17,7 @@ export function getQuestions() {
 			title: 'Has Other Consents or Licences',
 			pageTitle: 'Has Other Consents Or Licences',
 			question: 'Does the project require other consents or licences?',
+			hint: 'These are consents or licences needed to build or operate the project, issued by authorities other than the Secretary of State',
 			fieldName: 'hasOtherConsents',
 			url: 'has-other-consents',
 			validators: [new RequiredValidator('Select yes if the project requires other consents or licences')]
@@ -48,6 +49,7 @@ export function getQuestions() {
 			title: 'Other Consents or Licences Documents',
 			pageTitle: 'Other Consents or Licences Documents',
 			question: 'Which documents identify the other consents or licences?',
+			hint: 'Select all that apply, including responses from relevant authorities explaining why consent might not be granted',
 			fieldName: 'otherConsentsDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSENTS_AND_LICENCES_REQUIRED_UNDER_OTHER_LEGISLATION,
 			validators: [new RequiredValidator('Select the documents relating to the other consents and licences')]

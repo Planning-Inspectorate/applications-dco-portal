@@ -12,8 +12,9 @@ export function getQuestions() {
 	const questions = {
 		hasStatutoryNuisanceStatement: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Does the project include a statutory nuisance statement?',
-			question: 'Does the project include a statutory nuisance statement?',
+			title: 'Could the project cause any statutory nuisances?',
+			question: 'Could the project cause any statutory nuisances?',
+			hint: 'The Environment Protection Act 1990 defines statutory nuisances, including things like noise, smoke, artificial light, and dust',
 			fieldName: 'hasStatutoryNuisanceStatement',
 			url: 'has-statutory-nuisance-statement',
 			validators: [new RequiredValidator('Select yes if the project could cause any statutory nuisances')]

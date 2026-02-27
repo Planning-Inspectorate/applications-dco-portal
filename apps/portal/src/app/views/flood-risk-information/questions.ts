@@ -20,8 +20,9 @@ export function getQuestions() {
 		},
 		floodRiskAssessment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the flood risk assessment?',
-			question: 'Which documents relate to the flood risk assessment?',
+			title: 'Select the flood risk assessment',
+			question: 'Select the flood risk assessment',
+			hint: 'This may be an appendix to the Environmental Statement or a separate document',
 			fieldName: 'floodRiskAssessment',
 			url: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT,
 			validators: [new RequiredValidator('Select the documents relating to the flood risk assessment')]
