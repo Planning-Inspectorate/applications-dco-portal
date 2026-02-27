@@ -33,7 +33,7 @@ export function addLocalsConfiguration(): Handler {
 				}
 			],
 			serviceFeedbackLink:
-				'https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fforms.office.com.mcas.ms%2Fe%2FkPEzg1fZLx%3FMcasTsid%3D20596&McasCSRF=ed470696e3d88b7fea1c220720cea2359502eb2b52c61486d0f4d42cafdb42dd',
+				'https://forms.office.com/pages/responsepage.aspx?id=mN94WIhvq0iTIpmM5VcIjVqzqAxXAi1LghAWTH6Y3OJUMlI5MjJCMVdGUEYxMEVROVJKUUQ3ODFRWC4u&route=shorturl',
 			signOutLink: req.session.isAuthenticated
 				? `<li class="govuk-service-navigation__item logout-item"><a href="/sign-out" class="govuk-service-navigation__link">Sign out</a></li>`
 				: ''
