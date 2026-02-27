@@ -28,11 +28,11 @@
     "test-coverage": "node --test --experimental-test-coverage"
   },
   "dependencies": {
-    "@azure/functions": "^4.11.0",
+    "@azure/functions": "^4.11.2",
     "@azure/identity": "^4.13.0",
-    "@azure/msal-node": "^5.0.3",
+    "@azure/msal-node": "^5.0.4",
 		"@azure/service-bus": "^7.7.3",
-		"@azure/storage-blob": "^12.30.0",
+		"@azure/storage-blob": "^12.31.0",
 		"@ministryofjustice/frontend": "^8.0.0",
 		"@planning-inspectorate/data-model": "^2.10.1",
     "@planning-inspectorate/dynamic-forms": "^3.7.0",
