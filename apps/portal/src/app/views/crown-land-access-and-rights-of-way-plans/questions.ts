@@ -24,6 +24,7 @@ export function getQuestions() {
 			title: 'Crown Land Documents',
 			pageTitle: 'Crown Land Documents',
 			question: 'Which documents identify the Crown land?',
+			hint: 'Select all that apply',
 			fieldName: 'crownLand',
 			url: DOCUMENT_SUB_CATEGORY_ID.CROWN_LAND_PLAN,
 			validators: [new RequiredValidator('Select the documents relating to Crown land')]
@@ -44,6 +45,7 @@ export function getQuestions() {
 			title: 'Means of Access Documents',
 			pageTitle: 'Means of Access Documents',
 			question: 'Which documents identify changes to access or public rights of way?',
+			hint: 'Select all that apply',
 			fieldName: 'meansOfAccess',
 			url: DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN,
 			validators: [new RequiredValidator('Select the documents relating to access and public rights of way changes')]
