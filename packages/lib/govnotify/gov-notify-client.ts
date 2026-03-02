@@ -87,6 +87,14 @@ export class GovNotifyClient {
 		this.logger.info('Planning Inspectorate staff data submission email template successfully dispatched');
 	}
 
+	async sendNewSubmissionDateNotification(email: string, personalisation: { [key: string]: string }): Promise<void> {
+		this.logger.info('Dispatching new submission date email template');
+		await this.sendEmail(this.#templateIds.newSubmissionDateNotification as string, email, {
+			personalisation: personalisation
+		});
+		this.logger.info('New submission date email template successfully dispatched');
+	}
+
 	async sendEmail(templateId: string, emailAddress: string, options: GovNotifyOptions): Promise<void> {
 		try {
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);

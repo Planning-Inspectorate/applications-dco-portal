@@ -9,13 +9,17 @@ describe('nsip project function', () => {
 			$transaction: mock.fn((fn) => fn(mockDb)),
 			case: {
 				findUnique: mock.fn(() => ({
-					reference: 'EN123456'
+					reference: 'EN123456',
+					email: 'test@email.com'
 				})),
 				update: mock.fn()
 			},
 			nsipProject: {
 				upsert: mock.fn()
 			}
+		};
+		const mockNotifyClient = {
+			sendNewSubmissionDateNotification: mock.fn()
 		};
 		const context = {
 			log: mock.fn()
@@ -32,7 +36,7 @@ describe('nsip project function', () => {
 			northing: 'Test Org'
 		};
 
-		const handler = buildNsipProjectFunction({ db: mockDb });
+		const handler = buildNsipProjectFunction({ db: mockDb, notifyClient: mockNotifyClient });
 		await handler(message, context);
 
 		assert.strictEqual(mockDb.nsipProject.upsert.mock.callCount(), 1);
@@ -77,7 +81,55 @@ describe('nsip project function', () => {
 			}
 		});
 
+		assert.strictEqual(mockNotifyClient.sendNewSubmissionDateNotification.mock.callCount(), 1);
+		assert.deepStrictEqual(
+			mockNotifyClient.sendNewSubmissionDateNotification.mock.calls[0].arguments[0],
+			'test@email.com'
+		);
+		assert.deepStrictEqual(mockNotifyClient.sendNewSubmissionDateNotification.mock.calls[0].arguments[1], {
+			case_reference_number: 'EN123456',
+			due_date: '12 December 2025',
+			relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+		});
+
 		assert.strictEqual(context.log.mock.callCount(), 1);
+	});
+	it('should not send new submission date email if the anticipated submission date has not changed', async () => {
+		const mockDb = {
+			$transaction: mock.fn((fn) => fn(mockDb)),
+			case: {
+				findUnique: mock.fn(() => ({
+					reference: 'EN123456',
+					anticipatedDateOfSubmission: new Date(2025, 11, 12)
+				})),
+				update: mock.fn()
+			},
+			nsipProject: {
+				upsert: mock.fn()
+			}
+		};
+		const mockNotifyClient = {
+			sendNewSubmissionDateNotification: mock.fn()
+		};
+		const context = {
+			log: mock.fn()
+		};
+		const message = {
+			caseId: '1',
+			caseReference: 'EN123456',
+			anticipatedDateOfSubmission: new Date(2025, 11, 12),
+			projectEmailAddress: 'pins-bo-staff@email.com',
+			projectName: 'test@email.com',
+			projectDescription: 'Applicant',
+			projectLocation: 'John',
+			easting: 'Doe',
+			northing: 'Test Org'
+		};
+
+		const handler = buildNsipProjectFunction({ db: mockDb, notifyClient: mockNotifyClient });
+		await handler(message, context);
+
+		assert.strictEqual(mockNotifyClient.sendNewSubmissionDateNotification.mock.callCount(), 0);
 	});
 	it('should save data from message into db if only mandatory fields received', async () => {
 		const mockDb = {

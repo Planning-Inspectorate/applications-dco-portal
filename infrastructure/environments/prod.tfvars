@@ -8,6 +8,7 @@ apps_config = {
       whitelist_access_changed_templated_id = "b005c9ca-244d-4768-b712-eaec96d61dee"
       whitelist_remove_templated_id         = "52219fa3-81dd-45ca-94c7-6464a8051e2b"
       anti_virus_failed_template_id         = "3109e0d2-987a-412a-891a-f13a24948c9a"
+      new_submission_date_template_id       = "9d7edb22-9141-4319-87b2-e9ffb68b768d"
     }
   }
 
