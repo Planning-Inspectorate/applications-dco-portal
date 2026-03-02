@@ -14,7 +14,8 @@ export function loadConfig(): Config {
 		SQL_CONNECTION_STRING,
 		GOV_NOTIFY_DISABLED,
 		GOV_NOTIFY_API_KEY,
-		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
+		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID,
+		GOV_NOTIFY_NEW_SUBMISSION_DATE_TEMPLATE_ID
 	} = process.env;
 
 	const props = {
@@ -25,7 +26,8 @@ export function loadConfig(): Config {
 		SQL_CONNECTION_STRING,
 		GOV_NOTIFY_DISABLED,
 		GOV_NOTIFY_API_KEY,
-		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
+		GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID,
+		GOV_NOTIFY_NEW_SUBMISSION_DATE_TEMPLATE_ID
 	};
 
 	for (const [k, v] of Object.entries(props)) {
@@ -42,7 +44,8 @@ export function loadConfig(): Config {
 			disabled: GOV_NOTIFY_DISABLED === 'true',
 			apiKey: GOV_NOTIFY_API_KEY || '',
 			templateIds: {
-				antiVirusFailedNotification: GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID
+				antiVirusFailedNotification: GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID,
+				newSubmissionDateNotification: GOV_NOTIFY_NEW_SUBMISSION_DATE_TEMPLATE_ID
 			}
 		},
 		logLevel: LOG_LEVEL || 'info',

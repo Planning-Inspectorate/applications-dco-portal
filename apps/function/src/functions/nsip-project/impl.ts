@@ -1,11 +1,13 @@
 import type { FunctionService } from '../../service.ts';
 import type { InvocationContext, ServiceBusTopicHandler } from '@azure/functions';
 import type { Schemas } from '@planning-inspectorate/data-model';
+import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
+import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 type NSIPProject = Schemas.NSIPProject;
 
 export function buildNsipProjectFunction(service: FunctionService): ServiceBusTopicHandler {
 	return async (message: NSIPProject, context: InvocationContext) => {
-		const { db } = service;
+		const { db, notifyClient } = service;
 
 		if (!message || !message.caseId || !message.caseReference) {
 			context.log('NSIP Project function exited with no caseReference');
@@ -47,6 +49,16 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 						projectEmailAddress: message.projectEmailAddress
 					}
 				});
+
+				if (
+					hasAnticipatedSubmissionDateChanged(message.anticipatedDateOfSubmission, caseData.anticipatedDateOfSubmission)
+				) {
+					await notifyClient?.sendNewSubmissionDateNotification(caseData.email, {
+						case_reference_number: caseData.reference,
+						due_date: formatDateForDisplay(message.anticipatedDateOfSubmission as Date, { format: 'd MMMM yyyy' }),
+						relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+					});
+				}
 			}
 
 			context.log('NSIP Project function run successfully');
@@ -59,4 +71,20 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 			throw new Error('Error during NSIP Project function run: ' + errorMessage);
 		}
 	};
+}
+
+function hasAnticipatedSubmissionDateChanged(date1: Date | null, date2: Date | null): boolean {
+	if (!date1 && !date2) {
+		return false;
+	}
+
+	if (!date1 || !date2) {
+		return true;
+	}
+
+	return (
+		date1.getFullYear() !== date2.getFullYear() ||
+		date1.getMonth() !== date2.getMonth() ||
+		date1.getDate() !== date2.getDate()
+	);
 }

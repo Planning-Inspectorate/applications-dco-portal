@@ -140,6 +140,33 @@ describe(`gov-notify-client`, () => {
 			]);
 		});
 	});
+	describe('sendAntiVirusFailedNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				antiVirusFailedNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendAntiVirusFailedNotification('email', {
+				document_name: 'test.pdf',
+				case_reference_number: 'EN123456',
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						document_name: 'test.pdf',
+						case_reference_number: 'EN123456',
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
 	describe('sendApplicantSubmissionNotification', () => {
 		it('should call sendEmail with personalisation', async (ctx) => {
 			const logger = mockLogger();
@@ -197,6 +224,33 @@ describe(`gov-notify-client`, () => {
 							filename: 'EN123456 application form.pdf',
 							retention_period: null
 						}
+					}
+				}
+			]);
+		});
+	});
+	describe('sendNewSubmissionDateNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				newSubmissionDateNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendNewSubmissionDateNotification('email', {
+				case_reference_number: 'EN123456',
+				due_date: '26 February 2026',
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						due_date: '26 February 2026',
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
 					}
 				}
 			]);

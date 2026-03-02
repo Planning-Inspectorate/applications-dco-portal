@@ -15,6 +15,7 @@ export interface TemplateIds {
 	antiVirusFailedNotification?: string;
 	applicantSubmissionNotification?: string;
 	pinsStaffSubmissionNotification?: string;
+	newSubmissionDateNotification?: string;
 }
 
 export interface NotifyConfig {

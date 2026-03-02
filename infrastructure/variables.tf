@@ -43,6 +43,7 @@ variable "apps_config" {
         anti_virus_failed_template_id         = string
         applicant_submission_template_id      = string
         pins_staff_submission_template_id     = string
+        new_submission_date_template_id       = string
       })
     })
 

@@ -39,9 +39,10 @@ module "function_integration" {
     NSIP_PROJECT_SUBSCRIPTION                     = azurerm_servicebus_subscription.nsip_project_subscription.name
 
     # gov notify
-    GOV_NOTIFY_DISABLED                      = var.apps_config.gov_notify.disabled
-    GOV_NOTIFY_API_KEY                       = local.key_vault_refs["dcop-gov-notify-api-key"]
-    GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID = var.apps_config.gov_notify.templates.anti_virus_failed_template_id
+    GOV_NOTIFY_DISABLED                        = var.apps_config.gov_notify.disabled
+    GOV_NOTIFY_API_KEY                         = local.key_vault_refs["dcop-gov-notify-api-key"]
+    GOV_NOTIFY_ANTI_VIRUS_FAILED_TEMPLATE_ID   = var.apps_config.gov_notify.templates.anti_virus_failed_template_id
+    GOV_NOTIFY_NEW_SUBMISSION_DATE_TEMPLATE_ID = var.apps_config.gov_notify.templates.new_submission_date_template_id
   }
 }
 
