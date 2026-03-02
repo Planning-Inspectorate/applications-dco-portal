@@ -57,7 +57,7 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 
 	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
 		list(req, res, getApplicationSectionDisplayName(applicationSectionId), {
-			pageHeading: 'Check your answers before confirming'
+			pageHeading: 'Check your answers'
 		})
 	);
 	router.post(

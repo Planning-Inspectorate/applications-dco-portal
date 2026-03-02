@@ -14,3 +14,7 @@ export interface FullAddressRecord {
 	country: string;
 	postcode: string;
 }
+
+export type ApplicantAgentDetailsPrefix = 'applicant' | 'agent';
+
+export type PaymentMethodWithHint = { id: string; displayName: string; hint: { text: string } };

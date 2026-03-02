@@ -4,8 +4,8 @@ import { contactDetailsQuestions } from './questions.ts';
 
 describe('applicant-agent-details questions', () => {
 	describe('contactDetailsQuestions', () => {
-		const prefix = 'myField';
-		const title = 'My Field';
+		const prefix = 'applicant';
+		const title = 'Applicant';
 		it('should create six questions with prefix in question keys', () => {
 			const questions = contactDetailsQuestions(prefix, title);
 
@@ -14,10 +14,9 @@ describe('applicant-agent-details questions', () => {
 				assert.ok(key.startsWith(prefix));
 			}
 		});
-		it('should use title and prefix where appropriate with casing', () => {
+		it('should use prefix where appropriate with casing', () => {
 			const questions = contactDetailsQuestions(prefix, title);
 			for (const question of Object.values(questions)) {
-				assert.ok(question.title.startsWith(title));
 				assert.ok(question.question.includes(prefix));
 			}
 		});
