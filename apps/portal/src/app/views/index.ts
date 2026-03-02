@@ -43,6 +43,7 @@ import {
 } from './declaration/controller.ts';
 import { buildContactPage } from './contact/controller.ts';
 import { buildCookiesPage } from './cookies/controller.ts';
+import { buildTermsAndConditionsPage } from './terms-and-conditions/controller.ts';
 
 /**
  * routes that are only accessible when the application has not been submitted
@@ -185,6 +186,7 @@ export function createSubmissionSafeRoutes(service: PortalService): IRouter {
 
 	const contactPage = buildContactPage();
 	const cookiesPage = buildCookiesPage();
+	const termsAndConditionsPage = buildTermsAndConditionsPage();
 	const applicationCompletePage = buildApplicationCompletePage(service);
 	const downloadApplicationPdf = buildDownloadApplicationPdf(service);
 	const signOutController = buildSignOutController(service);
@@ -193,6 +195,7 @@ export function createSubmissionSafeRoutes(service: PortalService): IRouter {
 
 	router.get('/contact', asyncHandler(contactPage));
 	router.get('/cookies', asyncHandler(cookiesPage));
+	router.get('/terms-and-conditions', asyncHandler(termsAndConditionsPage));
 	router.get('/application-complete', canViewApplicationCompletePageMiddleware, asyncHandler(applicationCompletePage));
 	router.get('/download/pdf', canViewApplicationCompletePageMiddleware, asyncHandler(downloadApplicationPdf));
 	router.get('/sign-out', cleanupSessionJourney, asyncHandler(signOutController));

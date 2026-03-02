@@ -361,7 +361,7 @@ export function buildSubmitNewCodeRequestController({ db, notifyClient }: Portal
 }
 
 export function buildNoAccessPage(): AsyncRequestHandler {
-	return async (req, res) => {
+	return async (_req, res) => {
 		return res.render('views/login/no-access.njk', {
 			pageTitle: 'You do not have access to this service'
 		});
