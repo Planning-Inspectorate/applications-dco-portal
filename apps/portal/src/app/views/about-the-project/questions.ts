@@ -11,7 +11,7 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import { CUSTOM_COMPONENTS, CUSTOM_COMPONENT_CLASSES } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { PROJECT_SITE_TYPES } from './constants.ts';
-import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
+import { referenceDataToRadioOptionsWithHintText } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
@@ -20,9 +20,10 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Description',
 			pageTitle: 'Project Description',
-			question: 'Describe the Project',
+			question: 'Project description',
 			fieldName: 'description',
-			url: 'description',
+			url: 'describe-the-project',
+			html: 'views/html-templates/project-description.html',
 			validators: [
 				new RequiredValidator('Enter a project description'),
 				new StringValidator({
@@ -41,9 +42,10 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Consent Reason',
 			pageTitle: 'Project Consent Reason',
-			question: 'Explain why the project requires development consent',
+			question: 'Development consent',
 			fieldName: 'consentReason',
-			url: 'consent-reason',
+			url: 'why-project-requires-development-consent',
+			html: 'views/html-templates/development-consent.html',
 			validators: [
 				new RequiredValidator('Enter an explanation for why the project requires development consent'),
 				new StringValidator({
@@ -62,9 +64,10 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Location Description',
 			pageTitle: 'Project Location Description',
-			question: 'Describe the location or route of the project',
+			question: 'Location or route description',
 			fieldName: 'locationDescription',
-			url: 'location-description',
+			url: 'project-location-or-route',
+			html: 'views/html-templates/location-or-route.html',
 			validators: [
 				new RequiredValidator('Enter the project location or route'),
 				new StringValidator({
@@ -85,8 +88,8 @@ export function getQuestions() {
 			pageTitle: 'Single or Linear',
 			question: 'Is the site single or linear?',
 			fieldName: 'singleOrLinear',
-			url: 'single-or-linear',
-			options: referenceDataToRadioOptions(PROJECT_SITE_TYPES),
+			url: 'site-single-or-linear',
+			options: referenceDataToRadioOptionsWithHintText(PROJECT_SITE_TYPES),
 			validators: [new RequiredValidator('Select if the site is single or linear')]
 		},
 		singleGridReferences: {
@@ -196,9 +199,10 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Has Associated Developments',
 			pageTitle: 'Has Associated Developments',
-			question: 'Does the project include any associated developments?',
+			question: 'Does the project include an associated development?',
+			hint: 'These support the development or operational capacity of an infrastructure project, for example, access road improvements or grid connections',
 			fieldName: 'hasAssociatedDevelopments',
-			url: 'has-associated-developments',
+			url: 'associated-development',
 			validators: [new RequiredValidator('Select yes if the project includes any associated developments')]
 		},
 		associatedDevelopments: {
@@ -206,6 +210,7 @@ export function getQuestions() {
 			title: 'Associated Developments',
 			pageTitle: 'Associated Developments',
 			question: 'Which documents relate to the associated developments?',
+			hint: 'Select all that apply',
 			fieldName: 'associatedDevelopments',
 			url: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT,
 			validators: [new RequiredValidator('Select the documents relating to the associated developments')]

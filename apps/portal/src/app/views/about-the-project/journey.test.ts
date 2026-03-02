@@ -42,6 +42,6 @@ describe('about the project journey', () => {
 			(acc: number, s: any) => (acc += s.questions.filter((q: any) => !!q.html).length),
 			0
 		);
-		assert.strictEqual(questionsWithHtml, 2);
+		assert.strictEqual(questionsWithHtml, 4);
 	});
 });
