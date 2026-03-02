@@ -23,13 +23,13 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 	return new Journey({
 		journeyId: applicationSectionId,
 		sections: [
-			new Section('Applicant Details', 'applicant')
+			new Section('Applicant details', 'applicant')
 				.addQuestion(questions.applicantOrganisation)
 				.addQuestion(questions.applicantName)
 				.addQuestion(questions.applicantEmailAddress)
 				.addQuestion(questions.applicantPhone)
 				.addQuestion(questions.applicantAddress),
-			new Section('Agent Details', 'agent')
+			new Section('Agent details', 'agent')
 				.addQuestion(questions.isAgent)
 				.startMultiQuestionCondition('agent-questions', (response: Handler) =>
 					questionHasAnswer(response, questions.isAgent, BOOLEAN_OPTIONS.YES)
@@ -40,7 +40,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.agentPhone)
 				.addQuestion(questions.agentAddress)
 				.endMultiQuestionCondition('agent-questions'),
-			new Section('Payment Details', 'payment')
+			new Section('Application fee details', 'payment')
 				.addQuestion(questions.paymentMethod)
 				.addQuestion(questions.paymentReference)
 		],

@@ -11,29 +11,45 @@ import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questi
 import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
 import FullAddressValidator from '@pins/dco-portal-lib/forms/custom-components/full-address/full-address-validator.ts';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
-import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
-import { PAYMENT_METHOD } from '@pins/dco-portal-database/src/seed/data-static.ts';
+import { referenceDataToRadioOptionsWithHintText } from '@pins/dco-portal-lib/util/questions.ts';
+import { PAYMENT_METHOD, PAYMENT_METHOD_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { QuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
 import type { FullAddressProps } from '@pins/dco-portal-lib/forms/custom-components/full-address/types.d.ts';
+import type { ApplicantAgentDetailsPrefix, PaymentMethodWithHint } from './types.d.ts';
 
 export function getQuestions() {
+	const paymentMethodsWithHints = PAYMENT_METHOD.map((method) => {
+		const methodWithHint: PaymentMethodWithHint = { ...method, hint: { text: '' } };
+		if (methodWithHint.id === PAYMENT_METHOD_ID.BACS) {
+			methodWithHint.hint = {
+				text: `Bankers Automated Clearing Services (BACS) is a secure, electronic bank-to-bank transfer`
+			};
+		} else if (methodWithHint.id === PAYMENT_METHOD_ID.CHAPS) {
+			methodWithHint.hint = {
+				text: `Clearing House Automated Payment System (CHAPS) is often used for fast transfers of large sums of money`
+			};
+		}
+
+		return methodWithHint;
+	});
+
 	const questions = {
 		...contactDetailsQuestions('applicant', 'Applicant'),
 		...contactDetailsQuestions('agent', 'Agent'),
 		paymentMethod: {
 			type: COMPONENT_TYPES.RADIO,
-			title: 'Application Payment Method',
-			pageTitle: 'Application Payment Method',
+			title: 'Payment method',
+			pageTitle: 'Payment method',
 			question: 'Select how you paid the application fee',
 			fieldName: 'paymentMethod',
 			url: 'payment-method',
-			options: referenceDataToRadioOptions(PAYMENT_METHOD),
+			options: referenceDataToRadioOptionsWithHintText(paymentMethodsWithHints),
 			validators: [new RequiredValidator('Select BACS, CHAPS or cheque')]
 		},
 		paymentReference: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Payment Reference',
-			pageTitle: 'Payment Reference',
+			title: 'Payment reference',
+			pageTitle: 'Payment reference',
 			question: 'Enter the payment reference',
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
@@ -46,8 +62,8 @@ export function getQuestions() {
 		},
 		isAgent: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Is Agent?',
-			pageTitle: 'Is Agent',
+			title: 'Are you an agent?',
+			pageTitle: 'Are you an agent',
 			question: 'Are you an agent acting on behalf of the applicant?',
 			fieldName: 'isAgent',
 			url: 'is-agent',
@@ -63,14 +79,14 @@ export function getQuestions() {
 	return createQuestions(questions, classes, {});
 }
 
-export function contactDetailsQuestions(prefix: string, title: string) {
+export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, title: string) {
 	const questions: Record<string, unknown> = {};
 
 	questions[`${prefix}Organisation`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-		title: `${title} Organisation`,
+		title: `Organisation`,
 		pageTitle: `${title} Organisation`,
-		question: `Enter the ${prefix}'s organisation`,
+		question: getQuestionFormat(prefix, 'organisation'),
 		fieldName: `${prefix}Organisation`,
 		url: `organisation`,
 		validators: [
@@ -87,9 +103,9 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 	};
 	questions[`${prefix}Name`] = {
 		type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
-		title: `${title} Name`,
+		title: `Name`,
 		pageTitle: `${title} Name`,
-		question: `Enter the ${prefix}'s name`,
+		question: getQuestionFormat(prefix, 'name'),
 		fieldName: `${prefix}Name`,
 		url: `name`,
 		validators: [
@@ -125,9 +141,9 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 	};
 	questions[`${prefix}EmailAddress`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-		title: `${title} Email Address`,
+		title: `Email address`,
 		pageTitle: `${title} Email Address`,
-		question: `Enter the ${prefix}'s email address`,
+		question: getQuestionFormat(prefix, 'email address'),
 		fieldName: `${prefix}EmailAddress`,
 		url: `email-address`,
 		validators: [
@@ -142,11 +158,11 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 	};
 	questions[`${prefix}Phone`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-		title: `${title} Phone Number`,
+		title: `Phone number`,
 		pageTitle: `${title} Phone Number`,
-		question: `Enter the ${prefix}'s phone number`,
+		question: getQuestionFormat(prefix, 'phone number'),
 		fieldName: `${prefix}Phone`,
-		url: `phone`,
+		url: `phone-number`,
 		validators: [
 			new RequiredValidator('Enter a phone number'),
 			new StringValidator({
@@ -160,9 +176,9 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 	};
 	questions[`${prefix}Address`] = {
 		type: CUSTOM_COMPONENTS.FULL_ADDRESS,
-		title: `${title} Address`,
+		title: `Address`,
 		pageTitle: `${title} Address`,
-		question: `Enter the ${prefix}'s address`,
+		question: getQuestionFormat(prefix, 'address'),
 		fieldName: `${prefix}Address`,
 		url: `address`,
 		fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
@@ -174,4 +190,13 @@ export function contactDetailsQuestions(prefix: string, title: string) {
 	};
 
 	return questions as Record<string, QuestionProps | FullAddressProps>;
+}
+
+function getQuestionFormat(prefix: ApplicantAgentDetailsPrefix, fieldText: string) {
+	switch (prefix) {
+		case 'agent':
+			return `Enter your ${fieldText}`;
+		default:
+			return `Enter the ${prefix}’s ${fieldText}`;
+	}
 }
