@@ -13,7 +13,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Draft Development Consent Order',
 			pageTitle: 'Draft Development Consent Order',
-			question: 'Which documents relate to the draft development consent order?',
+			question: 'Which documents relate to the draft development consent order (DCO)?',
+			hint: 'Select all that apply',
 			fieldName: 'draftDevelopmentConsentOrder',
 			url: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER,
 			validators: [new RequiredValidator('Select the documents relating to the draft development consent order')]
@@ -22,7 +23,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'SI Validation Report Success Email',
 			pageTitle: 'SI Validation Report Success Email',
-			question: 'Which documents relate to the SI validation report success email?',
+			question: 'Which document is the statutory instrument (SI) validation report success email?',
+			hint: 'Select all that apply',
 			fieldName: 'siValidationReportSuccessEmail',
 			url: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
 			validators: [new RequiredValidator('Select the documents relating to the SI validation report success email')]
@@ -31,7 +33,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Explanatory Memorandum',
 			pageTitle: 'Explanatory Memorandum',
-			question: 'Which documents relate to the Explanatory Memorandum?',
+			question: 'Which documents relate to the explanatory memorandum?',
+			hint: 'Select all that apply',
 			fieldName: 'explanatoryMemorandum',
 			url: DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM,
 			validators: [new RequiredValidator('Select the documents relating to the explanatory memorandum')]
