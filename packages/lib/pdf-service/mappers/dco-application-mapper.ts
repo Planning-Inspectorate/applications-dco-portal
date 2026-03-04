@@ -649,7 +649,7 @@ function mapEnvironmentalImpactAssessment(
 			value: caseData.whyNotNotifyingConsultationBodies
 		},
 
-		notifyingOtherPeople: {
+		notifiedOtherPeople: {
 			name: 'Notifying Other People',
 			value: caseData.notifiedOtherPeople ? 'Yes' : 'No'
 		}

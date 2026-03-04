@@ -122,7 +122,6 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				// Conditionally building case update query handles updating/deleting relation models with minimal queries
 				const data = {
 					infrastructureAdditionalInformationDescription: answers.additionalInformationDescription || null,
-					notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES ? true : false,
 					[`${kebabCaseToCamelCase(applicationSectionId)}Status`]: {
 						connect: { id: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED }
 					}
