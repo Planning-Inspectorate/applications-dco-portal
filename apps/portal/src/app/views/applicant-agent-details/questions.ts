@@ -119,7 +119,7 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 							regex: /^[A-Za-z' -]+$/,
 							regexMessage: 'First name must only contain letters a to z, apostrophes and hyphens'
 						},
-						maxLength: { maxLength: 250, minLengthMessage: 'First name must be 250 characters or less' }
+						maxLength: { maxLength: 250, maxLengthMessage: 'First name must be 250 characters or less' }
 					},
 					{
 						fieldName: `${prefix}LastName`,
@@ -129,7 +129,7 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 							regex: /^[A-Za-z'-]+$/,
 							regexMessage: 'Last name must only contain letters a to z, apostrophes and hyphens'
 						},
-						maxLength: { maxLength: 250, minLengthMessage: 'Last name must be 250 characters or less' }
+						maxLength: { maxLength: 250, maxLengthMessage: 'Last name must be 250 characters or less' }
 					}
 				]
 			})
