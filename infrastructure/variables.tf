@@ -44,6 +44,7 @@ variable "apps_config" {
         applicant_submission_template_id      = string
         pins_staff_submission_template_id     = string
         new_submission_date_template_id       = string
+        submission_date_missed_template_id    = string
       })
     })
 

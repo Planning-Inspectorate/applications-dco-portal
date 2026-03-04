@@ -256,4 +256,31 @@ describe(`gov-notify-client`, () => {
 			]);
 		});
 	});
+	describe('sendSubmissionDatePassedNotification', () => {
+		it('should call sendEmail with personalisation', async (ctx) => {
+			const logger = mockLogger();
+			const client = new GovNotifyClient(logger, 'key', {
+				submissionDateMissedNotification: 'template-id-1'
+			});
+			ctx.mock.method(client, 'sendEmail', () => {});
+			await client.sendSubmissionDatePassedNotification('email', {
+				case_reference_number: 'EN123456',
+				due_date: '26 February 2026',
+				relevant_team_email_address: DEFAULT_PROJECT_EMAIL_ADDRESS
+			});
+			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
+			const args = client.sendEmail.mock.calls[0].arguments;
+			assert.deepStrictEqual(args, [
+				'template-id-1',
+				'email',
+				{
+					personalisation: {
+						case_reference_number: 'EN123456',
+						due_date: '26 February 2026',
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+					}
+				}
+			]);
+		});
+	});
 });

@@ -25,6 +25,7 @@ apps_config = {
       applicant_submission_template_id      = "71eb31c7-3ff3-4b00-86ed-1666c5864dc6"
       pins_staff_submission_template_id     = "fbe636c0-90e5-4a9b-9df5-6c6e953d25f0"
       new_submission_date_template_id       = "9fc173e9-81c2-49e9-bd15-697f3f37d0d0"
+      submission_date_missed_template_id    = "d903b4b4-d220-4f43-b6b0-94e9478fbc23"
     }
   }
   logging = {

@@ -11,6 +11,7 @@ import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middl
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { initSessionMiddleware } from '@pins/dco-portal-lib/util/session.ts';
 import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-requests.ts';
+import { registerDailyJob } from './schedule/notification/notify-submission-date-passed.ts';
 
 /**
  * @param {import('#service').PortalService} service
@@ -61,6 +62,8 @@ export function createApp(service: PortalService): Express {
 	const defaultErrorHandler = buildDefaultErrorHandlerMiddleware(service.logger);
 	// catch/handle errors last
 	app.use(defaultErrorHandler);
+
+	registerDailyJob(service);
 
 	return app;
 }

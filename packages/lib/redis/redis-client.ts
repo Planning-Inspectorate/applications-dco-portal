@@ -4,7 +4,7 @@ import { MSALCacheClient } from './msal-cache-client.ts';
 import { PartitionManager } from './partition-manager.ts';
 import { DistributedCachePlugin } from '@azure/msal-node';
 import type { Logger } from 'pino';
-import type { RedisClientType } from 'redis';
+import type { RedisClientType, SetOptions } from 'redis';
 import type { IPartitionManager } from '@azure/msal-node';
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
@@ -69,8 +69,8 @@ export class RedisClient {
 		return await this.client.get(key);
 	}
 
-	async set(key: string, value: any) {
-		await this.client.set(key, value);
+	async set(key: string, value: any, options?: SetOptions) {
+		return await this.client.set(key, value, options);
 	}
 
 	async zAdd(key: string, score: number, value: string) {
