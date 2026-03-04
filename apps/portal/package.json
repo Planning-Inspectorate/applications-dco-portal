@@ -28,6 +28,7 @@
     "govuk-frontend": "*",
     "helmet": "*",
     "multer": "*",
+		"node-cron": "*",
     "nunjucks": "*",
     "pino": "*",
     "pino-pretty": "*",

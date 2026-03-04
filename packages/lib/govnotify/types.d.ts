@@ -16,6 +16,7 @@ export interface TemplateIds {
 	applicantSubmissionNotification?: string;
 	pinsStaffSubmissionNotification?: string;
 	newSubmissionDateNotification?: string;
+	submissionDateMissedNotification?: string;
 }
 
 export interface NotifyConfig {
