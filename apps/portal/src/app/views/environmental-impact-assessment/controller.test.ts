@@ -59,7 +59,7 @@ describe('environmental-impact-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/environmental-impact-assessment-information/details/has-environmental-statement'
+				'/environmental-impact-assessment-information/details/environmental-statement'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
@@ -119,7 +119,7 @@ describe('environmental-impact-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/environmental-impact-assessment-information/details/has-environmental-statement'
+				'/environmental-impact-assessment-information/details/environmental-statement'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
@@ -177,7 +177,7 @@ describe('environmental-impact-assessment-information controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/environmental-impact-assessment-information/details/has-environmental-statement'
+				'/environmental-impact-assessment-information/details/environmental-statement'
 			);
 
 			assert.deepStrictEqual(mockReq.session, { caseReference: 'EN123456' });

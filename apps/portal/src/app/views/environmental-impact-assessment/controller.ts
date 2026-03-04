@@ -28,7 +28,7 @@ export function buildEnvironmentalImpactAssessmentHomePage(
 			await populateForm(req, res, db, applicationSectionId);
 		}
 
-		res.redirect(`${req.baseUrl}/details/has-environmental-statement`);
+		res.redirect(`${req.baseUrl}/details/environmental-statement`);
 	};
 }
 

@@ -12,7 +12,6 @@ import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/dat
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';
 import HTML_TEMPLATES from './html-templates.ts';
-import { SELECT_ALL_THAT_APPLY_HTML } from '../common-html-templates.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -22,7 +21,7 @@ export function getQuestions() {
 			question: 'Environmental Statement',
 			html: HTML_TEMPLATES.HAS_ENVIRONMENTAL_STATEMENT_HTML,
 			fieldName: 'hasEnvironmentalStatement',
-			url: 'has-environmental-statement',
+			url: 'environmental-statement',
 			validators: [new RequiredValidator('Select yes if the project requires an environmental statement')]
 		},
 		nonTechnicalSummary: {
@@ -78,12 +77,11 @@ export function getQuestions() {
 			type: COMPONENT_TYPES.CHECKBOX,
 			title: 'Other Environmental Documents',
 			pageTitle: 'Other Environmental Documents',
-			question: 'What other types of environmental statement documents have you uploaded?',
-			html: SELECT_ALL_THAT_APPLY_HTML,
+			question: 'What other types of environmental statement documents have you uploaded? (optional)',
+			description: 'Select all that apply',
 			fieldName: 'otherEnvironmentalDocuments',
-			url: 'other-environmental-documents',
-			options: referenceDataToRadioOptions(OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS),
-			validators: []
+			url: 'environmental-statement-document-types',
+			options: referenceDataToRadioOptions(OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS)
 		},
 		introductoryChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -198,13 +196,13 @@ export function getQuestions() {
 				})
 			]
 		},
-		notifyingOtherPeople: {
+		notifiedOtherPeople: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
 			title: 'Notifying Other People',
 			pageTitle: 'Notifying Other People',
 			html: HTML_TEMPLATES.NOTIFYING_OTHER_PEOPLE_HTML,
 			question: 'Notifying other people regulated identified under Regulation 11(1)(c)',
-			fieldName: 'notifyingOtherPeople',
+			fieldName: 'notifiedOtherPeople',
 			url: 'notifying-other-people',
 			validators: [new RequiredValidator('Select yes if you’ve notified other people under Regulation 11(1)(c)')]
 		}

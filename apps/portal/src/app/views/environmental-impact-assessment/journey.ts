@@ -78,7 +78,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.notifyingConsultationBodies)
 				.addQuestion(questions.whyNotNotifyingConsultationBodies)
 				.withCondition(whenQuestionHasAnswer(questions.notifyingConsultationBodies, BOOLEAN_OPTIONS.NO))
-				.addQuestion(questions.notifyingOtherPeople)
+				.addQuestion(questions.notifiedOtherPeople)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

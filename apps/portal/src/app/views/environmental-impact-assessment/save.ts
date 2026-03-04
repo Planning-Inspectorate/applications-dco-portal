@@ -116,7 +116,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				await $tx.case.update({
 					where: { reference: req.session.caseReference },
 					data: {
-						notifiedOtherPeople: answers.notifyingOtherPeople === BOOLEAN_OPTIONS.YES,
+						notifiedOtherPeople: answers.notifiedOtherPeople === BOOLEAN_OPTIONS.YES,
 						notifyingConsultationBodies: answers.notifyingConsultationBodies === BOOLEAN_OPTIONS.YES,
 						whyNotNotifyingConsultationBodies:
 							answers.notifyingConsultationBodies === BOOLEAN_OPTIONS.NO

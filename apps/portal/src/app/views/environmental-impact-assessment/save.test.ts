@@ -50,7 +50,7 @@ describe('environmental-impact-assessment-information save', () => {
 							confidentialDocuments: 'doc-id-13',
 							sensitiveInformation: 'doc-id-14',
 							notifyingConsultationBodies: 'yes',
-							notifyingOtherPeople: 'yes'
+							notifiedOtherPeople: 'yes'
 						}
 					}
 				}
@@ -104,7 +104,7 @@ describe('environmental-impact-assessment-information save', () => {
 							hasScopingOpinion: 'no',
 							otherEnvironmentalDocuments: '',
 							notifyingConsultationBodies: 'yes',
-							notifyingOtherPeople: 'yes'
+							notifiedOtherPeople: 'yes'
 						}
 					}
 				}
@@ -170,7 +170,7 @@ describe('environmental-impact-assessment-information save', () => {
 							confidentialDocuments: 'doc-id-13',
 							sensitiveInformation: 'doc-id-14',
 							notifyingConsultationBodies: 'yes',
-							notifyingOtherPeople: 'yes'
+							notifiedOtherPeople: 'yes'
 						}
 					}
 				}
@@ -235,7 +235,7 @@ describe('environmental-impact-assessment-information save', () => {
 							confidentialDocuments: 'doc-id-13',
 							sensitiveInformation: 'doc-id-14',
 							notifyingConsultationBodies: 'yes',
-							notifyingOtherPeople: 'yes'
+							notifiedOtherPeople: 'yes'
 						}
 					}
 				}
