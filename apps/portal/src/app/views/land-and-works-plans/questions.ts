@@ -13,7 +13,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Land Plans',
 			pageTitle: 'Land Plans',
-			question: 'Which documents relate to the land plans?',
+			question: 'Which documents make up the land plan?',
+			hint: 'Select all that apply',
 			fieldName: 'landPlans',
 			url: DOCUMENT_SUB_CATEGORY_ID.LAND_PLANS,
 			validators: [new RequiredValidator('Select the documents relating to the land plan')]
@@ -22,7 +23,8 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Works Plans',
 			pageTitle: 'Works Plans',
-			question: 'Which documents relate to the works plan?',
+			question: 'Which documents make up the works plan?',
+			hint: 'Select all that apply',
 			fieldName: 'worksPlans',
 			url: DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN,
 			validators: [new RequiredValidator('Select the documents relating to the works plan')]
