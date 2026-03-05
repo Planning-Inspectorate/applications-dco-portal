@@ -56,7 +56,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			caseData.SupportingEvidence,
 			OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
 		),
-		otherInformation: getMultiSubcategorySupportingEvidenceIds(
+		supportingInformation: getMultiSubcategorySupportingEvidenceIds(
 			caseData.SupportingEvidence,
 			OTHER_INFORMATION_SUBCATEGORY_IDS
 		)

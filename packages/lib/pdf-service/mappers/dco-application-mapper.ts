@@ -817,7 +817,7 @@ function mapOtherPlansAndReports(otherPlansAndReportsEvidence: SupportingEvidenc
 		otherPlansAndReportsEvidence,
 		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS['plans-drawings-sections']
 	);
-	const otherInformationEvidence = findSupportingEvidenceBySubcategory(
+	const supportingInformationEvidence = findSupportingEvidenceBySubcategory(
 		otherPlansAndReportsEvidence,
 		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS['other-information']
 	);
@@ -828,9 +828,9 @@ function mapOtherPlansAndReports(otherPlansAndReportsEvidence: SupportingEvidenc
 			value: otherPlansDrawingsSectionsEvidence.map((evidence) => evidence.Document.fileName)
 		},
 
-		otherInformation: {
+		supportingInformation: {
 			name: 'Other Information',
-			value: otherInformationEvidence.map((evidence) => evidence.Document.fileName)
+			value: supportingInformationEvidence.map((evidence) => evidence.Document.fileName)
 		}
 	};
 }

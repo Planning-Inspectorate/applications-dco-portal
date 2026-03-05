@@ -45,7 +45,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 						subCategoryIds: OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
 					},
 					{
-						key: 'otherInformation',
+						key: 'supportingInformation',
 						subCategoryIds: OTHER_INFORMATION_SUBCATEGORY_IDS
 					}
 				];
@@ -53,6 +53,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				await deleteMultipleSubCategorySupportingEvidence($tx, caseId, categories);
 
 				for (const { key } of categories) {
+					if (!answers[key]) continue; //skip if no documents selected for that category
 					const ids = answers[key]?.split(',') ?? [];
 					for (const documentId of ids) {
 						const fullDocument = caseData.Documents.find((doc) => doc.id === documentId);

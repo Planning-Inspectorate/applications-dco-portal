@@ -44,7 +44,7 @@ describe('other-plans-and-reports save', () => {
 					journeyResponse: {
 						answers: {
 							otherPlansDrawingsSections: 'doc-id-3',
-							otherInformation: 'doc-id-2'
+							supportingInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -68,6 +68,66 @@ describe('other-plans-and-reports save', () => {
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
 			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
 		});
+		it('if no documents selected for either question then no supporting evidence should be saved for them', async () => {
+			const mockDb = {
+				$transaction: mock.fn((fn) => fn(mockDb)),
+				case: {
+					findUnique: mock.fn(() => ({
+						id: 'case-id-1',
+						Documents: [
+							{
+								id: 'doc-id-3',
+								subCategoryId: 'floor-plans'
+							},
+							{
+								id: 'doc-id-2',
+								subCategoryId: 'potential-main-issues-for-the-examination-pmie'
+							}
+						]
+					})),
+					update: mock.fn()
+				},
+				supportingEvidence: {
+					deleteMany: mock.fn(),
+					upsert: mock.fn()
+				}
+			};
+			const mockReq = {
+				baseUrl: '/other-plans-and-reports',
+				session: {
+					caseReference: 'EN123456'
+				}
+			};
+			const mockRes = {
+				redirect: mock.fn(),
+				locals: {
+					journeyResponse: {
+						answers: {
+							otherPlansDrawingsSections: '',
+							supportingInformation: ''
+						}
+					}
+				}
+			};
+
+			const controller = buildSaveController(
+				{
+					db: mockDb,
+					logger: mockLogger()
+				},
+				APPLICATION_SECTION_ID.OTHER_PLANS_AND_REPORTS
+			);
+			await controller(mockReq, mockRes);
+
+			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
+			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/');
+
+			assert.strictEqual(mockDb.case.findUnique.mock.callCount(), 1);
+			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
+
+			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 0);
+		});
 		it('should redirect to not found page if the case data is not present in db', async () => {
 			const mockDb = {
 				$transaction: mock.fn((fn) => fn(mockDb)),
@@ -88,7 +148,7 @@ describe('other-plans-and-reports save', () => {
 					journeyResponse: {
 						answers: {
 							otherPlansDrawingsSections: 'doc-id-3',
-							otherInformation: 'doc-id-2'
+							supportingInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -150,7 +210,7 @@ describe('other-plans-and-reports save', () => {
 					journeyResponse: {
 						answers: {
 							otherPlansDrawingsSections: 'doc-id-3',
-							otherInformation: 'doc-id-2'
+							supportingInformation: 'doc-id-2'
 						}
 					}
 				}
@@ -203,7 +263,7 @@ describe('other-plans-and-reports save', () => {
 					journeyResponse: {
 						answers: {
 							otherPlansDrawingsSections: 'doc-id-3',
-							otherInformation: 'doc-id-2'
+							supportingInformation: 'doc-id-2'
 						}
 					}
 				}

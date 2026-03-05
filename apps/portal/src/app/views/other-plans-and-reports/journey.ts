@@ -14,7 +14,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.otherPlansDrawingsSections)
-				.addQuestion(questions.otherInformation)
+				.addQuestion(questions.supportingInformation)
 		],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',

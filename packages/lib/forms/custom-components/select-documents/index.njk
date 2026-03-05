@@ -23,47 +23,54 @@
     {{ super() }}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            {% if question.options and question.options | length > 0 %}
-                {% if question.html %}
-                    {% set beforeInputsHtml = question.html %}
-                {% endif %}
-                <form action="" method="post" novalidate>
-                    {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
-                    {{ govukCheckboxes({
-                        name: question.fieldName,
-                        hint: question.hint and { text: question.hint },
-                        fieldset: {
-                            legend: {
-                                text: question.question,
-                                isPageHeading: true,
-                                classes: "govuk-fieldset__legend--l"
-                            }
-                        },
-                        formGroup: {
-                            beforeInputs: {
-                                html: beforeInputsHtml
-                            }
-                        },
-                        items: question.options
+            <form action="" method="post" novalidate>
+                {% if _csrf %}<input type="hidden" name="_csrf" value="{{ _csrf }}">{% endif %}
+                {% if question.options and question.options | length > 0 %}
+                    {% if question.html %}
+                        {% set beforeInputsHtml = question.html %}
+                    {% endif %}
+                        {{ govukCheckboxes({
+                            name: question.fieldName,
+                            hint: question.hint and { text: question.hint },
+                            fieldset: {
+                                legend: {
+                                    text: question.question,
+                                    isPageHeading: true,
+                                    classes: "govuk-fieldset__legend--l"
+                                }
+                            },
+                            formGroup: {
+                                beforeInputs: {
+                                    html: beforeInputsHtml
+                                }
+                            },
+                            items: question.options
+                        }) }}
+                        {{ govukButton({
+                            text: continueButtonText,
+                            type: "submit",
+                            attributes: { "data-cy":"button-save-and-continue"}
+                        }) }}
+                {% else %}
+                    <h1 class="govuk-heading-l">
+                        {{ question.question }}
+                    </h1>
+                    {{ govukWarningText({
+                        text: 'No documents have been uploaded. Upload documents first to select them.'
                     }) }}
                     {{ govukButton({
-                        text: continueButtonText,
-                        type: "submit",
-                        attributes: { "data-cy":"button-save-and-continue"}
+                        text: 'Return home',
+                        href: '/'
                     }) }}
-                </form>
-            {% else %}
-                <h1 class="govuk-heading-l">
-                    {{ question.question }}
-                </h1>
-                {{ govukWarningText({
-                    text: 'No documents have been uploaded. Upload documents first to select them.'
-                }) }}
-                {{ govukButton({
-                    text: 'Return home',
-                    href: '/'
-                }) }}
-            {% endif %}
+                    {% if not question.required %}
+                        {{ govukButton({
+                            text: continueButtonText,
+                            type: "submit",
+                            attributes: { "data-cy":"button-save-and-continue"}
+                        }) }}
+                    {% endif %}
+                {% endif %}
+            </form>
         </div>
     </div>
 {% endblock %}
