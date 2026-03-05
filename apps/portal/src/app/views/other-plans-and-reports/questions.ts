@@ -2,8 +2,6 @@
 import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-// @ts-expect-error - due to not having @types
-import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 
 export function getQuestions() {
@@ -12,19 +10,20 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Other Plans, Drawings or Sections',
 			pageTitle: 'Other Plans, Drawings or Sections',
-			question: 'Which documents contain other plans, drawings or sections?',
+			question: 'Which documents contain other plans, drawings or sections? (optional)',
+			hint: 'Select all that apply',
 			fieldName: 'otherPlansDrawingsSections',
 			url: 'plans-drawings-sections',
-			validators: [new RequiredValidator()]
+			validators: []
 		},
-		otherInformation: {
+		supportingInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Other Information',
-			pageTitle: 'Other Information',
-			question: 'Which documents contain any other supporting information?',
-			fieldName: 'otherInformation',
-			url: 'other-information',
-			validators: [new RequiredValidator()]
+			title: 'Supporting Information',
+			pageTitle: 'Supporting Information',
+			question: 'Which documents contain any other supporting information? (optional)',
+			fieldName: 'supportingInformation',
+			url: 'supporting-information',
+			validators: []
 		}
 	};
 

@@ -56,7 +56,7 @@ describe('other-plans-and-reports controller', () => {
 				forms: {
 					'other-plans-and-reports': {
 						otherPlansDrawingsSections: 'doc-id-1,doc-id-2,doc-id-3,doc-id-4,doc-id-5,doc-id-6',
-						otherInformation: 'doc-id-7,doc-id-8'
+						supportingInformation: 'doc-id-7,doc-id-8'
 					}
 				}
 			});
@@ -97,7 +97,7 @@ describe('other-plans-and-reports controller', () => {
 				forms: {
 					'other-plans-and-reports': {
 						otherPlansDrawingsSections: '',
-						otherInformation: ''
+						supportingInformation: ''
 					}
 				}
 			});
