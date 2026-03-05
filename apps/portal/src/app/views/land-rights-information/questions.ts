@@ -25,32 +25,33 @@ export function getQuestions() {
 		},
 		statementOfReasons: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the statement of reasons?',
-			question: 'Which documents relate to the statement of reasons?',
+			title: 'Which document is the statement of reasons?',
+			question: 'Which document is the statement of reasons?',
 			fieldName: 'statementOfReasons',
 			url: DOCUMENT_SUB_CATEGORY_ID.STATEMENT_OF_REASONS,
 			validators: [new RequiredValidator('Select the documents relating to the statement of reasons')]
 		},
 		fundingStatement: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the funding statement?',
-			question: 'Which documents relate to the funding statement?',
+			title: 'Which document is the funding statement?',
+			question: 'Which document is the funding statement?',
 			fieldName: 'fundingStatement',
 			url: DOCUMENT_SUB_CATEGORY_ID.FUNDING_STATEMENT,
 			validators: [new RequiredValidator('Select the documents relating to the funding statement')]
 		},
 		bookOfReference: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the book of reference?',
-			question: 'Which documents relate to the book of reference?',
+			title: 'Which document is the Book of Reference (BoR)?',
+			question: 'Which document is the Book of Reference (BoR)?',
 			fieldName: 'bookOfReference',
 			url: DOCUMENT_SUB_CATEGORY_ID.BOOK_OF_REFERENCE_PARTS_1_TO_5,
 			validators: [new RequiredValidator('Select the documents relating to the book of reference')]
 		},
 		landAndRightsNegotiationsTracker: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the land and rights negotiations tracker?',
-			question: 'Which documents relate to the land and rights negotiations tracker?',
+			title: 'Which documents make up the land and rights negotations tracker?',
+			question: 'Which documents make up the land and rights negotations tracker?',
+			hint: 'Select all that apply',
 			fieldName: 'landAndRightsNegotiationsTracker',
 			url: DOCUMENT_SUB_CATEGORY_ID.LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER,
 			validators: [new RequiredValidator('Select the documents relating to the land and rights negotiations tracker')]
