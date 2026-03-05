@@ -142,17 +142,17 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 export const DOCUMENT_SUB_CATEGORY = [
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.APPLICATION_COVER_LETTER,
-		displayName: 'Application Cover Letter',
+		displayName: 'Application cover letter',
 		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.GUIDE_TO_THE_APPLICATION,
-		displayName: 'Guide to the Application',
+		displayName: 'Guide to the application',
 		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.PRE_APPLICATION_PROGRAMME_DOCUMENT,
-		displayName: 'Pre-application Programme Document',
+		displayName: 'Pre-application programme document',
 		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
@@ -162,7 +162,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.FAST_TRACK_ADMISSION_DOCUMENT,
-		displayName: 'Fast Track Admission Document',
+		displayName: 'Fast track admission document',
 		categoryId: DOCUMENT_CATEGORY_ID.APPLICATION_FORM_RELATED_INFORMATION
 	},
 	{
@@ -182,7 +182,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN,
-		displayName: 'Access plan and Rights of Way plan',
+		displayName: 'Access plan and rights of way plan',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
@@ -218,7 +218,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES,
 		displayName:
-			'Plans of statutory and non-statutory sites or features (nature conservation, habitats, marine conservation zones, water bodies etc)',
+			'Plans of statutory and non-statutory sites or features (for example, nature conservation, habitats, marine conservation zones, water bodies)',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
@@ -238,17 +238,17 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.TREE_PRESERVATION_ORDER_AND_HEDGEROW_PLAN,
-		displayName: 'Tree Preservation Order and Hedgerow Plan',
+		displayName: 'Tree Preservation Order (TPO) and hedgerow plan',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_MANAGEMENT_PLAN,
-		displayName: 'Environmental Management Plan',
+		displayName: 'Environmental Management Plan (EMP)',
 		categoryId: DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER,
-		displayName: 'Draft development consent order',
+		displayName: 'Draft development consent order (DCO)',
 		categoryId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
 	},
 	{
@@ -258,7 +258,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
-		displayName: 'SI validation report success email',
+		displayName: 'Statutory instrument report success email',
 		categoryId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
 	},
 	{
@@ -273,7 +273,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.BOOK_OF_REFERENCE_PARTS_1_TO_5,
-		displayName: 'Book of reference (parts 1 to 5)',
+		displayName: 'Book of Reference (parts 1 to 5)',
 		categoryId: DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION
 	},
 	{
@@ -293,27 +293,27 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,
-		displayName: 'Habitat Regulations Assessment (HRA) Screening Report',
+		displayName: 'Habitat Regulations Assessment (HRA) screening report',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT,
-		displayName: 'Report to Inform Appropriate Assessment (where relevant or required)',
+		displayName: 'Report to Inform Appropriate Assessment (RIAA) (where relevant or required)',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.STATUTORY_NUISANCE_STATEMENT,
-		displayName: 'Statutory Nuisance Statement',
+		displayName: 'Statutory nuisance statement',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.CONSENTS_AND_LICENCES_REQUIRED_UNDER_OTHER_LEGISLATION,
-		displayName: 'Consents and Licences Required Under Other Legislation',
+		displayName: 'Consents and licences required under other legislation',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.PLANNING_STATEMENT,
-		displayName: 'Planning Statement',
+		displayName: 'Planning statement',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
@@ -323,13 +323,13 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.POLICY_COMPLIANCE_DOCUMENT,
-		displayName: 'Policy Compliance Document',
+		displayName: 'Policy compliance document',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.POTENTIAL_MAIN_ISSUES_FOR_THE_EXAMINATION_PMIE,
 		displayName:
-			'Potential Main Issues for the Examination PMIE (supported by Principal Areas of Disagreement Summary Statements (PADSS)',
+			'Potential Main Issues for the Examination (PMIE) (supported by Principal Areas of Disagreement Summary Statements (PADSS)',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
@@ -339,12 +339,12 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SAFETY_ASSESSMENT,
-		displayName: 'Safety Assessment (where required)',
+		displayName: 'Safety assessment (where required)',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.NATIONAL_SECURITY_ISSUES,
-		displayName: 'National Security Issues (where required)',
+		displayName: 'National security issues (where required)',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
@@ -354,7 +354,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.DRAFT_STATEMENT_OF_COMMON_GROUND,
-		displayName: 'Draft Statement of Common Ground (SOCG) (if available at the acceptance stage)',
+		displayName: 'Draft Statement of Common Ground (SoCG) (if available at the acceptance stage)',
 		categoryId: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS
 	},
 	{
@@ -369,12 +369,12 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
-		displayName: 'Environmental Statement Appendices',
+		displayName: 'Environmental statement appendices',
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
-		displayName: 'Environmental Statement Figures',
+		displayName: 'Environmental statement figures',
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
@@ -399,17 +399,17 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
-		displayName: 'Screening Direction (if applicable)',
+		displayName: 'Screening direction',
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
-		displayName: 'Scoping Opinion (if applicable)',
+		displayName: 'Scoping opinion',
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.FLOOD_RISK_ASSESSMENT,
-		displayName: 'Flood Risk Assessment',
+		displayName: 'Flood risk assessment (FRA)',
 		categoryId: DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT
 	},
 	{
