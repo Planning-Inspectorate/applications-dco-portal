@@ -33,15 +33,17 @@
                     {% set _ = upperExtensions.push(ext | upper) %}
                 {% endfor %}
                 {% if upperExtensions.length == 1 %}
-                    Each document must be a {{ upperExtensions[0] }}
+                    Each file must be a  {{ upperExtensions[0] }}
                     {% elif upperExtensions.length == 2 %}
-                    Each document must be a {{ upperExtensions[0] }} or {{ upperExtensions[1] }}
+                    Each file must be a  {{ upperExtensions[0] }} or {{ upperExtensions[1] }}
                 {% else %}
-                    Each document must be a
+                    Each file must be a
                     {{ upperExtensions.slice(0, -1) | join(", ") }}, or {{ upperExtensions[upperExtensions.length - 1] }}
                 {% endif %}
             </p>
-            <p class="govuk-body">The total size of your uploaded documents must be smaller than 1GB.</p>
+            <p class="govuk-body">You must only include letters a to z, numbers, full stops and spaces in file names.</p>
+            <p class="govuk-body">A single file must be smaller than 250MB. The total size of your uploaded files must be smaller than 1GB.</p>
+            <p class="govuk-body">We will scan your files for viruses. You will need to remove any files that are flagged before you can use them or mark this section as complete.</p>
 
 
             {% if uploadedFiles and uploadedFiles | length > 0 %}

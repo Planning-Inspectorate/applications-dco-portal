@@ -70,7 +70,7 @@ export default class FileUpload extends Question {
 
 	formatAnswerForSummary(sectionSegment, journey, answer) {
 		const hasFiles = Array.isArray(answer) && answer.length > 0;
-		const value = hasFiles ? nl2br(answer.map((file) => file.fileName).join('\n')) : '-';
+		const value = hasFiles ? nl2br(answer.map((file) => `• ${file.fileName}`).join('\n')) : '-';
 		const isRedactedField = this.fieldName.includes(REDACTED_FLAG);
 
 		return [

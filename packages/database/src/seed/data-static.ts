@@ -44,7 +44,7 @@ export const DOCUMENT_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_CATEGORY_ID.DRAFT_DCO,
-		displayName: 'Draft DCO'
+		displayName: 'Draft development consent order (DCO)'
 	},
 	{
 		id: DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION,
