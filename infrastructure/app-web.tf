@@ -19,7 +19,7 @@ module "app_portal" {
   # container
   container_registry_name = var.tooling_config.container_registry_name
   container_registry_rg   = var.tooling_config.container_registry_rg
-  image_name              = "dcop/portal"
+  image_name              = "applications/dco-portal"
 
   # networking
   app_service_private_dns_zone_id = data.azurerm_private_dns_zone.app_service.id
