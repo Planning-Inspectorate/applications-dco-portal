@@ -101,7 +101,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Draft DCO'
+								text: 'Draft development consent order (DCO)'
 							}
 						},
 						{
@@ -839,7 +839,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Draft DCO'
+								text: 'Draft development consent order (DCO)'
 							}
 						},
 						{

@@ -17,7 +17,10 @@ describe('dynamic forms util', () => {
 				'Application form related information'
 			);
 			assert.strictEqual(getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.PLANS_AND_DRAWINGS), 'Plans and drawings');
-			assert.strictEqual(getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.DRAFT_DCO), 'Draft DCO');
+			assert.strictEqual(
+				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.DRAFT_DCO),
+				'Draft development consent order (DCO)'
+			);
 			assert.strictEqual(
 				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION),
 				'Compulsory acquisition information'

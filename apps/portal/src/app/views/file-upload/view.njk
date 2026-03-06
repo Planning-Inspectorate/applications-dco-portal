@@ -41,7 +41,7 @@
                             rows: documents
                         }) }}
                     {% else %}
-                        <p class="govuk-body">This category contains 0 document(s).</p>
+                        <p class="govuk-body">This category contains 0 documents.</p>
                     {% endif %}
 
                     {% if affectedDocuments.length > 0 %}
@@ -77,6 +77,9 @@
                                         classes: "govuk-fieldset__legend--m"
                                     }
                                 },
+                                hint: {
+                                    html: "<div class='govuk-grid-row'><div class='govuk-grid-column-two-thirds'>You can only mark this section as complete when all your documents have been uploaded and you have removed any documents with a virus</div></div>"
+                                },
                                 items: [
                                     {
                                         value: "yes",
@@ -94,7 +97,7 @@
                                 }
                             }) }}
                             {{ govukButton({
-                                text: "Continue"
+                                text: "Save and return"
                             }) }}
                         </form>
                     {% endif %}

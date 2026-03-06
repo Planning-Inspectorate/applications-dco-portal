@@ -41,8 +41,8 @@ export function getQuestions(documentTypeId: string) {
 		},
 		isCertified: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Is the document certified?',
-			question: 'Is the document certified?',
+			title: 'Will the document be certified in the draft development consent order (DCO)?',
+			question: 'Will the document be certified in the draft development consent order (DCO)?',
 			fieldName: 'isCertified',
 			url: 'document-certified',
 			validators: [new RequiredValidator('Select yes if the document is certified')]
