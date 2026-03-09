@@ -5,7 +5,7 @@ import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
 export function registerDailyJob(service: PortalService) {
-	cron.schedule('* * * * *', async () => {
+	cron.schedule('0 9 * * *', async () => {
 		await dispatchSubmissionDatePassedNotifications(service);
 	});
 }
