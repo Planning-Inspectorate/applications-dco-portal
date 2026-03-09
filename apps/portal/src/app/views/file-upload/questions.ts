@@ -50,6 +50,7 @@ export function getQuestions(documentTypeId: string) {
 		fileUpload: {
 			type: CUSTOM_COMPONENTS.FILE_UPLOAD,
 			title: 'Upload your documents',
+			pageTitle: 'Documents added',
 			question: 'Upload your documents',
 			fieldName: 'fileUpload',
 			url: 'upload-documents',
