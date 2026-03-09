@@ -13,10 +13,10 @@ data "azurerm_servicebus_topic" "nsip_project" {
   namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
 }
 
-data "azurerm_servicebus_topic" "dco_portal_data_submissions" {
-  name         = var.sb_topic_names.dco_portal_data_submissions
-  namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
-}
+# data "azurerm_servicebus_topic" "dco_portal_data_submissions" {
+#   name         = var.sb_topic_names.dco_portal_data_submissions
+#   namespace_id = data.azurerm_servicebus_namespace.back_office_sb.id
+# }
 
 data "azurerm_private_dns_zone" "service_bus" {
   name                = "privatelink.servicebus.windows.net"
@@ -34,9 +34,15 @@ resource "azurerm_private_dns_zone_virtual_network_link" "service_bus" {
   provider = azurerm.tooling
 }
 
-#rbac for portal app to publish service bus topics
-resource "azurerm_role_assignment" "portal_servicebus_datasender" {
-  scope                = data.azurerm_servicebus_topic.dco_portal_data_submissions.id
-  role_definition_name = "Azure Service Bus Data Sender"
-  principal_id         = module.app_portal.principal_id
+# #rbac for portal app to publish service bus topics
+# resource "azurerm_role_assignment" "portal_servicebus_datasender" {
+#   scope                = data.azurerm_servicebus_topic.dco_portal_data_submissions.id
+#   role_definition_name = "Azure Service Bus Data Sender"
+#   principal_id         = module.app_portal.principal_id
+# }
+
+resource "azurerm_servicebus_topic" "dco_portal_data_submissions" {
+  name                = "dco-portal-data-submissions"
+  namespace_id        = data.azurerm_servicebus_namespace.back_office_sb.id
+  default_message_ttl = "P3D"
 }
