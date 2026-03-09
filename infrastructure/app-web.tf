@@ -103,7 +103,7 @@ module "app_portal" {
     # service bus
     ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
     SERVICE_BUS_PUBLISH_EVENT_DISABLED            = var.apps_config.service_bus_publish_event.disabled
-    DCO_PORTAL_DATA_SUBMISSIONS_TOPIC             = data.azurerm_servicebus_topic.dco_portal_data_submissions.name
+    # DCO_PORTAL_DATA_SUBMISSIONS_TOPIC             = data.azurerm_servicebus_topic.dco_portal_data_submissions.name
   }
 
   providers = {
