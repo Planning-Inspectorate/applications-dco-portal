@@ -34,12 +34,11 @@ export function getQuestions() {
 	});
 
 	const questions = {
-		...contactDetailsQuestions('applicant', 'Applicant'),
-		...contactDetailsQuestions('agent', 'Agent'),
+		...contactDetailsQuestions('applicant'),
+		...contactDetailsQuestions('agent'),
 		paymentMethod: {
 			type: COMPONENT_TYPES.RADIO,
 			title: 'Payment method',
-			pageTitle: 'Payment method',
 			question: 'Select how you paid the application fee',
 			fieldName: 'paymentMethod',
 			url: 'payment-method',
@@ -49,7 +48,6 @@ export function getQuestions() {
 		paymentReference: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 			title: 'Payment reference',
-			pageTitle: 'Payment reference',
 			question: 'Enter the payment reference',
 			fieldName: 'paymentReference',
 			url: 'payment-reference',
@@ -63,7 +61,6 @@ export function getQuestions() {
 		isAgent: {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Are you an agent?',
-			pageTitle: 'Are you an agent',
 			question: 'Are you an agent acting on behalf of the applicant?',
 			fieldName: 'isAgent',
 			url: 'is-agent',
@@ -79,13 +76,12 @@ export function getQuestions() {
 	return createQuestions(questions, classes, {});
 }
 
-export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, title: string) {
+export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix) {
 	const questions: Record<string, unknown> = {};
 
 	questions[`${prefix}Organisation`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `Organisation`,
-		pageTitle: `${title} Organisation`,
 		question: getQuestionFormat(prefix, 'organisation'),
 		fieldName: `${prefix}Organisation`,
 		url: `organisation`,
@@ -104,7 +100,6 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 	questions[`${prefix}Name`] = {
 		type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
 		title: `Name`,
-		pageTitle: `${title} Name`,
 		question: getQuestionFormat(prefix, 'name'),
 		fieldName: `${prefix}Name`,
 		url: `name`,
@@ -142,7 +137,6 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 	questions[`${prefix}EmailAddress`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `Email address`,
-		pageTitle: `${title} Email Address`,
 		question: getQuestionFormat(prefix, 'email address'),
 		fieldName: `${prefix}EmailAddress`,
 		url: `email-address`,
@@ -159,7 +153,6 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 	questions[`${prefix}Phone`] = {
 		type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
 		title: `Phone number`,
-		pageTitle: `${title} Phone Number`,
 		question: getQuestionFormat(prefix, 'phone number'),
 		fieldName: `${prefix}Phone`,
 		url: `phone-number`,
@@ -177,7 +170,6 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix, tit
 	questions[`${prefix}Address`] = {
 		type: CUSTOM_COMPONENTS.FULL_ADDRESS,
 		title: `Address`,
-		pageTitle: `${title} Address`,
 		question: getQuestionFormat(prefix, 'address'),
 		fieldName: `${prefix}Address`,
 		url: `address`,

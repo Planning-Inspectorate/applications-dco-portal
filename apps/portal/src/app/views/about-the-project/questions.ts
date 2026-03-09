@@ -19,8 +19,8 @@ export function getQuestions() {
 		description: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Description',
-			pageTitle: 'Project Description',
 			question: 'Project description',
+			pageTitle: 'How would you describe the project?',
 			fieldName: 'description',
 			url: 'describe-the-project',
 			html: 'views/html-templates/project-description.html',
@@ -41,8 +41,8 @@ export function getQuestions() {
 		consentReason: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Consent Reason',
-			pageTitle: 'Project Consent Reason',
 			question: 'Development consent',
+			pageTitle: 'Why does the project need development consent?',
 			fieldName: 'consentReason',
 			url: 'why-project-requires-development-consent',
 			html: 'views/html-templates/development-consent.html',
@@ -63,8 +63,8 @@ export function getQuestions() {
 		locationDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Project Location Description',
-			pageTitle: 'Project Location Description',
 			question: 'Location or route description',
+			pageTitle: 'How would you describe the location or route of the project?',
 			fieldName: 'locationDescription',
 			url: 'project-location-or-route',
 			html: 'views/html-templates/location-or-route.html',
@@ -85,7 +85,6 @@ export function getQuestions() {
 		singleOrLinear: {
 			type: COMPONENT_TYPES.RADIO,
 			title: 'Single or Linear',
-			pageTitle: 'Single or Linear',
 			question: 'Is the site single or linear?',
 			fieldName: 'singleOrLinear',
 			url: 'site-single-or-linear',
@@ -95,7 +94,6 @@ export function getQuestions() {
 		singleGridReferences: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
 			title: `Single Site Grid References`,
-			pageTitle: `Single Site Grid References`,
 			question: `Enter grid references`,
 			fieldName: `singleSiteGridReferences`,
 			url: `grid-references-single-site`,
@@ -125,7 +123,6 @@ export function getQuestions() {
 		linearGridReferences: {
 			type: CUSTOM_COMPONENTS.GROUPED_MULTI_FIELD_INPUT,
 			title: `Linear Site Grid References`,
-			pageTitle: `Linear Site Grid References`,
 			question: `Enter grid references`,
 			fieldName: `linearSiteGridReferences`,
 			url: `grid-references-linear-site`,
@@ -198,7 +195,6 @@ export function getQuestions() {
 		hasAssociatedDevelopments: {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Has Associated Developments',
-			pageTitle: 'Has Associated Developments',
 			question: 'Does the project include an associated development?',
 			hint: 'These support the development or operational capacity of an infrastructure project, for example, access road improvements or grid connections',
 			fieldName: 'hasAssociatedDevelopments',
@@ -208,7 +204,6 @@ export function getQuestions() {
 		associatedDevelopments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Associated Developments',
-			pageTitle: 'Associated Developments',
 			question: 'Which documents relate to the associated developments?',
 			hint: 'Select all that apply',
 			fieldName: 'associatedDevelopments',

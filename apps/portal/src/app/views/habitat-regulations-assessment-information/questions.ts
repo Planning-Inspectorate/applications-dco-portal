@@ -33,6 +33,7 @@ export function getQuestions() {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Habitat Regulations Assessment (HRA) documents',
 			question: 'Habitat Regulations Assessment (HRA) documents',
+			pageTitle: 'Which documents relate to the HRA process?',
 			html: HRA_DESCRIPTION,
 			fieldName: 'habitatRegulationsAssessmentScreeningReport',
 			url: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,

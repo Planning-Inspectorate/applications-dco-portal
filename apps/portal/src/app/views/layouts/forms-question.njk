@@ -4,8 +4,9 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% if not title %}
+  {% set sectionName = " - " + pageCaption if pageCaption else "" %}
   {% set title %}
-    {{ question.pageTitle | default('GOV.UK') }} - DCO Portal
+    {{ question.pageTitle | default('GOV.UK') }}{{ sectionName }} - Apply for and manage your infrastructure project
   {% endset %}
 {% endif %}
 

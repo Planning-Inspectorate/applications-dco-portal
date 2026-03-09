@@ -7,6 +7,15 @@
 
 {% set inputGroups = question.inputGroups %}
 
+{% if not title %}
+  {% set sectionName = " - " + pageCaption if pageCaption else "" %}
+  {% set title %}
+    {{ question.pageTitle | default('GOV.UK') }}{{ sectionName }} - Apply for and manage your infrastructure project
+  {% endset %}
+{% endif %}
+
+{% block pageTitle %}{{ "Error: " + title if errors else title }}{% endblock %}
+
 {% block dynQuestionContent %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
