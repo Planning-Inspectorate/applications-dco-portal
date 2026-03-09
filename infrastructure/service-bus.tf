@@ -41,8 +41,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "service_bus" {
 #   principal_id         = module.app_portal.principal_id
 # }
 
-resource "azurerm_servicebus_topic" "dco_portal_data_submissions" {
-  name                = "dco-portal-data-submissions"
-  namespace_id        = data.azurerm_servicebus_namespace.back_office_sb.id
-  default_message_ttl = "P3D"
-}
+# resource "azurerm_servicebus_topic" "dco_portal_data_submissions" {
+#   name                = "dco-portal-data-submissions"
+#   namespace_id        = data.azurerm_servicebus_namespace.back_office_sb.id
+#   default_message_ttl = "P3D"
+# }
