@@ -9,7 +9,6 @@ export function getQuestions() {
 		otherPlansDrawingsSections: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Other Plans, Drawings or Sections',
-			pageTitle: 'Other Plans, Drawings or Sections',
 			question: 'Which documents contain other plans, drawings or sections? (optional)',
 			hint: 'Select all that apply',
 			fieldName: 'otherPlansDrawingsSections',
@@ -19,7 +18,6 @@ export function getQuestions() {
 		supportingInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Supporting Information',
-			pageTitle: 'Supporting Information',
 			question: 'Which documents contain any other supporting information? (optional)',
 			fieldName: 'supportingInformation',
 			url: 'supporting-information',

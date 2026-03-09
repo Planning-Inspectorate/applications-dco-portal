@@ -12,7 +12,6 @@ export function getQuestions() {
 		draftDevelopmentConsentOrder: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Draft Development Consent Order',
-			pageTitle: 'Draft Development Consent Order',
 			question: 'Which documents relate to the draft development consent order (DCO)?',
 			hint: 'Select all that apply',
 			fieldName: 'draftDevelopmentConsentOrder',
@@ -22,7 +21,6 @@ export function getQuestions() {
 		siValidationReportSuccessEmail: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'SI Validation Report Success Email',
-			pageTitle: 'SI Validation Report Success Email',
 			question: 'Which document is the statutory instrument (SI) validation report success email?',
 			hint: 'Select all that apply',
 			fieldName: 'siValidationReportSuccessEmail',
@@ -32,7 +30,6 @@ export function getQuestions() {
 		explanatoryMemorandum: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Explanatory Memorandum',
-			pageTitle: 'Explanatory Memorandum',
 			question: 'Which documents relate to the explanatory memorandum?',
 			hint: 'Select all that apply',
 			fieldName: 'explanatoryMemorandum',

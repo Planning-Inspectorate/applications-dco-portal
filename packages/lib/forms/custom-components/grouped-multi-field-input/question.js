@@ -113,7 +113,7 @@ export default class GroupedMultiFieldInputQuestion extends Question {
 
 		return [
 			{
-				key: `${this.title}`,
+				key: `${this.title ?? this.question}`,
 				value: nl2br(escape(formattedAnswer)),
 				action: this.getAction(sectionSegment, journey, summaryDetails)
 			}

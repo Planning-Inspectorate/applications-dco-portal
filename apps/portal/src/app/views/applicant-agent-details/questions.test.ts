@@ -7,7 +7,7 @@ describe('applicant-agent-details questions', () => {
 		const prefix = 'applicant';
 		const title = 'Applicant';
 		it('should create six questions with prefix in question keys', () => {
-			const questions = contactDetailsQuestions(prefix, title);
+			const questions = contactDetailsQuestions(prefix);
 
 			assert.strictEqual(Object.keys(questions).length, 5);
 			for (const key of Object.keys(questions)) {
@@ -15,7 +15,7 @@ describe('applicant-agent-details questions', () => {
 			}
 		});
 		it('should use prefix where appropriate with casing', () => {
-			const questions = contactDetailsQuestions(prefix, title);
+			const questions = contactDetailsQuestions(prefix);
 			for (const question of Object.values(questions)) {
 				assert.ok(question.question.includes(prefix));
 			}

@@ -25,7 +25,6 @@ export function getQuestions() {
 		otherConsentsDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Other Consents or Licences Description',
-			pageTitle: 'Other Consents or Licences Description',
 			question: 'Other Consents or Licences required',
 			html: 'views/other-consents-or-licenses-details/other-consents-question-description.html',
 			fieldName: 'otherConsentsDescription',
@@ -47,7 +46,6 @@ export function getQuestions() {
 		otherConsentsDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Other Consents or Licences Documents',
-			pageTitle: 'Other Consents or Licences Documents',
 			question: 'Which documents identify the other consents or licences?',
 			hint: 'Select all that apply, including responses from relevant authorities explaining why consent might not be granted',
 			fieldName: 'otherConsentsDocuments',

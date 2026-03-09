@@ -75,7 +75,7 @@ export default class FileUpload extends Question {
 
 		return [
 			{
-				key: this.pageTitle ?? this.question,
+				key: this.title ?? this.question,
 				value,
 				action: isRedactedField ? null : this.getAction(sectionSegment, journey, answer)
 			}
