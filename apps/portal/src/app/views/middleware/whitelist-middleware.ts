@@ -20,14 +20,11 @@ export function buildWhitelistMiddleware({ db }: PortalService) {
 			}
 		});
 
-		if (!whitelistUser) {
+		if (!whitelistUser || whitelistUser.userRoleId !== WHITELIST_USER_ROLE_ID.ADMIN_USER) {
 			return notFoundHandler(req, res);
 		}
 
-		if (whitelistUser.userRoleId === WHITELIST_USER_ROLE_ID.ADMIN_USER) {
-			return next();
-		}
-		res.redirect('/');
+		next();
 	};
 }
 

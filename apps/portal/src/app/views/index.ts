@@ -72,17 +72,23 @@ export function createSubmissionRestrictedRoutes(service: PortalService): IRoute
 	router.get('/', cleanupSessionJourney, asyncHandler(homePageController));
 	router.post('/', asyncHandler(submitHomePageController));
 
-	router.get('/declaration/name', hasApplicationBeenSubmitted, asyncHandler(declarationNamePage));
+	router.get('/declaration/name', whitelistMiddleware, hasApplicationBeenSubmitted, asyncHandler(declarationNamePage));
 	router.post('/declaration/name', asyncHandler(saveDeclarationName));
-	router.get('/declaration/organisation', hasApplicationBeenSubmitted, asyncHandler(declarationOrganisationPage));
+	router.get(
+		'/declaration/organisation',
+		whitelistMiddleware,
+		hasApplicationBeenSubmitted,
+		asyncHandler(declarationOrganisationPage)
+	);
 	router.post('/declaration/organisation', asyncHandler(saveDeclarationOrganisation));
 	router.get(
 		'/declaration/position-in-organisation',
+		whitelistMiddleware,
 		hasApplicationBeenSubmitted,
 		asyncHandler(positionInOrganisationPage)
 	);
 	router.post('/declaration/position-in-organisation', asyncHandler(savePositionInOrganisation));
-	router.get('/declaration', hasApplicationBeenSubmitted, asyncHandler(declarationPage));
+	router.get('/declaration', whitelistMiddleware, hasApplicationBeenSubmitted, asyncHandler(declarationPage));
 	router.post('/declaration', asyncHandler(submitDeclaration));
 
 	router.use('/manage-users', whitelistMiddleware, whitelistRoutes(service));
