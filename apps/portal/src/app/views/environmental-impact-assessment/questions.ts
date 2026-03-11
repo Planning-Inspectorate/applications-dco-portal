@@ -86,7 +86,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
-			validators: [new RequiredValidator('Select any documents relating to the introductory chapters')]
+			validators: [new RequiredValidator('Select the documents forming the introductory chapters')]
 		},
 		aspectChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -95,7 +95,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
-			validators: [new RequiredValidator('Select any documents relating to the aspect chapters')]
+			validators: [new RequiredValidator('Select the documents forming the aspect chapters')]
 		},
 		environmentStatementAppendices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -104,7 +104,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
-			validators: [new RequiredValidator('Select any documents relating to the environmental statement appendices')]
+			validators: [new RequiredValidator('Select the documents forming the appendices')]
 		},
 		environmentStatementFigures: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -113,7 +113,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
-			validators: [new RequiredValidator('Select any documents relating to the environmental statement figures')]
+			validators: [new RequiredValidator('Select the documents forming the environmental statement figures')]
 		},
 		modelInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -122,7 +122,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
-			validators: [new RequiredValidator('Select any documents relating to the model information')]
+			validators: [new RequiredValidator('Select the documents forming the model information')]
 		},
 		anyOtherMediaInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -131,7 +131,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
-			validators: [new RequiredValidator('Select any documents relating to any other media information')]
+			validators: [new RequiredValidator('Select the documents forming the media information')]
 		},
 		confidentialDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
@@ -140,7 +140,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
-			validators: [new RequiredValidator('Select any documents relating to confidential documents')]
+			validators: [new RequiredValidator('Select any confidential documents')]
 		},
 		sensitiveInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
