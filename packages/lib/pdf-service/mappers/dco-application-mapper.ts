@@ -2,7 +2,8 @@ import {
 	DOCUMENT_SUB_CATEGORY,
 	DOCUMENT_SUB_CATEGORY_ID,
 	DOCUMENT_CATEGORY,
-	OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS
+	OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS,
+	OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { FullCase, SupportingEvidenceWithDocument } from '../types.js';
 
@@ -815,11 +816,11 @@ function mapOtherConsentsOrLicenses(
 function mapOtherPlansAndReports(otherPlansAndReportsEvidence: SupportingEvidenceWithDocument[]) {
 	const otherPlansDrawingsSectionsEvidence = findSupportingEvidenceBySubcategory(
 		otherPlansAndReportsEvidence,
-		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS['plans-drawings-sections']
+		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS[OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS.OTHER_PLANS_DRAWINGS_SECTIONS]
 	);
 	const supportingInformationEvidence = findSupportingEvidenceBySubcategory(
 		otherPlansAndReportsEvidence,
-		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS['other-information']
+		OTHER_PLANS_AND_REPORTS_SUBCATEGORY_MAPPINGS[OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS.SUPPORTING_INFORMATION]
 	);
 
 	return {

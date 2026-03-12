@@ -3,6 +3,7 @@ import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questi
 // @ts-expect-error - due to not having @types
 import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
+import { OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function getQuestions() {
 	const questions = {
@@ -12,7 +13,7 @@ export function getQuestions() {
 			question: 'Which documents contain other plans, drawings or sections? (optional)',
 			hint: 'Select all that apply',
 			fieldName: 'otherPlansDrawingsSections',
-			url: 'plans-drawings-sections',
+			url: OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS.OTHER_PLANS_DRAWINGS_SECTIONS,
 			validators: []
 		},
 		supportingInformation: {
@@ -20,7 +21,7 @@ export function getQuestions() {
 			title: 'Supporting Information',
 			question: 'Which documents contain any other supporting information? (optional)',
 			fieldName: 'supportingInformation',
-			url: 'supporting-information',
+			url: OTHER_PLANS_AND_REPORTS_SUBCATEGORY_IDS.SUPPORTING_INFORMATION,
 			validators: []
 		}
 	};
