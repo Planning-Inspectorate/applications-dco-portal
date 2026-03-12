@@ -67,15 +67,18 @@
                     {{ govukWarningText({
                         text: 'No documents have been uploaded. Upload documents first to select them.'
                     }) }}
-                    {{ govukButton({
-                        text: 'Return home',
-                        href: '/'
-                    }) }}
                     {% if not question.required %}
                         {{ govukButton({
                             text: continueButtonText,
                             type: "submit",
                             attributes: { "data-cy":"button-save-and-continue"}
+                        }) }}
+
+                        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/">Return home</a></p>
+                    {% else %}
+                        {{ govukButton({
+                            text: 'Return home',
+                            href: '/'
                         }) }}
                     {% endif %}
                 {% endif %}
