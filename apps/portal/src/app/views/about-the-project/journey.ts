@@ -3,7 +3,7 @@ import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
-import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
+import { PROJECT_SITE_TYPE_IDS, CBOS_PREPOPULATED_HTML_TEMPLATES } from './constants.ts';
 
 export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
@@ -12,8 +12,11 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 
 	if (req.session?.cbosPopulated) {
 		for (const populatedQuestionKey of Object.keys(req.session.cbosPopulated)) {
-			if (req.session.cbosPopulated[populatedQuestionKey] && questions[populatedQuestionKey])
-				questions[populatedQuestionKey].html = 'views/html-templates/prepopulated-data-template.html';
+			if (req.session.cbosPopulated[populatedQuestionKey] && questions[populatedQuestionKey]) {
+				questions[populatedQuestionKey].html =
+					CBOS_PREPOPULATED_HTML_TEMPLATES[populatedQuestionKey] ||
+					'views/html-templates/prepopulated-data-template.html';
+			}
 		}
 	}
 
