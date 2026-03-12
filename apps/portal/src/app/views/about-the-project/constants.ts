@@ -15,3 +15,8 @@ export const PROJECT_SITE_TYPES = [
 		hint: { text: 'An area extending in a line, for example, electric lines, railways or roads' }
 	}
 ];
+
+export const CBOS_PREPOPULATED_HTML_TEMPLATES: Record<string, string> = {
+	description: 'views/html-templates/project-description-cbos-populated.html',
+	locationDescription: 'views/html-templates/location-or-route-cbos-populated.html'
+};
