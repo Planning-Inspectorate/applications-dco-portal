@@ -62,6 +62,19 @@ resource "azurerm_servicebus_subscription" "nsip_project_subscription" {
   default_message_ttl                  = var.sb_ttl.nsip_project
 }
 
+#rbac for subscription
+resource "azurerm_role_assignment" "service_user_subscription_datareceiver" {
+  scope                = data.azurerm_servicebus_topic.service_user.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = module.function_integration.principal_id
+}
+
+resource "azurerm_role_assignment" "nsip_project_subscription_datareceiver" {
+  scope                = data.azurerm_servicebus_topic.nsip_project.id
+  role_definition_name = "Azure Service Bus Data Receiver"
+  principal_id         = module.function_integration.principal_id
+}
+
 resource "azurerm_eventgrid_event_subscription" "malware_scan_results" {
   name  = "malware-scan-results-subscription-${local.resource_suffix}"
   scope = data.azurerm_eventgrid_topic.back_office_malware_scanning.id
