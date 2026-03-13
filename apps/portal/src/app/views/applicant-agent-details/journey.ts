@@ -14,7 +14,8 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 	if (req.session?.cbosPopulated) {
 		for (const populatedQuestionKey of Object.keys(req.session.cbosPopulated)) {
 			if (req.session.cbosPopulated[populatedQuestionKey] && questions[populatedQuestionKey])
-				questions[populatedQuestionKey].html = 'views/html-templates/prepopulated-data-template.html';
+				questions[populatedQuestionKey].hint =
+					'You can update this information, but you must tell the case team about any changes';
 		}
 	}
 

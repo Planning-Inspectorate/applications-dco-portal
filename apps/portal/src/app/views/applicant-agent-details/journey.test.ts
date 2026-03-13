@@ -27,7 +27,7 @@ describe('applicant agent details journey', () => {
 		const questionsDefined = sections.every((s: any) => s.questions.every((q: any) => q !== undefined));
 		assert.strictEqual(questionsDefined, true);
 	});
-	it('cbos prepopulated questions should have the requisite html property', () => {
+	it('cbos prepopulated questions should have the requisite hint property', () => {
 		const mockReq = {
 			params: { id: 'project-1' },
 			baseUrl: '/about-the-project',
@@ -47,10 +47,10 @@ describe('applicant agent details journey', () => {
 		const journey = createJourney('about-the-project', questions, response, mockReq);
 		const sections = journey.sections;
 
-		const questionsWithHtml = sections.reduce(
-			(acc: number, s: any) => (acc += s.questions.filter((q: any) => !!q.html).length),
+		const questionsWithHint = sections.reduce(
+			(acc: number, s: any) => (acc += s.questions.filter((q: any) => !!q.hint).length),
 			0
 		);
-		assert.strictEqual(questionsWithHtml, 3);
+		assert.strictEqual(questionsWithHint, 3);
 	});
 });
