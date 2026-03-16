@@ -147,7 +147,7 @@ export class BlobStorageClient {
 
 				await dbClient.document.updateMany({
 					where: { blobName: blob.name },
-					data: { blobName: `applications/${blob.name}` }
+					data: { blobName: `application/${blob.name}` }
 				});
 
 				this.logger.info(`Moved successfully: ${blob.name}`);
