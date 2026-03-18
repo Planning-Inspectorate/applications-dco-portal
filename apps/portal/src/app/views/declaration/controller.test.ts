@@ -763,7 +763,9 @@ describe('declaration controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				caseReference: 'EN123456',
 				canDownloadPdf: false,
-				dateSubmitted: '12:00AM on 12 December 2025'
+				dateSubmitted: '12 December 2025',
+				dateTimeSubmitted: '12:00AM on 12 December 2025',
+				pdfFormattedSize: ''
 			});
 		});
 		it('canDownloadPdf should be true if pdfBlobName located', async () => {
@@ -783,8 +785,11 @@ describe('declaration controllers', () => {
 					}))
 				}
 			};
+			const mockBlobStore = {
+				getBlobSize: mock.fn(() => 1234567)
+			};
 
-			const applicationCompletePage = buildApplicationCompletePage({ db: mockDb });
+			const applicationCompletePage = buildApplicationCompletePage({ db: mockDb, blobStore: mockBlobStore });
 			await applicationCompletePage(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.render.mock.callCount(), 1);
@@ -792,7 +797,9 @@ describe('declaration controllers', () => {
 			assert.deepStrictEqual(mockRes.render.mock.calls[0].arguments[1], {
 				caseReference: 'EN123456',
 				canDownloadPdf: true,
-				dateSubmitted: '12:00AM on 12 December 2025'
+				dateSubmitted: '12 December 2025',
+				dateTimeSubmitted: '12:00AM on 12 December 2025',
+				pdfFormattedSize: '1MB'
 			});
 		});
 		it('should render not found page if case data cannot be fetched', async () => {
