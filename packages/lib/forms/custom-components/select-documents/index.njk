@@ -64,10 +64,10 @@
                     <h1 class="govuk-heading-l">
                         {{ question.question }}
                     </h1>
-                    {{ govukWarningText({
-                        text: 'No documents have been uploaded. Upload documents first to select them.'
-                    }) }}
                     {% if not question.required %}
+                        {{ govukWarningText({
+                            text: 'No documents have been uploaded. Upload documents first to select them or continue without answering.'
+                        }) }}
                         {{ govukButton({
                             text: continueButtonText,
                             type: "submit",
@@ -76,6 +76,9 @@
 
                         <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/">Return home</a></p>
                     {% else %}
+                        {{ govukWarningText({
+                            text: 'No documents have been uploaded. Upload documents first to select them.'
+                        }) }}
                         {{ govukButton({
                             text: 'Return home',
                             href: '/'
