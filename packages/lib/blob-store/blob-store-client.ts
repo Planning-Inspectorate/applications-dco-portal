@@ -77,6 +77,13 @@ export class BlobStorageClient {
 		return blockBlobClient.url;
 	}
 
+	async getBlobSize(blobName: string) {
+		const blockBlobClient = this.#getBlockBlobClient(blobName);
+		await this.checkBlobExists(blockBlobClient, blobName);
+		const properties = await blockBlobClient.getProperties();
+		return properties.contentLength;
+	}
+
 	async deleteBlobIfExists(blobName: string): Promise<BlobDeleteIfExistsResponse> {
 		const blockBlobClient = this.#getBlockBlobClient(blobName);
 		await this.checkBlobExists(blockBlobClient, blobName);

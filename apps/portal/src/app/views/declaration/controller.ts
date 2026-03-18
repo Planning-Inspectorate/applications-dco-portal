@@ -10,6 +10,7 @@ import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/l
 import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/constants.ts';
+import { formatBytes } from '@pins/dco-portal-lib/forms/custom-components/file-upload/util.ts';
 
 export function buildDeclarationNamePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -301,7 +302,7 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 	};
 }
 
-export function buildApplicationCompletePage({ db }: PortalService): AsyncRequestHandler {
+export function buildApplicationCompletePage({ db, blobStore }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const caseData = await db.case.findUnique({
 			where: { reference: req.session.caseReference }
@@ -311,10 +312,14 @@ export function buildApplicationCompletePage({ db }: PortalService): AsyncReques
 			return notFoundHandler(req, res);
 		}
 
+		const blobSize = caseData?.pdfBlobName ? await blobStore?.getBlobSize(caseData?.pdfBlobName) : undefined;
+
 		return res.render('views/declaration/application-complete.njk', {
 			caseReference: req.session.caseReference,
+			pdfFormattedSize: blobSize ? formatBytes(blobSize) : '',
 			canDownloadPdf: !!caseData.pdfBlobName,
-			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
+			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: 'd MMMM yyyy' }),
+			dateTimeSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
 		});
 	};
 }

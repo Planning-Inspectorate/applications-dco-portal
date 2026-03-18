@@ -12,18 +12,18 @@
             html: "Your reference number<br><strong>" + caseReference + "</strong>"
         }) }}
 
-        <p class="govuk-body">Submitted at {{ dateSubmitted }}.</p>    
+        <p class="govuk-body">Submitted at {{ dateTimeSubmitted }}.</p>
 
         {% if canDownloadPdf %}
             <p class="govuk-body">We have sent you a confirmation email. You can also download a copy of your application.</p>
-
-            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/download/pdf" target="_blank" rel="noreferrer">{{ caseReference }} DCO Application PDF</a></p>
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="/download/pdf" target="_blank" rel="noreferrer">{{ caseReference }} DCO Application (PDF, {{ pdfFormattedSize }})</a></p>
         {% else %}
             <p class="govuk-body">We will send you a confirmation email and a copy of your application soon.</p>
         {% endif %}
 
         <h2 class="govuk-heading-m">What happens next</h2>
-
+        <p class="govuk-body">We will publish your application documents on the <a class="govuk-link govuk-link--no-visited-state" href="https://national-infrastructure-consenting.planninginspectorate.gov.uk/" target="_blank" rel="noreferrer">Find a National Infrastructure Project (opens in new tab)</a> website as soon as possible.</p>
+        <p class="govuk-body">You will receive our decision within 28 days from {{ dateSubmitted }}. If we do not accept your application for examination, we will explain why.</p>
         <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="{{ config.serviceFeedbackLink }}" target="_blank" rel="noreferrer">What did you think of this service?</a> (takes 30 seconds)</p>
         </div>
     </div>
