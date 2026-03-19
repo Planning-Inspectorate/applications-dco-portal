@@ -11,7 +11,7 @@ export function getQuestions() {
 	const questions = {
 		landPlans: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Land Plans',
+			title: 'Land plan documents',
 			question: 'Which documents make up the land plan?',
 			hint: 'Select all that apply',
 			fieldName: 'landPlans',
@@ -20,7 +20,7 @@ export function getQuestions() {
 		},
 		worksPlans: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Works Plans',
+			title: 'Works plan documents',
 			question: 'Which documents make up the works plan?',
 			hint: 'Select all that apply',
 			fieldName: 'worksPlans',

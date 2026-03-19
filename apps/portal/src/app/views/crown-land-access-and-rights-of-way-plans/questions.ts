@@ -12,7 +12,7 @@ export function getQuestions() {
 	const questions = {
 		hasCrownLand: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Crown Land',
+			title: 'Could the project affect any Crown land?',
 			question: 'Could the project affect any Crown land?',
 			fieldName: 'hasCrownLand',
 			url: 'has-crown-land',
@@ -20,7 +20,7 @@ export function getQuestions() {
 		},
 		crownLand: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Crown Land Documents',
+			title: 'Crown land documents',
 			question: 'Which documents identify the Crown land?',
 			hint: 'Select all that apply',
 			fieldName: 'crownLand',
@@ -29,7 +29,7 @@ export function getQuestions() {
 		},
 		hasMeansOfAccess: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Means of Access',
+			title: 'Could the project require changes to access or public rights of way?',
 			question: 'Could the project require changes to access or public rights of way?',
 			fieldName: 'hasMeansOfAccess',
 			url: 'has-means-of-access',
@@ -39,7 +39,7 @@ export function getQuestions() {
 		},
 		meansOfAccess: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Means of Access Documents',
+			title: 'Changes to access or public rights of way documents',
 			question: 'Which documents identify changes to access or public rights of way?',
 			hint: 'Select all that apply',
 			fieldName: 'meansOfAccess',
