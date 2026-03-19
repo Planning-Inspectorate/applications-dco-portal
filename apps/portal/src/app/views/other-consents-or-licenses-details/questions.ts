@@ -14,7 +14,7 @@ export function getQuestions() {
 	const questions = {
 		hasOtherConsents: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Other Consents or Licences',
+			title: 'Does the project require other consents or licences?',
 			pageTitle: 'Has Other Consents Or Licences',
 			question: 'Does the project require other consents or licences?',
 			hint: 'These are consents or licences needed to build or operate the project, issued by authorities other than the Secretary of State',
@@ -24,7 +24,7 @@ export function getQuestions() {
 		},
 		otherConsentsDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Other Consents or Licences Description',
+			title: 'Description of other consents or licences required',
 			question: 'Other Consents or Licences required',
 			html: 'views/other-consents-or-licenses-details/other-consents-question-description.html',
 			fieldName: 'otherConsentsDescription',
@@ -45,7 +45,7 @@ export function getQuestions() {
 		},
 		otherConsentsDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Other Consents or Licences Documents',
+			title: 'Other consents or licences documents',
 			question: 'Which documents identify the other consents or licences?',
 			hint: 'Select all that apply, including responses from relevant authorities explaining why consent might not be granted',
 			fieldName: 'otherConsentsDocuments',
