@@ -1,7 +1,7 @@
 import { PdfService } from '#service';
 import type { Request, Response } from 'express';
 import { generatePdf } from '../lib/generate-pdf.ts';
-import { launchBrowser } from '../lib/browser.ts';
+import { PdfBrowser } from '../lib/browser.ts';
 
 export function postGeneratePdf(service: PdfService) {
 	return async (req: Request, res: Response) => {
@@ -15,9 +15,19 @@ export function postGeneratePdf(service: PdfService) {
 			return res.status(400).send({ message: 'Stringified html is required' });
 		}
 
+		const browser = PdfBrowser.getInstance();
+		let page;
 		try {
-			const browser = await launchBrowser(service);
-			const pdfBuffer = await generatePdf(browser, html);
+			//ensure browser launched if not already
+			await browser.launch(service.nodeEnv);
+			page = await browser.newPage();
+		} catch (err: any) {
+			logger.error({ err }, 'Failed to create page in headless browser');
+			return res.status(500).send({ message: err?.message || 'An error occurred' });
+		}
+
+		try {
+			const pdfBuffer = await generatePdf(html, page);
 			res.contentType('application/pdf').send(pdfBuffer);
 			logger.info('Successfully generated pdf');
 		} catch (err: any) {
@@ -25,6 +35,10 @@ export function postGeneratePdf(service: PdfService) {
 			res.status(500).send({
 				message: err?.message || 'An error occurred'
 			});
+		} finally {
+			if (page) {
+				await browser.closePage(page);
+			}
 		}
 	};
 }

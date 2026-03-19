@@ -20,23 +20,17 @@ describe('lib/generate-pdf.ts', () => {
                     </body>
                 </html>`;
 
-			const mockNewPage = {
+			const mockPage = {
 				setContent: mock.fn(),
 				emulateMediaType: mock.fn(),
 				pdf: mock.fn(() => 'input-html-as-a-pdf')
 			};
-			const mockBrowser = {
-				newPage: mock.fn(() => mockNewPage),
-				close: mock.fn()
-			};
 
-			const pdfBuffer = await generatePdf(mockBrowser, html);
+			const pdfBuffer = await generatePdf(html, mockPage);
 
-			assert.strictEqual(mockBrowser.newPage.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.setContent.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.emulateMediaType.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.pdf.mock.callCount(), 1);
-			assert.strictEqual(mockBrowser.close.mock.callCount(), 1);
+			assert.strictEqual(mockPage.setContent.mock.callCount(), 1);
+			assert.strictEqual(mockPage.emulateMediaType.mock.callCount(), 1);
+			assert.strictEqual(mockPage.pdf.mock.callCount(), 1);
 
 			const expected = Buffer.from('input-html-as-a-pdf');
 			assert.deepStrictEqual(expected, pdfBuffer);
@@ -55,32 +49,26 @@ describe('lib/generate-pdf.ts', () => {
                     </body>
                 </html>`;
 
-			const mockNewPage = {
+			const mockPage = {
 				setContent: mock.fn(),
 				emulateMediaType: mock.fn(() => {
 					throw new Error('test-error');
 				}),
 				pdf: mock.fn(() => 'input-html-as-a-pdf')
 			};
-			const mockBrowser = {
-				newPage: mock.fn(() => mockNewPage),
-				close: mock.fn()
-			};
 
 			await assert.rejects(
 				async () => {
-					const pdfBuffer = await generatePdf(mockBrowser, html);
+					const pdfBuffer = await generatePdf(html, mockPage);
 				},
 				{
 					message: 'test-error'
 				}
 			);
 
-			assert.strictEqual(mockBrowser.newPage.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.setContent.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.emulateMediaType.mock.callCount(), 1);
-			assert.strictEqual(mockNewPage.pdf.mock.callCount(), 0);
-			assert.strictEqual(mockBrowser.close.mock.callCount(), 0);
+			assert.strictEqual(mockPage.setContent.mock.callCount(), 1);
+			assert.strictEqual(mockPage.emulateMediaType.mock.callCount(), 1);
+			assert.strictEqual(mockPage.pdf.mock.callCount(), 0);
 		});
 	});
 });
