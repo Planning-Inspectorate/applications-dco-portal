@@ -32,82 +32,135 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 	const data = {
 		caseReference: caseData.reference,
 		application: {
-			applicantAgentDetails: {
-				name: 'Applicant and Agent Details',
-				data: mapApplicantAgentDetails(caseData)
+			applicant: {
+				name: '1. Applicant',
+				data: mapApplicantDetails(caseData)
+			},
+			agent: {
+				name: '2. Agent',
+				data: mapAgentDetails(caseData)
+			},
+			fee: {
+				name: '3. Fee',
+				data: mapFeeDetails(caseData)
+			},
+			consentReason: {
+				name: '4. Confirming why the Planning Inspectorate should receive the application',
+				data: mapConsentReason(caseData)
+			},
+			projectDescription: {
+				name: '5. Non-technical description of the Proposed Development',
+				data: mapProjectDescription(caseData)
+			},
+			locationOrRoute: {
+				name: '6. Location or route of the Proposed Development',
+				data: mapLocationOrRoute(caseData)
+			},
+			associatedDevelopments: {
+				name: '7. Associated Development',
+				value: mapAssociatedDevelopments(caseData, evidenceByCategory['reports-and-statements'])
 			},
 
-			aboutTheProject: {
-				name: 'About the Project',
-				data: mapAboutTheProject(caseData, evidenceByCategory['reports-and-statements'])
+			consultationReport: {
+				name: '8. a) Consultation Report',
+				data: mapConsultationReport(evidenceByCategory['consultation-report'])
 			},
 
-			consultationAndPublicityDetails: {
-				name: 'Consultation and Publicity Details',
-				data: mapConsultationAndPublicityDetails(evidenceByCategory['consultation-report'])
+			consultationReportAppendices: {
+				name: '8. b) Copies of newspaper notices',
+				data: mapConsultationReportAppendices(evidenceByCategory['consultation-report'])
 			},
 
 			draftOrderAndExplanatoryMemorandum: {
-				name: 'Draft Order and Explanatory Memorandum',
-				data: mapDraftOrderAndExplanatoryMemorandum(evidenceByCategory['draft-dco'])
+				name: '9. Draft Development Consent Order',
+				data: mapDraftDcoOrder(evidenceByCategory['draft-dco'])
 			},
 
-			landAndWorksPlans: {
-				name: 'Land and Works Plans',
-				data: mapLandAndWorksPlans(evidenceByCategory['plans-and-drawings'])
+			explanatoryMemorandum: {
+				name: '10. Explanatory Memorandum',
+				data: mapExplanatoryMemorandum(evidenceByCategory['draft-dco'])
+			},
+
+			landPlan: {
+				name: '11. Land Plan',
+				data: mapLandPlan(evidenceByCategory['plans-and-drawings'])
+			},
+
+			worksPlan: {
+				name: '12. Works Plans',
+				data: mapWorksPlan(evidenceByCategory['plans-and-drawings'])
 			},
 
 			landRightsInformation: {
-				name: 'Land Rights Information',
+				name: '13. Compulsory Acquisition of land or an interest in land or right over land',
 				data: mapLandRightsInformation(evidenceByCategory['compulsory-acquisition-information'])
 			},
 
 			environmentalImpactAssessment: {
-				name: 'Environmental Impact Assessment',
+				name: '14. a) Environmental Impact Assessment (EIA)',
 				data: mapEnvironmentalImpactAssessment(caseData, evidenceByCategory['environmental-statement'])
 			},
 
+			screeningAndScoping: {
+				name: '14. b) Screening Opinion/ Direction and Scoping Opinion/ Direction',
+				data: mapScreeningAndScopingDirection(evidenceByCategory['environmental-statement'])
+			},
+
+			environmentalStatementNotifications: {
+				name: '14. c) Publicity required under Regulation 13 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2017 (or where the transitional provisions apply, Regulation 11 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2009)',
+				data: mapEnvironmentalStatementNotifications(caseData)
+			},
+
 			habitatRegulationsAssessmentInformation: {
-				name: 'Habitat Regulations Assessment Information',
+				name: '15. European sites (to which Regulation 63 of The Conservation of Habitats and Species Regulations 2017 and/ or Regulation 28 of the Conservation of Offshore Marine Habitats and Species Regulations 2017 applies) or a Ramsar site.',
 				data: mapHabitatRegulationsAssessmentInformation(evidenceByCategory['reports-and-statements'])
 			},
 
-			natureConservationAndEnvironmentalInformation: {
-				name: 'Nature Conservation and Environmental Information',
-				data: mapNatureConservationAndEnvironmentalInformation(evidenceByCategory['plans-and-drawings'])
+			naturalEnvironmentInformation: {
+				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the Proposed Development.',
+				data: mapNaturalEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
+			},
+			historicEnvironmentInformation: {
+				name: '17. A plan, with accompanying information, identifying any statutory or non statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the Proposed Development',
+				data: mapHistoricEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 
 			floodRiskInformation: {
-				name: 'Flood Risk Information',
+				name: '18. Flood Risk Assessment',
 				data: mapFloodRiskInformation(evidenceByCategory['environmental-statement'])
 			},
 
 			statutoryNuisanceInformation: {
-				name: 'Statutory Nuisance Information',
+				name: '19. Matters set out in section 79(1) (statutory nuisances etc) of the Environmental Protection Act 1990',
 				data: mapStatutoryNuisanceInformation(evidenceByCategory['reports-and-statements'])
 			},
 
-			crownLandAccessAndRightsOfWayPlans: {
-				name: 'Crown Land Access and Rights of Way Plans',
-				data: mapCrownLandAccessAndRightsOfWayPlans(evidenceByCategory['plans-and-drawings'])
+			crownLandAccess: {
+				name: '20. A plan with any accompanying information identifying any Crown land',
+				data: mapCrownLandAccess(evidenceByCategory['plans-and-drawings'])
+			},
+
+			rightOfWayPlans: {
+				name: '21. A plan identifying new or altered means of access, stopping up of streets or any diversions, extinguishments or creation or rights of way or public rights of navigation',
+				data: mapRightOfWayPlans(evidenceByCategory['plans-and-drawings'])
 			},
 
 			infrastructureSpecificAdditionalInformation: {
-				name: 'Infrastructure Specific Additional Information',
+				name: '22. Additional information for specific types of infrastructure',
 				data: mapInfrastructureSpecificAdditionalInformation(
 					caseData,
 					evidenceByCategory['additional-prescribed-information']
 				)
 			},
 
-			otherConsentsOrLicenses: {
-				name: 'Other Consents or Licenses',
-				data: mapOtherConsentsOrLicenses(caseData, evidenceByCategory['reports-and-statements'])
+			otherPlansAndReports: {
+				name: '23. Any other plans, drawings and sections necessary to describe the proposal for which development consent is sought, and any other documents, reports or information to support the application',
+				data: mapOtherPlansAndReports(otherPlansAndReportsCategories)
 			},
 
-			otherPlansAndReports: {
-				name: 'Other Plans and Reports',
-				data: mapOtherPlansAndReports(otherPlansAndReportsCategories)
+			otherConsentsOrLicenses: {
+				name: '24. Other consents/ licences required under other legislation',
+				data: mapOtherConsentsOrLicenses(caseData, evidenceByCategory['reports-and-statements'])
 			}
 		},
 		documents: prettyEvidenceByCategory,
@@ -136,7 +189,7 @@ export function findSupportingEvidenceBySubcategory(
 	return evidence.filter((evidence) => subCategoryIds.includes(evidence.subCategoryId)) || [];
 }
 
-function mapApplicantAgentDetails(caseData: FullCase) {
+function mapApplicantDetails(caseData: FullCase) {
 	return {
 		applicantOrganisation: { name: 'Applicant Organisation', value: caseData.ApplicantDetails?.organisation },
 		applicantFirstName: { name: 'Applicant First Name', value: caseData.ApplicantDetails?.firstName },
@@ -155,37 +208,49 @@ function mapApplicantAgentDetails(caseData: FullCase) {
 		applicantTownCity: { name: 'Applicant Town/City', value: caseData.ApplicantDetails?.Address?.townCity },
 		applicantCounty: { name: 'Applicant County', value: caseData.ApplicantDetails?.Address?.county },
 		applicantCountry: { name: 'Applicant Country', value: caseData.ApplicantDetails?.Address?.country },
-		applicantPostcode: { name: 'Applicant Postcode', value: caseData.ApplicantDetails?.Address?.postcode },
+		applicantPostcode: { name: 'Applicant Postcode', value: caseData.ApplicantDetails?.Address?.postcode }
+	};
+}
 
+function mapAgentDetails(caseData: FullCase) {
+	return {
 		isAgent: { name: 'Is Agent', value: caseData.AgentDetails ? 'Yes' : 'No' },
-
 		agentOrganisation: { name: 'Agent Organisation', value: caseData.AgentDetails?.organisation },
 		agentFirstName: { name: 'Agent First Name', value: caseData.AgentDetails?.firstName },
 		agentLastName: { name: 'Agent Last Name', value: caseData.AgentDetails?.lastName },
 		agentEmail: { name: 'Agent Email', value: caseData.AgentDetails?.emailAddress },
 		agentPhone: { name: 'Agent Phone', value: caseData.AgentDetails?.phone },
-
 		agentAddressLine1: { name: 'Agent Address Line 1', value: caseData.AgentDetails?.Address?.addressLine1 },
 		agentAddressLine2: { name: 'Agent Address Line 2', value: caseData.AgentDetails?.Address?.addressLine2 },
 		agentTownCity: { name: 'Agent Town/City', value: caseData.AgentDetails?.Address?.townCity },
 		agentCounty: { name: 'Agent County', value: caseData.AgentDetails?.Address?.county },
 		agentCountry: { name: 'Agent Country', value: caseData.AgentDetails?.Address?.country },
-		agentPostcode: { name: 'Agent Postcode', value: caseData.AgentDetails?.Address?.postcode },
-
-		paymentMethod: { name: 'Payment Method', value: caseData.CasePaymentMethod?.displayName }
+		agentPostcode: { name: 'Agent Postcode', value: caseData.AgentDetails?.Address?.postcode }
 	};
 }
 
-function mapAboutTheProject(caseData: FullCase, reportsAndStatementsEvidence: SupportingEvidenceWithDocument[]) {
-	const associatedDevelopments = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
-	]);
-
+function mapFeeDetails(caseData: FullCase) {
 	return {
-		projectDescription: { name: 'Project Description', value: caseData.projectDescription },
-		projectConsentReason: { name: 'Project Consent Reason', value: caseData.projectConsentReason },
-		locationDescription: { name: 'Location Description', value: caseData.locationDescription },
+		paymentMethod: { name: 'Payment Method', value: caseData.CasePaymentMethod?.displayName },
+		paymentReference: { name: 'Payment Reference', value: caseData.paymentReference }
+	};
+}
 
+function mapConsentReason(caseData: FullCase) {
+	return {
+		projectConsentReason: { name: 'Project Consent Reason', value: caseData.projectConsentReason }
+	};
+}
+
+function mapProjectDescription(caseData: FullCase) {
+	return {
+		projectDescription: { name: 'Project Description', value: caseData.projectDescription }
+	};
+}
+
+function mapLocationOrRoute(caseData: FullCase) {
+	return {
+		locationDescription: { name: 'Location Description', value: caseData.locationDescription },
 		singleOrLinear: {
 			name: 'Single or Linear',
 			value: caseData.ProjectSingleSite ? 'Single' : 'Linear'
@@ -199,8 +264,16 @@ function mapAboutTheProject(caseData: FullCase, reportsAndStatementsEvidence: Su
 		linearMiddleEasting: { name: 'Linear Middle Easting', value: caseData.ProjectLinearSite?.middleEasting },
 		linearMiddleNorthing: { name: 'Linear Middle Northing', value: caseData.ProjectLinearSite?.middleNorthing },
 		linearEndEasting: { name: 'Linear End Easting', value: caseData.ProjectLinearSite?.endEasting },
-		linearEndNorthing: { name: 'Linear End Northing', value: caseData.ProjectLinearSite?.endNorthing },
+		linearEndNorthing: { name: 'Linear End Northing', value: caseData.ProjectLinearSite?.endNorthing }
+	};
+}
 
+function mapAssociatedDevelopments(caseData: FullCase, reportsAndStatementsEvidence: SupportingEvidenceWithDocument[]) {
+	const associatedDevelopments = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+	]);
+
+	return {
 		hasAssociatedDevelopments: {
 			name: 'Has Associated Developments',
 			value: associatedDevelopments.length > 0 ? 'Yes' : 'No'
@@ -254,7 +327,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		nonOffshoreGeneratingStation: {
-			name: 'Non-Offshore Generating Station',
+			name: 'Construction or extension of a non offshore generating station (Reg. 6 (1a))',
 			nested: true,
 			value: {
 				electricityGrid: {
@@ -277,7 +350,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		offshoreGeneratingStation: {
-			name: 'Offshore Generating Station',
+			name: 'Construction or extension of an offshore generating station (Reg. 6 (1b))',
 			nested: true,
 			value: {
 				cableInstallation: {
@@ -296,7 +369,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		highwayRelatedDevelopment: {
-			name: 'Highway Related Development',
+			name: 'Highway related development (Reg. 6 (2) (part 1))',
 			nested: true,
 			value: {
 				groundLevels: {
@@ -331,7 +404,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		railwayDevelopment: {
-			name: 'Railway Development',
+			name: 'Construction or alteration of a railway (Reg. 6 (2) (part 2))',
 			nested: true,
 			value: {
 				groundLevels: {
@@ -366,7 +439,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		harbourFacilities: {
-			name: 'Harbour Facilities',
+			name: 'Construction or alteration of harbour facilities (Reg. 6 (3))',
 			nested: true,
 			value: {
 				whyHarbourOrderNeeded: {
@@ -385,7 +458,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		pipelines: {
-			name: 'Pipelines',
+			name: 'Construction of a pipeline (Reg. 6 (4))',
 			nested: true,
 			value: {
 				name: { name: 'Pipeline Name', value: caseData.Pipelines?.name },
@@ -411,7 +484,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		hazardousWasteFacility: {
-			name: 'Hazardous Waste Facility',
+			name: 'Construction or alteration of a hazardous waste facility (Reg. 6 (5))',
 			nested: true,
 			value: {
 				whyIsFacilityNeeded: {
@@ -430,7 +503,7 @@ function mapInfrastructureSpecificAdditionalInformation(
 		},
 
 		damOrReservoir: {
-			name: 'Dam or Reservoir',
+			name: 'Construction of a dam or reservoir (Reg. 6 (6))',
 			nested: true,
 			value: {
 				recreationalAmenities: {
@@ -450,20 +523,25 @@ function mapInfrastructureSpecificAdditionalInformation(
 	};
 }
 
-function mapConsultationAndPublicityDetails(consultationEvidence: SupportingEvidenceWithDocument[]) {
+function mapConsultationReport(consultationEvidence: SupportingEvidenceWithDocument[]) {
 	const consultationReportEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
-	]);
-	const consultationAppendicesEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
 	]);
 
 	return {
 		consultationReport: {
 			name: 'Consultation Report',
 			value: consultationReportEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapConsultationReportAppendices(consultationEvidence: SupportingEvidenceWithDocument[]) {
+	const consultationAppendicesEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+	]);
+
+	return {
 		consultationReportAppendices: {
 			name: 'Consultation Report Appendices',
 			value: consultationAppendicesEvidence.map((evidence) => evidence.Document.fileName)
@@ -471,12 +549,9 @@ function mapConsultationAndPublicityDetails(consultationEvidence: SupportingEvid
 	};
 }
 
-function mapCrownLandAccessAndRightsOfWayPlans(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+function mapCrownLandAccess(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
 	const crownLandEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.CROWN_LAND_PLAN
-	]);
-	const accessPlanEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN
 	]);
 
 	return {
@@ -488,8 +563,16 @@ function mapCrownLandAccessAndRightsOfWayPlans(plansAndDrawingsEvidence: Support
 		crownLandPlans: {
 			name: 'Crown Land Plans',
 			value: crownLandEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapRightOfWayPlans(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+	const accessPlanEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.ACCESS_PLAN_AND_RIGHTS_OF_WAY_PLAN
+	]);
+
+	return {
 		hasMeansOfAccess: {
 			name: 'Has Means of Access',
 			value: accessPlanEvidence.length > 0 ? 'Yes' : 'No'
@@ -502,15 +585,12 @@ function mapCrownLandAccessAndRightsOfWayPlans(plansAndDrawingsEvidence: Support
 	};
 }
 
-function mapDraftOrderAndExplanatoryMemorandum(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
+function mapDraftDcoOrder(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
 	const draftDcoOrderEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER
 	]);
 	const siValidationEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL
-	]);
-	const explanatoryMemorandumEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
 	]);
 
 	return {
@@ -522,8 +602,16 @@ function mapDraftOrderAndExplanatoryMemorandum(draftDcoEvidence: SupportingEvide
 		siValidationReportSuccessEmail: {
 			name: 'SI Validation Report Success Email',
 			value: siValidationEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapExplanatoryMemorandum(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
+	const explanatoryMemorandumEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
+	]);
+
+	return {
 		explanatoryMemorandum: {
 			name: 'Explanatory Memorandum',
 			value: explanatoryMemorandumEvidence.map((evidence) => evidence.Document.fileName)
@@ -537,12 +625,6 @@ function mapEnvironmentalImpactAssessment(
 ) {
 	const nonTechnicalSummaryEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
-	]);
-	const screeningEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
-	]);
-	const scopingEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
 	]);
 	const introductoryChaptersEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
@@ -578,26 +660,6 @@ function mapEnvironmentalImpactAssessment(
 		nonTechnicalSummary: {
 			name: 'Non-Technical Summary',
 			value: nonTechnicalSummaryEvidence.map((evidence) => evidence.Document.fileName)
-		},
-
-		hasScreeningDirection: {
-			name: 'Has Screening Direction',
-			value: screeningEvidence.length > 0 ? 'Yes' : 'No'
-		},
-
-		screeningDirectionDocuments: {
-			name: 'Screening Direction Documents',
-			value: screeningEvidence.map((evidence) => evidence.Document.fileName)
-		},
-
-		hasScopingOpinion: {
-			name: 'Has Scoping Opinion',
-			value: scopingEvidence.length > 0 ? 'Yes' : 'No'
-		},
-
-		scopingOpinionDocuments: {
-			name: 'Scoping Opinion Documents',
-			value: scopingEvidence.map((evidence) => evidence.Document.fileName)
 		},
 
 		introductoryChapters: {
@@ -638,8 +700,43 @@ function mapEnvironmentalImpactAssessment(
 		sensitiveInformation: {
 			name: 'Sensitive Information',
 			value: sensitiveInfoEvidence.map((evidence) => evidence.Document.fileName)
+		}
+	};
+}
+
+function mapScreeningAndScopingDirection(environmentalStatementEvidence: SupportingEvidenceWithDocument[]) {
+	const screeningEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
+	]);
+	const scopingEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+	]);
+
+	return {
+		hasScreeningDirection: {
+			name: 'Has Screening Direction',
+			value: screeningEvidence.length > 0 ? 'Yes' : 'No'
 		},
 
+		screeningDirectionDocuments: {
+			name: 'Screening Direction Documents',
+			value: screeningEvidence.map((evidence) => evidence.Document.fileName)
+		},
+
+		hasScopingOpinion: {
+			name: 'Has Scoping Opinion',
+			value: scopingEvidence.length > 0 ? 'Yes' : 'No'
+		},
+
+		scopingOpinionDocuments: {
+			name: 'Scoping Opinion Documents',
+			value: scopingEvidence.map((evidence) => evidence.Document.fileName)
+		}
+	};
+}
+
+function mapEnvironmentalStatementNotifications(caseData: FullCase) {
+	return {
 		notifyingConsultationBodies: {
 			name: 'Notifying Consultation Bodies',
 			value: caseData.notifyingConsultationBodies ? 'Yes' : 'No'
@@ -693,20 +790,25 @@ function mapHabitatRegulationsAssessmentInformation(reportsAndStatementsEvidence
 	};
 }
 
-function mapLandAndWorksPlans(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+function mapLandPlan(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
 	const landPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.LAND_PLANS
-	]);
-	const worksPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN
 	]);
 
 	return {
 		landPlans: {
 			name: 'Land Plans',
 			value: landPlansEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapWorksPlan(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+	const worksPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN
+	]);
+
+	return {
 		worksPlans: {
 			name: 'Works Plans',
 			value: worksPlansEvidence.map((evidence) => evidence.Document.fileName)
@@ -756,12 +858,9 @@ function mapLandRightsInformation(compulsoryAcquisitionEvidence: SupportingEvide
 	};
 }
 
-function mapNatureConservationAndEnvironmentalInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+function mapNaturalEnvironmentInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
 	const naturalEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
-	]);
-	const historicEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
 	]);
 
 	return {
@@ -773,8 +872,16 @@ function mapNatureConservationAndEnvironmentalInformation(plansAndDrawingsEviden
 		naturalEnvironmentInformation: {
 			name: 'Natural Environment Information',
 			value: naturalEnvironmentEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapHistoricEnvironmentInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+	const historicEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
+	]);
+
+	return {
 		hasHistoricEnvironmentInformation: {
 			name: 'Has Historic Environment Information',
 			value: historicEnvironmentEvidence.length > 0 ? 'Yes' : 'No'

@@ -34,8 +34,8 @@
     </div>
     {% for key, row in dcoApplicationData.application %}
         <div class="govuk-grid-row">
-            <div class="govuk-grid-column-one-third">
-                <h2 class="govuk-heading-l">
+            <div class="govuk-grid-column-full">
+                <h2 class="govuk-heading-m">
                     {{ row.name }}
                 </h2>
             </div>
@@ -59,8 +59,8 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h2 class="govuk-heading-l">
-                Declaration
+            <h2 class="govuk-heading-m">
+                25. Declaration
             </h2>
         </div>
     </div>
@@ -71,6 +71,14 @@
                 <li class="govuk-body">to the best of my knowledge, the information given in this application and enclosed maps, plans and other documents are true</li>
                 <li class="govuk-body">I have read and agree to The Planning Inspectorate's privacy notice</li>
             </ul>
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">Signature</p>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <p class="govuk-body">{{ dcoApplicationData.declaration.name }}</p>
         </div>
     </div>
     <div class="govuk-grid-row">
