@@ -41,8 +41,8 @@ describe('declaration controllers', () => {
 		it('should save users first and last name to session and redirect to you org page', async () => {
 			const mockReq = {
 				body: {
-					declarationFirstName: 'test',
-					declarationLastName: 'name'
+					declarationFirstName: 'Lt Test',
+					declarationLastName: 'PK Name'
 				},
 				session: {}
 			};
@@ -53,8 +53,8 @@ describe('declaration controllers', () => {
 			const saveDeclarationName = buildSaveDeclarationName({});
 			await saveDeclarationName(mockReq, mockRes);
 
-			assert.strictEqual(mockReq.session.declarationFirstName, 'test');
-			assert.strictEqual(mockReq.session.declarationLastName, 'name');
+			assert.strictEqual(mockReq.session.declarationFirstName, 'Lt Test');
+			assert.strictEqual(mockReq.session.declarationLastName, 'PK Name');
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(mockRes.redirect.mock.calls[0].arguments[0], '/declaration/organisation');
