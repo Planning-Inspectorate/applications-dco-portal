@@ -12,7 +12,7 @@ export function getQuestions() {
 	const questions = {
 		hasFloodRiskAssessment: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Does the project include any flood risk assessments?',
+			title: 'Does the project require a flood risk assessment?',
 			question: 'Does the project include any flood risk assessments?',
 			fieldName: 'hasFloodRiskAssessment',
 			url: 'has-flood-risk-assessment',
@@ -20,7 +20,7 @@ export function getQuestions() {
 		},
 		floodRiskAssessment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Select the flood risk assessment',
+			title: 'Flood risk assessment',
 			question: 'Select the flood risk assessment',
 			hint: 'This may be an appendix to the Environmental Statement or a separate document',
 			fieldName: 'floodRiskAssessment',
