@@ -32,14 +32,33 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 	const data = {
 		caseReference: caseData.reference,
 		application: {
-			applicantAgentDetails: {
-				name: 'Applicant and Agent Details',
-				data: mapApplicantAgentDetails(caseData)
+			applicant: {
+				name: '1. Applicant',
+				data: mapApplicantDetails(caseData)
 			},
-
-			aboutTheProject: {
-				name: 'About the Project',
-				data: mapAboutTheProject(caseData, evidenceByCategory['reports-and-statements'])
+			agent: {
+				name: '2. Agent',
+				data: mapAgentDetails(caseData)
+			},
+			fee: {
+				name: '3. Fee',
+				data: mapFeeDetails(caseData)
+			},
+			consentReason: {
+				name: '4. Confirming why the Planning Inspectorate should receive the application',
+				data: mapConsentReason(caseData)
+			},
+			projectDescription: {
+				name: '5. Non-technical description of the Proposed Development',
+				data: mapProjectDescription(caseData)
+			},
+			locationOrRoute: {
+				name: '6. Location or route of the Proposed Development',
+				data: mapLocationOrRoute(caseData)
+			},
+			associatedDevelopments: {
+				name: '7. Associated Development',
+				value: mapAssociatedDevelopments(caseData, evidenceByCategory['reports-and-statements'])
 			},
 
 			consultationAndPublicityDetails: {
@@ -136,7 +155,7 @@ export function findSupportingEvidenceBySubcategory(
 	return evidence.filter((evidence) => subCategoryIds.includes(evidence.subCategoryId)) || [];
 }
 
-function mapApplicantAgentDetails(caseData: FullCase) {
+function mapApplicantDetails(caseData: FullCase) {
 	return {
 		applicantOrganisation: { name: 'Applicant Organisation', value: caseData.ApplicantDetails?.organisation },
 		applicantFirstName: { name: 'Applicant First Name', value: caseData.ApplicantDetails?.firstName },
@@ -155,37 +174,49 @@ function mapApplicantAgentDetails(caseData: FullCase) {
 		applicantTownCity: { name: 'Applicant Town/City', value: caseData.ApplicantDetails?.Address?.townCity },
 		applicantCounty: { name: 'Applicant County', value: caseData.ApplicantDetails?.Address?.county },
 		applicantCountry: { name: 'Applicant Country', value: caseData.ApplicantDetails?.Address?.country },
-		applicantPostcode: { name: 'Applicant Postcode', value: caseData.ApplicantDetails?.Address?.postcode },
+		applicantPostcode: { name: 'Applicant Postcode', value: caseData.ApplicantDetails?.Address?.postcode }
+	};
+}
 
+function mapAgentDetails(caseData: FullCase) {
+	return {
 		isAgent: { name: 'Is Agent', value: caseData.AgentDetails ? 'Yes' : 'No' },
-
 		agentOrganisation: { name: 'Agent Organisation', value: caseData.AgentDetails?.organisation },
 		agentFirstName: { name: 'Agent First Name', value: caseData.AgentDetails?.firstName },
 		agentLastName: { name: 'Agent Last Name', value: caseData.AgentDetails?.lastName },
 		agentEmail: { name: 'Agent Email', value: caseData.AgentDetails?.emailAddress },
 		agentPhone: { name: 'Agent Phone', value: caseData.AgentDetails?.phone },
-
 		agentAddressLine1: { name: 'Agent Address Line 1', value: caseData.AgentDetails?.Address?.addressLine1 },
 		agentAddressLine2: { name: 'Agent Address Line 2', value: caseData.AgentDetails?.Address?.addressLine2 },
 		agentTownCity: { name: 'Agent Town/City', value: caseData.AgentDetails?.Address?.townCity },
 		agentCounty: { name: 'Agent County', value: caseData.AgentDetails?.Address?.county },
 		agentCountry: { name: 'Agent Country', value: caseData.AgentDetails?.Address?.country },
-		agentPostcode: { name: 'Agent Postcode', value: caseData.AgentDetails?.Address?.postcode },
-
-		paymentMethod: { name: 'Payment Method', value: caseData.CasePaymentMethod?.displayName }
+		agentPostcode: { name: 'Agent Postcode', value: caseData.AgentDetails?.Address?.postcode }
 	};
 }
 
-function mapAboutTheProject(caseData: FullCase, reportsAndStatementsEvidence: SupportingEvidenceWithDocument[]) {
-	const associatedDevelopments = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
-	]);
-
+function mapFeeDetails(caseData: FullCase) {
 	return {
-		projectDescription: { name: 'Project Description', value: caseData.projectDescription },
-		projectConsentReason: { name: 'Project Consent Reason', value: caseData.projectConsentReason },
-		locationDescription: { name: 'Location Description', value: caseData.locationDescription },
+		paymentMethod: { name: 'Payment Method', value: caseData.CasePaymentMethod?.displayName },
+		paymentReference: { name: 'Payment Reference', value: caseData.paymentReference }
+	};
+}
 
+function mapConsentReason(caseData: FullCase) {
+	return {
+		projectConsentReason: { name: 'Project Consent Reason', value: caseData.projectConsentReason }
+	};
+}
+
+function mapProjectDescription(caseData: FullCase) {
+	return {
+		projectDescription: { name: 'Project Description', value: caseData.projectDescription }
+	};
+}
+
+function mapLocationOrRoute(caseData: FullCase) {
+	return {
+		locationDescription: { name: 'Location Description', value: caseData.locationDescription },
 		singleOrLinear: {
 			name: 'Single or Linear',
 			value: caseData.ProjectSingleSite ? 'Single' : 'Linear'
@@ -199,8 +230,16 @@ function mapAboutTheProject(caseData: FullCase, reportsAndStatementsEvidence: Su
 		linearMiddleEasting: { name: 'Linear Middle Easting', value: caseData.ProjectLinearSite?.middleEasting },
 		linearMiddleNorthing: { name: 'Linear Middle Northing', value: caseData.ProjectLinearSite?.middleNorthing },
 		linearEndEasting: { name: 'Linear End Easting', value: caseData.ProjectLinearSite?.endEasting },
-		linearEndNorthing: { name: 'Linear End Northing', value: caseData.ProjectLinearSite?.endNorthing },
+		linearEndNorthing: { name: 'Linear End Northing', value: caseData.ProjectLinearSite?.endNorthing }
+	};
+}
 
+function mapAssociatedDevelopments(caseData: FullCase, reportsAndStatementsEvidence: SupportingEvidenceWithDocument[]) {
+	const associatedDevelopments = findSupportingEvidenceBySubcategory(reportsAndStatementsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+	]);
+
+	return {
 		hasAssociatedDevelopments: {
 			name: 'Has Associated Developments',
 			value: associatedDevelopments.length > 0 ? 'Yes' : 'No'
