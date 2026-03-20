@@ -31,7 +31,7 @@ export function buildSaveDeclarationName({ logger }: PortalService): AsyncReques
 		if (!declarationFirstName) {
 			logger.info({ declarationFirstName, declarationLastName }, 'no value provided for declarationFirstName');
 			req.body.errors.declarationFirstName = { msg: 'Enter your first name' };
-		} else if (!/^[a-zA-Z'-]+$/.test(declarationFirstName)) {
+		} else if (!/^[a-zA-Z' -]+$/.test(declarationFirstName)) {
 			logger.info({ declarationLastName }, 'invalid value provided for declarationFirstName');
 			req.body.errors.declarationFirstName = {
 				msg: 'First name must only contain letters a to z, apostrophes and hyphens'
@@ -41,7 +41,7 @@ export function buildSaveDeclarationName({ logger }: PortalService): AsyncReques
 		if (!declarationLastName) {
 			logger.info({ declarationLastName }, 'no value provided for declarationLastName');
 			req.body.errors.declarationLastName = { msg: 'Enter your last name' };
-		} else if (!/^[a-zA-Z'-]+$/.test(declarationLastName)) {
+		} else if (!/^[a-zA-Z' -]+$/.test(declarationLastName)) {
 			logger.info({ declarationLastName }, 'invalid value provided for declarationLastName');
 			req.body.errors.declarationLastName = {
 				msg: 'Last name must only contain letters a to z, apostrophes and hyphens'
