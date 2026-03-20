@@ -61,39 +61,68 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 				value: mapAssociatedDevelopments(caseData, evidenceByCategory['reports-and-statements'])
 			},
 
-			consultationAndPublicityDetails: {
-				name: 'Consultation and Publicity Details',
-				data: mapConsultationAndPublicityDetails(evidenceByCategory['consultation-report'])
+			consultationReport: {
+				name: '8. a) Consultation Report',
+				data: mapConsultationReport(evidenceByCategory['consultation-report'])
+			},
+
+			consultationReportAppendices: {
+				name: '8. b) Copies of newspaper notices',
+				data: mapConsultationReportAppendices(evidenceByCategory['consultation-report'])
 			},
 
 			draftOrderAndExplanatoryMemorandum: {
-				name: 'Draft Order and Explanatory Memorandum',
-				data: mapDraftOrderAndExplanatoryMemorandum(evidenceByCategory['draft-dco'])
+				name: '9. Draft Development Consent Order',
+				data: mapDraftDcoOrder(evidenceByCategory['draft-dco'])
 			},
 
-			landAndWorksPlans: {
-				name: 'Land and Works Plans',
-				data: mapLandAndWorksPlans(evidenceByCategory['plans-and-drawings'])
+			explanatoryMemorandum: {
+				name: '10. Explanatory Memorandum',
+				data: mapExplanatoryMemorandum(evidenceByCategory['draft-dco'])
+			},
+
+			landPlan: {
+				name: '11. Land Plan',
+				data: mapLandPlan(evidenceByCategory['plans-and-drawings'])
+			},
+
+			worksPlan: {
+				name: '12. Works Plans',
+				data: mapWorksPlan(evidenceByCategory['plans-and-drawings'])
 			},
 
 			landRightsInformation: {
-				name: 'Land Rights Information',
+				name: '13. Compulsory Acquisition of land or an interest in land or right over land',
 				data: mapLandRightsInformation(evidenceByCategory['compulsory-acquisition-information'])
 			},
 
 			environmentalImpactAssessment: {
-				name: 'Environmental Impact Assessment',
+				name: '14. a) Environmental Impact Assessment (EIA)',
 				data: mapEnvironmentalImpactAssessment(caseData, evidenceByCategory['environmental-statement'])
 			},
 
+			screeningAndScoping: {
+				name: '14. b) Screening Opinion/ Direction and Scoping Opinion/ Direction',
+				data: mapScreeningAndScopingDirection(evidenceByCategory['environmental-statement'])
+			},
+
+			environmentalStatementNotifications: {
+				name: '14. c) Publicity required under Regulation 13 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2017 (or where the transitional provisions apply, Regulation 11 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2009)',
+				data: mapEnvironmentalStatementNotifications(caseData)
+			},
+
 			habitatRegulationsAssessmentInformation: {
-				name: 'Habitat Regulations Assessment Information',
+				name: '15. European sites (to which Regulation 63 of The Conservation of Habitats and Species Regulations 2017 and/ or Regulation 28 of the Conservation of Offshore Marine Habitats and Species Regulations 2017 applies) or a Ramsar site.',
 				data: mapHabitatRegulationsAssessmentInformation(evidenceByCategory['reports-and-statements'])
 			},
 
-			natureConservationAndEnvironmentalInformation: {
-				name: 'Nature Conservation and Environmental Information',
-				data: mapNatureConservationAndEnvironmentalInformation(evidenceByCategory['plans-and-drawings'])
+			naturalEnvironmentInformation: {
+				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the Proposed Development.',
+				data: mapNaturalEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
+			},
+			historicEnvironmentInformation: {
+				name: '17. A plan, with accompanying information, identifying any statutory or non statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the Proposed Development',
+				data: mapHistoricEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 
 			floodRiskInformation: {
@@ -489,20 +518,25 @@ function mapInfrastructureSpecificAdditionalInformation(
 	};
 }
 
-function mapConsultationAndPublicityDetails(consultationEvidence: SupportingEvidenceWithDocument[]) {
+function mapConsultationReport(consultationEvidence: SupportingEvidenceWithDocument[]) {
 	const consultationReportEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
-	]);
-	const consultationAppendicesEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
 	]);
 
 	return {
 		consultationReport: {
 			name: 'Consultation Report',
 			value: consultationReportEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapConsultationReportAppendices(consultationEvidence: SupportingEvidenceWithDocument[]) {
+	const consultationAppendicesEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+	]);
+
+	return {
 		consultationReportAppendices: {
 			name: 'Consultation Report Appendices',
 			value: consultationAppendicesEvidence.map((evidence) => evidence.Document.fileName)
@@ -541,15 +575,12 @@ function mapCrownLandAccessAndRightsOfWayPlans(plansAndDrawingsEvidence: Support
 	};
 }
 
-function mapDraftOrderAndExplanatoryMemorandum(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
+function mapDraftDcoOrder(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
 	const draftDcoOrderEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.DRAFT_DEVELOPMENT_CONSENT_ORDER
 	]);
 	const siValidationEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL
-	]);
-	const explanatoryMemorandumEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
 	]);
 
 	return {
@@ -561,8 +592,16 @@ function mapDraftOrderAndExplanatoryMemorandum(draftDcoEvidence: SupportingEvide
 		siValidationReportSuccessEmail: {
 			name: 'SI Validation Report Success Email',
 			value: siValidationEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapExplanatoryMemorandum(draftDcoEvidence: SupportingEvidenceWithDocument[]) {
+	const explanatoryMemorandumEvidence = findSupportingEvidenceBySubcategory(draftDcoEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.EXPLANATORY_MEMORANDUM
+	]);
+
+	return {
 		explanatoryMemorandum: {
 			name: 'Explanatory Memorandum',
 			value: explanatoryMemorandumEvidence.map((evidence) => evidence.Document.fileName)
@@ -576,12 +615,6 @@ function mapEnvironmentalImpactAssessment(
 ) {
 	const nonTechnicalSummaryEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY
-	]);
-	const screeningEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
-	]);
-	const scopingEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
 	]);
 	const introductoryChaptersEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS
@@ -617,26 +650,6 @@ function mapEnvironmentalImpactAssessment(
 		nonTechnicalSummary: {
 			name: 'Non-Technical Summary',
 			value: nonTechnicalSummaryEvidence.map((evidence) => evidence.Document.fileName)
-		},
-
-		hasScreeningDirection: {
-			name: 'Has Screening Direction',
-			value: screeningEvidence.length > 0 ? 'Yes' : 'No'
-		},
-
-		screeningDirectionDocuments: {
-			name: 'Screening Direction Documents',
-			value: screeningEvidence.map((evidence) => evidence.Document.fileName)
-		},
-
-		hasScopingOpinion: {
-			name: 'Has Scoping Opinion',
-			value: scopingEvidence.length > 0 ? 'Yes' : 'No'
-		},
-
-		scopingOpinionDocuments: {
-			name: 'Scoping Opinion Documents',
-			value: scopingEvidence.map((evidence) => evidence.Document.fileName)
 		},
 
 		introductoryChapters: {
@@ -677,8 +690,43 @@ function mapEnvironmentalImpactAssessment(
 		sensitiveInformation: {
 			name: 'Sensitive Information',
 			value: sensitiveInfoEvidence.map((evidence) => evidence.Document.fileName)
+		}
+	};
+}
+
+function mapScreeningAndScopingDirection(environmentalStatementEvidence: SupportingEvidenceWithDocument[]) {
+	const screeningEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION
+	]);
+	const scopingEvidence = findSupportingEvidenceBySubcategory(environmentalStatementEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION
+	]);
+
+	return {
+		hasScreeningDirection: {
+			name: 'Has Screening Direction',
+			value: screeningEvidence.length > 0 ? 'Yes' : 'No'
 		},
 
+		screeningDirectionDocuments: {
+			name: 'Screening Direction Documents',
+			value: screeningEvidence.map((evidence) => evidence.Document.fileName)
+		},
+
+		hasScopingOpinion: {
+			name: 'Has Scoping Opinion',
+			value: scopingEvidence.length > 0 ? 'Yes' : 'No'
+		},
+
+		scopingOpinionDocuments: {
+			name: 'Scoping Opinion Documents',
+			value: scopingEvidence.map((evidence) => evidence.Document.fileName)
+		}
+	};
+}
+
+function mapEnvironmentalStatementNotifications(caseData: FullCase) {
+	return {
 		notifyingConsultationBodies: {
 			name: 'Notifying Consultation Bodies',
 			value: caseData.notifyingConsultationBodies ? 'Yes' : 'No'
@@ -732,20 +780,25 @@ function mapHabitatRegulationsAssessmentInformation(reportsAndStatementsEvidence
 	};
 }
 
-function mapLandAndWorksPlans(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+function mapLandPlan(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
 	const landPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.LAND_PLANS
-	]);
-	const worksPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN
 	]);
 
 	return {
 		landPlans: {
 			name: 'Land Plans',
 			value: landPlansEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapWorksPlan(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+	const worksPlansEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.WORKS_PLAN
+	]);
+
+	return {
 		worksPlans: {
 			name: 'Works Plans',
 			value: worksPlansEvidence.map((evidence) => evidence.Document.fileName)
@@ -795,12 +848,9 @@ function mapLandRightsInformation(compulsoryAcquisitionEvidence: SupportingEvide
 	};
 }
 
-function mapNatureConservationAndEnvironmentalInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+function mapNaturalEnvironmentInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
 	const naturalEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.PLANS_OF_STATUTORY_AND_NON_STATUTORY_SITES_OR_FEATURES
-	]);
-	const historicEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
 	]);
 
 	return {
@@ -812,8 +862,16 @@ function mapNatureConservationAndEnvironmentalInformation(plansAndDrawingsEviden
 		naturalEnvironmentInformation: {
 			name: 'Natural Environment Information',
 			value: naturalEnvironmentEvidence.map((evidence) => evidence.Document.fileName)
-		},
+		}
+	};
+}
 
+function mapHistoricEnvironmentInformation(plansAndDrawingsEvidence: SupportingEvidenceWithDocument[]) {
+	const historicEnvironmentEvidence = findSupportingEvidenceBySubcategory(plansAndDrawingsEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.PLANS_SHOWING_HISTORIC_OR_SCHEDULED_MONUMENT_SITES
+	]);
+
+	return {
 		hasHistoricEnvironmentInformation: {
 			name: 'Has Historic Environment Information',
 			value: historicEnvironmentEvidence.length > 0 ? 'Yes' : 'No'
