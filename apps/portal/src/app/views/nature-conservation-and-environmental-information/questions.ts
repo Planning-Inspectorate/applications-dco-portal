@@ -12,7 +12,7 @@ export function getQuestions() {
 	const questions = {
 		hasNaturalEnvironmentInformation: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Natural Environment Information',
+			title: 'Could the project affect any nature conservation, landscape, geological or water features?',
 			question: 'Could the project affect any nature conservation, landscape, geological or water features?',
 			hint: 'For example, habitats of protected species, water bodies within a river basin management plan',
 			fieldName: 'hasNaturalEnvironmentInformation',
@@ -25,7 +25,7 @@ export function getQuestions() {
 		},
 		naturalEnvironmentInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Natural Environment Information Documents',
+			title: 'Nature conservation, landscape, geological or water features documents',
 			question: 'Which documents relate to the nature conservation, landscape, geological or water features?',
 			hint: 'Select all that apply',
 			fieldName: 'naturalEnvironmentInformation',
@@ -38,7 +38,7 @@ export function getQuestions() {
 		},
 		hasHistoricEnvironmentInformation: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Historic Environment Information',
+			title: 'Could the project affect any historic environment sites or features?',
 			question: 'Could the project affect any historic environment sites or features?',
 			hint: 'For example, scheduled monuments, World Heritage sites, listed buildings or registered battlefields',
 			fieldName: 'hasHistoricEnvironmentInformation',
@@ -49,7 +49,7 @@ export function getQuestions() {
 		},
 		historicEnvironmentInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Historic Environment Information Documents',
+			title: 'Historic environment sites or features documents',
 			question: 'Which documents relate to the historic environment sites or features?',
 			hint: 'Select all that apply',
 			fieldName: 'historicEnvironmentInformation',
