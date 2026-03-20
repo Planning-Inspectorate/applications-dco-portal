@@ -63,7 +63,9 @@ export function createRoutes(service: PortalService, applicationSectionId: strin
 	);
 
 	router.get('/check-your-answers', getJourneyResponse, getJourney, (req, res) =>
-		list(req, res, getApplicationSectionDisplayName(applicationSectionId), {})
+		list(req, res, getApplicationSectionDisplayName(applicationSectionId), {
+			submitButtonText: 'Save and return'
+		})
 	);
 	router.post(
 		'/check-your-answers',
