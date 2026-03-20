@@ -11,7 +11,7 @@ export function getQuestions() {
 	const questions = {
 		consultationReport: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the consultation report?',
+			title: 'Consultation report documents',
 			question: 'Which documents relate to the consultation report?',
 			fieldName: 'consultationReport',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT,
@@ -19,7 +19,7 @@ export function getQuestions() {
 		},
 		consultationReportAppendices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the newspaper notices?',
+			title: 'Newspaper notices documents',
 			question: 'Which documents relate to the newspaper notices?',
 			fieldName: 'consultationReportAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES,
