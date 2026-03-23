@@ -27,8 +27,8 @@ export function getQuestions() {
 	const questions = {
 		hasAdditionalInformation: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
-			title: 'Additional Information',
-			question: 'Additional Information',
+			title: 'Is any additional information required for this type of infrastructure?',
+			question: 'Is any additional information required for this type of infrastructure?',
 			pageTitle: 'Is there any additional information required for this type of infrastructure?',
 			html: HTML_TEMPLATES.HAS_ADDITIONAL_INFORMATION_HTML,
 			fieldName: 'hasAdditionalInformation',
@@ -37,7 +37,7 @@ export function getQuestions() {
 		},
 		additionalInformationDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Additional Information Description',
+			title: 'Additional information description',
 			question: 'Describe the additional information required',
 			fieldName: 'additionalInformationDescription',
 			url: 'additional-information-description',
@@ -57,7 +57,7 @@ export function getQuestions() {
 		},
 		additionalInformationDocuments: {
 			type: COMPONENT_TYPES.CHECKBOX,
-			title: 'Additional Information Documents',
+			title: 'Type of development',
 			question: 'Which of these types of development is the project?',
 			html: SELECT_ALL_THAT_APPLY_HTML,
 			fieldName: 'additionalInformationDocuments',
@@ -67,7 +67,8 @@ export function getQuestions() {
 		},
 		electricityGrid: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Electricity Grid',
+			title:
+				'Who will design and build the connection to the electricity grid for the non offshore generating station?',
 			question:
 				'Who will design and build the connection to the electricity grid for the non offshore generating station?',
 			fieldName: 'electricityGrid',
@@ -90,7 +91,7 @@ export function getQuestions() {
 		},
 		gasFuelledGeneratingStation: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Gas Fuelled Generating Station',
+			title: 'Is it a gas fuelled non offshore generating station?',
 			question: 'Is it a gas fuelled non offshore generating station?',
 			fieldName: 'gasFuelledGeneratingStation',
 			url: 'gas-fuelled-generating-station',
@@ -98,7 +99,7 @@ export function getQuestions() {
 		},
 		gasPipelineConnection: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Gas Pipeline Connection',
+			title: 'Who will design and build the gas pipeline connection to the non offshore generating station?',
 			question: 'Who will design and build the gas pipeline connection to the non offshore generating station?',
 			fieldName: 'gasPipelineConnection',
 			url: 'gas-pipeline-connection',
@@ -118,7 +119,7 @@ export function getQuestions() {
 		},
 		nonOffshoreGeneratingStation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Non Offshore Generating Station',
+			title: 'Non offshore generating station additional documents',
 			question: 'Which documents provide additional information for the non offshore generating station?',
 			fieldName: 'nonOffshoreGeneratingStation',
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_OFFSHORE_GENERATING_STATION,
@@ -126,7 +127,7 @@ export function getQuestions() {
 		},
 		cableInstallation: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Offshore Cable Installation',
+			title: 'Route and method of installation for any cable in the offshore generating station',
 			question:
 				'Provide details of the route and method of installation for any cable in the offshore generating station?',
 			fieldName: 'cableInstallation',
@@ -149,7 +150,7 @@ export function getQuestions() {
 		},
 		safetyZones: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Offshore Safety Zones',
+			title: 'Will you apply for safety zones for the offshore generating station?',
 			question: 'Will you apply for safety zones for the offshore generating station?',
 			fieldName: 'safetyZones',
 			url: 'safety-zones',
@@ -169,7 +170,7 @@ export function getQuestions() {
 		},
 		offshoreGeneratingStation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Offshore Generating Station',
+			title: 'Offshore generating station additional documents',
 			question: 'Which documents provide additional information for the offshore generating station?',
 			fieldName: 'offshoreGeneratingStation',
 			url: DOCUMENT_SUB_CATEGORY_ID.OFFSHORE_GENERATING_STATION,
@@ -177,7 +178,7 @@ export function getQuestions() {
 		},
 		highwayGroundLevels: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Highway Ground Levels',
+			title: 'Ground levels of the highway related development',
 			question: 'What are the ground levels of the highway related development?',
 			fieldName: 'highwayGroundLevels',
 			url: 'highway-ground-levels',
@@ -185,7 +186,8 @@ export function getQuestions() {
 		},
 		highwayBridgeHeights: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Highway Bridge Heights and Elevated Works',
+			title:
+				'Height of every bridge, viaduct, aqueduct, embankment and elevated guide way for the highway related development',
 			question:
 				'What is the height of every bridge, viaduct, aqueduct, embankment and elevated guide way for the highway related development?',
 			hint: 'Where relevant, include the levels of the proposed works',
@@ -211,7 +213,7 @@ export function getQuestions() {
 		},
 		highwayTunnelDepths: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Highway Cutting and Tunnel Depths',
+			title: 'Depth of every cutting and tunnel for the highway related development',
 			question: 'What is the depth of every cutting and tunnel for the highway related development?',
 			hint: 'Where relevant, include the levels of the proposed works',
 			fieldName: 'highwayTunnelDepths',
@@ -232,7 +234,7 @@ export function getQuestions() {
 		},
 		highwayTidalWaterLevels: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Highway Levels of Tidal Waters or Inland Waterways',
+			title: 'Levels of the bed of relevant tidal waters or inland waterways for the highway related development',
 			question:
 				'What are the levels of the bed of relevant tidal waters or inland waterways for the highway related development?',
 			fieldName: 'highwayTidalWaterLevels',
@@ -253,7 +255,8 @@ export function getQuestions() {
 		},
 		highwayHeightOfStructures: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Highway Height of Structures or Devices',
+			title:
+				'Height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways for the highway related development',
 			question:
 				'What is the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways for the highway related development?',
 			hint: 'Where relevant, include the levels of the proposed works',
@@ -279,7 +282,7 @@ export function getQuestions() {
 		},
 		highwayDrainageOutfallDetails: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Highway Drainage Outfall Details',
+			title: 'Drainage outfall details for highways',
 			question: 'What are the drainage outfall details for highways?',
 			hint: 'Where relevant, include the levels of the proposed works',
 			fieldName: 'highwayDrainageOutfallDetails',
@@ -300,7 +303,7 @@ export function getQuestions() {
 		},
 		highwayRelatedDevelopment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Highway Related Development',
+			title: 'Highway related development additional documents',
 			question: 'Which documents provide additional information for the highway related development?',
 			fieldName: 'highwayRelatedDevelopment',
 			url: DOCUMENT_SUB_CATEGORY_ID.HIGHWAY_RELATED_DEVELOPMENT,
@@ -308,7 +311,7 @@ export function getQuestions() {
 		},
 		railwayGroundLevels: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Railway Ground Levels',
+			title: 'Ground levels of the railway development',
 			question: 'What are the ground levels of the railway development?',
 			fieldName: 'railwayGroundLevels',
 			url: 'railway-ground-levels',
@@ -316,7 +319,7 @@ export function getQuestions() {
 		},
 		railwayBridgeHeights: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Railway Bridge Heights and Elevated Works',
+			title: 'Height of every bridge, viaduct, aqueduct, embankment and elevated guide way for the railway development',
 			question:
 				'What is the height of every bridge, viaduct, aqueduct, embankment and elevated guide way for the railway development?',
 			hint: 'Where relevant, include the levels of the proposed works',
@@ -342,7 +345,7 @@ export function getQuestions() {
 		},
 		railwayTunnelDepths: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Railway Cutting and Tunnel Depths',
+			title: 'Depth of every cutting and tunnel for the railway development',
 			question: 'What is the depth of every cutting and tunnel for the railway development?',
 			hint: 'Where relevant, include the levels of the proposed works',
 			fieldName: 'railwayTunnelDepths',
@@ -363,7 +366,7 @@ export function getQuestions() {
 		},
 		railwayTidalWaterLevels: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Railway Levels of Tidal Waters or Inland Waterways',
+			title: 'Levels of the bed of relevant tidal waters or inland waterways for the railway development',
 			question:
 				'What are the levels of the bed of relevant tidal waters or inland waterways for the railway development?',
 			fieldName: 'railwayTidalWaterLevels',
@@ -386,7 +389,8 @@ export function getQuestions() {
 		},
 		railwayHeightOfStructures: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Railway Height of Structures or Devices',
+			title:
+				'Height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways for the railway development',
 			question:
 				'What is the height of every structure or device intended to be erected above, on or below the bed of tidal waters or inland waterways for the railway development?',
 			hint: 'Where relevant, include the levels of the proposed works',
@@ -412,7 +416,7 @@ export function getQuestions() {
 		},
 		railwayDrainageOutfallDetails: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Railway Drainage Outfall Details',
+			title: 'Drainage outfall details for railways',
 			question: 'What are the drainage outfall details for railways?',
 			hint: 'Where relevant, include the levels of the proposed works',
 			fieldName: 'railwayDrainageOutfallDetails',
@@ -433,7 +437,7 @@ export function getQuestions() {
 		},
 		railwayDevelopment: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Railway Development',
+			title: 'Railway development additional documents',
 			question: 'Which documents provide additional information for the railway development?',
 			fieldName: 'railwayDevelopment',
 			url: DOCUMENT_SUB_CATEGORY_ID.RAILWAY_DEVELOPMENT,
@@ -441,7 +445,7 @@ export function getQuestions() {
 		},
 		whyHarbourOrderNeeded: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Why is Harbour Order Needed',
+			title: 'Why is the order needed to improve, maintain or manage the harbour?',
 			question: 'Why is the order needed to improve, maintain or manage the harbour?',
 			fieldName: 'whyHarbourOrderNeeded',
 			url: 'why-is-order',
@@ -463,7 +467,8 @@ export function getQuestions() {
 		},
 		benefitsToSeaTransport: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Benefits to Sea Transport',
+			title:
+				'How will the order for a harbour facility benefit transport by sea or recreational use of sea-going ships?',
 			question:
 				'How will the order for a harbour facility benefit transport by sea or recreational use of sea-going ships?',
 			fieldName: 'benefitsToSeaTransport',
@@ -488,7 +493,7 @@ export function getQuestions() {
 		},
 		harbourFacilities: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Harbour Facilities',
+			title: 'Harbour facility additional documents',
 			question: 'Which documents provide additional information for the harbour facility?',
 			fieldName: 'harbourFacilities',
 			url: DOCUMENT_SUB_CATEGORY_ID.HARBOUR_FACILITIES,
@@ -496,7 +501,7 @@ export function getQuestions() {
 		},
 		pipelineDetails: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
-			title: `Pipeline Details`,
+			title: `Pipeline details`,
 			question: `Enter pipeline details`,
 			fieldName: `pipelineDetails`,
 			url: `pipeline-details`,
@@ -547,17 +552,17 @@ export function getQuestions() {
 				})
 			],
 			inputFields: [
-				{ fieldName: `pipelineName`, label: 'Name' },
-				{ fieldName: `pipelineOwner`, label: 'Owner' },
-				{ fieldName: `pipelineStartPoint`, label: 'Start point' },
-				{ fieldName: `pipelineEndPoint`, label: 'End point' },
-				{ fieldName: `pipelineLength`, label: 'Length (in kilometres)' },
-				{ fieldName: `pipelineExternalDiameter`, label: 'External diameter (in mm)' }
+				{ fieldName: `pipelineName`, label: 'Pipeline name' },
+				{ fieldName: `pipelineOwner`, label: 'Pipeline owner' },
+				{ fieldName: `pipelineStartPoint`, label: 'Pipeline start point' },
+				{ fieldName: `pipelineEndPoint`, label: 'Pipeline end point' },
+				{ fieldName: `pipelineLength`, label: 'Pipeline length (in kilometres)' },
+				{ fieldName: `pipelineExternalDiameter`, label: 'Pipeline external diameter (in mm)' }
 			]
 		},
 		pipelineConveyance: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Pipeline Conveyance',
+			title: 'What will the pipeline convey?',
 			question: 'What will the pipeline convey?',
 			fieldName: 'pipelineConveyance',
 			url: 'what-will-pipeline-convey',
@@ -577,7 +582,7 @@ export function getQuestions() {
 		},
 		landRightsCrossingConsents: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Land Rights Crossing Consents Needed',
+			title: 'Does the pipeline need rights in land or crossing consents?',
 			question: 'Does the pipeline need rights in land or crossing consents?',
 			fieldName: 'landRightsCrossingConsents',
 			url: 'land-rights-crossing-consents-needed',
@@ -585,7 +590,7 @@ export function getQuestions() {
 		},
 		landRightsCrossingConsentsAgreement: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Land Rights Crossing Consents Agreement',
+			title: 'Can parties obtain rights in land or crossing consents by agreement for the pipeline?',
 			question: 'Can parties obtain rights in land or crossing consents by agreement for the pipeline?',
 			fieldName: 'landRightsCrossingConsentsAgreement',
 			url: 'land-rights-crossing-consents-by-agreement',
@@ -607,7 +612,7 @@ export function getQuestions() {
 		},
 		pipelines: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Pipelines',
+			title: 'Pipeline additional documents',
 			question: 'Which documents provide additional information for the pipeline?',
 			fieldName: 'pipelines',
 			url: DOCUMENT_SUB_CATEGORY_ID.PIPELINES,
@@ -615,7 +620,7 @@ export function getQuestions() {
 		},
 		whyIsFacilityNeeded: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Why is Hazardous Waste Facility Needed',
+			title: 'Why is the hazardous waste facility needed?',
 			question: 'Why is the hazardous waste facility needed?',
 			fieldName: 'whyIsFacilityNeeded',
 			url: 'why-is-facility-needed',
@@ -635,7 +640,7 @@ export function getQuestions() {
 		},
 		annualCapacity: {
 			type: COMPONENT_TYPES.SINGLE_LINE_INPUT,
-			title: 'Hazardous Waste Annual Capacity',
+			title: 'What is the plant’s estimated annual capacity for disposing or recovering hazardous waste?',
 			question: 'What is the plant’s estimated annual capacity for disposing or recovering hazarous waste?',
 			fieldName: 'annualCapacity',
 			url: 'annual-capacity',
@@ -645,7 +650,7 @@ export function getQuestions() {
 		},
 		hazardousWasteFacility: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Hazardous Waste Facility',
+			title: 'Hazardous waste facility additional documents',
 			question: 'Which documents provide additional information for the hazardous waste facility?',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'hazardousWasteFacility',
@@ -654,7 +659,7 @@ export function getQuestions() {
 		},
 		recreationalAmenities: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Dam or Reservoir Recreational Amenities',
+			title: 'Will the dam or reservoir include any recreational amenities?',
 			question: 'Will the dam or reservoir include any recreational amenities?',
 			fieldName: 'recreationalAmenities',
 			url: 'recreational-amenities',
@@ -662,7 +667,7 @@ export function getQuestions() {
 		},
 		recreationalAmenitiesDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Dam or Reservoir Recreatonal Amenities Description',
+			title: 'Description of the dam or reservoir’s recreational amenities',
 			question: 'Describe the dam or reservoir’s recreational amenities',
 			fieldName: 'recreationalAmenitiesDescription',
 			url: 'describe-recreational-amenities',
@@ -682,7 +687,7 @@ export function getQuestions() {
 		},
 		damOrReservoir: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Dam or Reservoir',
+			title: 'Dam or reservoir additional documents',
 			question: 'Which documents provide additional information for the hazardous waste facility?',
 			fieldName: 'damOrReservoir',
 			url: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR,

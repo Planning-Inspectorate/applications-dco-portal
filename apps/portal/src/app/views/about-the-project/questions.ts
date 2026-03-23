@@ -18,7 +18,7 @@ export function getQuestions() {
 	const questions = {
 		description: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Project Description',
+			title: 'Project description',
 			question: 'Project description',
 			pageTitle: 'How would you describe the project?',
 			fieldName: 'description',
@@ -40,7 +40,7 @@ export function getQuestions() {
 		},
 		consentReason: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Project Consent Reason',
+			title: 'Why the project needs development consent',
 			question: 'Development consent',
 			pageTitle: 'Why does the project need development consent?',
 			fieldName: 'consentReason',
@@ -62,7 +62,7 @@ export function getQuestions() {
 		},
 		locationDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Project Location Description',
+			title: 'Project location or route description',
 			question: 'Location or route description',
 			pageTitle: 'How would you describe the location or route of the project?',
 			fieldName: 'locationDescription',
@@ -84,7 +84,7 @@ export function getQuestions() {
 		},
 		singleOrLinear: {
 			type: COMPONENT_TYPES.RADIO,
-			title: 'Single or Linear',
+			title: 'Single or linear site',
 			question: 'Is the site single or linear?',
 			fieldName: 'singleOrLinear',
 			url: 'site-single-or-linear',
@@ -93,7 +93,7 @@ export function getQuestions() {
 		},
 		singleGridReferences: {
 			type: COMPONENT_TYPES.MULTI_FIELD_INPUT,
-			title: `Single Site Grid References`,
+			title: `Single site grid references`,
 			question: `Enter grid references`,
 			fieldName: `singleSiteGridReferences`,
 			url: `grid-references-single-site`,
@@ -122,7 +122,7 @@ export function getQuestions() {
 		},
 		linearGridReferences: {
 			type: CUSTOM_COMPONENTS.GROUPED_MULTI_FIELD_INPUT,
-			title: `Linear Site Grid References`,
+			title: `Linear site grid references`,
 			question: `Enter grid references`,
 			fieldName: `linearSiteGridReferences`,
 			url: `grid-references-linear-site`,
@@ -170,21 +170,21 @@ export function getQuestions() {
 			],
 			inputGroups: [
 				{
-					title: 'Start',
+					title: 'Start linear grid references',
 					fields: [
 						{ fieldName: `startEasting`, label: 'Easting' },
 						{ fieldName: `startNorthing`, label: 'Northing' }
 					]
 				},
 				{
-					title: 'Middle',
+					title: 'Middle linear grid references',
 					fields: [
 						{ fieldName: `middleEasting`, label: 'Easting' },
 						{ fieldName: `middleNorthing`, label: 'Northing' }
 					]
 				},
 				{
-					title: 'End',
+					title: 'End linear grid references',
 					fields: [
 						{ fieldName: `endEasting`, label: 'Easting' },
 						{ fieldName: `endNorthing`, label: 'Northing' }
@@ -194,7 +194,7 @@ export function getQuestions() {
 		},
 		hasAssociatedDevelopments: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Associated Developments',
+			title: 'Does the project include an associated development?',
 			question: 'Does the project include an associated development?',
 			hint: 'These support the development or operational capacity of an infrastructure project, for example, access road improvements or grid connections',
 			fieldName: 'hasAssociatedDevelopments',
@@ -203,7 +203,7 @@ export function getQuestions() {
 		},
 		associatedDevelopments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Associated Developments',
+			title: 'Associated development documents',
 			question: 'Which documents relate to the associated developments?',
 			hint: 'Select all that apply',
 			fieldName: 'associatedDevelopments',
