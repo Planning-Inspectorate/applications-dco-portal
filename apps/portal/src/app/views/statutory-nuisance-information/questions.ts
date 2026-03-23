@@ -21,7 +21,7 @@ export function getQuestions() {
 		},
 		statutoryNuisanceStatement: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Which documents relate to the statutory nuisance statement?',
+			title: 'Statutory nuisance statement',
 			question: 'Which documents relate to the statutory nuisance statement?',
 			fieldName: 'statutoryNuisanceStatement',
 			url: DOCUMENT_SUB_CATEGORY_ID.STATUTORY_NUISANCE_STATEMENT,
