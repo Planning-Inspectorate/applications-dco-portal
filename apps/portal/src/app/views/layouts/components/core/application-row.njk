@@ -16,7 +16,9 @@
             <p class="govuk-body">{{ row.name }}</p>
         </div>
         <div class="govuk-grid-column-one-third">
-            <p class="govuk-body">{{ row.value }}</p>
+            {% for line in row.value %}
+                <p class="govuk-body">{{ line }}</p>
+            {% endfor %}
         </div>
     </div>
     {% endif %}
