@@ -17,8 +17,8 @@ export function getQuestions() {
 	const questions = {
 		hasEnvironmentalStatement: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
-			title: 'Has Environmental Statement',
-			question: 'Environmental Statement',
+			title: 'Does the project require an environmental statement?',
+			question: 'Environmental statement',
 			pageTitle: 'Does the project require an environmental statement?',
 			html: HTML_TEMPLATES.HAS_ENVIRONMENTAL_STATEMENT_HTML,
 			fieldName: 'hasEnvironmentalStatement',
@@ -27,7 +27,7 @@ export function getQuestions() {
 		},
 		nonTechnicalSummary: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Non-Technical Summary',
+			title: 'Non-technical summary',
 			question: 'Select the non-technical summary of the environmental statement',
 			html: HTML_TEMPLATES.NON_TECHNICAL_SUMMARY_HTML,
 			fieldName: 'nonTechnicalSummary',
@@ -40,7 +40,7 @@ export function getQuestions() {
 		},
 		hasScreeningDirection: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Screening Opinion or Direction',
+			title: 'Have you sought or received a screening opinion or direction?',
 			question: 'Have you sought or received a screening opinion or direction?',
 			fieldName: 'hasScreeningDirection',
 			url: 'has-screening-opinion-or-direction',
@@ -48,7 +48,7 @@ export function getQuestions() {
 		},
 		screeningDirectionDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Screening Opinion or Direction Documents',
+			title: 'Screening opinion or direction documents',
 			question: 'Select the screening opinion or direction',
 			fieldName: 'screeningDirectionDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.SCREENING_DIRECTION,
@@ -56,7 +56,7 @@ export function getQuestions() {
 		},
 		hasScopingOpinion: {
 			type: COMPONENT_TYPES.BOOLEAN,
-			title: 'Has Scoping Opinion or Direction',
+			title: 'Have you sought or received a scoping opinion or direction?',
 			question: 'Have you sought or received a scoping opinion or direction?',
 			fieldName: 'hasScopingOpinion',
 			url: 'has-scoping-opinion-or-direction',
@@ -64,7 +64,7 @@ export function getQuestions() {
 		},
 		scopingOpinionDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Scoping Opinion or Direction Documents',
+			title: 'Scoping opinion or direction documents',
 			question: 'Select the scoping opinion or direction',
 			fieldName: 'scopingOpinionDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.SCOPING_OPINION,
@@ -72,7 +72,7 @@ export function getQuestions() {
 		},
 		otherEnvironmentalDocuments: {
 			type: COMPONENT_TYPES.CHECKBOX,
-			title: 'Other Environmental Documents',
+			title: 'Other types of environmental statement documents uploaded',
 			question: 'What other types of environmental statement documents have you uploaded? (optional)',
 			description: 'Select all that apply',
 			fieldName: 'otherEnvironmentalDocuments',
@@ -81,8 +81,8 @@ export function getQuestions() {
 		},
 		introductoryChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Introductory Chapters',
-			question: 'Introductory Chapters',
+			title: 'Introductory chapters',
+			question: 'Introductory chapters',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'introductoryChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS,
@@ -90,8 +90,8 @@ export function getQuestions() {
 		},
 		aspectChapters: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Aspect Chapters',
-			question: 'Aspect Chapters',
+			title: 'Aspect chapters',
+			question: 'Aspect chapters',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'aspectChapters',
 			url: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS,
@@ -99,8 +99,8 @@ export function getQuestions() {
 		},
 		environmentStatementAppendices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Environmental Statement Appendices',
-			question: 'Environmental Statement Appendices',
+			title: 'Appendices',
+			question: 'Environmental statement appendices',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementAppendices',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
@@ -108,8 +108,8 @@ export function getQuestions() {
 		},
 		environmentStatementFigures: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Environmental Statement Figures',
-			question: 'Environmental Statement Figures',
+			title: 'Figures',
+			question: 'Environmental statement figures',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'environmentStatementFigures',
 			url: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES,
@@ -117,8 +117,8 @@ export function getQuestions() {
 		},
 		modelInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Model Information',
-			question: 'Model Information',
+			title: 'Model information',
+			question: 'Model information',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'modelInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION,
@@ -126,8 +126,8 @@ export function getQuestions() {
 		},
 		anyOtherMediaInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Any Other Media Information',
-			question: 'Any Other Media Information',
+			title: 'Media information',
+			question: 'Any other media information',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'anyOtherMediaInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION,
@@ -135,8 +135,8 @@ export function getQuestions() {
 		},
 		confidentialDocuments: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Confidential Documents',
-			question: 'Confidential Documents',
+			title: 'Confidential documents',
+			question: 'Confidential documents',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'confidentialDocuments',
 			url: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS,
@@ -144,8 +144,8 @@ export function getQuestions() {
 		},
 		sensitiveInformation: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Sensitive Information',
-			question: 'Sensitive Information',
+			title: 'Sensitive information',
+			question: 'Sensitive information',
 			html: HTML_TEMPLATES.OPTIONAL_SUBCATEGORY_SUBTITLE_HTML,
 			fieldName: 'sensitiveInformation',
 			url: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
@@ -153,7 +153,7 @@ export function getQuestions() {
 		},
 		notifyingConsultationBodies: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
-			title: 'Notifying Consultation Bodies',
+			title: 'Have you notified the consultation bodies about the project?',
 			html: HTML_TEMPLATES.NOTIFYING_CONSULTATION_BODIES_HTML,
 			question: 'Notifying consultation bodies',
 			pageTitle: 'Have you notified the consultation bodies about the project?',
@@ -163,7 +163,7 @@ export function getQuestions() {
 		},
 		whyNotNotifyingConsultationBodies: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
-			title: 'Explain Why Not Notifying Consultation Bodies',
+			title: 'Explanation for not notifying the consultation bodies',
 			question: 'Explain why you have not notified the consultation bodies about the project',
 			fieldName: 'whyNotNotifyingConsultationBodies',
 			url: 'explain-why-not-notified-consultation-bodies',
@@ -185,7 +185,7 @@ export function getQuestions() {
 		},
 		notifiedOtherPeople: {
 			type: CUSTOM_COMPONENTS.DESCRIPTIVE_BOOLEAN,
-			title: 'Notifying Other People',
+			title: 'Have you notified any other people under Regulation 11(1)(c) about the project?',
 			html: HTML_TEMPLATES.NOTIFYING_OTHER_PEOPLE_HTML,
 			question: 'Notifying other people regulated identified under Regulation 11(1)(c)',
 			pageTitle: 'Have you notified any other people under Regulation 11(1)(c) about the project?',
