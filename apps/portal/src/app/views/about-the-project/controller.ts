@@ -19,7 +19,10 @@ export function buildAboutTheProjectHomePage({ db }: PortalService, applicationS
 }
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
-	const associatedDevelopmentDocumentIds = [DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT];
+	const associatedDevelopmentDocumentIds = [
+		DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT,
+		DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS
+	];
 
 	const caseData = await db.case.findUnique({
 		where: { reference: req.session?.caseReference },
@@ -46,7 +49,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 			? PROJECT_SITE_TYPE_IDS.LINEAR
 			: null;
 	const forms = req.session.forms || (req.session.forms = {});
-	const hasEvidence = (caseData?.SupportingEvidence?.length ?? 0) > 0;
 	const standardFields = {
 		consentReason: caseData.projectConsentReason || '',
 		description: caseData.projectDescription || '',
@@ -65,21 +67,27 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	const alreadyStartedSection =
 		(caseData as any)[`${kebabCaseToCamelCase(applicationSectionId)}StatusId`] !==
 		DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED;
+
 	let associatedDevelopmentsFields;
 	if (alreadyStartedSection) {
-		if (hasEvidence) {
-			associatedDevelopmentsFields = {
-				hasAssociatedDevelopments: 'yes',
-				associatedDevelopments: getSupportingEvidenceIds(
-					caseData.SupportingEvidence,
-					DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
-				)
-			};
-		} else {
-			associatedDevelopmentsFields = {
-				hasAssociatedDevelopments: 'no'
-			};
-		}
+		const associatedDevelopmentsCount = await db.supportingEvidence.count({
+			where: {
+				caseId: caseData.id,
+				subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+			}
+		});
+
+		associatedDevelopmentsFields = {
+			hasAssociatedDevelopments: associatedDevelopmentsCount > 0 ? 'yes' : 'no',
+			associatedDevelopments: getSupportingEvidenceIds(
+				caseData.SupportingEvidence,
+				DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+			),
+			locationOrRouteDocuments: getSupportingEvidenceIds(
+				caseData.SupportingEvidence,
+				DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS
+			)
+		};
 	}
 
 	forms[applicationSectionId] = {

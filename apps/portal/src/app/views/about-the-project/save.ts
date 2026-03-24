@@ -38,18 +38,23 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				const categories: CategoryInformation[] = [
 					{
 						key: 'associatedDevelopments',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT,
+						applied: answers.hasAssociatedDevelopments === BOOLEAN_OPTIONS.YES
+					},
+					{
+						key: 'locationOrRouteDocuments',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS,
+						applied: true
 					}
 				];
 
 				await deleteSubCategorySupportingEvidence($tx, caseId, categories);
 
-				if (answers.hasAssociatedDevelopments === BOOLEAN_OPTIONS.YES) {
-					for (const { key, subCategoryId } of categories) {
-						const ids = answers[key]?.split(',') ?? [];
-						for (const documentId of ids) {
-							await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
-						}
+				for (const { key, subCategoryId, applied } of categories) {
+					if (!applied) continue;
+					const ids = answers[key]?.split(',') ?? [];
+					for (const documentId of ids) {
+						await saveSupportingEvidence($tx, caseId, documentId, subCategoryId);
 					}
 				}
 

@@ -34,6 +34,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.withCondition(whenQuestionHasAnswer(questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.SINGLE))
 				.addQuestion(questions.linearGridReferences)
 				.withCondition(whenQuestionHasAnswer(questions.singleOrLinear, PROJECT_SITE_TYPE_IDS.LINEAR))
+				.addQuestion(questions.locationOrRouteDocuments)
 				.addQuestion(questions.hasAssociatedDevelopments)
 				.addQuestion(questions.associatedDevelopments)
 				.withCondition(whenQuestionHasAnswer(questions.hasAssociatedDevelopments, BOOLEAN_OPTIONS.YES))

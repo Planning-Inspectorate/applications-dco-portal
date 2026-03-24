@@ -18,7 +18,8 @@ describe('about-the-project controller', () => {
 					findUnique: mock.fn(() => ({
 						aboutTheProjectStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [
-							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT }
+							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DETAILS_OF_ASSOCIATED_DEVELOPMENT },
+							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS }
 						],
 						projectDescription: 'test',
 						projectConsentReason: 'consent',
@@ -28,6 +29,9 @@ describe('about-the-project controller', () => {
 							northing: 123456
 						}
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 1)
 				}
 			};
 			const mockReq = {
@@ -62,6 +66,7 @@ describe('about-the-project controller', () => {
 						middleNorthing: '',
 						endEasting: '',
 						endNorthing: '',
+						locationOrRouteDocuments: 'doc-id-2',
 						hasAssociatedDevelopments: 'yes',
 						associatedDevelopments: 'doc-id-1'
 					}
@@ -82,6 +87,9 @@ describe('about-the-project controller', () => {
 							northing: 123456
 						}
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 0)
 				}
 			};
 			const mockReq = {
@@ -116,7 +124,9 @@ describe('about-the-project controller', () => {
 						middleNorthing: '',
 						endEasting: '',
 						endNorthing: '',
-						hasAssociatedDevelopments: 'no'
+						locationOrRouteDocuments: '',
+						hasAssociatedDevelopments: 'no',
+						associatedDevelopments: ''
 					}
 				}
 			});
@@ -139,6 +149,9 @@ describe('about-the-project controller', () => {
 							endNorthing: 123456
 						}
 					}))
+				},
+				supportingEvidence: {
+					count: mock.fn(() => 0)
 				}
 			};
 			const mockReq = {
@@ -173,7 +186,9 @@ describe('about-the-project controller', () => {
 						middleNorthing: '123456',
 						endEasting: '123456',
 						endNorthing: '123456',
-						hasAssociatedDevelopments: 'no'
+						locationOrRouteDocuments: '',
+						hasAssociatedDevelopments: 'no',
+						associatedDevelopments: ''
 					}
 				}
 			});
