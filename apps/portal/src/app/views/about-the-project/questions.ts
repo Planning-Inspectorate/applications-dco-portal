@@ -82,6 +82,15 @@ export function getQuestions() {
 				})
 			]
 		},
+		locationOrRouteDocuments: {
+			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
+			title: 'Location or route documents',
+			question: 'Which documents relate to the location or route of the project?',
+			hint: 'Select all that apply',
+			fieldName: 'locationOrRouteDocuments',
+			url: DOCUMENT_SUB_CATEGORY_ID.LOCATION_PLANS,
+			validators: [new RequiredValidator("Select the documents relating to the project's location or route")]
+		},
 		singleOrLinear: {
 			type: COMPONENT_TYPES.RADIO,
 			title: 'Single or linear site',
