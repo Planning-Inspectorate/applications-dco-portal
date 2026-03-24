@@ -17,6 +17,7 @@ describe('environmental-impact-assessment-information controller', () => {
 					findUnique: mock.fn(() => ({
 						environmentalImpactAssessmentInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						notifyingConsultationBodies: true,
+						notifiedOtherPeople: true,
 						whyNotNotifyingConsultationBodies: 'test',
 						SupportingEvidence: [
 							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY },
@@ -83,7 +84,8 @@ describe('environmental-impact-assessment-information controller', () => {
 						confidentialDocuments: 'doc-id-12',
 						sensitiveInformation: 'doc-id-13',
 						notifyingConsultationBodies: 'yes',
-						whyNotNotifyingConsultationBodies: 'test'
+						whyNotNotifyingConsultationBodies: 'test',
+						notifiedOtherPeople: 'yes'
 					}
 				}
 			});
@@ -142,7 +144,8 @@ describe('environmental-impact-assessment-information controller', () => {
 						confidentialDocuments: '',
 						sensitiveInformation: '',
 						notifyingConsultationBodies: 'no',
-						whyNotNotifyingConsultationBodies: ''
+						whyNotNotifyingConsultationBodies: '',
+						notifiedOtherPeople: 'no'
 					}
 				}
 			});
