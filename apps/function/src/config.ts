@@ -7,6 +7,7 @@ export function loadConfig(): Config {
 	const {
 		LOG_LEVEL,
 		NODE_ENV,
+		APP_HOSTNAME,
 		NSIP_PROJECT_SUBSCRIPTION,
 		NSIP_PROJECT_TOPIC,
 		SERVICE_USER_SUBSCRIPTION,
@@ -19,6 +20,7 @@ export function loadConfig(): Config {
 	} = process.env;
 
 	const props = {
+		APP_HOSTNAME,
 		NSIP_PROJECT_SUBSCRIPTION,
 		NSIP_PROJECT_TOPIC,
 		SERVICE_USER_SUBSCRIPTION,
@@ -37,6 +39,7 @@ export function loadConfig(): Config {
 	}
 
 	return {
+		appHostname: APP_HOSTNAME,
 		database: {
 			datasourceUrl: SQL_CONNECTION_STRING
 		},

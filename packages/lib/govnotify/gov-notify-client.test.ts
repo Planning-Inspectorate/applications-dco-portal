@@ -179,7 +179,8 @@ describe(`gov-notify-client`, () => {
 				'EN123456',
 				Buffer.alloc(10),
 				'26 February 2026',
-				DEFAULT_PROJECT_EMAIL_ADDRESS
+				DEFAULT_PROJECT_EMAIL_ADDRESS,
+				'http://test.com'
 			);
 			assert.strictEqual(client.sendEmail.mock.callCount(), 1);
 			const args = client.sendEmail.mock.calls[0].arguments;
@@ -196,7 +197,8 @@ describe(`gov-notify-client`, () => {
 							retention_period: null
 						},
 						submission_date: '26 February 2026',
-						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+						relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk',
+						portal_url: 'http://test.com'
 					}
 				}
 			]);

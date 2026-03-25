@@ -28,6 +28,10 @@ export class FunctionService {
 		this.notifyClient = initGovNotify(config.govNotify, logger);
 	}
 
+	get appHostname() {
+		return this.#config.appHostname;
+	}
+
 	/**
 	 * Alias of dbClient
 	 *

@@ -83,6 +83,6 @@ vnet_config = {
   secondary_subnet_address_space      = "10.31.29.0/24"
 }
 
-# web_domains = {
-#   portal = "<TBC>.planninginspectorate.gov.uk"
-# }
+web_domains = {
+  portal = "https://apply-manage-infrastructure-project.planninginspectorate.gov.uk"
+}

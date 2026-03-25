@@ -24,6 +24,7 @@ export function loadConfig(): Config {
 		LOG_LEVEL,
 		PORT,
 		NODE_ENV,
+		APP_HOSTNAME,
 		REDIS_CONNECTION_STRING,
 		PDF_SERVICE_URL,
 		SESSION_SECRET,
@@ -105,6 +106,10 @@ export function loadConfig(): Config {
 		throw new Error('SQL_CONNECTION_STRING is required');
 	}
 
+	if (!APP_HOSTNAME) {
+		throw new Error('APP_HOSTNAME is required');
+	}
+
 	const enableTestTools = ENABLE_E2E_TEST_ENDPOINTS === 'true';
 
 	// If test tools are enabled, require a shared secret token to protect test endpoints
@@ -113,6 +118,7 @@ export function loadConfig(): Config {
 	}
 
 	config = {
+		appHostname: APP_HOSTNAME,
 		blobStore: {
 			disabled: BLOB_STORE_DISABLED === 'true',
 			host: BLOB_STORE_HOST,

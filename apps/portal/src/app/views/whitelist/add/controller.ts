@@ -9,7 +9,7 @@ import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
-export function buildSaveController({ db, logger, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSaveController({ db, logger, notifyClient, appHostname }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { caseReference } = req.session;
 		if (!caseReference) {
@@ -91,7 +91,8 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 
 		await notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
 			case_reference_number: caseReference,
-			relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+			relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
+			portal_url: appHostname ?? ''
 		});
 
 		addSessionData(req, req.session.caseReference as string, {

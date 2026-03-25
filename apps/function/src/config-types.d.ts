@@ -2,6 +2,7 @@ import { Prisma } from 'prisma-client-7d10cd48d02ddf4d5115dfbb37c628c5ad928a6574
 import { NotifyConfig } from '@pins/dco-portal-lib/govnotify/types.d.ts';
 
 interface Config {
+	appHostname?: string;
 	database: Prisma.PrismaClientOptions;
 	govNotify: NotifyConfig;
 	logLevel: string;

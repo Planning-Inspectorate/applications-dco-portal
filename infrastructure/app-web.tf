@@ -57,6 +57,7 @@ module "app_portal" {
     ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
     NODE_ENV                                   = var.apps_config.node_environment
     ENVIRONMENT                                = var.environment
+    APP_HOSTNAME                               = var.web_domains.portal
 
     # logging
     LOG_LEVEL = var.apps_config.logging.level

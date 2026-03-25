@@ -7,7 +7,7 @@ type NSIPProject = Schemas.NSIPProject;
 
 export function buildNsipProjectFunction(service: FunctionService): ServiceBusTopicHandler {
 	return async (message: NSIPProject, context: InvocationContext) => {
-		const { db, notifyClient } = service;
+		const { db, notifyClient, appHostname } = service;
 
 		if (!message || !message.caseId || !message.caseReference) {
 			context.log('NSIP Project function exited with no caseReference');
@@ -56,7 +56,8 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 					await notifyClient?.sendNewSubmissionDateNotification(caseData.email, {
 						case_reference_number: caseData.reference,
 						due_date: formatDateForDisplay(message.anticipatedDateOfSubmission as Date, { format: 'd MMMM yyyy' }),
-						relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+						relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
+						portal_url: appHostname ?? ''
 					});
 				}
 			}

@@ -9,7 +9,7 @@ import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/l
 import { JOURNEY_ID } from './journey.ts';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
-export function buildSaveController({ db, logger, notifyClient }: PortalService): AsyncRequestHandler {
+export function buildSaveController({ db, logger, notifyClient, appHostname }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {
 		const { whitelistUserId } = req.params;
 		if (!whitelistUserId) {
@@ -88,7 +88,8 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 				type_of_user_changed_from:
 					WHITELIST_USER_ROLE.find((r) => r.id === whitelistUser.userRoleId)?.displayName ?? '',
 				type_of_user_changed_to: WHITELIST_USER_ROLE.find((r) => r.id === answers.accessLevel)?.displayName ?? '',
-				relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+				relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
+				portal_url: appHostname ?? ''
 			});
 		}
 
