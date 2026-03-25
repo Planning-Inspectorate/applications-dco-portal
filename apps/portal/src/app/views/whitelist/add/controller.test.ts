@@ -44,7 +44,11 @@ describe('whitelist add user controller', () => {
 				}
 			};
 
-			const controller = buildSaveController({ db: mockDb, notifyClient: mockNotifyClient });
+			const controller = buildSaveController({
+				db: mockDb,
+				notifyClient: mockNotifyClient,
+				appHostname: 'https://test.com'
+			});
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
@@ -78,7 +82,8 @@ describe('whitelist add user controller', () => {
 				'bob@email.com',
 				{
 					case_reference_number: 'EN123456',
-					relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+					relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk',
+					portal_url: 'https://test.com'
 				}
 			]);
 		});

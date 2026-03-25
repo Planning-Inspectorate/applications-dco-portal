@@ -36,7 +36,11 @@ describe('nsip project function', () => {
 			northing: 'Test Org'
 		};
 
-		const handler = buildNsipProjectFunction({ db: mockDb, notifyClient: mockNotifyClient });
+		const handler = buildNsipProjectFunction({
+			db: mockDb,
+			notifyClient: mockNotifyClient,
+			appHostname: 'https://test.com'
+		});
 		await handler(message, context);
 
 		assert.strictEqual(mockDb.nsipProject.upsert.mock.callCount(), 1);
@@ -89,7 +93,8 @@ describe('nsip project function', () => {
 		assert.deepStrictEqual(mockNotifyClient.sendNewSubmissionDateNotification.mock.calls[0].arguments[1], {
 			case_reference_number: 'EN123456',
 			due_date: '12 December 2025',
-			relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk'
+			relevant_team_email_address: 'nienquiries@planninginspectorate.gov.uk',
+			portal_url: 'https://test.com'
 		});
 
 		assert.strictEqual(context.log.mock.callCount(), 1);

@@ -6,7 +6,7 @@ import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 
 export function bindPdfEvents(service: PortalService) {
-	const { db, eventEmitter, pdfServiceClient, blobStore, notifyClient, logger } = service;
+	const { db, eventEmitter, pdfServiceClient, blobStore, notifyClient, logger, appHostname } = service;
 	eventEmitter.on('generatePdf', async (data: GeneratePdfInput) => {
 		let pdfBuffer: Buffer<ArrayBuffer> | undefined;
 		try {
@@ -53,7 +53,8 @@ export function bindPdfEvents(service: PortalService) {
 						caseReference,
 						pdfBuffer,
 						formatDateForDisplay(caseData.submissionDate as Date, { format: 'd MMMM yyyy' }),
-						caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS
+						caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
+						appHostname ?? ''
 					)
 				),
 				notifyClient?.sendPinsStaffSubmissionNotification(

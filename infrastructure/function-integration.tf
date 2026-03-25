@@ -31,6 +31,7 @@ module "function_integration" {
   # settings
   function_node_version = var.apps_config.functions.node_version
   app_settings = {
+    APP_HOSTNAME                                  = var.web_domains.portal
     ServiceBusConnection__fullyQualifiedNamespace = "${var.back_office_config.service_bus_name}.servicebus.windows.net"
     SQL_CONNECTION_STRING                         = local.key_vault_refs["sql-app-connection-string"]
     SERVICE_USER_TOPIC                            = data.azurerm_servicebus_topic.service_user.name

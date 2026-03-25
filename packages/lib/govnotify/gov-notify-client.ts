@@ -62,7 +62,8 @@ export class GovNotifyClient {
 		caseReference: string,
 		pdfFile: Buffer,
 		submissionDate: string,
-		projectEmailAddress: string
+		projectEmailAddress: string,
+		appHostname: string
 	): Promise<void> {
 		this.logger.info('Dispatching applicant data submission email template');
 		await this.sendEmail(this.#templateIds.applicantSubmissionNotification as string, email, {
@@ -70,7 +71,8 @@ export class GovNotifyClient {
 				pdfLink: this.notifyClient.prepareUpload(pdfFile, { filename: `${caseReference} application form.pdf` }),
 				case_reference_number: caseReference,
 				submission_date: submissionDate,
-				relevant_team_email_address: projectEmailAddress
+				relevant_team_email_address: projectEmailAddress,
+				portal_url: appHostname
 			}
 		});
 		this.logger.info('Applicant data submission email template successfully dispatched');
