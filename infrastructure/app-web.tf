@@ -52,6 +52,7 @@ module "app_portal" {
   }
 
   app_settings = {
+    IS_APPLICATION_ENABLED                     = var.apps_config.is_application_enabled
     APPLICATIONINSIGHTS_CONNECTION_STRING      = local.key_vault_refs["app-insights-connection-string"]
     ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
     NODE_ENV                                   = var.apps_config.node_environment

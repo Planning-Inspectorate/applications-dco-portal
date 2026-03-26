@@ -71,6 +71,10 @@ export class PortalService {
 		return this.#config.gitSha;
 	}
 
+	get isApplicationEnabled() {
+		return this.#config.isApplicationEnabled;
+	}
+
 	get nodeEnv() {
 		return this.#config.NODE_ENV;
 	}

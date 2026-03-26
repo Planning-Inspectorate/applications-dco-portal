@@ -15,6 +15,7 @@ interface Config {
 	gitSha?: string;
 	govNotify: NotifyConfig;
 	httpPort: number;
+	isApplicationEnabled: boolean;
 	logLevel: string;
 	NODE_ENV: string;
 	serviceBus: ServiceBusConfig;

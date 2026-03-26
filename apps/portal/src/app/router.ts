@@ -14,9 +14,12 @@ import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitor
 import { handleSessionTimeoutMiddleware, hasSessionExpired } from './views/middleware/session.ts';
 import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { buildSessionExpiredController } from './views/session-expired/controller.ts';
+import { buildApplicationEnabledMiddleware } from './views/middleware/application-enabled.ts';
 
 export function buildRouter(service: PortalService): IRouter {
 	const router = createRouter();
+
+	const applicationEnabledMiddleware = buildApplicationEnabledMiddleware(service);
 
 	const monitoringRoutes = createMonitoringRoutes(service);
 
@@ -26,10 +29,16 @@ export function buildRouter(service: PortalService): IRouter {
 	// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control#no-cache
 	router.use(cacheNoCacheMiddleware);
 
-	router.use('/login', cacheDisableAllCachingMiddleware, isUserUnauthenticated, loginRoutes(service));
+	router.use(
+		'/login',
+		applicationEnabledMiddleware,
+		cacheDisableAllCachingMiddleware,
+		isUserUnauthenticated,
+		loginRoutes(service)
+	);
 
 	const sessionExpiredController = buildSessionExpiredController();
-	router.get('/session-expired', asyncHandler(sessionExpiredController));
+	router.get('/session-expired', applicationEnabledMiddleware, asyncHandler(sessionExpiredController));
 
 	// redirect user to session timeout page if session has expired
 	router.use(handleSessionTimeoutMiddleware(service));
@@ -39,13 +48,18 @@ export function buildRouter(service: PortalService): IRouter {
 	// place any routes that do not require user auth above here
 	router.use(isUserAuthenticated);
 
-	router.use('/', submissionSafeAppRoutes(service));
+	router.use('/', applicationEnabledMiddleware, submissionSafeAppRoutes(service));
 
 	// all subsequent routes require an incomplete application
 	// if the application is complete, any routes here will redirect to the application complete page
-	router.use('/', isApplicationCompleteMiddleware, submissionRestrictedAppRoutes(service));
+	router.use(
+		'/',
+		applicationEnabledMiddleware,
+		isApplicationCompleteMiddleware,
+		submissionRestrictedAppRoutes(service)
+	);
 
-	router.use('/error', createErrorRoutes(service));
+	router.use('/error', applicationEnabledMiddleware, createErrorRoutes(service));
 
 	return router;
 }
