@@ -35,9 +35,9 @@ const NOTIFYING_OTHER_PEOPLE_HTML = `
 	requires the Secretary of State or the relevant authority to notify you of any people they consider:
 </p>
 
-<ul>
-	<li class="govuk-body">likely to be affected by, or have interest in, the project, or</li>
-	<li class="govuk-body">unlikely to become aware of the project by the standard public notice</li>
+<ul class="govuk-list govuk-list--bullet">
+	<li>likely to be affected by, or have interest in, the project, or</li>
+	<li>unlikely to become aware of the project by the standard public notice</li>
 </ul>
 
 <p class="govuk-body">You must send a copy of the notice to any such people.</p>
