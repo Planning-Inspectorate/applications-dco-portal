@@ -3,7 +3,7 @@ import { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
 import { PdfServiceConfig } from '@pins/dco-portal-lib/pdf-service/types.js';
 
 interface Config {
-	appHostname?: string;
+	appHostname: string;
 	blobStore: BlobStoreConfig;
 	pdf: PdfServiceConfig;
 	cacheControl: {

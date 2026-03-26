@@ -54,7 +54,7 @@ export function bindPdfEvents(service: PortalService) {
 						pdfBuffer,
 						formatDateForDisplay(caseData.submissionDate as Date, { format: 'd MMMM yyyy' }),
 						caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-						appHostname ?? ''
+						appHostname
 					)
 				),
 				notifyClient?.sendPinsStaffSubmissionNotification(

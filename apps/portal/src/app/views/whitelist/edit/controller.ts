@@ -89,7 +89,7 @@ export function buildSaveController({ db, logger, notifyClient, appHostname }: P
 					WHITELIST_USER_ROLE.find((r) => r.id === whitelistUser.userRoleId)?.displayName ?? '',
 				type_of_user_changed_to: WHITELIST_USER_ROLE.find((r) => r.id === answers.accessLevel)?.displayName ?? '',
 				relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-				portal_url: appHostname ?? ''
+				portal_url: appHostname
 			});
 		}
 
