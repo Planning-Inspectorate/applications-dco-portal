@@ -39,7 +39,7 @@ export function loadConfig(): Config {
 	}
 
 	return {
-		appHostname: APP_HOSTNAME,
+		appHostname: APP_HOSTNAME || '',
 		database: {
 			datasourceUrl: SQL_CONNECTION_STRING
 		},

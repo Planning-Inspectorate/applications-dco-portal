@@ -92,7 +92,7 @@ export function buildSaveController({ db, logger, notifyClient, appHostname }: P
 		await notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {
 			case_reference_number: caseReference,
 			relevant_team_email_address: caseData.projectEmailAddress || DEFAULT_PROJECT_EMAIL_ADDRESS,
-			portal_url: appHostname ?? ''
+			portal_url: appHostname
 		});
 
 		addSessionData(req, req.session.caseReference as string, {
