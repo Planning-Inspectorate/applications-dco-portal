@@ -1,4 +1,5 @@
 apps_config = {
+  is_application_enabled = false
 
   gov_notify = {
     disabled = false
@@ -8,6 +9,8 @@ apps_config = {
       whitelist_access_changed_templated_id = "b005c9ca-244d-4768-b712-eaec96d61dee"
       whitelist_remove_templated_id         = "52219fa3-81dd-45ca-94c7-6464a8051e2b"
       anti_virus_failed_template_id         = "3109e0d2-987a-412a-891a-f13a24948c9a"
+      applicant_submission_template_id      = "83e76de7-a463-4af3-90c9-acf76ff4f180"
+      pins_staff_submission_template_id     = "0c1d1784-dc0d-49f6-b430-f0a01953cef9"
       new_submission_date_template_id       = "9d7edb22-9141-4319-87b2-e9ffb68b768d"
       submission_date_missed_template_id    = "16a9d766-beec-4804-bd46-633a3f7aec0e"
     }

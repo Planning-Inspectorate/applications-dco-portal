@@ -18,6 +18,8 @@ variable "apps_config" {
     node_environment         = string
     private_endpoint_enabled = bool
 
+    is_application_enabled = bool
+
     functions = object({
       node_version     = number
       service_plan_sku = string

@@ -28,6 +28,7 @@ apps_config = {
       submission_date_missed_template_id    = "d903b4b4-d220-4f43-b6b0-94e9478fbc23"
     }
   }
+  is_application_enabled = true
   logging = {
     level = "info"
   }

@@ -8,6 +8,8 @@ apps_config = {
   node_environment         = "production"
   private_endpoint_enabled = true
 
+  is_application_enabled = true
+
   functions = {
     service_plan_sku = "P0v3"
     node_version     = 22

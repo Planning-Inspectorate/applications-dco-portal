@@ -18,6 +18,7 @@ export function loadConfig(): Config {
 
 	// get values from the environment
 	const {
+		IS_APPLICATION_ENABLED,
 		CACHE_CONTROL_MAX_AGE,
 		GIT_SHA,
 		LOG_LEVEL,
@@ -46,6 +47,10 @@ export function loadConfig(): Config {
 	} = process.env;
 
 	const buildConfig = loadBuildConfig();
+
+	if (!IS_APPLICATION_ENABLED) {
+		throw new Error('IS_APPLICATION_ENABLED is required');
+	}
 
 	if (!SESSION_SECRET) {
 		throw new Error('SESSION_SECRET is required');
@@ -137,6 +142,7 @@ export function loadConfig(): Config {
 				submissionDateMissedNotification: GOV_NOTIFY_SUBMISSION_DATE_MISSED_TEMPLATE_ID
 			}
 		},
+		isApplicationEnabled: IS_APPLICATION_ENABLED === 'true',
 		// the log level to use
 		logLevel: LOG_LEVEL || 'info',
 		NODE_ENV: NODE_ENV || 'development',
