@@ -688,7 +688,7 @@ export function getQuestions() {
 		damOrReservoir: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Dam or reservoir additional documents',
-			question: 'Which documents provide additional information for the hazardous waste facility?',
+			question: 'Which documents provide additional information for the dam or reservoir?',
 			fieldName: 'damOrReservoir',
 			url: DOCUMENT_SUB_CATEGORY_ID.DAM_OR_RESERVOIR,
 			validators: [new RequiredValidator('Select which documents provide additional information')]
