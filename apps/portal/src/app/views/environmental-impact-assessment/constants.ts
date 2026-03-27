@@ -12,18 +12,18 @@ export const OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_IDS = [
 ];
 
 export const OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS = [
-	{ id: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS, displayName: 'Introductory Chapters' },
-	{ id: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS, displayName: 'Aspect Chapters' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.INTRODUCTORY_CHAPTERS, displayName: 'Introductory chapters' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.ASPECT_CHAPTERS, displayName: 'Aspect chapters' },
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_APPENDICES,
-		displayName: 'Environmental Statement Appendices'
+		displayName: 'Environmental statement appendices'
 	},
-	{ id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES, displayName: 'Environmental Statement Figures' },
-	{ id: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION, displayName: 'Model Information' },
-	{ id: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION, displayName: 'Any Other Media Information' },
-	{ id: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS, displayName: 'Confidential Documents' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_STATEMENT_FIGURES, displayName: 'Environmental statement figures' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.MODEL_INFORMATION, displayName: 'Model information' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.ANY_OTHER_MEDIA_INFORMATION, displayName: 'Any other media information' },
+	{ id: DOCUMENT_SUB_CATEGORY_ID.CONFIDENTIAL_DOCUMENTS, displayName: 'Confidential documents' },
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SENSITIVE_ENVIRONMENTAL_INFORMATION,
-		displayName: 'Sensitive Environmental Information'
+		displayName: 'Sensitive environmental information'
 	}
 ];
