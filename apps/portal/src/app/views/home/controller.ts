@@ -162,8 +162,8 @@ function getSubmissionDateContent(
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 
-	const tomorrow = new Date(today);
-	tomorrow.setDate(today.getDate() + 1);
+	const yesterday = new Date(today);
+	yesterday.setDate(today.getDate() - 1);
 
 	if (!anticipatedDateOfSubmission) {
 		return {
@@ -179,7 +179,7 @@ function getSubmissionDateContent(
 
 	if (
 		normalisedAnticipatedDateOfSubmission.getTime() === today.getTime() ||
-		normalisedAnticipatedDateOfSubmission.getTime() === tomorrow.getTime()
+		normalisedAnticipatedDateOfSubmission.getTime() === yesterday.getTime()
 	) {
 		return {
 			submissionText: `<h2 class="govuk-heading-m">Now submit your application</h2><p class="govuk-body">You can now submit your application. Once the application is submitted, it will be locked and you can make no further changes.</p>`,
@@ -187,7 +187,7 @@ function getSubmissionDateContent(
 			submissionInformation: '',
 			enableSubmissionButton: isUserAdmin
 		};
-	} else if (today < normalisedAnticipatedDateOfSubmission) {
+	} else if (yesterday < normalisedAnticipatedDateOfSubmission) {
 		return {
 			submissionText: `<h2 class="govuk-heading-m">You will be able to submit you application on ${formatDateForDisplay(anticipatedDateOfSubmission)}</h2><p class="govuk-body">Once the applications is submitted, it will be locked and you can make no further changes.</p>`,
 			warningText: `If you miss this date, you'll need to agree a new submission date with the Planning Inspectorate`,

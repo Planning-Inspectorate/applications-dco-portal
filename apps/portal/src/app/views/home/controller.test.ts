@@ -438,7 +438,7 @@ describe('views/home/controller.ts', () => {
 				"If you miss this date, you'll need to agree a new submission date with the Planning Inspectorate"
 			);
 		});
-		it('should render with you can now submit content and with submission button if submission date is tomorrow and user is admin', async (ctx) => {
+		it('should render with you can now submit content and with submission button if submission date is yesterday and user is admin', async (ctx) => {
 			const now = new Date('2025-01-29T00:00:00.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
@@ -448,7 +448,7 @@ describe('views/home/controller.ts', () => {
 					findUnique: mock.fn(() => ({
 						reference: 'EN123456',
 						email: 'test@email.com',
-						anticipatedDateOfSubmission: new Date('2025-01-30T00:00:00.000Z'),
+						anticipatedDateOfSubmission: new Date('2025-01-28T00:00:00.000Z'),
 						applicationFormRelatedInformationStatusId: 'not-started',
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
@@ -494,7 +494,7 @@ describe('views/home/controller.ts', () => {
 			);
 			assert.strictEqual(mockRes.render.mock.calls[0].arguments[1].submissionInformation, '');
 		});
-		it('should render with you can now submit content and without submission button if submission date is tomorrow and user has standard permissions', async (ctx) => {
+		it('should render with you can now submit content and without submission button if submission date is yesterday and user has standard permissions', async (ctx) => {
 			const now = new Date('2025-01-29T00:00:00.000Z');
 			ctx.mock.timers.enable({ apis: ['Date'], now });
 
@@ -504,7 +504,7 @@ describe('views/home/controller.ts', () => {
 					findUnique: mock.fn(() => ({
 						reference: 'EN123456',
 						email: 'test@email.com',
-						anticipatedDateOfSubmission: new Date('2025-01-30T00:00:00.000Z'),
+						anticipatedDateOfSubmission: new Date('2025-01-28T00:00:00.000Z'),
 						applicationFormRelatedInformationStatusId: 'not-started',
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
