@@ -35,3 +35,10 @@
 	color: govuk.govuk-colour('blue', $variant: 'shade-50');
 	text-decoration: none;
 }
+.govuk-footer__link.govuk-link--no-visited-state:visited {
+	color: brand.$pins-blue-500;
+}
+.govuk-footer__link.govuk-link--no-visited-state:hover {
+	color: govuk.govuk-colour('blue', $variant: 'shade-50');
+	text-decoration: none;
+}
