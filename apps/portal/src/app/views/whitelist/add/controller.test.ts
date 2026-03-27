@@ -168,7 +168,7 @@ describe('whitelist add user controller', () => {
 				EN123456: {
 					whitelistError: [
 						{
-							text: 'You are trying to add a user who already exists on the whitelist',
+							text: 'This person can already access the project',
 							href: '#'
 						}
 					]

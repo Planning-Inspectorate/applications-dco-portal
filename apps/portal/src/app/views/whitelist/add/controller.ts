@@ -38,7 +38,7 @@ export function buildSaveController({ db, logger, notifyClient, appHostname }: P
 		if (whitelistUser) {
 			const error = [
 				{
-					text: 'You are trying to add a user who already exists on the whitelist',
+					text: 'This person can already access the project',
 					href: '#'
 				}
 			];
