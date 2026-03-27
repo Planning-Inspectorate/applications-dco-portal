@@ -32,11 +32,7 @@ export function getQuestions() {
 			html: HTML_TEMPLATES.NON_TECHNICAL_SUMMARY_HTML,
 			fieldName: 'nonTechnicalSummary',
 			url: DOCUMENT_SUB_CATEGORY_ID.NON_TECHNICAL_SUMMARY,
-			validators: [
-				new RequiredValidator(
-					'Select the documents relating to the non-technical summary of the environmental statement'
-				)
-			]
+			validators: [new RequiredValidator('Select the non-technical summary of the environmental statement')]
 		},
 		hasScreeningDirection: {
 			type: COMPONENT_TYPES.BOOLEAN,
