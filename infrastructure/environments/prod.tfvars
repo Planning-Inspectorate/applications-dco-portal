@@ -1,5 +1,29 @@
 apps_config = {
+  app_service_plan = {
+    sku                      = "P0v3"
+    per_site_scaling_enabled = false
+    worker_count             = 1
+    zone_balancing_enabled   = false
+  }
+  node_environment         = "production"
+  private_endpoint_enabled = true
+
+  functions = {
+    service_plan_sku = "P0v3"
+    node_version     = 22
+  }
+
   is_application_enabled = false
+
+  logging = {
+    level = "info"
+  }
+
+  redis = {
+    capacity = 0
+    family   = "C"
+    sku_name = "Basic"
+  }
 
   gov_notify = {
     disabled = false
@@ -16,6 +40,13 @@ apps_config = {
     }
   }
 
+  blob_store = {
+    disabled = true
+  }
+
+  service_bus_publish_event = {
+    disabled = false
+  }
 }
 
 
@@ -23,11 +54,6 @@ auth_config = {
   auth_enabled   = false
   auth_client_id = "2f5cb0e8-5df8-49f4-8fa7-c3277a0a8632" # App Registration for Auth registration
   application_id = "d597841a-bf3a-491f-908f-d581d1999b17" # App Registration for DCO deployment Prod
-
-  functions = {
-    service_plan_sku = "P0v3"
-    node_version     = 22
-  }
 }
 
 back_office_config = {
@@ -43,12 +69,21 @@ back_office_infra_config = {
   }
 }
 
+common_config = {
+  resource_group_name = "pins-rg-common-prod-ukw-001"
+  action_group_names = {
+    iap      = "pins-ag-odt-iap-prod"
+    its      = "pins-ag-odt-its-prod"
+    info_sec = "pins-ag-odt-info-sec-prod"
+  }
+}
+
 environment = "prod"
 
 front_door_config = {
-  name        = "pins-fd-common-tooling"
-  rg          = "pins-rg-common-tooling"
-  ep_name     = "pins-fde-applications"
+  name        = "pins-fd-common-prod"
+  rg          = "pins-rg-common-prod"
+  ep_name     = "pins-fde-applications-prod"
   use_tooling = false
 }
 
@@ -83,6 +118,12 @@ vnet_config = {
   secondary_subnet_address_space      = "10.31.29.0/24"
 }
 
+waf_rate_limits = {
+  enabled             = true
+  duration_in_minutes = 5
+  threshold           = 1500
+}
+
 web_domains = {
-  portal = "https://apply-manage-infrastructure-project.planninginspectorate.gov.uk"
+  portal = "apply-manage-infrastructure-project.planninginspectorate.gov.uk"
 }
