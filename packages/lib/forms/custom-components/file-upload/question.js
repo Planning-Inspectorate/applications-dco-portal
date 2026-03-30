@@ -58,12 +58,17 @@ export default class FileUpload extends Question {
 		const hasSessionErrors = sessionErrorSummary.length > 0;
 
 		if (hasBodyErrors || hasSessionErrors) {
-			return this.prepQuestionForRendering(sectionObj, journey, {
-				id: params.id || params.applicationId,
-				currentUrl: originalUrl,
-				files: session.files,
-				errors: hasBodyErrors ? bodyErrors : sessionErrors,
-				errorSummary: hasBodyErrors ? bodyErrorSummary : sessionErrorSummary
+			return this.toViewModel({
+				params: req.params,
+				sectionObj,
+				journey,
+				customViewData: {
+					id: params.id || params.applicationId,
+					currentUrl: originalUrl,
+					files: session.files,
+					errors: hasBodyErrors ? bodyErrors : sessionErrors,
+					errorSummary: hasBodyErrors ? bodyErrorSummary : sessionErrorSummary
+				}
 			});
 		}
 	}

@@ -17,10 +17,15 @@ export async function uploadDocumentQuestion(req: Request, res: Response, next: 
 
 		const viewModel = hasSessionErrors
 			? questionObj.checkForValidationErrors(req, sectionObj, journey)
-			: questionObj.prepQuestionForRendering(sectionObj, journey, {
-					id: req.session.emailAddress,
-					currentUrl: req.originalUrl,
-					files: req.session?.files
+			: questionObj.toViewModel({
+					params: req.params,
+					sectionObj,
+					journey,
+					customViewData: {
+						id: req.session.emailAddress,
+						currentUrl: req.originalUrl,
+						files: req.session?.files
+					}
 				});
 
 		if (req.session) {
