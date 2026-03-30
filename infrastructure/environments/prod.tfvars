@@ -41,7 +41,7 @@ apps_config = {
   }
 
   blob_store = {
-    disabled = true
+    disabled = false
   }
 
   service_bus_publish_event = {
