@@ -258,7 +258,7 @@ export const DOCUMENT_SUB_CATEGORY = [
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.SI_VALIDATION_REPORT_SUCCESS_EMAIL,
-		displayName: 'Statutory instrument report success email',
+		displayName: 'Statutory instrument (SI) validation report success email',
 		categoryId: DOCUMENT_CATEGORY_ID.DRAFT_DCO
 	},
 	{
