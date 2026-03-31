@@ -282,7 +282,7 @@ model NsipProject {
   projectEmailAddress         String?
 
   projectName        String?
-  projectDescription String?
+  projectDescription String? @db.NVarChar(2000)
   projectLocation    String?
 
   easting  Int?
