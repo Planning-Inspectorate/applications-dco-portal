@@ -22,7 +22,7 @@ export function getQuestions() {
 		statutoryNuisanceStatement: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Statutory nuisance statement',
-			question: 'Which documents relate to the statutory nuisance statement?',
+			question: 'Select the statutory nuisance statement',
 			fieldName: 'statutoryNuisanceStatement',
 			url: DOCUMENT_SUB_CATEGORY_ID.STATUTORY_NUISANCE_STATEMENT,
 			validators: [new RequiredValidator('Select the documents relating to the statutory nuisance statement')]
