@@ -23,4 +23,17 @@ export default class SelectDocuments extends CheckboxQuestion {
 	setOptions(options) {
 		this.options = options;
 	}
+
+	formatAnswerForSummary(sectionSegment, journey, answer) {
+		const formattedAnswerArray = super.formatAnswerForSummary(sectionSegment, journey, answer);
+		return formattedAnswerArray.map((formattedAnswer) => {
+			if (formattedAnswer.value) {
+				const valueArray = formattedAnswer.value.split('<br>');
+				if (valueArray.length > 1) {
+					formattedAnswer.value = valueArray.map((value) => `• ${value}`).join('<br>');
+				}
+			}
+			return formattedAnswer;
+		});
+	}
 }
