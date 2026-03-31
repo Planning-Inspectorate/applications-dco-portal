@@ -25,7 +25,7 @@ export function getQuestions() {
 		otherConsentsDescription: {
 			type: COMPONENT_TYPES.TEXT_ENTRY,
 			title: 'Description of other consents or licences required',
-			question: 'Other Consents or Licences required',
+			question: 'Other consents or licences required',
 			html: 'views/other-consents-or-licenses-details/other-consents-question-description.html',
 			fieldName: 'otherConsentsDescription',
 			url: 'other-consents-description',

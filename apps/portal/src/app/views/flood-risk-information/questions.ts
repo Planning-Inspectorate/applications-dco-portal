@@ -13,7 +13,7 @@ export function getQuestions() {
 		hasFloodRiskAssessment: {
 			type: COMPONENT_TYPES.BOOLEAN,
 			title: 'Does the project require a flood risk assessment?',
-			question: 'Does the project include any flood risk assessments?',
+			question: 'Does the project require a flood risk assessment?',
 			fieldName: 'hasFloodRiskAssessment',
 			url: 'has-flood-risk-assessment',
 			validators: [new RequiredValidator('Select yes if the project requires a flood risk assessment')]
