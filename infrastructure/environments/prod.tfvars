@@ -13,7 +13,7 @@ apps_config = {
     node_version     = 22
   }
 
-  is_application_enabled = false
+  is_application_enabled = true
 
   logging = {
     level = "info"
