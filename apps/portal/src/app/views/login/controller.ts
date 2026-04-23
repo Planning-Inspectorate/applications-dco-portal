@@ -117,8 +117,8 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 		}
 
 		const [serviceUser, whitelistUser] = await Promise.all([
-			db.nsipServiceUser.findFirst({
-				where: { caseReference, email: emailAddress }
+			db.nsipServiceUser.findUnique({
+				where: { caseReference_email: { caseReference, email: emailAddress } }
 			}),
 			db.whitelistUser.findUnique({
 				where: { caseReference_email: { caseReference, email: emailAddress } }

@@ -291,7 +291,7 @@ model NsipProject {
 
 model NsipServiceUser {
   /// relation used for integration with CBOS Service User topic
-  id              String   @id
+  id              String
   caseReference   String
   email           String
   modifiedAt      DateTime @updatedAt
@@ -309,7 +309,7 @@ model NsipServiceUser {
   postcode       String?
   addressCountry String?
 
-  @@unique([caseReference, email])
+  @@id([caseReference, email])
 }
 
 model FullAddress {
