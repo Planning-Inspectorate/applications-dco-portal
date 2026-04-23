@@ -70,7 +70,7 @@ describe('login controllers', () => {
 					findUnique: mock.fn()
 				},
 				nsipServiceUser: {
-					findFirst: mock.fn(() => ({
+					findUnique: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
 				},
@@ -124,7 +124,7 @@ describe('login controllers', () => {
 					}))
 				},
 				nsipServiceUser: {
-					findFirst: mock.fn(() => ({
+					findUnique: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
 				},
@@ -170,7 +170,7 @@ describe('login controllers', () => {
 		it('should redirect back to no access page if no service user associated with case reference', async () => {
 			const mockDb = {
 				nsipServiceUser: {
-					findFirst: mock.fn()
+					findUnique: mock.fn()
 				},
 				whitelistUser: {
 					findUnique: mock.fn()
@@ -195,7 +195,7 @@ describe('login controllers', () => {
 		it('should redirect back to no access page if case reference is whitelisted but email provided does not match service user entry', async () => {
 			const mockDb = {
 				nsipServiceUser: {
-					findFirst: mock.fn(() => ({
+					findUnique: mock.fn(() => ({
 						caseReference: 'EN123456',
 						email: 'another-email@email.com'
 					}))
@@ -223,7 +223,7 @@ describe('login controllers', () => {
 		it('should redirect back to no access page if case reference is whitelisted but email provided does not match whitelist user entry', async () => {
 			const mockDb = {
 				nsipServiceUser: {
-					findFirst: mock.fn()
+					findUnique: mock.fn()
 				},
 				whitelistUser: {
 					findUnique: mock.fn(() => ({
@@ -358,7 +358,7 @@ describe('login controllers', () => {
 					findUnique: mock.fn(() => null)
 				},
 				nsipServiceUser: {
-					findFirst: mock.fn(() => ({
+					findUnique: mock.fn(() => ({
 						email: 'valid@email.com'
 					}))
 				},
@@ -426,7 +426,7 @@ describe('login controllers', () => {
 					create: mock.fn()
 				},
 				nsipServiceUser: {
-					findFirst: mock.fn(() => ({ email: 'valid@email.com' }))
+					findUnique: mock.fn(() => ({ email: 'valid@email.com' }))
 				},
 				whitelistUser: {
 					findUnique: mock.fn()
