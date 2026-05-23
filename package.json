@@ -30,7 +30,7 @@
   "dependencies": {
     "@azure/functions": "^4.11.2",
     "@azure/identity": "^4.13.1",
-    "@azure/msal-node": "^5.1.1",
+    "@azure/msal-node": "^5.2.2",
     "@azure/service-bus": "^7.7.3",
     "@azure/storage-blob": "^12.31.0",
     "@planning-inspectorate/data-model": "^2.10.1",
@@ -42,7 +42,7 @@
     "body-parser": "^2.2.2",
     "cfb": "^1.2.2",
     "connect-redis": "^9.0.0",
-    "cypress": "^15.9.0",
+    "cypress": "^15.15.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "dotenv": "^17.2.3",
