@@ -3,6 +3,7 @@ import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.t
 export async function seedDev(dbClient: PrismaClient) {
 	const CASE_WHITELIST = process.env.CASE_WHITELIST;
 	if (CASE_WHITELIST) {
+		console.log('Starting seed...');
 		await Promise.all(
 			CASE_WHITELIST.split(',').map((entry) => {
 				const [caseReference, email] = entry.split(':');
@@ -27,6 +28,8 @@ export async function seedDev(dbClient: PrismaClient) {
 				}
 			})
 		);
+	} else {
+		console.log('Required CASE_WHITELIST environment variable not set');
 	}
 
 	console.log('dev seed complete');
