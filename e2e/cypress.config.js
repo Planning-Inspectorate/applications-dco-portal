@@ -5,11 +5,10 @@ import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
 import { clearDocumentCategory } from './cypress/support/dbUtils.js';
 
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Always load env from this workspace (e2e/.env)
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+// load env from this workspace (e2e/.env)
+import { loadEnvFile } from 'node:process';
+// prettier-ignore
+try { loadEnvFile(); } catch {/* ignore errors*/}
 
 export default defineConfig({
 	e2e: {

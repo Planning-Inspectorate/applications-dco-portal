@@ -1,8 +1,9 @@
-import dotenv from 'dotenv';
+import { loadEnvFile } from 'node:process';
 import type { Config } from './config-types.d.ts';
 
 export function loadConfig(): Config {
-	dotenv.config();
+	// prettier-ignore
+	try {loadEnvFile()} catch {/* ignore errors*/}
 
 	const {
 		LOG_LEVEL,
