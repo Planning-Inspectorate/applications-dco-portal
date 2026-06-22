@@ -147,6 +147,7 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 
 		const oneTimePassword = enableE2eTestEndpoints ? 'ABCDE' : generateOtp();
 		await saveOtp(db, emailAddress, caseReference, oneTimePassword);
+		logger.debug({ oneTimePassword }, 'login');
 
 		// Only send via Notify when not in test-tools mode
 		if (!enableE2eTestEndpoints) {

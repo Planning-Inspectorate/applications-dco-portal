@@ -1,6 +1,8 @@
 import { defineConfig } from 'cypress';
 import baseConfig from './cypress.config.js';
-import 'dotenv/config';
+import { loadEnvFile } from 'node:process';
+// prettier-ignore
+try { loadEnvFile(); } catch {/* ignore errors*/}
 
 const e2eOverride = {
 	baseUrl: 'https://back-office-appeals-dev.planninginspectorate.gov.uk/'

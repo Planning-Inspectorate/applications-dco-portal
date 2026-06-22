@@ -20,7 +20,6 @@
     "body-parser": "*",
     "connect-redis": "*",
     "cookie-parser": "*",
-    "dotenv": "*",
     "express": "*",
     "express-session": "*",
     "express-validator": "*",

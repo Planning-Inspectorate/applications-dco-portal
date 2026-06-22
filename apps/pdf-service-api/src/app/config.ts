@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import { loadEnvFile } from 'node:process';
 import type { Config } from './config-types.d.ts';
 
 // cache the config
@@ -9,7 +9,8 @@ export function loadConfig(): Config {
 		return config;
 	}
 	// load configuration from .env file into process.env
-	dotenv.config();
+	// prettier-ignore
+	try {loadEnvFile()} catch {/* ignore errors*/}
 
 	//get values from environment
 	const { GIT_SHA, PORT, LOG_LEVEL, NODE_ENV, FILE_MAX_SIZE_IN_BYTES } = process.env;

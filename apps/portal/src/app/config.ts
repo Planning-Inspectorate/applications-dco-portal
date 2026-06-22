@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import { loadEnvFile } from 'node:process';
 import path from 'node:path';
 import { fileURLToPath } from 'url';
 import type { Config } from './config-types.d.ts';
@@ -14,7 +14,8 @@ export function loadConfig(): Config {
 		return config;
 	}
 	// load configuration from .env file into process.env
-	dotenv.config();
+	// prettier-ignore
+	try {loadEnvFile()} catch {/* ignore errors*/}
 
 	// get values from the environment
 	const {
