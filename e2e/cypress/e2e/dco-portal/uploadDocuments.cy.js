@@ -11,7 +11,7 @@ const TASKS = [
 	{ name: 'Plans and drawings', index: 1, fragment: '/plans-and-drawings' },
 	{ name: 'Draft DCO', index: 2, fragment: '/draft-dco' },
 	{ name: 'Compulsory acquisition information', index: 3, fragment: '/compulsory-acquisition-information' },
-	{ name: 'Consultation report', index: 4, fragment: '/consultation-report' }
+	{ name: 'Newspaper notices', index: 4, fragment: '/newspaper-notices' }
 ];
 
 const ALLOWED_FILE_TYPES = [

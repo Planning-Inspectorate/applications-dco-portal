@@ -9,20 +9,12 @@ import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/dat
 
 export function getQuestions() {
 	const questions = {
-		consultationReport: {
-			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
-			title: 'Consultation report documents',
-			question: 'Which documents relate to the consultation report?',
-			fieldName: 'consultationReport',
-			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT,
-			validators: [new RequiredValidator('Select the documents relating to the consultation report')]
-		},
-		consultationReportAppendices: {
+		newspaperNotices: {
 			type: CUSTOM_COMPONENTS.SELECT_DOCUMENTS,
 			title: 'Newspaper notices documents',
-			question: 'Which documents relate to the newspaper notices?',
-			fieldName: 'consultationReportAppendices',
-			url: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES,
+			question: 'Which documents relate to newspaper notices?',
+			fieldName: 'newspaperNotices',
+			url: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES,
 			validators: [new RequiredValidator('Select the documents relating to the newspaper notices')]
 		}
 	};
