@@ -540,14 +540,14 @@ function mapInfrastructureSpecificAdditionalInformation(
 }
 
 function mapNewspaperNotices(newspaperNoticesEvidence: SupportingEvidenceWithDocument[]) {
-	const evidence = findSupportingEvidenceBySubcategory(newspaperNoticesEvidence, [
+	const newspaperNoticesEvidenceBySubcategory = findSupportingEvidenceBySubcategory(newspaperNoticesEvidence, [
 		DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 	]);
 
 	return {
 		newspaperNotices: {
 			name: 'Newspaper notices documents',
-			value: evidence.map((e) => e.Document.fileName)
+			value: newspaperNoticesEvidenceBySubcategory.map((e) => e.Document.fileName)
 		}
 	};
 }
