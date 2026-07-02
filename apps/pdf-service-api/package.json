@@ -17,7 +17,7 @@
     "express": "*",
     "helmet": "*",
     "pino": "*",
-    "puppeteer-core": "*"
+    "puppeteer-core": "^24.40.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "*",
