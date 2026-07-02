@@ -28,12 +28,8 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				const caseId = caseData.id;
 				const categories: CategoryInformation[] = [
 					{
-						key: 'consultationReport',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
-					},
-					{
-						key: 'consultationReportAppendices',
-						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+						key: 'newspaperNotices',
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 					}
 				];
 

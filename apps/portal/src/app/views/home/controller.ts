@@ -133,16 +133,22 @@ function getCategoryStatus(statusId: string): { text: string; classes: string } 
 }
 
 function formatTaskListItems(caseData: any, taskList: { id: string; displayName: string }[]) {
+	// Map section IDs to their route paths (handles cases where internal ID differs from route path)
+	const routePathMap: Record<string, string> = {
+		[APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS]: 'publicity-details'
+	};
+
 	return taskList.map((subtask) => {
 		const subtaskDisplayName = optionalSections.includes(subtask.id)
 			? `${subtask.displayName} (optional)`
 			: subtask.displayName;
+		const routePath = routePathMap[subtask.id] || subtask.id;
 		return {
 			title: {
 				text: subtaskDisplayName,
 				classes: 'govuk-link--no-visited-state'
 			},
-			href: `/${subtask.id}`,
+			href: `/${routePath}`,
 			status: {
 				tag: getCategoryStatus((caseData as any)[`${kebabCaseToCamelCase(subtask.id)}StatusId`])
 			}

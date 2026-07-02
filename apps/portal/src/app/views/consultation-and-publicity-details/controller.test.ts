@@ -17,11 +17,11 @@ describe('consultation-and-publicity-details controller', () => {
 					findUnique: mock.fn(() => ({
 						consultationAndPublicityDetailsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						SupportingEvidence: [
-							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT },
-							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT },
-							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES },
-							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES },
-							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT }
+							{ documentId: 'doc-id-1', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES },
+							{ documentId: 'doc-id-2', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES },
+							{ documentId: 'doc-id-3', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES },
+							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES },
+							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES }
 						]
 					}))
 				}
@@ -45,15 +45,14 @@ describe('consultation-and-publicity-details controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/consultation-and-publicity-details/details/consultation-report'
+				'/consultation-and-publicity-details/details/newspaper-notices'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
 				caseReference: 'EN123456',
 				forms: {
 					'consultation-and-publicity-details': {
-						consultationReport: 'doc-id-1,doc-id-2,doc-id-5',
-						consultationReportAppendices: 'doc-id-3,doc-id-4'
+						newspaperNotices: 'doc-id-1,doc-id-2,doc-id-3,doc-id-4,doc-id-5'
 					}
 				}
 			});
@@ -86,15 +85,14 @@ describe('consultation-and-publicity-details controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/consultation-and-publicity-details/details/consultation-report'
+				'/consultation-and-publicity-details/details/newspaper-notices'
 			);
 
 			assert.deepStrictEqual(mockReq.session, {
 				caseReference: 'EN123456',
 				forms: {
 					'consultation-and-publicity-details': {
-						consultationReport: '',
-						consultationReportAppendices: ''
+						newspaperNotices: ''
 					}
 				}
 			});
@@ -126,7 +124,7 @@ describe('consultation-and-publicity-details controller', () => {
 			assert.strictEqual(mockRes.redirect.mock.callCount(), 1);
 			assert.strictEqual(
 				mockRes.redirect.mock.calls[0].arguments[0],
-				'/consultation-and-publicity-details/details/consultation-report'
+				'/consultation-and-publicity-details/details/newspaper-notices'
 			);
 
 			assert.deepStrictEqual(mockReq.session, { caseReference: 'EN123456' });
