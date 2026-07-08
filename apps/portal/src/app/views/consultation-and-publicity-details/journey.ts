@@ -3,7 +3,9 @@ import type { Handler, Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
 export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
-	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
+	const validBaseUrlSuffixes = ['/' + applicationSectionId, '/publicity-details'];
+
+	if (!validBaseUrlSuffixes.some((suffix) => req.baseUrl.endsWith(suffix))) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
 
@@ -11,11 +13,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 
 	return new Journey({
 		journeyId: applicationSectionId,
-		sections: [
-			new Section(applicationSectionDisplayName, 'details')
-				.addQuestion(questions.consultationReport)
-				.addQuestion(questions.consultationReportAppendices)
-		],
+		sections: [new Section(applicationSectionDisplayName, 'details').addQuestion(questions.newspaperNotices)],
 		taskListUrl: 'check-your-answers',
 		journeyTemplate: 'views/layouts/forms-question.njk',
 		taskListTemplate: 'views/layouts/forms-check-your-answers.njk',

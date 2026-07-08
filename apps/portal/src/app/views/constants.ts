@@ -31,7 +31,8 @@ export const APPLICATION_SECTION = [
 	},
 	{
 		id: APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS,
-		displayName: 'Consultation and publicity details'
+		displayName: 'Publicity details',
+		route: 'publicity-details'
 	},
 	{
 		id: APPLICATION_SECTION_ID.DRAFT_ORDER_AND_EXPLANATORY_MEMORANDUM,

@@ -104,7 +104,7 @@ export function createSubmissionRestrictedRoutes(service: PortalService): IRoute
 		'/compulsory-acquisition-information',
 		fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION)
 	);
-	router.use('/consultation-report', fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.CONSULTATION_REPORT));
+	router.use('/newspaper-notices', fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.NEWSPAPER_NOTICES));
 	router.use('/reports-and-statements', fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS));
 	router.use('/environmental-statement', fileUploadRoutes(service, DOCUMENT_CATEGORY_ID.ENVIRONMENTAL_STATEMENT));
 	router.use(
@@ -120,7 +120,7 @@ export function createSubmissionRestrictedRoutes(service: PortalService): IRoute
 	);
 	router.use('/about-the-project', aboutTheProjectRoutes(service, APPLICATION_SECTION_ID.ABOUT_THE_PROJECT));
 	router.use(
-		'/consultation-and-publicity-details',
+		'/publicity-details',
 		consultationAndPublicityDetailsRoutes(service, APPLICATION_SECTION_ID.CONSULTATION_AND_PUBLICITY_DETAILS)
 	);
 	router.use(

@@ -60,14 +60,9 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 				data: mapAssociatedDevelopments(evidenceByCategory['reports-and-statements'])
 			},
 
-			consultationReport: {
-				name: '8. a) Consultation Report',
-				data: mapConsultationReport(evidenceByCategory['consultation-report'])
-			},
-
-			consultationReportAppendices: {
-				name: '8. b) Copies of newspaper notices',
-				data: mapConsultationReportAppendices(evidenceByCategory['consultation-report'])
+			newspaperNotices: {
+				name: '8. Copies of newspaper notices',
+				data: mapNewspaperNotices(evidenceByCategory['newspaper-notices'])
 			},
 
 			draftOrderAndExplanatoryMemorandum: {
@@ -544,28 +539,15 @@ function mapInfrastructureSpecificAdditionalInformation(
 	};
 }
 
-function mapConsultationReport(consultationEvidence: SupportingEvidenceWithDocument[]) {
-	const consultationReportEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+function mapNewspaperNotices(newspaperNoticesEvidence: SupportingEvidenceWithDocument[]) {
+	const newspaperNoticesEvidenceBySubcategory = findSupportingEvidenceBySubcategory(newspaperNoticesEvidence, [
+		DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 	]);
 
 	return {
-		consultationReport: {
-			name: 'Consultation report documents',
-			value: consultationReportEvidence.map((evidence) => evidence.Document.fileName)
-		}
-	};
-}
-
-function mapConsultationReportAppendices(consultationEvidence: SupportingEvidenceWithDocument[]) {
-	const consultationAppendicesEvidence = findSupportingEvidenceBySubcategory(consultationEvidence, [
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
-	]);
-
-	return {
-		consultationReportAppendices: {
+		newspaperNotices: {
 			name: 'Newspaper notices documents',
-			value: consultationAppendicesEvidence.map((evidence) => evidence.Document.fileName)
+			value: newspaperNoticesEvidenceBySubcategory.map((e) => e.Document.fileName)
 		}
 	};
 }
