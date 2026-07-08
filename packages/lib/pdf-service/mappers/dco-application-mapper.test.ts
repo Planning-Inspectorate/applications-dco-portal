@@ -12,11 +12,11 @@ describe('dco-application-mapper.ts', () => {
 			const supportingEvidence = [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-2',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-3',
@@ -75,11 +75,11 @@ describe('dco-application-mapper.ts', () => {
 			const supportingEvidence = [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-2',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-3',
@@ -128,11 +128,11 @@ describe('dco-application-mapper.ts', () => {
 			const supportingEvidence = [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-2',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-3',
@@ -167,7 +167,7 @@ describe('dco-application-mapper.ts', () => {
 				DOCUMENT_SUB_CATEGORY_ID.CHARTS_FOR_MARINE_SCHEMES
 			]);
 			const reportAppendicesEvidence = findSupportingEvidenceBySubcategory(supportingEvidence, [
-				DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+				DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 			]);
 
 			assert.deepStrictEqual(marineSchemesEvidence, [
@@ -183,7 +183,11 @@ describe('dco-application-mapper.ts', () => {
 			assert.deepStrictEqual(reportAppendicesEvidence, [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
+				},
+				{
+					id: 'evidence-2',
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				}
 			]);
 		});
@@ -191,11 +195,11 @@ describe('dco-application-mapper.ts', () => {
 			const supportingEvidence = [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-2',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-3',
@@ -250,11 +254,11 @@ describe('dco-application-mapper.ts', () => {
 			const supportingEvidence = [
 				{
 					id: 'evidence-1',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-2',
-					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
+					subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES
 				},
 				{
 					id: 'evidence-3',

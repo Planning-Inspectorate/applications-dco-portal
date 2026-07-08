@@ -33,8 +33,7 @@ describe('consultation-and-publicity-details save', () => {
 				locals: {
 					journeyResponse: {
 						answers: {
-							consultationReport: 'doc-id-3',
-							consultationReportAppendices: 'doc-id-2'
+							newspaperNotices: 'doc-id-3'
 						}
 					}
 				}
@@ -56,7 +55,7 @@ describe('consultation-and-publicity-details save', () => {
 			assert.strictEqual(mockDb.case.update.mock.callCount(), 1);
 
 			assert.strictEqual(mockDb.supportingEvidence.deleteMany.mock.callCount(), 1);
-			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 2);
+			assert.strictEqual(mockDb.supportingEvidence.upsert.mock.callCount(), 1);
 		});
 		it('should save consultation and publicity details journey successfully if compulsory acquisition is no', async () => {
 			const mockDb = {

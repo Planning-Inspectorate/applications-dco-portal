@@ -26,15 +26,12 @@ export function buildConsultationAndPublicityHomePage(
 			await populateForm(req, res, db, applicationSectionId);
 		}
 
-		res.redirect(`${req.baseUrl}/details/consultation-report`);
+		res.redirect(`${req.baseUrl}/details/newspaper-notices`);
 	};
 }
 
 async function populateForm(req: Request, res: Response, db: PrismaClient, applicationSectionId: string) {
-	const consultationAndPublicityDetailsDocumentIds = [
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT,
-		DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
-	];
+	const consultationAndPublicityDetailsDocumentIds = [DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES];
 
 	const caseData = await db.case.findUnique({
 		where: { reference: req.session?.caseReference },
@@ -56,13 +53,6 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 	const forms = req.session.forms || (req.session.forms = {});
 
 	forms[applicationSectionId] = {
-		consultationReport: getSupportingEvidenceIds(
-			caseData.SupportingEvidence,
-			DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT
-		),
-		consultationReportAppendices: getSupportingEvidenceIds(
-			caseData.SupportingEvidence,
-			DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES
-		)
+		newspaperNotices: getSupportingEvidenceIds(caseData.SupportingEvidence, DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES)
 	};
 }

@@ -24,7 +24,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
 						compulsoryAcquisitionInformationStatusId: 'not-started',
-						consultationReportStatusId: 'completed',
+						newspaperNoticesStatusId: 'completed',
 						reportsAndStatementsStatusId: 'not-started',
 						environmentalStatementStatusId: 'not-started',
 						additionalPrescribedInformationStatusId: 'not-started',
@@ -118,7 +118,7 @@ describe('views/home/controller.ts', () => {
 							}
 						},
 						{
-							href: '/consultation-report',
+							href: '/newspaper-notices',
 							status: {
 								tag: {
 									classes: 'govuk-tag--blue',
@@ -127,7 +127,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Consultation report'
+								text: 'Newspaper notices'
 							}
 						},
 						{
@@ -211,7 +211,7 @@ describe('views/home/controller.ts', () => {
 							}
 						},
 						{
-							href: '/consultation-and-publicity-details',
+							href: '/publicity-details',
 							status: {
 								tag: {
 									classes: 'govuk-tag--grey',
@@ -220,7 +220,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Consultation and publicity details'
+								text: 'Publicity details'
 							}
 						},
 						{
@@ -398,7 +398,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
 						compulsoryAcquisitionInformationStatusId: 'not-started',
-						consultationReportStatusId: 'completed',
+						newspaperNoticesStatusId: 'completed',
 						reportsAndStatementsStatusId: 'not-started',
 						environmentalStatementStatusId: 'not-started',
 						additionalPrescribedInformationStatusId: 'not-started',
@@ -453,7 +453,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
 						compulsoryAcquisitionInformationStatusId: 'not-started',
-						consultationReportStatusId: 'completed',
+						newspaperNoticesStatusId: 'completed',
 						reportsAndStatementsStatusId: 'not-started',
 						environmentalStatementStatusId: 'not-started',
 						additionalPrescribedInformationStatusId: 'not-started',
@@ -509,7 +509,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
 						compulsoryAcquisitionInformationStatusId: 'not-started',
-						consultationReportStatusId: 'completed',
+						newspaperNoticesStatusId: 'completed',
 						reportsAndStatementsStatusId: 'not-started',
 						environmentalStatementStatusId: 'not-started',
 						additionalPrescribedInformationStatusId: 'not-started',
@@ -565,7 +565,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: 'not-started',
 						draftDcoStatusId: 'in-progress',
 						compulsoryAcquisitionInformationStatusId: 'not-started',
-						consultationReportStatusId: 'completed',
+						newspaperNoticesStatusId: 'completed',
 						reportsAndStatementsStatusId: 'not-started',
 						environmentalStatementStatusId: 'not-started',
 						additionalPrescribedInformationStatusId: 'not-started',
@@ -701,7 +701,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						draftDcoStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						compulsoryAcquisitionInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
-						consultationReportStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
+						newspaperNoticesStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						reportsAndStatementsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						environmentalStatementStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						applicantAndAgentDetailsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
@@ -746,7 +746,7 @@ describe('views/home/controller.ts', () => {
 						plansAndDrawingsStatusId: DOCUMENT_CATEGORY_STATUS_ID.IN_PROGRESS,
 						draftDcoStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						compulsoryAcquisitionInformationStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
-						consultationReportStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
+						newspaperNoticesStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						reportsAndStatementsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						environmentalStatementStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
 						applicantAndAgentDetailsStatusId: DOCUMENT_CATEGORY_STATUS_ID.COMPLETED,
@@ -856,7 +856,7 @@ describe('views/home/controller.ts', () => {
 							}
 						},
 						{
-							href: '/consultation-report',
+							href: '/newspaper-notices',
 							status: {
 								tag: {
 									classes: 'govuk-tag--blue',
@@ -865,7 +865,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Consultation report'
+								text: 'Newspaper notices'
 							}
 						},
 						{
@@ -949,7 +949,7 @@ describe('views/home/controller.ts', () => {
 							}
 						},
 						{
-							href: '/consultation-and-publicity-details',
+							href: '/publicity-details',
 							status: {
 								tag: {
 									classes: 'govuk-tag--blue',
@@ -958,7 +958,7 @@ describe('views/home/controller.ts', () => {
 							},
 							title: {
 								classes: 'govuk-link--no-visited-state',
-								text: 'Consultation and publicity details'
+								text: 'Publicity details'
 							}
 						},
 						{

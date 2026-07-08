@@ -25,10 +25,7 @@ describe('dynamic forms util', () => {
 				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION),
 				'Compulsory acquisition information'
 			);
-			assert.strictEqual(
-				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.CONSULTATION_REPORT),
-				'Consultation report'
-			);
+			assert.strictEqual(getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.NEWSPAPER_NOTICES), 'Newspaper notices');
 			assert.strictEqual(
 				getDocumentCategoryDisplayName(DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS),
 				'Reports and statements'

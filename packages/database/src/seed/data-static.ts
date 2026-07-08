@@ -26,7 +26,7 @@ export const DOCUMENT_CATEGORY_ID = Object.freeze({
 	PLANS_AND_DRAWINGS: 'plans-and-drawings',
 	DRAFT_DCO: 'draft-dco',
 	COMPULSORY_ACQUISITION_INFORMATION: 'compulsory-acquisition-information',
-	CONSULTATION_REPORT: 'consultation-report',
+	NEWSPAPER_NOTICES: 'newspaper-notices',
 	REPORTS_AND_STATEMENTS: 'reports-and-statements',
 	ENVIRONMENTAL_STATEMENT: 'environmental-statement',
 	ADDITIONAL_PRESCRIBED_INFORMATION: 'additional-prescribed-information',
@@ -51,8 +51,8 @@ export const DOCUMENT_CATEGORY = [
 		displayName: 'Compulsory acquisition information'
 	},
 	{
-		id: DOCUMENT_CATEGORY_ID.CONSULTATION_REPORT,
-		displayName: 'Consultation report'
+		id: DOCUMENT_CATEGORY_ID.NEWSPAPER_NOTICES,
+		displayName: 'Newspaper notices'
 	},
 	{
 		id: DOCUMENT_CATEGORY_ID.REPORTS_AND_STATEMENTS,
@@ -101,8 +101,7 @@ export const DOCUMENT_SUB_CATEGORY_ID = Object.freeze({
 	FUNDING_STATEMENT: 'funding-statement',
 	BOOK_OF_REFERENCE_PARTS_1_TO_5: 'book-of-reference',
 	LAND_AND_RIGHTS_NEGOTIATIONS_TRACKER: 'land-and-rights-negotiations-tracker',
-	CONSULTATION_REPORT: 'consultation-report',
-	CONSULTATION_REPORT_APPENDICES: 'consultation-report-appendices',
+	NEWSPAPER_NOTICES: 'newspaper-notices',
 	HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT: 'habitat-regulations-assessment-screening-report',
 	REPORT_TO_INFORM_APPROPRIATE_ASSESSMENT: 'report-to-inform-appropriate-assessment',
 	STATUTORY_NUISANCE_STATEMENT: 'statutory-nuisance-statement',
@@ -282,14 +281,9 @@ export const DOCUMENT_SUB_CATEGORY = [
 		categoryId: DOCUMENT_CATEGORY_ID.COMPULSORY_ACQUISITION_INFORMATION
 	},
 	{
-		id: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT,
-		displayName: 'Consultation report',
-		categoryId: DOCUMENT_CATEGORY_ID.CONSULTATION_REPORT
-	},
-	{
-		id: DOCUMENT_SUB_CATEGORY_ID.CONSULTATION_REPORT_APPENDICES,
-		displayName: 'Consultation report appendices',
-		categoryId: DOCUMENT_CATEGORY_ID.CONSULTATION_REPORT
+		id: DOCUMENT_SUB_CATEGORY_ID.NEWSPAPER_NOTICES,
+		displayName: 'Newspaper notices',
+		categoryId: DOCUMENT_CATEGORY_ID.NEWSPAPER_NOTICES
 	},
 	{
 		id: DOCUMENT_SUB_CATEGORY_ID.HABITAT_REGULATIONS_ASSESSMENT_SCREENING_REPORT,
