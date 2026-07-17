@@ -42,7 +42,7 @@
     "body-parser": "^2.2.2",
     "cfb": "^1.2.2",
     "connect-redis": "^9.0.0",
-    "cypress": "^15.9.0",
+    "cypress": "^15.16.0",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "express": "^5.2.1",
