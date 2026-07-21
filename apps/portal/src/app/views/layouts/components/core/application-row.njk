@@ -10,7 +10,7 @@
         {% for key, subRow in row.value %}
             {{ applicationRow(subRow) }}
         {% endfor %}
-    {% else %}
+    {% elif row.value %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             <p class="govuk-body">{{ row.name }}</p>
@@ -20,6 +20,12 @@
                 <p class="govuk-body">{{ line }}</p>
             {% endfor %}
         </div>
+    </div>
+    {% else %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+         <p class="govuk-body">{{ row }}</p>
+      </div>
     </div>
     {% endif %}
 {% endmacro %}
