@@ -111,7 +111,7 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			},
 
 			naturalEnvironmentInformation: {
-				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the development.',
+				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the development',
 				data: mapNaturalEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 			historicEnvironmentInformation: {
@@ -232,8 +232,7 @@ function mapAgentDetails(caseData: FullCase) {
 
 function mapFeeDetails(caseData: FullCase) {
 	return {
-		paymentHintText:
-			'State the arrangement for the application fee payment: i.e. cheque, electronic transfer or other.',
+		paymentHintText: 'State the arrangement for the application fee payment: i.e. cheque, electronic transfer or other',
 		paymentMethod: { name: 'Payment method', value: [caseData.CasePaymentMethod?.displayName] },
 		paymentReference: { name: 'Payment reference', value: [caseData.paymentReference] }
 	};
