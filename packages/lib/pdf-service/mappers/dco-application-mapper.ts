@@ -44,19 +44,19 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 				data: mapFeeDetails(caseData)
 			},
 			consentReason: {
-				name: '4. Confirming why the Planning Inspectorate should receive the application',
+				name: '4. Brief explanation as to why this application is to be treated as development for which development consent is required under the Planning Act 2008',
 				data: mapConsentReason(caseData)
 			},
 			projectDescription: {
-				name: '5. Non-technical description of the Proposed Development',
+				name: '5. Brief non-technical description of the proposal',
 				data: mapProjectDescription(caseData)
 			},
 			locationOrRoute: {
-				name: '6. Location or route of the Proposed Development',
+				name: '6. Description of location of application site(s), or route of development (reference appropriate plans)',
 				data: mapLocationOrRoute(caseData, evidenceByCategory['plans-and-drawings'])
 			},
 			associatedDevelopments: {
-				name: '7. Associated Development',
+				name: '7. Associated development',
 				data: mapAssociatedDevelopments(evidenceByCategory['reports-and-statements'])
 			},
 
@@ -66,7 +66,7 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			},
 
 			draftOrderAndExplanatoryMemorandum: {
-				name: '9. Draft Development Consent Order',
+				name: '9. Draft Order',
 				data: mapDraftDcoOrder(evidenceByCategory['draft-dco'])
 			},
 
@@ -76,17 +76,17 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			},
 
 			landPlan: {
-				name: '11. Land Plan',
+				name: '11. Land plan',
 				data: mapLandPlan(evidenceByCategory['plans-and-drawings'])
 			},
 
 			worksPlan: {
-				name: '12. Works Plans',
+				name: '12. Works plans',
 				data: mapWorksPlan(evidenceByCategory['plans-and-drawings'])
 			},
 
 			landRightsInformation: {
-				name: '13. Compulsory Acquisition of land or an interest in land or right over land',
+				name: '13. Compulsory acquisition of land or an interest in land or right over land',
 				data: mapLandRightsInformation(evidenceByCategory['compulsory-acquisition-information'])
 			},
 
@@ -96,31 +96,31 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			},
 
 			screeningAndScoping: {
-				name: '14. b) Screening Opinion/ Direction and Scoping Opinion/ Direction',
+				name: '14. b) Screening opinion/ direction and scoping opinion/ direction',
 				data: mapScreeningAndScopingDirection(evidenceByCategory['environmental-statement'])
 			},
 
 			environmentalStatementNotifications: {
-				name: '14. c) Publicity required under Regulation 13 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2017 (or where the transitional provisions apply, Regulation 11 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2009)',
+				name: '14. c) Publicity required under regulation 13 of The Infrastructure Planning (Environmental Impact Assessment) Regulations 2017',
 				data: mapEnvironmentalStatementNotifications(caseData)
 			},
 
 			habitatRegulationsAssessmentInformation: {
-				name: '15. European sites (to which Regulation 63 of The Conservation of Habitats and Species Regulations 2017 and/ or Regulation 28 of the Conservation of Offshore Marine Habitats and Species Regulations 2017 applies) or a Ramsar site.',
+				name: '15. European sites (to which regulation 48 of the Conservation (Natural Habitats, & c.) Regulations 1994 applies) or a Ramsar site',
 				data: mapHabitatRegulationsAssessmentInformation(evidenceByCategory['reports-and-statements'])
 			},
 
 			naturalEnvironmentInformation: {
-				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the Proposed Development.',
+				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the development',
 				data: mapNaturalEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 			historicEnvironmentInformation: {
-				name: '17. A plan, with accompanying information, identifying any statutory or non statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the Proposed Development',
+				name: '17. A plan, with accompanying information, identifying any statutory or non statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the proposed development',
 				data: mapHistoricEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 
 			floodRiskInformation: {
-				name: '18. Flood Risk Assessment',
+				name: '18. Flood risk assessment',
 				data: mapFloodRiskInformation(evidenceByCategory['environmental-statement'])
 			},
 
@@ -187,11 +187,11 @@ function mapApplicantDetails(caseData: FullCase) {
 	return {
 		applicantOrganisation: { name: 'Organisation', value: [caseData.ApplicantDetails?.organisation] },
 		applicantName: {
-			name: 'Name',
+			name: 'Name of contact',
 			value: [`${caseData.ApplicantDetails?.firstName || ''} ${caseData.ApplicantDetails?.lastName || ''}`]
 		},
-		applicantEmail: { name: 'Email address', value: [caseData.ApplicantDetails?.emailAddress] },
-		applicantPhone: { name: 'Phone number', value: [caseData.ApplicantDetails?.phone] },
+		applicantEmail: { name: 'Email', value: [caseData.ApplicantDetails?.emailAddress] },
+		applicantPhone: { name: 'Telephone no', value: [caseData.ApplicantDetails?.phone] },
 		applicantAddress: {
 			name: 'Address',
 			value: [
@@ -211,11 +211,11 @@ function mapAgentDetails(caseData: FullCase) {
 		isAgent: { name: 'Are you an agent?', value: [caseData.AgentDetails ? 'Yes' : 'No'] },
 		agentOrganisation: { name: 'Organisation', value: [caseData.AgentDetails?.organisation] },
 		agentName: {
-			name: 'Name',
+			name: 'Name of contact',
 			value: [`${caseData.AgentDetails?.firstName || ''} ${caseData.AgentDetails?.lastName || ''}`]
 		},
-		agentEmail: { name: 'Email address', value: [caseData.AgentDetails?.emailAddress] },
-		agentPhone: { name: 'Phone number', value: [caseData.AgentDetails?.phone] },
+		agentEmail: { name: 'Email', value: [caseData.AgentDetails?.emailAddress] },
+		agentPhone: { name: 'Telephone no', value: [caseData.AgentDetails?.phone] },
 		agentAddress: {
 			name: 'Address',
 			value: [
@@ -232,6 +232,7 @@ function mapAgentDetails(caseData: FullCase) {
 
 function mapFeeDetails(caseData: FullCase) {
 	return {
+		paymentHintText: 'State the arrangement for the application fee payment: i.e. cheque, electronic transfer or other',
 		paymentMethod: { name: 'Payment method', value: [caseData.CasePaymentMethod?.displayName] },
 		paymentReference: { name: 'Payment reference', value: [caseData.paymentReference] }
 	};
