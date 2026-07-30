@@ -111,11 +111,11 @@ export const mapCaseToDcoApplication = (caseData: FullCase) => {
 			},
 
 			naturalEnvironmentInformation: {
-				name: '16. A plan, with accompanying information, identifying any statutory or non statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the development',
+				name: '16. A plan, with accompanying information, identifying any statutory or non-statutory sites or features of nature conservation, geological or landscape importance; habitats of protected species, important habitats or other diversity features; and water bodies in a River Basin Management Plan - together with an assessment of any effects likely to be caused by the development',
 				data: mapNaturalEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 			historicEnvironmentInformation: {
-				name: '17. A plan, with accompanying information, identifying any statutory or non statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the proposed development',
+				name: '17. A plan, with accompanying information, identifying any statutory or non-statutory sites or features of the historic environment such as scheduled monuments, World Heritage sites, listed buildings and other historic structures, archaeological sites and registered battlefields, together with an assessment of any effects likely to be caused by the proposed development',
 				data: mapHistoricEnvironmentInformation(evidenceByCategory['plans-and-drawings'])
 			},
 
