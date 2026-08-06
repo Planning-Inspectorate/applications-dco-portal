@@ -5,7 +5,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import { addLocalsConfiguration } from '#util/config-middleware.ts';
 import type { Express } from 'express';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import type { HelmetCspDirectives } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
 import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
 import { buildDefaultErrorHandlerMiddleware, notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';

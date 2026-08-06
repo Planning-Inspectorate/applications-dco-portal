@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
-import { PortalService } from '#service';
-import { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
+import type { PortalService } from '#service';
+import type { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
 import { promisify } from 'node:util';
 
 export function handleSessionTimeoutMiddleware(service: PortalService) {

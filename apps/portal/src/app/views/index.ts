@@ -17,7 +17,7 @@ import { createRoutes as environmentalImpactAssessmentInformationRoutes } from '
 import { createRoutes as otherPlansAndReportsRoutes } from './other-plans-and-reports/index.ts';
 import { createRoutes as infrastructureSpecificAdditionalInformationRoutes } from './infrastructure-specific-additional-information/index.ts';
 import { createRoutes as whitelistRoutes } from './whitelist/index.ts';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
 import { buildHomePage, buildSubmitHomePageController } from './home/controller.ts';

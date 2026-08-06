@@ -1,4 +1,4 @@
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	DOCUMENT_CATEGORY_STATUS_ID,

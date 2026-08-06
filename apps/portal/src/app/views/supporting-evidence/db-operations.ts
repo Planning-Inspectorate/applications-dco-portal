@@ -1,4 +1,4 @@
-import { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
+import type { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 import type { CategoryInformation, MultipleCategoryInformation, SupportingEvidenceInput } from './types.d.ts';
 import { mapAnswersToInput } from './util.ts';
 

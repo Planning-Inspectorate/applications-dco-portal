@@ -1,4 +1,4 @@
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import type { NextFunction, Request, Response } from 'express';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';

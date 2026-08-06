@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { populateDocumentOptions } from '@pins/dco-portal-lib/forms/custom-components/select-documents/populate-document-options.ts';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 
 export function selectDocumentQuestionMiddleware({ db }: PortalService) {
 	return async (req: Request, res: Response, next: NextFunction) => {

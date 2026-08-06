@@ -1,4 +1,5 @@
-import puppeteer, { Browser, Page } from 'puppeteer-core';
+import type { Browser, Page } from 'puppeteer-core';
+import puppeteer from 'puppeteer-core';
 
 export class PdfBrowser {
 	private static instance: PdfBrowser | null;

@@ -3,7 +3,7 @@ import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.t
 import type { Config } from './config-types.d.ts';
 import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
 import type { Logger } from 'pino';
-import { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
+import type { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 import { initGovNotify } from '@pins/dco-portal-lib/govnotify/index.ts';
 
 /**

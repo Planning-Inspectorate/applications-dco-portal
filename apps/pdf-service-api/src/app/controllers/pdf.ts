@@ -1,4 +1,4 @@
-import { PdfService } from '#service';
+import type { PdfService } from '#service';
 import type { Request, Response } from 'express';
 import { generatePdf } from '../lib/generate-pdf.ts';
 import { PdfBrowser } from '../lib/browser.ts';
