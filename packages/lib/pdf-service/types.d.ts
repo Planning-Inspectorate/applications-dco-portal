@@ -1,4 +1,4 @@
-import { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
+import type { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 
 export type FullCase = Prisma.CaseGetPayload<{
 	include: {

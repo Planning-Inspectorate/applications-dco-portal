@@ -1,7 +1,7 @@
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { firewallErrorPage } from './controller.ts';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 
 export function createErrorRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });

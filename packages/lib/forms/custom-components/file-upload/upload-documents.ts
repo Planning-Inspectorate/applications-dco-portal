@@ -1,5 +1,5 @@
 import { validateUploadedFile } from './document-validation-util.ts';
-import { PortalService } from 'portal/src/app/service.ts';
+import type { PortalService } from 'portal/src/app/service.ts';
 import type { Request, Response } from 'express';
 import { addSessionData } from '../../../util/session.ts';
 import { Readable } from 'stream';

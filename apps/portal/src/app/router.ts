@@ -8,7 +8,7 @@ import { createRoutes as loginRoutes } from './views/login/index.ts';
 import { createErrorRoutes } from './views/static/error/index.ts';
 import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/auth.ts';
 import { isApplicationCompleteMiddleware } from './views/middleware/session.ts';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import { cacheDisableAllCachingMiddleware, cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
 import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
 import { handleSessionTimeoutMiddleware, hasSessionExpired } from './views/middleware/session.ts';

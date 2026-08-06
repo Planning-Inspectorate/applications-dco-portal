@@ -13,7 +13,7 @@ import {
 } from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapNsipProjectToCase, mapNsipServiceUserToCase, mapNsipToQuestionWasPrepopulated } from './mappers.ts';
 import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';

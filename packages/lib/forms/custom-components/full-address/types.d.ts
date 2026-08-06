@@ -1,4 +1,4 @@
-import { CommonQuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
+import type { CommonQuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
 
 export interface FullAddressParams {
 	addressLine1: string;

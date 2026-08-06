@@ -1,4 +1,4 @@
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import type { Request, Response } from 'express';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';

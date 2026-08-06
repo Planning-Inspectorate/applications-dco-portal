@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import { subDays, startOfDay, endOfDay } from 'date-fns';
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 

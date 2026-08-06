@@ -14,7 +14,7 @@ import AddressValidator, {
 	// @ts-expect-error - due to not having @types
 } from '@planning-inspectorate/dynamic-forms/src/validator/address-validator.js';
 import type { AddressValidatorOpts } from './types.d.ts';
-import FullAddressQuestion from './question.js';
+import type FullAddressQuestion from './question.js';
 
 export const countryMaxLength = 250;
 export const countryMinLength = 0;

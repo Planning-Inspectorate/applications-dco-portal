@@ -1,4 +1,4 @@
-import { PdfService } from '#service';
+import type { PdfService } from '#service';
 import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import { postGeneratePdf } from '../controllers/pdf.ts';

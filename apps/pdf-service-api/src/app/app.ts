@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import type { Express } from 'express';
-import { PdfService } from '#service';
+import type { PdfService } from '#service';
 import type { HelmetCspDirectives } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
 import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
 import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-requests.ts';

@@ -1,4 +1,4 @@
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import type { Logger } from 'pino';
 import { mapCaseToDcoApplication } from '@pins/dco-portal-lib/pdf-service/mappers/dco-application-mapper.ts';
 import { getNunjucksEnv } from '../../nunjucks.ts';

@@ -1,4 +1,4 @@
-import { PortalService } from '#service';
+import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
