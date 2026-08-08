@@ -7,5 +7,6 @@ declare namespace Cypress {
 		getByData(value: string): Chainable<JQuery<HTMLElement>>;
 		testLogin(emailAddress: string, caseReference: string): Chainable<void>;
 		loginSession(): Chainable<void>;
+		getEnvVar(envVarName: string): any;
 	}
 }
