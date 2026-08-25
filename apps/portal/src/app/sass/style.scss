@@ -6,20 +6,24 @@ $font-family: arial, helvetica, sans-serif;
 		sans-serif
 	)
 );
-@use './components/pins-table.scss';
-@use './components/pins-header.scss';
-@use './components/pins-navigation.scss';
-@use './components/pins-footer.scss';
+@use './components/pins-table';
+@use './components/pins-header';
+@use './components/pins-navigation';
+@use './components/pins-footer';
 
 // set font-family for any autocomplete menu items
+/* stylelint-disable-next-line selector-class-pattern */
 .autocomplete__menu {
 	font-family: $font-family;
 }
 
+/* stylelint-disable-next-line selector-class-pattern */
 .uploading-bar--hidden {
 	display: none;
 	margin-bottom: 1em;
 }
+
+/* stylelint-disable-next-line selector-class-pattern */
 .uploading-bar--visible {
 	display: block;
 	margin-bottom: 1em;
