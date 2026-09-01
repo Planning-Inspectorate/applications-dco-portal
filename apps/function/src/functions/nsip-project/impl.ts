@@ -69,7 +69,7 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 				context.error('Error during NSIP Project function run: ', error);
 				errorMessage = error.message;
 			}
-			throw new Error('Error during NSIP Project function run: ' + errorMessage);
+			throw new Error('Error during NSIP Project function run: ' + errorMessage, { cause: error });
 		}
 	};
 }

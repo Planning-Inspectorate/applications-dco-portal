@@ -200,7 +200,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving infrastructure specific additional information data to database');
-			throw new Error('error saving infrastructure specific additional information journey');
+			throw new Error('error saving infrastructure specific additional information journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });
