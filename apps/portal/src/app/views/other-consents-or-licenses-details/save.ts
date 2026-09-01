@@ -59,7 +59,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving other consents or licences data to database');
-			throw new Error('error saving other consents or licences journey');
+			throw new Error('error saving other consents or licences journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

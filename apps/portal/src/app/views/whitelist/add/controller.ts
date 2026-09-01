@@ -86,7 +86,7 @@ export function buildSaveController({ db, logger, notifyClient, appHostname }: P
 			});
 		} catch (error) {
 			logger.error({ error }, 'error adding new user to the whitelist');
-			throw new Error('error adding new user');
+			throw new Error('error adding new user', { cause: error });
 		}
 
 		await notifyClient?.sendWhitelistAddNotification(answers.emailAddress, {

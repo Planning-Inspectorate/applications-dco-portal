@@ -57,7 +57,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving draft order and explanatory memorandum data to database');
-			throw new Error('error saving draft order and explanatory memorandum journey');
+			throw new Error('error saving draft order and explanatory memorandum journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

@@ -69,7 +69,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving other plans and reports data to database');
-			throw new Error('error saving other plans and reports journey');
+			throw new Error('error saving other plans and reports journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

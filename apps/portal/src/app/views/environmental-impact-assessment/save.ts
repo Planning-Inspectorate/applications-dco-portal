@@ -128,7 +128,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving environmental impact assessment data to database');
-			throw new Error('error saving environmental impact assessment journey');
+			throw new Error('error saving environmental impact assessment journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });
