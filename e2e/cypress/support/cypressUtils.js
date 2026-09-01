@@ -22,7 +22,7 @@ export const validateDownloadedFile = (fileName) => {
 	try {
 		const stats = fs.statSync(filePath);
 		return stats.isFile();
-	} catch (err) {
+	} catch {
 		return false;
 	}
 };

@@ -11,6 +11,8 @@ export default defineConfig([
 			cypress
 		},
 		rules: {
+			'check-file/folder-naming-convention': 'off',
+			'check-file/filename-naming-convention': 'off',
 			'cypress/no-unnecessary-waiting': 'warn',
 			'cypress/assertion-before-screenshot': 'warn',
 			'cypress/no-force': 'warn'

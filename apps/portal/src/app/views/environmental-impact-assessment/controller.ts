@@ -82,7 +82,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 
 	forms[applicationSectionId] = {
 		hasEnvironmentalStatement:
-			nonTechnicalSummaryCount + otherEnvironmentalDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0
+			nonTechnicalSummaryCount + otherEnvironmentalDocumentCounts.reduce((acc, curr) => acc + curr.count, 0) > 0
 				? 'yes'
 				: 'no',
 		nonTechnicalSummary: getSupportingEvidenceIds(

@@ -1,6 +1,3 @@
-/* eslint-env node */
-/* global process */
-
 import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
 import { clearDocumentCategory } from './cypress/support/dbUtils.js';
