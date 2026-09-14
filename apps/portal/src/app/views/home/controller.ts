@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import {
 	DOCUMENT_CATEGORY,
 	DOCUMENT_CATEGORY_ID,
@@ -8,7 +8,7 @@ import {
 	WHITELIST_USER_ROLE_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION, APPLICATION_SECTION_ID } from '../constants.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';

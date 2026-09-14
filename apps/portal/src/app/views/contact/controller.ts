@@ -1,4 +1,4 @@
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 
 export function buildContactPage(): AsyncRequestHandler {
 	return async (req, res) => {

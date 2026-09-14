@@ -12,7 +12,7 @@ import {
 	buildTestSetupCase
 } from './controller.ts';
 import assert from 'node:assert';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import { mockOtpCode } from '@pins/dco-portal-lib/testing/mock-otp.ts';
 import { buildHomePage } from '../home/controller.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID, WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
@@ -995,7 +995,7 @@ describe('login controllers', () => {
 				cookie: mock.fn()
 			};
 
-			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger(), redisClient: mockRedis });
+			const controller = buildSubmitOtpController({ db: mockDb, logger: mockLogger(), fullRedisClient: mockRedis });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRedis.get.mock.callCount(), 1);

@@ -1,7 +1,7 @@
 import { initDatabaseClient } from '@pins/dco-portal-database';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Config } from './config-types.d.ts';
-import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
+import { initLogger } from '@planning-inspectorate/core/util';
 import type { Logger } from 'pino';
 import type { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 import { initGovNotify } from '@pins/dco-portal-lib/govnotify/index.ts';
