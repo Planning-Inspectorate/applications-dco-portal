@@ -9,11 +9,11 @@ import {
 	sentInLastTenSeconds
 } from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
 import type { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapNsipProjectToCase, mapNsipServiceUserToCase, mapNsipToQuestionWasPrepopulated } from './mappers.ts';
-import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { addSessionData, clearSessionData, readSessionData } from '@planning-inspectorate/core/util';
 import type { ValidationErrors } from '@pins/dco-portal-lib/types/errors.d.ts';
 import type { FieldValidationError } from 'express-validator/lib/base.d.ts';
 import { validationError } from '@pins/dco-portal-lib/util/errors.ts';
@@ -30,7 +30,9 @@ export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHan
 	};
 }
 
-export function buildSubmitHasApplicationReference({ logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitHasApplicationReference({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ hasReferenceNumber: string }> {
 	return async (req, res) => {
 		const { hasReferenceNumber } = req.body;
 
@@ -71,7 +73,11 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController(service: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController(service: PortalService): AsyncRequestHandlerWithBody<{
+	emailAddress: string;
+	caseReference: string;
+	errors?: ValidationErrors;
+}> {
 	return async (req, res) => {
 		const { db, notifyClient, enableE2eTestEndpoints, logger } = service;
 
@@ -178,9 +184,10 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitOtpController(service: PortalService): AsyncRequestHandler {
+export function buildSubmitOtpController(service: PortalService): AsyncRequestHandlerWithBody<{ otpCode: string }> {
 	return async (req, res) => {
-		const { db, logger, redisClient } = service;
+		const { db, logger, fullRedisClient } = service;
+		const redisClient = fullRedisClient;
 
 		const emailAddress = req.session.emailAddress;
 		const caseReference = req.session.caseReference;

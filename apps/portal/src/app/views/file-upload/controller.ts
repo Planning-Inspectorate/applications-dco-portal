@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	BOOLEAN_OPTIONS,
@@ -7,7 +7,7 @@ import {
 	formatDateForDisplay
 } from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import type { Request, Response } from 'express';
 import { statusIdRadioButtonValue } from '../util.ts';
 import { validationError } from '@pins/dco-portal-lib/util/errors.ts';
@@ -255,7 +255,12 @@ export function buildDownloadDocumentController(service: PortalService): AsyncRe
 	};
 }
 
-export function isFileUploadSectionCompletedController(service: PortalService, journeyId: string): AsyncRequestHandler {
+export function isFileUploadSectionCompletedController(
+	service: PortalService,
+	journeyId: string
+): AsyncRequestHandlerWithBody<{
+	[key: string]: string;
+}> {
 	return async (req, res) => {
 		const { db } = service;
 

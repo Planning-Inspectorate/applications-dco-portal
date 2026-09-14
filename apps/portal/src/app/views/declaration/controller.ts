@@ -1,6 +1,6 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { expressValidationErrorsToGovUkErrorList, formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
@@ -20,7 +20,9 @@ export function buildDeclarationNamePage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSaveDeclarationName({ logger }: PortalService): AsyncRequestHandler {
+export function buildSaveDeclarationName({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ declarationFirstName?: string; declarationLastName?: string }> {
 	return async (req, res) => {
 		const { declarationFirstName, declarationLastName } = req.body;
 		const errors: ValidationErrors = {};
@@ -70,7 +72,9 @@ export function buildDeclarationOrganisationPage(viewData = {}): AsyncRequestHan
 	};
 }
 
-export function buildSaveDeclarationOrganisation({ logger }: PortalService): AsyncRequestHandler {
+export function buildSaveDeclarationOrganisation({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ declarationOrganisation?: string }> {
 	return async (req, res) => {
 		const { declarationOrganisation } = req.body;
 		let errors: ValidationErrors | undefined;
@@ -119,7 +123,9 @@ export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHand
 	};
 }
 
-export function buildSavePositionInOrganisation({ logger }: PortalService): AsyncRequestHandler {
+export function buildSavePositionInOrganisation({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ positionInOrganisation?: string }> {
 	return async (req, res) => {
 		const { positionInOrganisation } = req.body;
 		let errors: ValidationErrors | undefined;
@@ -157,7 +163,9 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration(service: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration(
+	service: PortalService
+): AsyncRequestHandlerWithBody<{ declarationConfirmation?: string }, { config: { styleFile: string } }> {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
 		const { db, logger, blobStore, serviceBusEventClient } = service;
