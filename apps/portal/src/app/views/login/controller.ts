@@ -14,6 +14,9 @@ import type { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapNsipProjectToCase, mapNsipServiceUserToCase, mapNsipToQuestionWasPrepopulated } from './mappers.ts';
 import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import type { ValidationErrors } from '@pins/dco-portal-lib/types/errors.d.ts';
+import type { FieldValidationError } from 'express-validator/lib/base.d.ts';
+import { validationError } from '@pins/dco-portal-lib/util/errors.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -34,14 +37,12 @@ export function buildSubmitHasApplicationReference({ logger }: PortalService): A
 		if (!hasReferenceNumber) {
 			logger.info({ hasReferenceNumber }, 'no value provided for hasReferenceNumber');
 
-			req.body.errors = {
-				hasReferenceNumber: { msg: 'Select yes if you have an application reference number' }
-			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errors = validationError('hasReferenceNumber', 'Select yes if you have an application reference number');
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			const hasApplicationReferencePage = buildHasApplicationReferencePage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return hasApplicationReferencePage(req, res);
 		}
@@ -76,16 +77,16 @@ export function buildSubmitEmailController(service: PortalService): AsyncRequest
 
 		const { emailAddress, caseReference } = req.body;
 
-		const handleError = async (errors: Record<string, string>) => {
-			req.body.errors = req.body.errors || {};
-			for (const [field, message] of Object.entries(errors)) {
-				req.body.errors[field] = { msg: message };
+		const handleError = async (additionalErrors: Record<string, string>) => {
+			const errors: ValidationErrors = req.body.errors || {};
+			for (const [field, message] of Object.entries(additionalErrors)) {
+				errors[field] = { msg: message } as FieldValidationError;
 			}
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			const enterEmailPage = buildEnterEmailPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterEmailPage(req, res);
 		};
@@ -192,16 +193,14 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 		const { otpCode } = req.body;
 
 		const handleOtpError = async (message: string) => {
-			req.body.errors = {
-				otpCode: { msg: message }
-			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errors = validationError('otpCode', message);
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			logger.info({ otpCode, emailAddress }, message);
 
 			const enterOtpPage = buildEnterOtpPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterOtpPage(req, res);
 		};
@@ -214,10 +213,10 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 
 		if (!isValidOtpRecord(otpRecord)) {
 			const message = 'This code has expired. Get a new code';
-			req.body.errors = {
+			const errors = {
 				otpCode: { msg: 'This code has expired. Get a new code' }
 			};
-			req.body.errorSummary = [
+			const errorSummary = [
 				{
 					text: message,
 					href: `${req.baseUrl}/request-new-code`
@@ -227,8 +226,8 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 			logger.info({ otpCode, emailAddress }, message);
 
 			const enterOtpPage = buildEnterOtpPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterOtpPage(req, res);
 		}

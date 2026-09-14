@@ -95,10 +95,10 @@ export function buildSubmitHomePageController(service: PortalService): AsyncRequ
 
 		if (!allSectionsCompleted) {
 			const message = 'You must complete all required sections before sending your application';
-			req.body.errors = {
+			const errors = {
 				submission: { msg: message }
 			};
-			req.body.errorSummary = [
+			const errorSummary = [
 				{
 					text: message,
 					href: '#'
@@ -106,8 +106,8 @@ export function buildSubmitHomePageController(service: PortalService): AsyncRequ
 			];
 
 			const homePageController = buildHomePage(service, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return homePageController(req, res);
 		}

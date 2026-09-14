@@ -10,6 +10,7 @@ import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-da
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { Request, Response } from 'express';
 import { statusIdRadioButtonValue } from '../util.ts';
+import { validationError } from '@pins/dco-portal-lib/util/errors.ts';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -262,14 +263,11 @@ export function isFileUploadSectionCompletedController(service: PortalService, j
 		const isSectionCompleted = req.body[sectionCompletedFieldName];
 
 		const handleTaskCompletedError = async (message: string) => {
-			req.body.errors = {
-				[sectionCompletedFieldName]: { msg: message }
-			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errors = validationError(sectionCompletedFieldName, message);
 
 			const fileUploadHomePage = buildFileUploadHomePage(service, journeyId, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors)
 			});
 			return fileUploadHomePage(req, res);
 		};
