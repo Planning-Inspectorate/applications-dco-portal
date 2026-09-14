@@ -21,7 +21,7 @@ export class FunctionService {
 		const logger = initLogger(config);
 		this.logger = logger;
 
-		if (!config.database.datasourceUrl) {
+		if (!config.database.connectionString) {
 			throw new Error('database connectionString is required');
 		}
 		this.dbClient = initDatabaseClient(config, logger);
