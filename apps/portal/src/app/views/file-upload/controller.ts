@@ -265,14 +265,13 @@ export function isFileUploadSectionCompletedController(service: PortalService, j
 		const isSectionCompleted = req.body[sectionCompletedFieldName];
 
 		const handleTaskCompletedError = async (message: string) => {
-			req.body.errors = {
+			const errors = {
 				[sectionCompletedFieldName]: { msg: message }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
 			const fileUploadHomePage = buildFileUploadHomePage(service, journeyId, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors)
 			});
 			return fileUploadHomePage(req, res);
 		};
