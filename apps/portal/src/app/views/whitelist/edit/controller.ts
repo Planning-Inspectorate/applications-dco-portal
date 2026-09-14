@@ -1,9 +1,9 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { WHITELIST_USER_ROLE, WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { addSessionData } from '@planning-inspectorate/core/util';
 // @ts-expect-error - due to not having @types
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
 import { JOURNEY_ID } from './journey.ts';

@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	DOCUMENT_CATEGORY_STATUS_ID,
@@ -7,7 +7,7 @@ import {
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Request, Response } from 'express';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 
 export function buildStatutoryNuisanceInformationHomePage(
