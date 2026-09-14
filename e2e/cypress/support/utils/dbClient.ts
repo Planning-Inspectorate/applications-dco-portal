@@ -1,6 +1,6 @@
 // e2e/cypress/support/utils/dbClient.ts
 import { initDatabaseClient } from '@pins/dco-portal-database';
-import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
+import { initLogger } from '@planning-inspectorate/core/util';
 
 const logger = initLogger({ logLevel: 'info', NODE_ENV: 'test' });
 
@@ -26,7 +26,7 @@ export function getPrisma() {
 		prisma = initDatabaseClient(
 			{
 				database: {
-					datasourceUrl: getDatasourceUrl()
+					connectionString: getDatasourceUrl()
 				},
 				NODE_ENV: 'test'
 			},
