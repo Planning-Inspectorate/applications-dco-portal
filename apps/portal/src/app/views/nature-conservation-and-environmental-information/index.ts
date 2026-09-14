@@ -2,7 +2,7 @@ import type { PortalService } from '#service';
 import type { Handler, Request } from 'express';
 import { Router as createRouter } from 'express';
 import type { IRouter } from 'express';
-import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { asyncHandler } from '@planning-inspectorate/core/util';
 import { getQuestions } from './questions.ts';
 // @ts-expect-error - due to not having @types
 import { buildGetJourney } from '@planning-inspectorate/dynamic-forms/src/middleware/build-get-journey.js';

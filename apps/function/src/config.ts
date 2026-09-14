@@ -42,7 +42,7 @@ export function loadConfig(): Config {
 	return {
 		appHostname: APP_HOSTNAME || '',
 		database: {
-			datasourceUrl: SQL_CONNECTION_STRING
+			connectionString: SQL_CONNECTION_STRING!
 		},
 		govNotify: {
 			disabled: GOV_NOTIFY_DISABLED === 'true',

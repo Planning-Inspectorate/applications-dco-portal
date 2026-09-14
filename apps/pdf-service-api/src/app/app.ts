@@ -4,9 +4,11 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import type { Express } from 'express';
 import type { PdfService } from '#service';
-import type { HelmetCspDirectives } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
-import { initContentSecurityPolicyMiddlewares } from '@pins/dco-portal-lib/middleware/csp-middleware.ts';
-import { buildLogRequestsMiddleware } from '@pins/dco-portal-lib/middleware/log-requests.ts';
+import type { HelmetCspDirectives } from '@planning-inspectorate/core/middleware';
+import {
+	buildLogRequestsMiddleware,
+	initContentSecurityPolicyMiddlewares
+} from '@planning-inspectorate/core/middleware';
 
 /**
  * @param {import('#service').PdfService} service
@@ -49,7 +51,7 @@ export function createApp(service: PdfService): Express {
 }
 
 const cspDirectiveDefaults: HelmetCspDirectives = {
-	scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals.cspNonce}'`],
+	scriptSrc: ["'self'", (req, res) => `'nonce-${res.locals?.cspNonce}'`],
 	defaultSrc: ["'self'"],
 	connectSrc: ["'self'"],
 	fontSrc: ["'self'"],

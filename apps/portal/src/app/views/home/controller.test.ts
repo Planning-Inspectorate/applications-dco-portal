@@ -3,7 +3,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { buildHomePage, buildSubmitHomePageController } from './controller.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import { configureNunjucks } from '../../nunjucks.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID, WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { buildSaveController } from '../whitelist/remove/controller.ts';

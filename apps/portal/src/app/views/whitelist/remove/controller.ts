@@ -1,7 +1,7 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import { addSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
+import { addSessionData } from '@planning-inspectorate/core/util';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 
 export function buildRemoveUserPage({ db }: PortalService): AsyncRequestHandler {

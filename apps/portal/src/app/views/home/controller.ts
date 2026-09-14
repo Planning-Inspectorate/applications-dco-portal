@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import {
 	DOCUMENT_CATEGORY,
 	DOCUMENT_CATEGORY_ID,
@@ -8,7 +8,7 @@ import {
 	WHITELIST_USER_ROLE_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION, APPLICATION_SECTION_ID } from '../constants.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 // @ts-expect-error - due to not having @types
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
@@ -96,10 +96,10 @@ export function buildSubmitHomePageController(service: PortalService): AsyncRequ
 
 		if (!allSectionsCompleted) {
 			const message = 'You must complete all required sections before sending your application';
-			req.body.errors = {
+			const errors = {
 				submission: { msg: message }
 			};
-			req.body.errorSummary = [
+			const errorSummary = [
 				{
 					text: message,
 					href: '#'
@@ -107,8 +107,8 @@ export function buildSubmitHomePageController(service: PortalService): AsyncRequ
 			];
 
 			const homePageController = buildHomePage(service, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return homePageController(req, res);
 		}

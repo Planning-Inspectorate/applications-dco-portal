@@ -3,7 +3,7 @@ import type { Handler, Request } from 'express';
 import type { IRouter } from 'express';
 
 import type { PortalService } from '#service';
-import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { asyncHandler } from '@planning-inspectorate/core/util';
 // @ts-expect-error - due to not having @types
 import { buildSave, list, question } from '@planning-inspectorate/dynamic-forms/src/controller.js';
 // @ts-expect-error - due to not having @types

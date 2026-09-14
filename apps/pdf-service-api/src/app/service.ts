@@ -1,5 +1,5 @@
 import type { Config } from './config-types.d.ts';
-import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
+import { initLogger } from '@planning-inspectorate/core/util';
 import type { Logger } from 'pino';
 
 /**

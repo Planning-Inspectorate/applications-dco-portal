@@ -1,11 +1,13 @@
 import type { NextFunction, Request, Response } from 'express';
 import type { PortalService } from '#service';
-import type { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
 import { promisify } from 'node:util';
+
+type RedisClient = Exclude<PortalService['fullRedisClient'], undefined>;
 
 export function handleSessionTimeoutMiddleware(service: PortalService) {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		const { logger, redisClient } = service;
+		const { logger, fullRedisClient } = service;
+		const redisClient = fullRedisClient;
 
 		if (!redisClient) {
 			return next();
@@ -33,7 +35,8 @@ export function handleSessionTimeoutMiddleware(service: PortalService) {
 
 export function hasSessionExpired(service: PortalService) {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		const { logger, redisClient } = service;
+		const { logger, fullRedisClient } = service;
+		const redisClient = fullRedisClient;
 
 		if (!redisClient) {
 			return next();
@@ -70,7 +73,7 @@ export function hasSessionExpired(service: PortalService) {
 
 export function someoneElseEditingJourneyMiddleware(service: PortalService, journeyName: string) {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		const { redisClient } = service;
+		const redisClient = service.fullRedisClient;
 
 		if (!redisClient) {
 			return next();
@@ -78,7 +81,7 @@ export function someoneElseEditingJourneyMiddleware(service: PortalService, jour
 
 		const journeyKey = `journey:${journeyName}:active`;
 
-		await redisClient.zAdd(journeyKey, Date.now(), req.sessionID);
+		await redisClient.zAdd(journeyKey, { score: Date.now(), value: req.sessionID });
 		await redisClient.zRemRangeByScore(journeyKey, 0, Date.now() - 60000);
 		await redisClient.expire(journeyKey, 120);
 
@@ -96,7 +99,7 @@ export function someoneElseEditingJourneyMiddleware(service: PortalService, jour
 
 export function removeIsEditingJourneyMiddleware(service: PortalService, journeyName: string) {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		const { redisClient } = service;
+		const redisClient = service.fullRedisClient;
 
 		if (!redisClient) {
 			return next();
@@ -114,7 +117,7 @@ export function removeIsEditingJourneyMiddleware(service: PortalService, journey
 
 export function cleanupSessionJourneyMiddleware(service: PortalService) {
 	return async (req: Request, res: Response, next: NextFunction) => {
-		const { redisClient } = service;
+		const redisClient = service.fullRedisClient;
 
 		if (!redisClient) {
 			return next();
