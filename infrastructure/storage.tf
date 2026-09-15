@@ -24,7 +24,7 @@ resource "azurerm_storage_container" "documents" {
 
 # assign the portal app contributor access to the container
 resource "azurerm_role_assignment" "portal_documents_rbac" {
-  scope                = azurerm_storage_container.documents.resource_manager_id
+  scope                = azurerm_storage_container.documents.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = module.app_portal.principal_id
 }
