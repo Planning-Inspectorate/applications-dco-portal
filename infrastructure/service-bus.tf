@@ -26,10 +26,9 @@ data "azurerm_private_dns_zone" "service_bus" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "service_bus" {
-  name                  = "${local.org}-vnetlink-service-bus-${local.resource_suffix}"
-  resource_group_name   = var.tooling_config.network_rg
-  private_dns_zone_name = data.azurerm_private_dns_zone.service_bus.name
-  virtual_network_id    = azurerm_virtual_network.main.id
+  name                = "${local.org}-vnetlink-service-bus-${local.resource_suffix}"
+  private_dns_zone_id = data.azurerm_private_dns_zone.service_bus.id
+  virtual_network_id  = azurerm_virtual_network.main.id
 
   provider = azurerm.tooling
 }
