@@ -22,6 +22,17 @@ class uploadDocumentsLocators {
 	certifiedDocumentNoRadioButton() {
 		return cy.get(`input[name="isCertified"][value="no"]`);
 	}
+
+	/**
+	 * Returns all "Remove" links for staged (not-yet-committed) uploads on the
+	 * upload-documents page. Each link submits its backing delete form which
+	 * removes the file from blob storage and session state.
+	 *
+	 * @returns {Cypress.Chainable<JQuery<HTMLElement>>} All Remove links.
+	 */
+	removeUploadedFileLinks() {
+		return cy.get('.js-remove-link');
+	}
 }
 
 export default new uploadDocumentsLocators();

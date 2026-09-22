@@ -1,17 +1,20 @@
 /**
- * Removes leading zeros from string number - e.g. '00' becomes '0' and '05' becopmes '5'
- * @param {*} value The value to format
- * @returns
+ * Removes leading zeros from a numeric string, for example '00' becomes '0' and '05' becomes '5'.
+ *
+ * @param {*} value - The value to format.
+ * @returns {string} The formatted value.
  */
 export function formatAsWholeNumber(value) {
-	// remove any leading 0 (e.g. from '00' or '05')
+	// Remove any leading 0 (for example, from '00' or '05').
 	return +value + '';
 }
 
 /**
- * Takes an object and returns string concatonation of its values using seperator (e.g.  Line1\nLine2)
- * @param {*} object object containg address fields
- * @param {*} seperator character to use as seperator, defaults as empty string
+ * Combines an object's values into a single string using the supplied separator.
+ *
+ * @param {*} object - An object containing address fields.
+ * @param {*} seperator - The separator to use; defaults to an empty string.
+ * @returns {string} The formatted string.
  */
 export function formatObjectAsString(object, seperator = '') {
 	cy.log('** object to format ', JSON.stringify(object));
@@ -23,11 +26,12 @@ export function formatObjectAsString(object, seperator = '') {
 }
 
 /**
- * Takes a date object and returns formatted date and time
- * @param {Date} date - Date to format
- * @param {boolean} isOrdinal - Whether to use ordinal format (short month, 24-hour time)
- * @returns {Object} Formatted date and time
- * @throws {Error} When invalid date object is provided
+ * Formats a Date object into a human-readable date and time.
+ *
+ * @param {Date} date - The date to format.
+ * @param {boolean} isOrdinal - Whether to use ordinal format, such as a short month and 24-hour time.
+ * @returns {Object} The formatted date and time.
+ * @throws {Error} When an invalid date object is provided.
  */
 export function formatDateAndTime(date, isOrdinal = false) {
 	if (!(date instanceof Date)) {
@@ -57,8 +61,10 @@ export function formatDateAndTime(date, isOrdinal = false) {
 }
 
 /**
- * Gets date and time vales from a Date object
- * @param {*} date a Date to get date and time values from
+ * Gets the date and time values from a Date object.
+ *
+ * @param {*} date - The Date object to inspect.
+ * @returns {{day: string, month: string, year: string, hours: string, minutes: string}} The date and time values.
  */
 export function getDateAndTimeValues(date) {
 	return {
@@ -71,9 +77,10 @@ export function getDateAndTimeValues(date) {
 }
 
 /**
- * Formats an input string in camel case
- * @param {string} input
- * @returns
+ * Formats an input string in camel case.
+ *
+ * @param {string} input - The string to format.
+ * @returns {string} The camel-cased value.
  */
 export function formatAsCamelCase(input) {
 	return input

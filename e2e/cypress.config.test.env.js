@@ -5,15 +5,15 @@ import { loadEnvFile } from 'node:process';
 try { loadEnvFile(); } catch {/* ignore errors*/}
 
 const e2eOverride = {
-	baseUrl: 'https://back-office-appeals-test.planninginspectorate.gov.uk/'
+	baseUrl: 'https://dco-portal-test.planninginspectorate.gov.uk/'
 };
 
 export default defineConfig({
 	e2e: {
 		...baseConfig.e2e,
-		...e2eOverride
-	},
-	env: {
-		...baseConfig.env
+		...e2eOverride,
+		env: {
+			...baseConfig.e2e.env
+		}
 	}
 });

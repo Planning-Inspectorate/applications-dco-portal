@@ -1,6 +1,6 @@
 class CommonLocators {
 	saveAndContinueButton() {
-		return cy.get("[data-cy='button-save-and-continue']");
+		return cy.get('.govuk-button').contains(/Save and continue|Continue|Submit|Accept|Confirm|Save and return/i);
 	}
 }
 

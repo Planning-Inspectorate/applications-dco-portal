@@ -2,7 +2,8 @@ import fs from 'fs-extra';
 import path from 'path';
 
 /**
- * Deletes all files and directories in the 'downloads' directory.
+ * Removes every file and directory from the downloads folder.
+ *
  * @returns {null}
  */
 export const deleteDownloads = () => {
@@ -11,9 +12,10 @@ export const deleteDownloads = () => {
 };
 
 /**
- * Checks if a file exists in the downloads folder.
- *  * @param {string} fileName - The user ID to check for.
- * @returns {boolean}
+ * Checks whether a file exists in the downloads folder.
+ *
+ * @param {string} fileName - The name of the file to check.
+ * @returns {boolean} True when the file exists.
  */
 export const validateDownloadedFile = (fileName) => {
 	const downloadsPath = path.join(__dirname, `../downloads`);

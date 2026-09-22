@@ -20,8 +20,20 @@ Cypress.Commands.add('getByData', (value) => {
 	return cy.get(`[data-cy="${value}"]`);
 });
 
-Cypress.Commands.add('testLogin', (emailAddress, caseReference) => {
-	cy.request('POST', '/login/test', { emailAddress, caseReference });
+/**
+ * Reads one or more Cypress environment variables by name and yields them as a
+ * plain object, making them available inside a `.then()` callback without
+ * repeated `Cypress.env()` calls.
+ *
+ * @example
+ * cy.readEnv(['USER_EMAIL', 'TEST_TOOLS_TOKEN']).then(({ USER_EMAIL, TEST_TOOLS_TOKEN }) => { ... });
+ */
+Cypress.Commands.add('readEnv', (names: string[]) => {
+	const result = names.reduce<Record<string, unknown>>((acc, name) => {
+		acc[name] = Cypress.env(name);
+		return acc;
+	}, {});
+	return cy.wrap(result);
 });
 
 Cypress.Commands.add('loginSession', () => {
