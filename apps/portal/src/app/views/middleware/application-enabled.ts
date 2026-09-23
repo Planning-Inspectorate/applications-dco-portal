@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from 'express';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import type { PortalService } from '#service';
 
 export function buildApplicationEnabledMiddleware({ isApplicationEnabled }: PortalService) {

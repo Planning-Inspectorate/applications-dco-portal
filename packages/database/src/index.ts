@@ -4,7 +4,7 @@ import type { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Logger } from 'pino';
 
 export function initDatabaseClient(
-	config: { database: { datasourceUrl: string }; NODE_ENV: string },
+	config: { database: { connectionString?: string }; NODE_ENV: string },
 	logger: Logger
 ): PrismaClient {
 	let prismaLogger: Logger | undefined;
@@ -13,7 +13,11 @@ export function initDatabaseClient(
 		prismaLogger = logger;
 	}
 
-	return newDatabaseClient(config.database.datasourceUrl, prismaLogger);
+	if (!config.database.connectionString) {
+		throw new Error('database connectionString is required');
+	}
+
+	return newDatabaseClient(config.database.connectionString, prismaLogger);
 }
 
 export function newDatabaseClient(connectionString: string, logger?: Logger): PrismaClient {

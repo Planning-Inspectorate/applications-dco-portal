@@ -1,6 +1,6 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import {
 	expressValidationErrorsToGovUkErrorList
 	// @ts-expect-error - due to not having @types
@@ -11,6 +11,7 @@ import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.t
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/constants.ts';
 import { formatBytes } from '@pins/dco-portal-lib/forms/custom-components/file-upload/util.ts';
+import type { ValidationErrors } from '@pins/dco-portal-lib/types/errors.d.ts';
 
 export function buildDeclarationNamePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -23,36 +24,37 @@ export function buildDeclarationNamePage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSaveDeclarationName({ logger }: PortalService): AsyncRequestHandler {
+export function buildSaveDeclarationName({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ declarationFirstName?: string; declarationLastName?: string }> {
 	return async (req, res) => {
 		const { declarationFirstName, declarationLastName } = req.body;
-		req.body.errors = {};
+		const errors: ValidationErrors = {};
 
 		if (!declarationFirstName) {
 			logger.info({ declarationFirstName, declarationLastName }, 'no value provided for declarationFirstName');
-			req.body.errors.declarationFirstName = { msg: 'Enter your first name' };
+			errors.declarationFirstName = { msg: 'Enter your first name' };
 		} else if (!/^[a-zA-Z' -]+$/.test(declarationFirstName)) {
 			logger.info({ declarationLastName }, 'invalid value provided for declarationFirstName');
-			req.body.errors.declarationFirstName = {
+			errors.declarationFirstName = {
 				msg: 'First name must only contain letters a to z, apostrophes and hyphens'
 			};
 		}
 
 		if (!declarationLastName) {
 			logger.info({ declarationLastName }, 'no value provided for declarationLastName');
-			req.body.errors.declarationLastName = { msg: 'Enter your last name' };
+			errors.declarationLastName = { msg: 'Enter your last name' };
 		} else if (!/^[a-zA-Z' -]+$/.test(declarationLastName)) {
 			logger.info({ declarationLastName }, 'invalid value provided for declarationLastName');
-			req.body.errors.declarationLastName = {
+			errors.declarationLastName = {
 				msg: 'Last name must only contain letters a to z, apostrophes and hyphens'
 			};
 		}
 
-		if (Object.keys(req.body.errors).length > 0) {
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+		if (Object.keys(errors).length > 0) {
 			const declarationNamePage = buildDeclarationNamePage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary,
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors),
 				declarationFirstName,
 				declarationLastName
 			});
@@ -76,41 +78,41 @@ export function buildDeclarationOrganisationPage(viewData = {}): AsyncRequestHan
 	};
 }
 
-export function buildSaveDeclarationOrganisation({ logger }: PortalService): AsyncRequestHandler {
+export function buildSaveDeclarationOrganisation({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ declarationOrganisation?: string }> {
 	return async (req, res) => {
 		const { declarationOrganisation } = req.body;
+		let errors: ValidationErrors | undefined;
 		if (!declarationOrganisation) {
 			logger.info({ declarationOrganisation }, 'no value provided for declarationOrganisation');
 
-			req.body.errors = {
+			errors = {
 				declarationOrganisation: { msg: 'Enter your organisation' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		} else if (declarationOrganisation.length > 250) {
 			logger.info({ declarationOrganisation }, 'invalid value provided for declarationOrganisation');
 
-			req.body.errors = {
+			errors = {
 				declarationOrganisation: { msg: 'Organisation must be 250 characters or less' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		} else if (!/^[a-zA-Z0-9',\-\s]+$/.test(declarationOrganisation)) {
 			logger.info(
 				{ declarationOrganisation },
 				'value provided for declarationOrganisation contains invalid characters'
 			);
 
-			req.body.errors = {
+			errors = {
 				declarationOrganisation: {
 					msg: 'Organisation must only contain letters a to z, numbers, apostrophes, hyphens, commas and spaces'
 				}
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		}
 
-		if (req.body.errors) {
+		if (errors) {
 			const declarationOrganisationPage = buildDeclarationOrganisationPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary,
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors),
 				declarationOrganisation
 			});
 			return declarationOrganisationPage(req, res);
@@ -132,29 +134,30 @@ export function buildPositionInOrganisationPage(viewData = {}): AsyncRequestHand
 	};
 }
 
-export function buildSavePositionInOrganisation({ logger }: PortalService): AsyncRequestHandler {
+export function buildSavePositionInOrganisation({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ positionInOrganisation?: string }> {
 	return async (req, res) => {
 		const { positionInOrganisation } = req.body;
+		let errors: ValidationErrors | undefined;
 		if (!positionInOrganisation) {
 			logger.info({ positionInOrganisation }, 'no value provided for positionInOrganisation');
 
-			req.body.errors = {
+			errors = {
 				positionInOrganisation: { msg: 'Enter your position in your organisation' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		} else if (positionInOrganisation.length > 250) {
 			logger.info({ positionInOrganisation }, 'invalid value provided for positionInOrganisation');
 
-			req.body.errors = {
+			errors = {
 				positionInOrganisation: { msg: 'Organisation must be 250 characters or less' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 		}
 
-		if (req.body.errors) {
+		if (errors) {
 			const positionInOrganisationPage = buildPositionInOrganisationPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary,
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors),
 				positionInOrganisation
 			});
 			return positionInOrganisationPage(req, res);
@@ -175,7 +178,9 @@ export function buildDeclarationPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitDeclaration(service: PortalService): AsyncRequestHandler {
+export function buildSubmitDeclaration(
+	service: PortalService
+): AsyncRequestHandlerWithBody<{ declarationConfirmation?: string }, { config: { styleFile: string } }> {
 	return async (req, res) => {
 		const { declarationConfirmation } = req.body;
 		const { db, logger, blobStore, serviceBusEventClient } = service;
@@ -183,14 +188,13 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 		if (!declarationConfirmation) {
 			logger.info({ declarationConfirmation }, 'no value provided for positionInOrganisation');
 
-			req.body.errors = {
+			const errors = {
 				declarationConfirmation: { msg: 'You must confirm you understand and accept the declaration' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
 
 			const declarationPage = buildDeclarationPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors)
 			});
 			return declarationPage(req, res);
 		}
