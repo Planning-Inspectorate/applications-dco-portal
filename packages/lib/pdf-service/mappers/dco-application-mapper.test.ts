@@ -1,12 +1,38 @@
 // @ts-nocheck
 
 import { describe, it, mock } from 'node:test';
-import { findSupportingEvidenceByCategory, findSupportingEvidenceBySubcategory } from './dco-application-mapper.ts';
+import {
+	findSupportingEvidenceByCategory,
+	findSupportingEvidenceBySubcategory,
+	mapCaseToDcoApplication
+} from './dco-application-mapper.ts';
 import assert from 'node:assert';
 import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
 import { DOCUMENT_SUB_CATEGORY_ID, DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('dco-application-mapper.ts', () => {
+	describe('mapCaseToDcoApplication', () => {
+		it('maps EMP to Reports and statements and Other plans, drawings and sections for display in the generated PDF', () => {
+			const mappedApplication = mapCaseToDcoApplication({
+				reference: 'TEST-REFERENCE',
+				SupportingEvidence: [
+					{
+						subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_MANAGEMENT_PLAN,
+						Document: { fileName: 'environmental-management-plan.pdf' }
+					}
+				]
+			});
+
+			assert.deepStrictEqual(mappedApplication.documents['Plans and drawings'], []);
+			assert.deepStrictEqual(mappedApplication.documents['Reports and statements'], [
+				'environmental-management-plan.pdf'
+			]);
+			assert.deepStrictEqual(mappedApplication.application.otherPlansAndReports.data.otherPlansDrawingsSections.value, [
+				'environmental-management-plan.pdf'
+			]);
+		});
+	});
+
 	describe('findSupportingEvidenceByCategory', () => {
 		it('should filter an array of supporting evidence to contain those matching the category', () => {
 			const supportingEvidence = [

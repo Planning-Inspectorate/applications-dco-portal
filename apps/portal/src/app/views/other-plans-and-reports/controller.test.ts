@@ -23,7 +23,7 @@ describe('other-plans-and-reports controller', () => {
 							{ documentId: 'doc-id-4', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.SITE_LAYOUT_PLANS },
 							{ documentId: 'doc-id-5', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.CAR_PARKING_LANDSCAPING_ACCESS },
 							{ documentId: 'doc-id-6', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.DRAINAGE_AND_SURFACE_WATER_MANAGEMENT },
-							{ documentId: 'doc-id-7', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.NATIONAL_SECURITY_ISSUES },
+							{ documentId: 'doc-id-7', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.ENVIRONMENTAL_MANAGEMENT_PLAN },
 							{ documentId: 'doc-id-8', subCategoryId: DOCUMENT_SUB_CATEGORY_ID.FAST_TRACK_ADMISSION_DOCUMENT }
 						]
 					}))
@@ -55,8 +55,8 @@ describe('other-plans-and-reports controller', () => {
 				caseReference: 'EN123456',
 				forms: {
 					'other-plans-and-reports': {
-						otherPlansDrawingsSections: 'doc-id-1,doc-id-2,doc-id-3,doc-id-4,doc-id-5,doc-id-6',
-						supportingInformation: 'doc-id-7,doc-id-8'
+						otherPlansDrawingsSections: 'doc-id-1,doc-id-2,doc-id-3,doc-id-4,doc-id-5,doc-id-6,doc-id-7',
+						supportingInformation: 'doc-id-8'
 					}
 				}
 			});
