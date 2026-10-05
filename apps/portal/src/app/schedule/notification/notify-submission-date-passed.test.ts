@@ -3,7 +3,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { dispatchSubmissionDatePassedNotifications } from './notify-submission-date-passed.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 
 describe('dispatchSubmissionDatePassedNotifications', () => {
 	it('should send email to cases where submissions date has passed and case not submitted', async (ctx) => {
@@ -36,7 +36,7 @@ describe('dispatchSubmissionDatePassedNotifications', () => {
 			db: mockDb,
 			logger: mockLogger(),
 			notifyClient: mockNotifyClient,
-			redisClient: mockRedisClient
+			fullRedisClient: mockRedisClient
 		});
 
 		assert.strictEqual(mockNotifyClient.sendSubmissionDatePassedNotification.mock.callCount(), 2);

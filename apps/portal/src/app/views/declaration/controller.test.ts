@@ -15,7 +15,7 @@ import {
 } from './controller.ts';
 import assert from 'node:assert';
 import { Readable } from 'stream';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 
 describe('declaration controllers', () => {
 	describe('buildDeclarationNamePage', () => {

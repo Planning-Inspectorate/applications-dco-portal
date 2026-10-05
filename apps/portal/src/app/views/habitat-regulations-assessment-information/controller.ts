@@ -1,4 +1,4 @@
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import {
 	DOCUMENT_CATEGORY_STATUS_ID,
 	DOCUMENT_SUB_CATEGORY_ID
@@ -7,7 +7,7 @@ import type { PortalService } from '#service';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import type { Request, Response } from 'express';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { getSupportingEvidenceIds } from '../supporting-evidence/util.ts';
 
 export function buildHabitatRegulationsAssessmentInformationHomePage(

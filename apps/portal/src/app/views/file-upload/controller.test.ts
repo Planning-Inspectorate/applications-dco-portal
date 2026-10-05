@@ -9,7 +9,7 @@ import {
 } from './controller.ts';
 import assert from 'node:assert';
 import { DOCUMENT_CATEGORY_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import { Readable, Writable } from 'stream';
 import { APPLICATION_SECTION_ID } from '../constants.ts';
 import { buildApplicantAgentDetailsHomePage } from '../applicant-agent-details/controller.ts';

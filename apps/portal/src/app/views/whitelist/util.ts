@@ -1,7 +1,7 @@
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import type { Request, Response } from 'express';
-import { clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { clearSessionData, readSessionData } from '@planning-inspectorate/core/util';
 
 export const USER_ROLES = [
 	{

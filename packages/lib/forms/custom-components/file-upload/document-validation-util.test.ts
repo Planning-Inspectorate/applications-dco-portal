@@ -3,7 +3,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 import { isDocOrXlsEncrypted, validateUploadedFile } from './document-validation-util.ts';
-import { mockLogger } from '../../../testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import * as CFB from 'cfb';
 import { createMinimalZipBuffer } from './zip-file-util.ts';
 import { ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE } from './constants.ts';

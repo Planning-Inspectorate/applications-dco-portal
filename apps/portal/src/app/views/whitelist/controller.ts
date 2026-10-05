@@ -1,7 +1,7 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import { clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
+import { clearSessionData, readSessionData } from '@planning-inspectorate/core/util';
 
 export function buildWhitelistHomePage({ db }: PortalService): AsyncRequestHandler {
 	return async (req, res) => {

@@ -1,31 +1,15 @@
 import type { NotifyConfig, ServiceBusConfig } from '@pins/dco-portal-lib/govnotify/types';
 import type { BlobStoreConfig } from '@pins/dco-portal-lib/blob-store/types';
 import type { PdfServiceConfig } from '@pins/dco-portal-lib/pdf-service/types.js';
+import type { BaseConfig } from '@planning-inspectorate/core/app';
 
-interface Config {
+interface Config extends BaseConfig {
 	appHostname: string;
 	blobStore: BlobStoreConfig;
 	pdf: PdfServiceConfig;
-	cacheControl: {
-		maxAge: string;
-	};
-	database: {
-		datasourceUrl: string;
-	};
-	gitSha?: string;
 	govNotify: NotifyConfig;
-	httpPort: number;
 	isApplicationEnabled: boolean;
-	logLevel: string;
-	NODE_ENV: string;
 	serviceBus: ServiceBusConfig;
-	session: {
-		redisPrefix: string;
-		redis?: string;
-		secret: string;
-	};
-	srcDir: string;
-	staticDir: string;
 	enableE2eTestEndpoints: boolean;
 	testToolsToken?: string;
 }

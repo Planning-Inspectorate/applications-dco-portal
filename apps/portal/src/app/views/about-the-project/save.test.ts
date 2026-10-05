@@ -3,7 +3,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { buildSaveController } from './save.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import { APPLICATION_SECTION_ID } from '../constants.ts';
 import { PROJECT_SITE_TYPE_IDS } from './constants.ts';
 

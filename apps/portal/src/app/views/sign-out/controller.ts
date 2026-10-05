@@ -2,7 +2,8 @@ import type { Request, Response } from 'express';
 import type { PortalService } from '#service';
 import { promisify } from 'node:util';
 
-export function buildSignOutController({ logger, redisClient }: PortalService) {
+export function buildSignOutController({ logger, fullRedisClient }: PortalService) {
+	const redisClient = fullRedisClient;
 	return async (req: Request, res: Response) => {
 		await redisClient?.del(`sess:${req.sessionID}`);
 		await redisClient?.del(`user_session:${req.session.emailAddress}`);
