@@ -4,6 +4,7 @@ import type { Schemas } from '@planning-inspectorate/data-model';
 import { DEFAULT_PROJECT_EMAIL_ADDRESS } from '@pins/dco-portal-lib/govnotify/constants.ts';
 import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 type NSIPProject = Schemas.NSIPProject;
+import { isEqual } from 'date-fns';
 
 export function buildNsipProjectFunction(service: FunctionService): ServiceBusTopicHandler {
 	return async (message: NSIPProject, context: InvocationContext) => {
@@ -74,7 +75,7 @@ export function buildNsipProjectFunction(service: FunctionService): ServiceBusTo
 	};
 }
 
-function hasAnticipatedSubmissionDateChanged(date1: Date | null, date2: Date | null): boolean {
+function hasAnticipatedSubmissionDateChanged(date1: Date | string | null, date2: Date | string | null): boolean {
 	if (!date1 && !date2) {
 		return false;
 	}
@@ -83,9 +84,5 @@ function hasAnticipatedSubmissionDateChanged(date1: Date | null, date2: Date | n
 		return true;
 	}
 
-	return (
-		date1.getFullYear() !== date2.getFullYear() ||
-		date1.getMonth() !== date2.getMonth() ||
-		date1.getDate() !== date2.getDate()
-	);
+	return !isEqual(date1, date2);
 }
