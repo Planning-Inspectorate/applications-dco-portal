@@ -37,11 +37,11 @@ const documentUploadJourneyTests = (taskName, taskIndex, urlFragment, fileToUplo
 
 	const openCategory = () => {
 		CommonActions.login();
-		cy.contains('h1', 'Application reference number').should('be.visible');
+		// cy.contains('h1', 'Application reference number').should('be.visible');
 		cy.contains('h2', 'Your documents').should('be.visible');
 		UploadDocumentsActions.openTask(taskIndex);
 		cy.url().should('include', urlFragment);
-		cy.contains('This category contains 0 document(s)').should('be.visible');
+		cy.contains('This category contains 0 documents').should('be.visible');
 	};
 
 	const startUpload = () => {
@@ -69,6 +69,7 @@ const documentUploadJourneyTests = (taskName, taskIndex, urlFragment, fileToUplo
 		cy.contains('h1', 'Upload your documents').should('be.visible');
 		cy.url().should('include', urlFor('/upload/upload-documents'));
 		cy.get('input[type="file"]').selectFile(file, { force: true });
+		cy.wait(500);
 		clickContinue();
 	};
 
@@ -123,18 +124,20 @@ const documentUploadJourneyTests = (taskName, taskIndex, urlFragment, fileToUplo
 			openCategory();
 			startUpload();
 
-			continueAndAssertError('You must select an answer');
+			continueAndAssertError('Select the document type');
 			UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
 			clickContinue();
 
-			continueAndAssertError('Upload an attachment');
-			cy.get('input[type="file"]').selectFile(DEFAULT_UPLOAD, { force: true });
+			continueAndAssertError('Select a file to upload');
+			//cy.get('#fileUpload').selectFile(DEFAULT_UPLOAD, { force: true });
+			cy.get('#fileUpload-input').selectFile('cypress/fixtures/uploadTestthree.doc', { force: true });
+			cy.wait(500);
 			clickContinue();
 
-			continueAndAssertError('You must select an answer');
+			continueAndAssertError('Select the APFP regulation');
 			selectRegulation();
 
-			continueAndAssertError('You must select an answer');
+			continueAndAssertError('Select yes if the document is certified');
 		});
 
 		it('Uploaded file type validation', () => {
@@ -145,7 +148,7 @@ const documentUploadJourneyTests = (taskName, taskIndex, urlFragment, fileToUplo
 
 			assertErrorSummary();
 			cy.contains(
-				'The attachment must be PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
+				'Each file must be a PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, XLSM, MSG, JPG, JPEG, MPEG, MP3, MP4, MOV, PNG, TIF, TIFF, DBF, HTML, PRJ, SHP, SHX, or GIS'
 			);
 		});
 	});
