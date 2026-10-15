@@ -6,7 +6,6 @@
 		"types": ["cypress", "node"],
 		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
-		"baseUrl": ".",
 		"checkJs": false,
 		"erasableSyntaxOnly": true,
 		"esModuleInterop": true,

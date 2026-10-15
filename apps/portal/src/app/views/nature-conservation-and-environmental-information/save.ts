@@ -58,7 +58,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving nature conservation and environmental features data to database');
-			throw new Error('error saving nature conservation and environmental features journey');
+			throw new Error('error saving nature conservation and environmental features journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

@@ -53,7 +53,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving flood risk information data to database');
-			throw new Error('error saving flood risk information journey');
+			throw new Error('error saving flood risk information journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

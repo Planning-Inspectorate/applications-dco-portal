@@ -110,7 +110,7 @@ export class GovNotifyClient {
 			await this.notifyClient.sendEmail(templateId, emailAddress, options);
 		} catch (e) {
 			this.logger.error({ e }, 'Error dispatching email');
-			throw new Error('Email failed to dispatch');
+			throw new Error('Email failed to dispatch', { cause: e });
 		}
 	}
 }

@@ -26,7 +26,7 @@ export class PdfServiceClient {
 		} catch (err) {
 			this.logger.error(err);
 			const errorMessage = err instanceof Error ? err.message : '';
-			throw new Error('pdf-service-api generatePdf error: ' + errorMessage);
+			throw new Error('pdf-service-api generatePdf error: ' + errorMessage, { cause: err });
 		}
 
 		if (!apiResponse.ok || apiResponse.status !== 200) {

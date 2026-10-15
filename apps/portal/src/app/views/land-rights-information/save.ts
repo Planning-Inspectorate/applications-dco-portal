@@ -65,7 +65,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving land rights information data to database');
-			throw new Error('error saving land rights information journey');
+			throw new Error('error saving land rights information journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

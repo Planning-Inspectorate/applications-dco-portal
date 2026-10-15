@@ -91,7 +91,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving about the project data to database');
-			throw new Error('error saving about the project journey');
+			throw new Error('error saving about the project journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

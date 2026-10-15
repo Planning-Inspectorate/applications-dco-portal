@@ -93,7 +93,7 @@ export function uploadDocumentsController(
 					await blobStore?.uploadStream(Readable.from(file.buffer), file.mimetype, blobName);
 				} catch (error) {
 					logger.error({ error }, `Error uploading file: ${fileName} to blob store`);
-					throw new Error(`${fileName} could not be uploaded – try again`);
+					throw new Error(`${fileName} could not be uploaded – try again`, { cause: error });
 				}
 			}
 
@@ -130,7 +130,7 @@ export function deleteDocumentsController(service: PortalService, documentCatego
 			await blobStore?.deleteBlobIfExists(blobName);
 		} catch (error) {
 			logger.error({ error, blobName }, `Error deleting file: ${blobName} from Blob store`);
-			throw new Error('Failed to delete file');
+			throw new Error('Failed to delete file', { cause: error });
 		}
 
 		let uploadedFiles = req.session?.files?.[documentCategoryId]?.uploadedFiles || [];

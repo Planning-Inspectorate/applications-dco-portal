@@ -58,7 +58,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving crown land access and rights of way plans data to database');
-			throw new Error('error saving crown land access and rights of way plans journey');
+			throw new Error('error saving crown land access and rights of way plans journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

@@ -12,8 +12,8 @@ import {
 } from '../supporting-evidence/db-operations.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
-	OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS,
-	OTHER_INFORMATION_SUBCATEGORY_IDS
+	OTHER_INFORMATION_SUBCATEGORY_IDS,
+	OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
@@ -25,7 +25,9 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 				Documents: {
 					where: {
 						SubCategory: {
-							id: { in: [...OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, ...OTHER_INFORMATION_SUBCATEGORY_IDS] }
+							id: {
+								in: [...OTHER_PLANS_DRAWINGS_SECTIONS_SUBCATEGORY_IDS, ...OTHER_INFORMATION_SUBCATEGORY_IDS]
+							}
 						}
 					}
 				}
@@ -69,7 +71,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving other plans and reports data to database');
-			throw new Error('error saving other plans and reports journey');
+			throw new Error('error saving other plans and reports journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

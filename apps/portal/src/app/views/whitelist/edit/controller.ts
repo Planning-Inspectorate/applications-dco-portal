@@ -79,7 +79,7 @@ export function buildSaveController({ db, logger, notifyClient, appHostname }: P
 			});
 		} catch (error) {
 			logger.error({ error }, 'error editing whitelist user');
-			throw new Error('error editing user');
+			throw new Error('error editing user', { cause: error });
 		}
 
 		if (answers.accessLevel !== whitelistUser.userRoleId) {

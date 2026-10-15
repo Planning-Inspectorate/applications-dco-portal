@@ -175,7 +175,7 @@ export function buildDeleteDocumentAndSaveController(
 			blobStore?.deleteBlobIfExists(blobName);
 		} catch (error) {
 			logger.error({ error, blobName }, `Error deleting file: ${blobName} from Blob store`);
-			throw new Error('Failed to delete file from blob store');
+			throw new Error('Failed to delete file from blob store', { cause: error });
 		}
 
 		try {
@@ -206,7 +206,7 @@ export function buildDeleteDocumentAndSaveController(
 			});
 		} catch (error) {
 			logger.error({ error, documentId }, `Error deleting file: ${documentId} from database`);
-			throw new Error('Failed to delete file from database');
+			throw new Error('Failed to delete file from database', { cause: error });
 		}
 
 		res.redirect(req.baseUrl);
@@ -252,7 +252,7 @@ export function buildDownloadDocumentController(service: PortalService): AsyncRe
 			downloadStream?.pipe(res);
 		} catch (error) {
 			logger.error({ error, blobName }, `Error downloading file: ${blobName} from Blob store`);
-			throw new Error('Failed to download file from blob store');
+			throw new Error('Failed to download file from blob store', { cause: error });
 		}
 	};
 }

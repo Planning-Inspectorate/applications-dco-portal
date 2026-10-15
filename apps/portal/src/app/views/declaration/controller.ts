@@ -236,7 +236,7 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 			await blobStore?.moveFolder(caseReference, db);
 		} catch (error) {
 			logger.error({ error }, 'error moving case documents to back office container in blob store');
-			throw new Error('error moving documents during case submission');
+			throw new Error('error moving documents during case submission', { cause: error });
 		}
 
 		const documents = await db.document.findMany({
@@ -272,7 +272,7 @@ export function buildSubmitDeclaration(service: PortalService): AsyncRequestHand
 			);
 		} catch (error) {
 			logger.error({ error }, 'error sending event to service bus topic');
-			throw new Error('error sending event to service bus topic');
+			throw new Error('error sending event to service bus topic', { cause: error });
 		}
 
 		await db.case.update({
@@ -362,7 +362,7 @@ export function buildDownloadApplicationPdf(service: PortalService): AsyncReques
 				{ error, blobName },
 				`Error downloading pdf submission file for case: ${caseReference} from Blob store`
 			);
-			throw new Error('Failed to download pdf file from blob store');
+			throw new Error('Failed to download pdf file from blob store', { cause: error });
 		}
 	};
 }

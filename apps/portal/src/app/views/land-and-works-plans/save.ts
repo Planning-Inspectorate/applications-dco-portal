@@ -53,7 +53,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving land and works plans data to database');
-			throw new Error('error saving land and works plans journey');
+			throw new Error('error saving land and works plans journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

@@ -8,6 +8,7 @@ Cypress.Commands.add('deleteDownloads', () => {
 Cypress.Commands.add('validateDownloadedFile', (fileName) => {
 	cy.task('ValidateDownloadedFile', fileName).then((success) => {
 		if (success) {
+			/* eslint-disable-next-line @typescript-eslint/no-unused-expressions */
 			expect(success).to.be.true;
 		} else {
 			throw new Error(`${fileName} was not found. The file was either not downloaded or the file name is not correct.`);

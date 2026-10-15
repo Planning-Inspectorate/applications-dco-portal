@@ -48,7 +48,7 @@ export function buildSaveController({ db, logger }: PortalService, documentTypeI
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving document data to database');
-			throw new Error('error saving upload document journey');
+			throw new Error('error saving upload document journey', { cause: error });
 		}
 
 		clearSessionData(req, documentTypeId, ['uploadedFiles'], 'files');

@@ -61,46 +61,44 @@
                         }) }}
                     {% endif %}
 
-                    {% if documents.length > 0 %}
-                        <form action="" method="post" novalidate>
-                            <input type="hidden" name="_csrf" value="{{ _csrf }}">
+                    <form action="" method="post" novalidate>
+                        <input type="hidden" name="_csrf" value="{{ _csrf }}">
 
-                            {% set fieldKey = documentCategory + "IsCompleted" %}
-                            {% set fieldError = errors[fieldKey] %}
+                        {% set fieldKey = documentCategory + "IsCompleted" %}
+                        {% set fieldError = errors[fieldKey] %}
 
-                            {{ govukRadios({
-                                name: documentCategory + "IsCompleted",
-                                fieldset: {
-                                    legend: {
-                                        text: "Have you completed this section?",
-                                        isPageHeading: false,
-                                        classes: "govuk-fieldset__legend--m"
-                                    }
-                                },
-                                hint: {
-                                    html: "<div class='govuk-grid-row'><div class='govuk-grid-column-two-thirds'>You can only mark this section as complete when all your documents have been uploaded and you have removed any documents with a virus</div></div>"
-                                },
-                                items: [
-                                    {
-                                        value: "yes",
-                                        text: "Yes, I've completed this section",
-                                        checked: isCompletedValue == 'yes'
-                                    },
-                                    {
-                                        value: "no",
-                                        text: "No, I'll come back to it later",
-                                        checked: isCompletedValue == 'no'
-                                    }
-                                ],
-                                errorMessage: fieldError and {
-                                    text: fieldError.msg
+                        {{ govukRadios({
+                            name: documentCategory + "IsCompleted",
+                            fieldset: {
+                                legend: {
+                                    text: "Have you completed this section?",
+                                    isPageHeading: false,
+                                    classes: "govuk-fieldset__legend--m"
                                 }
-                            }) }}
-                            {{ govukButton({
-                                text: "Save and return"
-                            }) }}
-                        </form>
-                    {% endif %}
+                            },
+                            hint: {
+                                html: "<div class='govuk-grid-row'><div class='govuk-grid-column-two-thirds'>You can only mark this section as complete when all your documents have been uploaded and you have removed any documents with a virus</div></div>"
+                            },
+                            items: [
+                                {
+                                    value: "yes",
+                                    text: "Yes, I've completed this section",
+                                    checked: isCompletedValue == 'yes'
+                                },
+                                {
+                                    value: "no",
+                                    text: "No, I'll come back to it later",
+                                    checked: isCompletedValue == 'no'
+                                }
+                            ],
+                            errorMessage: fieldError and {
+                                text: fieldError.msg
+                            }
+                        }) }}
+                        {{ govukButton({
+                            text: "Save and return"
+                        }) }}
+                    </form>
                 </div>
             </div>
         </div>

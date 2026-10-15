@@ -49,7 +49,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving consultation and publicity details data to database');
-			throw new Error('error saving consultation and publicity details journey');
+			throw new Error('error saving consultation and publicity details journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });

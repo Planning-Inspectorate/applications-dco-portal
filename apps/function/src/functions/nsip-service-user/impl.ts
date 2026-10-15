@@ -49,7 +49,7 @@ export function buildNsipServiceUserFunction(service: FunctionService): ServiceB
 				context.error('Error during NSIP Service User function run: ', error);
 				errorMessage = error.message;
 			}
-			throw new Error('Error during NSIP Service User function run: ' + errorMessage);
+			throw new Error('Error during NSIP Service User function run: ' + errorMessage, { cause: error });
 		}
 	};
 }

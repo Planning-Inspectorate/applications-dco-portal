@@ -68,7 +68,7 @@ export function buildSaveController({ db, logger, notifyClient }: PortalService)
 			});
 		} catch (error) {
 			logger.error({ error }, `error removing whitelist user id ${whitelistUserId} from the database`);
-			throw new Error('error removing user from the whitelist');
+			throw new Error('error removing user from the whitelist', { cause: error });
 		}
 
 		await notifyClient?.sendWhitelistRemoveNotification(whitelistUser.email, {

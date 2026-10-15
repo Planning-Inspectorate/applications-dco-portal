@@ -79,7 +79,7 @@ async function populateForm(req: Request, res: Response, db: PrismaClient, appli
 
 	forms[applicationSectionId] = {
 		hasAdditionalInformation:
-			additionalInfoDocumentCounts.reduce((acc, curr) => (acc += curr.count), 0) > 0 ? 'yes' : 'no',
+			additionalInfoDocumentCounts.reduce((acc, curr) => acc + curr.count, 0) > 0 ? 'yes' : 'no',
 		additionalInformationDescription: caseData.infrastructureAdditionalInformationDescription || '',
 		additionalInformationDocuments: populateMultiSubcategoryCheckboxes(additionalInfoDocumentCounts),
 		electricityGrid: caseData.NonOffshoreGeneratingStation?.electricityGrid || '',

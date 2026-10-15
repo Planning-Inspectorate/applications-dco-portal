@@ -83,7 +83,7 @@ export function buildSaveController({ db, logger }: PortalService, applicationSe
 			});
 		} catch (error) {
 			logger.error({ error }, 'error saving applicant agent details data to database');
-			throw new Error('error saving applicant agent details journey');
+			throw new Error('error saving applicant agent details journey', { cause: error });
 		}
 
 		clearDataFromSession({ req, journeyId: applicationSectionId });
