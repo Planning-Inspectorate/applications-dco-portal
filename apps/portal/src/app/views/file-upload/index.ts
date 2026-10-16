@@ -11,20 +11,16 @@ import {
 import { uploadDocumentQuestion } from '../middleware/file-upload-middleware.ts';
 import { createJourney } from './journey.ts';
 import { getQuestions } from './questions.ts';
-// @ts-expect-error - due to not having @types
-import { buildGetJourney } from '@planning-inspectorate/dynamic-forms/src/middleware/build-get-journey.js';
 import {
+	buildGetJourney,
+	buildGetJourneyResponseFromSession,
+	buildSave,
+	list,
+	question,
 	saveDataToSession,
-	buildGetJourneyResponseFromSession
-	// @ts-expect-error - due to not having @types
-} from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
-// @ts-expect-error - due to not having @types
-import { list, question, buildSave } from '@planning-inspectorate/dynamic-forms/src/controller.js';
-// @ts-expect-error - due to not having @types
-import validate from '@planning-inspectorate/dynamic-forms/src/validator/validator.js';
-// @ts-expect-error - due to not having @types
-import { validationErrorHandler } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-import type { Handler, Request } from 'express';
+	validate,
+	validationErrorHandler
+} from '@planning-inspectorate/dynamic-forms';
 import { getDocumentCategoryDisplayName } from '../util.ts';
 import { buildSaveController } from './save.ts';
 import multer from 'multer';
@@ -41,7 +37,7 @@ import {
 export function createRoutes(service: PortalService, documentTypeId: string): IRouter {
 	const router = createRouter({ mergeParams: true });
 	const questions = getQuestions(documentTypeId);
-	const getJourney = buildGetJourney((req: Request, journeyResponse: Handler) =>
+	const getJourney = buildGetJourney((req, journeyResponse) =>
 		createJourney(documentTypeId, questions, journeyResponse, req)
 	);
 	const getJourneyResponse = buildGetJourneyResponseFromSession(documentTypeId);

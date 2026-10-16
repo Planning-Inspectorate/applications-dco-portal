@@ -1,29 +1,34 @@
 import { body } from 'express-validator';
-import AddressValidator, {
+import type { AddressRequiredFields, AddressValidatorParams } from '@planning-inspectorate/dynamic-forms';
+import {
+	AddressValidator,
 	addressLine1MaxLength,
 	addressLine1MinLength,
 	addressLine2MaxLength,
 	addressLine2MinLength,
-	townCityMaxLength,
-	townCityMinLength,
 	countyMaxLength,
 	countyMinLength,
 	postcodeMaxLength,
 	postcodeMinLength,
+	townCityMaxLength,
+	townCityMinLength,
 	validatePostcode
-	// @ts-expect-error - due to not having @types
-} from '@planning-inspectorate/dynamic-forms/src/validator/address-validator.js';
-import type { AddressValidatorOpts } from './types.d.ts';
+} from '@planning-inspectorate/dynamic-forms';
 import type FullAddressQuestion from './question.js';
 
 export const countryMaxLength = 250;
 export const countryMinLength = 0;
 
-export default class FullAddressValidator extends AddressValidator {
-	declare requiredFields?: { [key: string]: boolean };
+export interface FullAddressValidatorParams extends AddressValidatorParams {
+	requiredFields?: AddressRequiredFields & { country: boolean };
+}
 
-	constructor(opts?: AddressValidatorOpts) {
+export default class FullAddressValidator extends AddressValidator {
+	override requiredFields: FullAddressValidatorParams['requiredFields'] | undefined;
+
+	constructor(opts?: FullAddressValidatorParams) {
 		super(opts);
+		this.requiredFields = opts?.requiredFields;
 	}
 
 	validate(questionObj: FullAddressQuestion) {

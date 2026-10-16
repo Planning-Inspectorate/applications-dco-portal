@@ -10,8 +10,7 @@ import {
 import { APPLICATION_SECTION, APPLICATION_SECTION_ID } from '../constants.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-// @ts-expect-error - due to not having @types
-import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
+import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 
 const optionalSections: string[] = [
 	DOCUMENT_CATEGORY_ID.ADDITIONAL_PRESCRIBED_INFORMATION,

@@ -1,9 +1,10 @@
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
 import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
-import type { Handler, Request } from 'express';
+import type { Request } from 'express';
 
 export const JOURNEY_ID = 'add-user';
 
-export function createJourney(questions: any, response: Handler, req: Request) {
+export function createJourney(questions: any, response: JourneyResponseLike, req: Request) {
 	if (!req.baseUrl.includes('/' + JOURNEY_ID)) {
 		throw new Error(`not a valid request for the ${JOURNEY_ID} journey`);
 	}

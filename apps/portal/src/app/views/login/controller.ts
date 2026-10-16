@@ -1,9 +1,6 @@
 // @ts-expect-error - due to not having @types
 import bcrypt from 'bcrypt';
-// @ts-expect-error - due to not having @types
-import { expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { BOOLEAN_OPTIONS, expressValidationErrorsToGovUkErrorList } from '@planning-inspectorate/dynamic-forms';
 import {
 	isValidCaseReference,
 	isValidEmailAddress,

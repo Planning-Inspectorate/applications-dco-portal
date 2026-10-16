@@ -1,13 +1,21 @@
-import type { Handler, Request } from 'express';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
+import {
+	BOOLEAN_OPTIONS,
+	Journey,
+	questionHasAnswer,
+	Section,
+	whenQuestionHasAnswer
+} from '@planning-inspectorate/dynamic-forms';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
@@ -19,7 +27,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.hasEnvironmentalStatement)
-				.startMultiQuestionCondition('environmental-statement', (response: Handler) =>
+				.startMultiQuestionCondition('environmental-statement', (response) =>
 					questionHasAnswer(response, questions.hasEnvironmentalStatement, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.nonTechnicalSummary)

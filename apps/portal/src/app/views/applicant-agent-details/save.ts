@@ -1,14 +1,12 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-// @ts-expect-error - due to not having @types
-import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { mapAnswersToFullAddressInput, mapAnswersToContact } from './mappers.ts';
 import type { ContactDetailsRecord } from './types.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 
 export function buildSaveController({ db, logger }: PortalService, applicationSectionId: string): AsyncRequestHandler {
 	return async (req, res) => {
