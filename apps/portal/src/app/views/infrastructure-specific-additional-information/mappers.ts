@@ -1,5 +1,4 @@
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms';
 import type {
 	NonOffshoreGeneratingStationInput,
 	OffshoreGeneratingStationInput,

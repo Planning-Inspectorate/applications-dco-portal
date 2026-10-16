@@ -1,8 +1,8 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
-// @ts-expect-error - due to not having @types
-import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
+import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
 import {
@@ -10,8 +10,6 @@ import {
 	DOCUMENT_SUB_CATEGORY_ID
 } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { deleteSubCategorySupportingEvidence, saveSupportingEvidence } from '../supporting-evidence/db-operations.ts';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	mapAnswersToHighwayRelatedDevelopment,

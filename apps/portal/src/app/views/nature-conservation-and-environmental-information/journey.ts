@@ -1,10 +1,14 @@
-import type { Handler, Request } from 'express';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
-import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
+import { BOOLEAN_OPTIONS, Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}

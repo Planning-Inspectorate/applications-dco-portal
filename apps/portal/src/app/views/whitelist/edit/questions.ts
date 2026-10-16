@@ -1,10 +1,9 @@
-// @ts-expect-error - due to not having @types
-import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-// @ts-expect-error - due to not having @types
-import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-// @ts-expect-error - due to not having @types
-import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
-import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import {
+	COMPONENT_TYPES,
+	createQuestions,
+	questionClasses,
+	RequiredValidator
+} from '@planning-inspectorate/dynamic-forms';
 import { referenceDataToRadioOptionsWithHintText } from '@pins/dco-portal-lib/util/questions.ts';
 import { USER_ROLES } from '../util.ts';
 

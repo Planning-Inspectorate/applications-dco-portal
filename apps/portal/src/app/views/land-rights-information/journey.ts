@@ -1,12 +1,14 @@
-import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
-import type { Handler, Request } from 'express';
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
+import { BOOLEAN_OPTIONS, Journey, Section, questionHasAnswer } from '@planning-inspectorate/dynamic-forms';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
@@ -18,7 +20,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.compulsoryAcquisition)
-				.startMultiQuestionCondition('include-compulsory-acquisition', (response: Handler) =>
+				.startMultiQuestionCondition('include-compulsory-acquisition', (response) =>
 					questionHasAnswer(response, questions.compulsoryAcquisition, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.statementOfReasons)

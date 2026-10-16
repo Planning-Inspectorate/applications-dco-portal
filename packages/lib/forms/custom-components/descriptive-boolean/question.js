@@ -1,4 +1,4 @@
-import BooleanQuestion from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import { BooleanQuestion } from '@planning-inspectorate/dynamic-forms';
 
 export default class DescriptiveBooleanQuestion extends BooleanQuestion {
 	constructor({ title, question, fieldName, url, hint, pageTitle, description, html, options, validators, editable }) {

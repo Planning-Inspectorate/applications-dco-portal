@@ -1,8 +1,14 @@
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
 import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
-import type { Handler, Request } from 'express';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	const validBaseUrlSuffixes = ['/' + applicationSectionId, '/publicity-details'];
 
 	if (!validBaseUrlSuffixes.some((suffix) => req.baseUrl.endsWith(suffix))) {

@@ -1,4 +1,4 @@
-import CheckboxQuestion from '@planning-inspectorate/dynamic-forms/src/components/checkbox/question.js';
+import { CheckboxQuestion } from '@planning-inspectorate/dynamic-forms';
 
 export default class SelectDocuments extends CheckboxQuestion {
 	constructor({ ...params }) {

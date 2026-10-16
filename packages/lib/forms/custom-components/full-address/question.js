@@ -1,5 +1,4 @@
-import { Question } from '@planning-inspectorate/dynamic-forms/src/questions/question.js';
-import { nl2br } from '@planning-inspectorate/dynamic-forms/src/lib/utils.js';
+import { nl2br, Question } from '@planning-inspectorate/dynamic-forms';
 import escape from 'escape-html';
 import { FullAddress } from './full-address.ts';
 import FullAddressValidator from './full-address-validator.ts';
