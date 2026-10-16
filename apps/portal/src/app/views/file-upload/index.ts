@@ -1,4 +1,5 @@
 import { Router as createRouter } from 'express';
+import { buildCsrfMiddleware } from '@planning-inspectorate/core';
 import { asyncHandler } from '@planning-inspectorate/core/util';
 import type { PortalService } from '#service';
 import type { IRouter } from 'express';
@@ -49,6 +50,7 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 	const deleteDocumentAndSaveController = buildDeleteDocumentAndSaveController(service, documentTypeId);
 
 	const handleUploads = multer();
+	const validateMultipartUploadCsrf = buildCsrfMiddleware([], []);
 	const uploadDocuments = asyncHandler(
 		uploadDocumentsController(service, documentTypeId, ALLOWED_EXTENSIONS, ALLOWED_MIME_TYPES, MAX_FILE_SIZE)
 	);
@@ -76,6 +78,7 @@ export function createRoutes(service: PortalService, documentTypeId: string): IR
 		getJourneyResponse,
 		getJourney,
 		handleUploads.array('files[]'),
+		validateMultipartUploadCsrf,
 		uploadDocuments
 	);
 
