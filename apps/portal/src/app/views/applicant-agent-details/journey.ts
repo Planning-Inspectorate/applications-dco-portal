@@ -1,12 +1,14 @@
-import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
-import type { Handler, Request } from 'express';
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
+import { BOOLEAN_OPTIONS, Journey, Section, questionHasAnswer } from '@planning-inspectorate/dynamic-forms';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
@@ -32,7 +34,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.applicantPhone),
 			new Section('Agent details', 'agent')
 				.addQuestion(questions.isAgent)
-				.startMultiQuestionCondition('agent-questions', (response: Handler) =>
+				.startMultiQuestionCondition('agent-questions', (response) =>
 					questionHasAnswer(response, questions.isAgent, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.agentOrganisation)

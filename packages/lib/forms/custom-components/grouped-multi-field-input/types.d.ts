@@ -1,4 +1,4 @@
-import type { InputField } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
+import type { InputField } from '@planning-inspectorate/dynamic-forms';
 
 export interface InputGroup {
 	title: string;

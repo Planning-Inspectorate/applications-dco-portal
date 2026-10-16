@@ -1,17 +1,14 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
-// @ts-expect-error - due to not having @types
-import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
 import {
-	expressValidationErrorsToGovUkErrorList
-	// @ts-expect-error - due to not having @types
-} from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
+	BOOLEAN_OPTIONS,
+	expressValidationErrorsToGovUkErrorList,
+	formatDateForDisplay
+} from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { Request, Response } from 'express';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
 import { statusIdRadioButtonValue } from '../util.ts';
 
 export function buildFileUploadHomePage(
@@ -61,7 +58,7 @@ export function buildFileUploadHomePage(
 			}
 		};
 
-		type TableCell = { text?: string } | { html?: string };
+		type TableCell = { text?: string | null } | { html?: string };
 		type TableRow = TableCell[];
 		const { documentRows, affectedDocumentRows } = caseData.Documents.reduce<{
 			documentRows: TableRow[];
