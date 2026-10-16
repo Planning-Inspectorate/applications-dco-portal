@@ -1,11 +1,7 @@
 import { initDatabaseClient } from '@pins/dco-portal-database';
 import { initGovNotify } from '@pins/dco-portal-lib/govnotify/index.ts';
-import { initLogger } from '@pins/dco-portal-lib/util/logger.ts';
-import { initRedis } from '@pins/dco-portal-lib/redis/index.ts';
 import type { Config } from './config-types.d.ts';
-import type { Logger } from 'pino';
 import type { PrismaClient } from '@pins/dco-portal-database/src/client/client.ts';
-import type { RedisClient } from '@pins/dco-portal-lib/redis/redis-client.ts';
 import type { GovNotifyClient } from '@pins/dco-portal-lib/govnotify/gov-notify-client.ts';
 import type { BlobStorageClient } from '@pins/dco-portal-lib/blob-store/blob-store-client.ts';
 import { initBlobStore } from '@pins/dco-portal-lib/blob-store/index.ts';
@@ -16,42 +12,34 @@ import type { PdfServiceClient } from '@pins/dco-portal-lib/pdf-service/pdf-serv
 
 import { EventEmitter } from 'events';
 import { bindPdfEvents } from './events/pdf/events.ts';
+import { BaseService } from '@planning-inspectorate/core';
 
 /**
  * This class encapsulates all the services and clients for the application
  */
-export class PortalService {
+export class PortalService extends BaseService<PrismaClient> {
 	#config: Config;
 	#eventEmitter: EventEmitter;
-	logger: Logger;
-	dbClient: PrismaClient;
-	redisClient: RedisClient | null;
 	notifyClient: GovNotifyClient | null;
 	blobStoreClient: BlobStorageClient | null;
 	serviceBusEventClient: ServiceBusEventClient | null;
 	pdfServiceClient: PdfServiceClient | null;
 
 	constructor(config: Config) {
+		super(config, initDatabaseClient);
+
 		this.#config = config;
 		this.#eventEmitter = new EventEmitter();
-		const logger = initLogger(config);
-		this.logger = logger;
-		this.dbClient = initDatabaseClient(config, logger);
-		this.redisClient = initRedis(config.session, logger);
-		this.notifyClient = initGovNotify(config.govNotify, logger);
-		this.blobStoreClient = initBlobStore(config.blobStore, logger);
-		this.serviceBusEventClient = initEventClient(config.serviceBus, logger);
-		this.pdfServiceClient = initPdfService(config.pdf, logger);
+		this.notifyClient = initGovNotify(config.govNotify, this.logger);
+		this.blobStoreClient = initBlobStore(config.blobStore, this.logger);
+		this.serviceBusEventClient = initEventClient(config.serviceBus, this.logger);
+		this.pdfServiceClient = initPdfService(config.pdf, this.logger);
 
 		this.bindEventListeners();
 	}
 
 	get appHostname() {
 		return this.#config.appHostname;
-	}
-
-	get cacheControl() {
-		return this.#config.cacheControl;
 	}
 
 	get eventEmitter() {
@@ -62,19 +50,6 @@ export class PortalService {
 		return this.blobStoreClient;
 	}
 
-	/**
-	 * Alias of dbClient
-	 *
-	 * @returns {import('@pins/dco-portal-database/src/client').PrismaClient}
-	 */
-	get db() {
-		return this.dbClient;
-	}
-
-	get gitSha() {
-		return this.#config.gitSha;
-	}
-
 	get isApplicationEnabled() {
 		return this.#config.isApplicationEnabled;
 	}
@@ -83,20 +58,19 @@ export class PortalService {
 		return this.#config.NODE_ENV;
 	}
 
-	get secureSession() {
-		return this.#config.NODE_ENV === 'production';
-	}
-
-	get sessionSecret() {
-		return this.#config.session.secret;
-	}
-
-	get staticDir() {
-		return this.#config.staticDir;
-	}
-
 	get enableE2eTestEndpoints() {
 		return this.#config.enableE2eTestEndpoints;
+	}
+
+	get otherSessionOptions() {
+		return {
+			maxAge: 30 * 60 * 1000, // 30 minutes
+			rolling: true
+		};
+	}
+
+	get fullRedisClient() {
+		return this.redisClient?.fullClient;
 	}
 
 	get testToolsToken() {

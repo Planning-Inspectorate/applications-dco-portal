@@ -11,7 +11,8 @@ export function registerDailyJob(service: PortalService) {
 }
 
 export async function dispatchSubmissionDatePassedNotifications(service: PortalService) {
-	const { db, logger, notifyClient, redisClient } = service;
+	const { db, logger, notifyClient } = service;
+	const redisClient = service.fullRedisClient;
 	if (!db || !notifyClient || !redisClient) {
 		logger.warn('Required client interfaces not started. Daily scheduled cron will be skipped.');
 		return;

@@ -12,11 +12,12 @@ import {
 	sentInLastTenSeconds
 } from './util/validation.ts';
 import { deleteOtp, generateOtp, getOtpRecord, incrementOtpAttempts, saveOtp } from './util/otp-service.ts';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
 import type { PortalService } from '#service';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapNsipProjectToCase, mapNsipServiceUserToCase, mapNsipToQuestionWasPrepopulated } from './mappers.ts';
-import { addSessionData, clearSessionData, readSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { addSessionData, clearSessionData, readSessionData } from '@planning-inspectorate/core/util';
+import type { ValidationErrors } from '@pins/dco-portal-lib/types/errors.d.ts';
 
 export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHandler {
 	return async (req, res) => {
@@ -30,21 +31,23 @@ export function buildHasApplicationReferencePage(viewData = {}): AsyncRequestHan
 	};
 }
 
-export function buildSubmitHasApplicationReference({ logger }: PortalService): AsyncRequestHandler {
+export function buildSubmitHasApplicationReference({
+	logger
+}: PortalService): AsyncRequestHandlerWithBody<{ hasReferenceNumber: string }> {
 	return async (req, res) => {
 		const { hasReferenceNumber } = req.body;
 
 		if (!hasReferenceNumber) {
 			logger.info({ hasReferenceNumber }, 'no value provided for hasReferenceNumber');
 
-			req.body.errors = {
+			const errors = {
 				hasReferenceNumber: { msg: 'Select yes if you have an application reference number' }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			const hasApplicationReferencePage = buildHasApplicationReferencePage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return hasApplicationReferencePage(req, res);
 		}
@@ -73,22 +76,26 @@ export function buildEnterEmailPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitEmailController(service: PortalService): AsyncRequestHandler {
+export function buildSubmitEmailController(service: PortalService): AsyncRequestHandlerWithBody<{
+	emailAddress: string;
+	caseReference: string;
+	errors?: ValidationErrors;
+}> {
 	return async (req, res) => {
 		const { db, notifyClient, enableE2eTestEndpoints, logger } = service;
 
 		const { emailAddress, caseReference } = req.body;
 
-		const handleError = async (errors: Record<string, string>) => {
-			req.body.errors = req.body.errors || {};
-			for (const [field, message] of Object.entries(errors)) {
-				req.body.errors[field] = { msg: message };
+		const handleError = async (additionalErrors: Record<string, string>) => {
+			const errors: ValidationErrors = req.body.errors || {};
+			for (const [field, message] of Object.entries(additionalErrors)) {
+				errors[field] = { msg: message };
 			}
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			const enterEmailPage = buildEnterEmailPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterEmailPage(req, res);
 		};
@@ -180,9 +187,10 @@ export function buildEnterOtpPage(viewData = {}): AsyncRequestHandler {
 	};
 }
 
-export function buildSubmitOtpController(service: PortalService): AsyncRequestHandler {
+export function buildSubmitOtpController(service: PortalService): AsyncRequestHandlerWithBody<{ otpCode: string }> {
 	return async (req, res) => {
-		const { db, logger, redisClient } = service;
+		const { db, logger, fullRedisClient } = service;
+		const redisClient = fullRedisClient;
 
 		const emailAddress = req.session.emailAddress;
 		const caseReference = req.session.caseReference;
@@ -195,16 +203,16 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 		const { otpCode } = req.body;
 
 		const handleOtpError = async (message: string) => {
-			req.body.errors = {
+			const errors = {
 				otpCode: { msg: message }
 			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errorSummary = expressValidationErrorsToGovUkErrorList(errors);
 
 			logger.info({ otpCode, emailAddress }, message);
 
 			const enterOtpPage = buildEnterOtpPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterOtpPage(req, res);
 		};
@@ -217,10 +225,10 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 
 		if (!isValidOtpRecord(otpRecord)) {
 			const message = 'This code has expired. Get a new code';
-			req.body.errors = {
+			const errors = {
 				otpCode: { msg: 'This code has expired. Get a new code' }
 			};
-			req.body.errorSummary = [
+			const errorSummary = [
 				{
 					text: message,
 					href: `${req.baseUrl}/request-new-code`
@@ -230,8 +238,8 @@ export function buildSubmitOtpController(service: PortalService): AsyncRequestHa
 			logger.info({ otpCode, emailAddress }, message);
 
 			const enterOtpPage = buildEnterOtpPage({
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary
 			});
 			return enterOtpPage(req, res);
 		}

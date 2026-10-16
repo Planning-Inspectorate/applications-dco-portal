@@ -133,7 +133,7 @@ export function loadConfig(): Config {
 			maxAge: CACHE_CONTROL_MAX_AGE || '1d'
 		},
 		database: {
-			datasourceUrl: SQL_CONNECTION_STRING
+			connectionString: SQL_CONNECTION_STRING
 		},
 		gitSha: GIT_SHA,
 		govNotify: {

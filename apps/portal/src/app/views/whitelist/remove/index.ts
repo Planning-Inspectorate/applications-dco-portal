@@ -2,7 +2,7 @@ import { Router as createRouter } from 'express';
 import type { IRouter } from 'express';
 import type { PortalService } from '#service';
 import { buildRemoveUserPage, buildSaveController } from './controller.ts';
-import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { asyncHandler } from '@planning-inspectorate/core/util';
 
 export function createRoutes(service: PortalService): IRouter {
 	const router = createRouter({ mergeParams: true });
