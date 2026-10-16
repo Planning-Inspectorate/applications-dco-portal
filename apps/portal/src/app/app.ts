@@ -17,7 +17,8 @@ export function createApp(service: PortalService): Express {
 		service,
 		router,
 		configureNunjucks,
-		middlewares: [addLocalsConfiguration(), cookieParser()]
+		middlewares: [addLocalsConfiguration(), cookieParser()],
+		multiPartFormRoutes: [/\/upload$/]
 	});
 
 	registerDailyJob(service);
