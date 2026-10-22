@@ -1,13 +1,14 @@
+import type { JourneyLocals, RouteParams } from '@planning-inspectorate/dynamic-forms';
 import type { Request, Response, NextFunction } from 'express';
 
 export async function uploadDocumentQuestion(req: Request, res: Response, next: NextFunction) {
 	const uploadDocumentQuestionUrls = ['upload-documents'];
 	if (uploadDocumentQuestionUrls.includes(req.params.question)) {
 		const { section } = req.params;
-		const { journey } = res.locals;
+		const { journey } = res.locals as JourneyLocals;
 
 		const sectionObj = journey.getSection(section);
-		const questionObj = journey.getQuestionByParams(req.params);
+		const questionObj = journey.getQuestionByParams(req.params as RouteParams);
 
 		if (!questionObj || !sectionObj) {
 			return res.redirect(journey.taskListUrl);
@@ -18,7 +19,7 @@ export async function uploadDocumentQuestion(req: Request, res: Response, next: 
 		const viewModel = hasSessionErrors
 			? questionObj.checkForValidationErrors(req, sectionObj, journey)
 			: questionObj.toViewModel({
-					params: req.params,
+					params: req.params as RouteParams,
 					sectionObj,
 					journey,
 					customViewData: {
@@ -33,7 +34,7 @@ export async function uploadDocumentQuestion(req: Request, res: Response, next: 
 			delete req.session.errorSummary;
 		}
 
-		return questionObj.renderAction(res, viewModel);
+		return questionObj.renderAction(res, viewModel!);
 	}
 	next();
 }
