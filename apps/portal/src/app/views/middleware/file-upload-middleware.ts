@@ -20,7 +20,7 @@ export async function uploadDocumentQuestion(req: Request, res: Response, next: 
 			? questionObj.checkForValidationErrors(req, sectionObj, journey)
 			: questionObj.toViewModel({
 					params: req.params as RouteParams,
-					sectionObj,
+					section: sectionObj,
 					journey,
 					customViewData: {
 						id: req.session.emailAddress,

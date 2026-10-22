@@ -59,7 +59,7 @@ export default class FileUpload extends Question {
 		if (hasBodyErrors || hasSessionErrors) {
 			return this.toViewModel({
 				params: req.params,
-				sectionObj,
+				section: sectionObj,
 				journey,
 				customViewData: {
 					id: params.id || params.applicationId,
