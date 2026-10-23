@@ -3,7 +3,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { PdfServiceClient } from './pdf-service-client.ts';
-import { mockLogger } from '../testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 
 describe('lib/pdf-service-client', () => {
 	describe('generatePdf', () => {

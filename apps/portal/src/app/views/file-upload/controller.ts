@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler, AsyncRequestHandlerWithBody } from '@planning-inspectorate/core/util';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import {
 	BOOLEAN_OPTIONS,
@@ -7,9 +7,10 @@ import {
 	formatDateForDisplay
 } from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import type { Request, Response } from 'express';
 import { statusIdRadioButtonValue } from '../util.ts';
+import { validationError } from '@pins/dco-portal-lib/util/errors.ts';
 
 export function buildFileUploadHomePage(
 	{ db }: PortalService,
@@ -254,7 +255,12 @@ export function buildDownloadDocumentController(service: PortalService): AsyncRe
 	};
 }
 
-export function isFileUploadSectionCompletedController(service: PortalService, journeyId: string): AsyncRequestHandler {
+export function isFileUploadSectionCompletedController(
+	service: PortalService,
+	journeyId: string
+): AsyncRequestHandlerWithBody<{
+	[key: string]: string;
+}> {
 	return async (req, res) => {
 		const { db } = service;
 
@@ -262,14 +268,11 @@ export function isFileUploadSectionCompletedController(service: PortalService, j
 		const isSectionCompleted = req.body[sectionCompletedFieldName];
 
 		const handleTaskCompletedError = async (message: string) => {
-			req.body.errors = {
-				[sectionCompletedFieldName]: { msg: message }
-			};
-			req.body.errorSummary = expressValidationErrorsToGovUkErrorList(req.body.errors);
+			const errors = validationError(sectionCompletedFieldName, message);
 
 			const fileUploadHomePage = buildFileUploadHomePage(service, journeyId, {
-				errors: req.body.errors,
-				errorSummary: req.body.errorSummary
+				errors,
+				errorSummary: expressValidationErrorsToGovUkErrorList(errors)
 			});
 			return fileUploadHomePage(req, res);
 		};
