@@ -1,19 +1,16 @@
-// @ts-expect-error - due to not having @types
-import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
-// @ts-expect-error - due to not having @types
-import MultiFieldInputValidator from '@planning-inspectorate/dynamic-forms/src/validator/multi-field-input-validator.js';
-// @ts-expect-error - due to not having @types
-import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
-// @ts-expect-error - due to not having @types
-import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-// @ts-expect-error - due to not having @types
-import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import type { QuestionProps } from '@planning-inspectorate/dynamic-forms';
+import {
+	COMPONENT_TYPES,
+	createQuestions,
+	MultiFieldInputValidator,
+	questionClasses,
+	RequiredValidator,
+	StringValidator
+} from '@planning-inspectorate/dynamic-forms';
 import FullAddressValidator from '@pins/dco-portal-lib/forms/custom-components/full-address/full-address-validator.ts';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
 import { referenceDataToRadioOptionsWithHintText } from '@pins/dco-portal-lib/util/questions.ts';
 import { PAYMENT_METHOD, PAYMENT_METHOD_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import type { QuestionProps } from '@planning-inspectorate/dynamic-forms/src/questions/question-props.js';
 import type { FullAddressProps } from '@pins/dco-portal-lib/forms/custom-components/full-address/types.d.ts';
 import type { ApplicantAgentDetailsPrefix, PaymentMethodWithHint } from './types.d.ts';
 
@@ -176,7 +173,14 @@ export function contactDetailsQuestions(prefix: ApplicantAgentDetailsPrefix) {
 		fieldLabels: { addressLine1: 'Building name or number', addressLine2: 'Street' },
 		validators: [
 			new FullAddressValidator({
-				requiredFields: { addressLine1: true, addressLine2: true, townCity: true, postcode: true, country: true }
+				requiredFields: {
+					addressLine1: true,
+					addressLine2: true,
+					townCity: true,
+					postcode: true,
+					country: true,
+					county: false
+				}
 			})
 		]
 	};

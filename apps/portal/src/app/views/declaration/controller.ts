@@ -1,12 +1,7 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
-import {
-	expressValidationErrorsToGovUkErrorList
-	// @ts-expect-error - due to not having @types
-} from '@planning-inspectorate/dynamic-forms/src/validator/validation-error-handler.js';
-// @ts-expect-error - due to not having @types
-import { formatDateForDisplay } from '@planning-inspectorate/dynamic-forms/src/lib/date-utils.js';
+import { expressValidationErrorsToGovUkErrorList, formatDateForDisplay } from '@planning-inspectorate/dynamic-forms';
 import { SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { mapCaseDataToBackOfficeFormat, mapDocumentsToBackOfficeFormat } from './mappers.ts';
 import { DATA_SUBMISSIONS_TOPIC_NAME, EVENT_TYPE } from '@pins/dco-portal-lib/event/constants.ts';
@@ -318,8 +313,8 @@ export function buildApplicationCompletePage({ db, blobStore }: PortalService): 
 			caseReference: req.session.caseReference,
 			pdfFormattedSize: blobSize ? formatBytes(blobSize) : '',
 			canDownloadPdf: !!caseData.pdfBlobName,
-			dateSubmitted: formatDateForDisplay(caseData.submissionDate, { format: 'd MMMM yyyy' }),
-			dateTimeSubmitted: formatDateForDisplay(caseData.submissionDate, { format: "h:mma 'on' d MMMM yyyy" })
+			dateSubmitted: formatDateForDisplay(caseData.submissionDate!, { format: 'd MMMM yyyy' }),
+			dateTimeSubmitted: formatDateForDisplay(caseData.submissionDate!, { format: "h:mma 'on' d MMMM yyyy" })
 		});
 	};
 }

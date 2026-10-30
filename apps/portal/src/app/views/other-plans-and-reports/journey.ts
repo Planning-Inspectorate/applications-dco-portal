@@ -1,8 +1,13 @@
-import { Journey, Section } from '@planning-inspectorate/dynamic-forms';
-import type { Handler, Request } from 'express';
+import { Journey, type JourneyResponseLike, Section } from '@planning-inspectorate/dynamic-forms';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}

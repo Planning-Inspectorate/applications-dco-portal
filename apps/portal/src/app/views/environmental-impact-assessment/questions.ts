@@ -1,13 +1,11 @@
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';
-// @ts-expect-error - due to not having @types
-import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
-// @ts-expect-error - due to not having @types
-import StringValidator from '@planning-inspectorate/dynamic-forms/src/validator/string-validator.js';
-// @ts-expect-error - due to not having @types
-import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-// @ts-expect-error - due to not having @types
-import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
+import {
+	COMPONENT_TYPES,
+	createQuestions,
+	questionClasses,
+	RequiredValidator,
+	StringValidator
+} from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { OTHER_ENVIRONMENTAL_DOCUMENTS_SUBCATEGORY_ID_OPTIONS } from './constants.ts';

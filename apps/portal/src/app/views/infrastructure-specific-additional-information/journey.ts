@@ -1,13 +1,21 @@
-import { Journey, Section, whenQuestionHasAnswer } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import { questionHasAnswer } from '@planning-inspectorate/dynamic-forms/src/components/utils/question-has-answer.js';
-// @ts-expect-error - due to not having @types
-import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
+import type { JourneyResponseLike } from '@planning-inspectorate/dynamic-forms';
+import {
+	BOOLEAN_OPTIONS,
+	Journey,
+	questionHasAnswer,
+	Section,
+	whenQuestionHasAnswer
+} from '@planning-inspectorate/dynamic-forms';
 import { DOCUMENT_SUB_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import type { Handler, Request } from 'express';
+import type { Request } from 'express';
 import { getApplicationSectionDisplayName } from '../util.ts';
 
-export function createJourney(applicationSectionId: string, questions: any, response: Handler, req: Request) {
+export function createJourney(
+	applicationSectionId: string,
+	questions: any,
+	response: JourneyResponseLike,
+	req: Request
+) {
 	if (!req.baseUrl.endsWith('/' + applicationSectionId)) {
 		throw new Error(`not a valid request for the ${applicationSectionId} journey`);
 	}
@@ -19,12 +27,12 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 		sections: [
 			new Section(applicationSectionDisplayName, 'details')
 				.addQuestion(questions.hasAdditionalInformation)
-				.startMultiQuestionCondition('additional-information', (response: Handler) =>
+				.startMultiQuestionCondition('additional-information', (response) =>
 					questionHasAnswer(response, questions.hasAdditionalInformation, BOOLEAN_OPTIONS.YES)
 				)
 				.addQuestion(questions.additionalInformationDescription)
 				.addQuestion(questions.additionalInformationDocuments)
-				.startMultiQuestionCondition('offshore-generating-station', (response: Handler) =>
+				.startMultiQuestionCondition('offshore-generating-station', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -35,7 +43,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.safetyZones)
 				.addQuestion(questions.offshoreGeneratingStation)
 				.endMultiQuestionCondition('offshore-generating-station')
-				.startMultiQuestionCondition('non-offshore-generating-station', (response: Handler) =>
+				.startMultiQuestionCondition('non-offshore-generating-station', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -48,7 +56,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.withCondition(whenQuestionHasAnswer(questions.gasFuelledGeneratingStation, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.nonOffshoreGeneratingStation)
 				.endMultiQuestionCondition('non-offshore-generating-station')
-				.startMultiQuestionCondition('highway-related-development', (response: Handler) =>
+				.startMultiQuestionCondition('highway-related-development', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -63,7 +71,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.highwayDrainageOutfallDetails)
 				.addQuestion(questions.highwayRelatedDevelopment)
 				.endMultiQuestionCondition('highway-related-development')
-				.startMultiQuestionCondition('railway-development', (response: Handler) =>
+				.startMultiQuestionCondition('railway-development', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -78,7 +86,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.railwayDrainageOutfallDetails)
 				.addQuestion(questions.railwayDevelopment)
 				.endMultiQuestionCondition('railway-development')
-				.startMultiQuestionCondition('harbour-facilities', (response: Handler) =>
+				.startMultiQuestionCondition('harbour-facilities', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -89,7 +97,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.benefitsToSeaTransport)
 				.addQuestion(questions.harbourFacilities)
 				.endMultiQuestionCondition('harbour-facilities')
-				.startMultiQuestionCondition('pipelines', (response: Handler) =>
+				.startMultiQuestionCondition('pipelines', (response) =>
 					questionHasAnswer(response, questions.additionalInformationDocuments, DOCUMENT_SUB_CATEGORY_ID.PIPELINES)
 				)
 				.addQuestion(questions.pipelineDetails)
@@ -99,7 +107,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.withCondition(whenQuestionHasAnswer(questions.landRightsCrossingConsents, BOOLEAN_OPTIONS.YES))
 				.addQuestion(questions.pipelines)
 				.endMultiQuestionCondition('pipelines')
-				.startMultiQuestionCondition('hazardous-waste-facility', (response: Handler) =>
+				.startMultiQuestionCondition('hazardous-waste-facility', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,
@@ -110,7 +118,7 @@ export function createJourney(applicationSectionId: string, questions: any, resp
 				.addQuestion(questions.annualCapacity)
 				.addQuestion(questions.hazardousWasteFacility)
 				.endMultiQuestionCondition('hazardous-waste-facility')
-				.startMultiQuestionCondition('dam-or-reservoir', (response: Handler) =>
+				.startMultiQuestionCondition('dam-or-reservoir', (response) =>
 					questionHasAnswer(
 						response,
 						questions.additionalInformationDocuments,

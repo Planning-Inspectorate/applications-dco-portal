@@ -1,10 +1,7 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
 import type { DocumentRecord } from './types.d.ts';
-// @ts-expect-error - due to not having @types
-import { yesNoToBoolean } from '@planning-inspectorate/dynamic-forms/src/components/boolean/question.js';
-// @ts-expect-error - due to not having @types
-import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+import { clearDataFromSession, yesNoToBoolean } from '@planning-inspectorate/dynamic-forms';
 import type { UploadedFile } from '@pins/dco-portal-lib/forms/custom-components/file-upload/types.js';
 import { clearSessionData } from '@pins/dco-portal-lib/util/session.ts';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';

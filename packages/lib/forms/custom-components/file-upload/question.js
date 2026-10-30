@@ -1,5 +1,4 @@
-import { Question } from '@planning-inspectorate/dynamic-forms/src/questions/question.js';
-import { nl2br } from '@planning-inspectorate/dynamic-forms/src/lib/utils.js';
+import { nl2br, Question } from '@planning-inspectorate/dynamic-forms';
 import { Buffer } from 'node:buffer';
 
 const REDACTED_FLAG = 'Redacted';
@@ -60,7 +59,7 @@ export default class FileUpload extends Question {
 		if (hasBodyErrors || hasSessionErrors) {
 			return this.toViewModel({
 				params: req.params,
-				sectionObj,
+				section: sectionObj,
 				journey,
 				customViewData: {
 					id: params.id || params.applicationId,
@@ -82,7 +81,7 @@ export default class FileUpload extends Question {
 			{
 				key: this.title ?? this.question,
 				value,
-				action: isRedactedField ? null : this.getAction(sectionSegment, journey, answer)
+				action: isRedactedField ? undefined : this.getAction(sectionSegment, journey, answer)
 			}
 		];
 	}

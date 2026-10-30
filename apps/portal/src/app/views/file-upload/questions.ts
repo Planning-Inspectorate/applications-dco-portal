@@ -1,12 +1,10 @@
-// @ts-expect-error - due to not having @types
-import RequiredValidator from '@planning-inspectorate/dynamic-forms/src/validator/required-validator.js';
-// @ts-expect-error - due to not having @types
-import { createQuestions } from '@planning-inspectorate/dynamic-forms/src/questions/create-questions.js';
-// @ts-expect-error - due to not having @types
-import { questionClasses } from '@planning-inspectorate/dynamic-forms/src/questions/questions.js';
-import { COMPONENT_TYPES } from '@planning-inspectorate/dynamic-forms';
-// @ts-expect-error - due to not having @types
-import DocumentUploadValidator from '@planning-inspectorate/dynamic-forms/src/validator/document-upload-validator.js';
+import {
+	COMPONENT_TYPES,
+	createQuestions,
+	DocumentUploadValidator,
+	questionClasses,
+	RequiredValidator
+} from '@planning-inspectorate/dynamic-forms';
 import { referenceDataToRadioOptions } from '@pins/dco-portal-lib/util/questions.ts';
 import { APFP_REGULATION, DOCUMENT_SUB_CATEGORY } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { CUSTOM_COMPONENT_CLASSES, CUSTOM_COMPONENTS } from '@pins/dco-portal-lib/forms/custom-components/index.ts';

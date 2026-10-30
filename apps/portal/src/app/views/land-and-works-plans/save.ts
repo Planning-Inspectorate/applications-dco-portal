@@ -1,7 +1,6 @@
 import type { PortalService } from '#service';
 import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
-// @ts-expect-error - due to not having @types
-import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms/src/lib/session-answer-store.js';
+import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
 import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
