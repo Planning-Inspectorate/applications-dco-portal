@@ -36,8 +36,9 @@ const documentUploadJourneyTests = (taskName, taskIndex, urlFragment, fileToUplo
 	};
 
 	const openCategory = () => {
+		const testReference = Cypress.env('TEST_APPLICATION_REFERENCE');
 		CommonActions.login();
-		cy.contains('h1', 'Application reference number').should('be.visible');
+		cy.contains('h1', testReference).should('be.visible');
 		cy.contains('h2', 'Your documents').should('be.visible');
 		UploadDocumentsActions.openTask(taskIndex);
 		cy.url().should('include', urlFragment);
