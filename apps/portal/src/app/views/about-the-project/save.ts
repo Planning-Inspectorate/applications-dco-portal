@@ -1,8 +1,8 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
 import { BOOLEAN_OPTIONS, clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import type { CategoryInformation } from '../supporting-evidence/types.d.ts';
 import { mapAnswersToCase, mapAnswersToLinearSite, mapAnswersToSingleSite } from './mappers.ts';

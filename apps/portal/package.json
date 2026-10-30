@@ -14,6 +14,7 @@
   "dependencies": {
     "@pins/dco-portal-database": "^0.0.0",
     "@pins/dco-portal-lib": "^0.0.0",
+    "@planning-inspectorate/core": "*",
     "@planning-inspectorate/dynamic-forms": "*",
     "accessible-autocomplete": "*",
     "bcrypt": "*",
@@ -26,7 +27,7 @@
     "govuk-frontend": "*",
     "helmet": "*",
     "multer": "*",
-		"node-cron": "*",
+    "node-cron": "*",
     "nunjucks": "*",
     "pino": "*",
     "pino-pretty": "*",
