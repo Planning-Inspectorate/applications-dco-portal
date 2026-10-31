@@ -22,6 +22,14 @@ class uploadDocumentsLocators {
 	certifiedDocumentNoRadioButton() {
 		return cy.get(`input[name="isCertified"][value="no"]`);
 	}
+
+	confirmUploadButton() {
+		return cy.get('.govuk-button').contains(/Confirm upload/i);
+	}
+
+	uploadedDocumentsTable() {
+		return cy.get('.govuk-table');
+	}
 }
 
 export default new uploadDocumentsLocators();

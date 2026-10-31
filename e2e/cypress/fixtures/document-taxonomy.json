@@ -1,0 +1,115 @@
+[
+	{
+		"id": "application-form-related-information",
+		"name": "Application form related information",
+		"subcategories": [
+			"Application cover letter",
+			"Guide to the application",
+			"Pre-application programme document",
+			"Applicant’s section 55 checklist",
+			"Fast track admission document"
+		]
+	},
+	{
+		"id": "plans-and-drawings",
+		"name": "Plans and drawings",
+		"subcategories": [
+			"Location plans",
+			"Land plans",
+			"Works plan",
+			"Access plan and rights of way plan",
+			"Site layout plans",
+			"Elevation drawings",
+			"Floor plans",
+			"Car parking, landscaping, vehicular and pedestrian access",
+			"Drainage and, or surface water management",
+			"Other detailed plans and sections",
+			"Plans of statutory and non-statutory sites or features (for example, nature conservation, habitats, marine conservation zones, water bodies)",
+			"Plans showing statutory or non-statutory historic or scheduled monument sites",
+			"Crown land plan",
+			"Charts for marine schemes",
+			"Tree Preservation Order (TPO) and hedgerow plan"
+		]
+	},
+	{
+		"id": "draft-dco",
+		"name": "Draft development consent order (DCO)",
+		"subcategories": [
+			"Draft development consent order (DCO)",
+			"Explanatory memorandum",
+			"Statutory instrument (SI) validation report success email"
+		]
+	},
+	{
+		"id": "compulsory-acquisition-information",
+		"name": "Compulsory acquisition information",
+		"subcategories": [
+			"Statement of reasons",
+			"Funding statement",
+			"Book of Reference (parts 1 to 5)",
+			"Land and Rights Negotiations Tracker"
+		]
+	},
+	{
+		"id": "newspaper-notices",
+		"name": "Newspaper notices",
+		"subcategories": ["Newspaper notices"]
+	},
+	{
+		"id": "reports-and-statements",
+		"name": "Reports and statements",
+		"subcategories": [
+			"Habitat Regulations Assessment (HRA) screening report",
+			"Report to Inform Appropriate Assessment (RIAA) (where relevant or required)",
+			"Statutory nuisance statement",
+			"Consents and licences required under other legislation",
+			"Planning statement",
+			"Design and Access Statement (DAS)",
+			"Policy compliance document",
+			"Potential Main Issues for the Examination (PMIE) (supported by Principal Areas of Disagreement Summary Statements (PADSS)",
+			"Design Approach Document (DAD)",
+			"Safety assessment (where required)",
+			"National security issues (where required)",
+			"Details of associated development, with references to documents",
+			"Draft Statement of Common Ground (SoCG) (if available at the acceptance stage)",
+			"Environmental Management Plan (EMP)"
+		]
+	},
+	{
+		"id": "environmental-statement",
+		"name": "Environmental statement",
+		"subcategories": [
+			"Introductory chapters",
+			"Aspect chapters",
+			"Environmental statement appendices",
+			"Environmental statement figures",
+			"Non-technical summary",
+			"Model information",
+			"Any other media information",
+			"Confidential documents (limited use - please discuss with Planning Inspectorate case team)",
+			"Screening direction",
+			"Scoping opinion",
+			"Flood risk assessment (FRA)",
+			"Sensitive environmental information (please discuss with Planning Inspectorate case team)"
+		]
+	},
+	{
+		"id": "additional-prescribed-information",
+		"name": "Additional prescribed information",
+		"subcategories": [
+			"Offshore generating station",
+			"Non offshore generating station",
+			"Highway related development",
+			"Railway development",
+			"Harbour facilities",
+			"Pipelines",
+			"Hazardous waste facility",
+			"Dam or reservoir"
+		]
+	},
+	{
+		"id": "other-documents",
+		"name": "Other documents",
+		"subcategories": ["Any other documents to support the application"]
+	}
+]
