@@ -16,4 +16,31 @@ after(() => {
 	cy.clearCookies();
 });
 
+Cypress.on('window:load', (win) => {
+	win.document.querySelectorAll('base').forEach((b) => b.remove());
+
+	const patchFormActions = () => {
+		const path = win.location.pathname + (win.location.search || '');
+		if (path && path !== '/') {
+			win.document.querySelectorAll('form').forEach((form) => {
+				const action = form.getAttribute('action');
+				if (!action || action === '' || action === '/' || action === '#') {
+					form.setAttribute('action', path);
+					form.action = path;
+				}
+			});
+		}
+	};
+	patchFormActions();
+	win.addEventListener(
+		'submit',
+		(e) => {
+			if (e.target instanceof win.HTMLFormElement) {
+				patchFormActions();
+			}
+		},
+		true
+	);
+});
+
 Cypress.on('uncaught:exception', () => false);

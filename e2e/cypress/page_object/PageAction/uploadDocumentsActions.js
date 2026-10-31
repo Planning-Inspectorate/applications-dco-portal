@@ -3,17 +3,27 @@ import CommonActions from './commonActions.js';
 import CommonLocators from '../PageLocators/commonLocators.js';
 
 class UploadDocumentsActions {
-	//tasks are 0-indexed
-	openTask(index) {
-		UploadDocumentsLocators.taskList().eq(index).find('a').click();
+	openTask(indexOrFragment) {
+		if (typeof indexOrFragment === 'number') {
+			UploadDocumentsLocators.taskList().eq(indexOrFragment).find('a').click();
+		} else {
+			cy.get(`a[href*="${indexOrFragment}"]`).first().click();
+		}
 	}
 
-	reachDocumentUploadPage(taskIndex) {
+	reachDocumentUploadPage(taskIndexOrFragment) {
 		CommonActions.login();
-		this.openTask(taskIndex);
+		this.openTask(taskIndexOrFragment);
 		UploadDocumentsLocators.uploadDocumentsButton().click();
 		UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
 		CommonLocators.saveAndContinueButton().click();
+	}
+
+	confirmUploadAndVerify(urlFragment, fileName) {
+		UploadDocumentsLocators.confirmUploadButton().click();
+		cy.url().should('include', urlFragment);
+		cy.get('.govuk-heading-m').contains('Documents uploaded').should('be.visible');
+		UploadDocumentsLocators.uploadedDocumentsTable().should('contain.text', fileName);
 	}
 }
 

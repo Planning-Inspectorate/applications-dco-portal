@@ -1,31 +1,63 @@
-import { useSyncExternalStore } from 'react';
-import CommonActions from '../../page_object/PageAction/commonActions.js';
+/// <reference types="cypress" />
+import CommonLocators from '../../page_object/PageLocators/commonLocators.js';
+import ManageUserActions from '../../page_object/PageAction/manageUserActions.js';
+import ManageUserLocators from '../../page_object/PageLocators/manageUserLocators.js';
 
-describe('About the project', () => {
-	it('', () => {
-		cy.window().then((win) => {
-			win.sessionStorage.clear();
-			win.localStorage.clear();
+describe('Manage Users', () => {
+	const TEST_EMAIL = 'simulate-delivered@notifications.service.gov.uk';
+
+	beforeEach(() => {
+		cy.task('deleteWhitelistUser', {
+			email: TEST_EMAIL,
+			reference: Cypress.env('TEST_APPLICATION_REFERENCE')
 		});
+	});
 
-		CommonActions.login();
-		cy.get('.govuk-grid-column-two-thirds > :nth-child(2) > .govuk-link').contains('Manage users').click();
-		cy.get('.govuk-heading-l').should('be.visible');
-		cy.get('.govuk-heading-m').should('be.visible');
-		cy.get(':nth-child(5) > .govuk-link').should('be.visible').click();
-		cy.get('.govuk-label').should('be.visible');
-		cy.get('[name="emailAddress"]').type('joe.bloggs@planninginspectorate.gov.uk');
-		cy.get('[data-cy="button-save-and-continue"]').click();
-		cy.get('.govuk-fieldset__heading').should('be.visible');
-		cy.get('[data-cy="answer-standard-user"]').click();
-		cy.get('[data-cy="button-save-and-continue"]').click();
-		cy.get(':nth-child(1) > .govuk-summary-list__actions > .govuk-link').click();
-		cy.get('[name="emailAddress"]').clear();
-		cy.get('[name="emailAddress"]').type('mark.sanders@planninginspectorate.gov.uk');
-		cy.get('[data-cy="button-save-and-continue"]').click();
-		cy.get('[data-cy="answer-admin-user"]').click();
-		cy.get('[data-cy="button-save-and-continue"]').click();
-		cy.get('.govuk-button').click();
-		cy.get('.govuk-notification-banner').should('be.visible');
+	afterEach(() => {
+		cy.task('deleteWhitelistUser', {
+			email: TEST_EMAIL,
+			reference: Cypress.env('TEST_APPLICATION_REFERENCE')
+		});
+	});
+
+	it('displays current users list on manage users dashboard', () => {
+		ManageUserActions.navigateToManageUsers();
+		ManageUserLocators.usersTable().should('be.visible');
+		cy.get('.govuk-heading-m').contains('Current users').should('be.visible');
+	});
+
+	it('invites a new standard user successfully', () => {
+		ManageUserActions.navigateToManageUsers();
+		ManageUserActions.inviteUser(TEST_EMAIL, 'standard');
+		ManageUserLocators.userTableRow(TEST_EMAIL).should('contain.text', 'Standard');
+	});
+
+	it('changes user access level from standard to admin', () => {
+		ManageUserActions.navigateToManageUsers();
+		ManageUserActions.inviteUser(TEST_EMAIL, 'standard');
+		ManageUserActions.changeUserRole(TEST_EMAIL, 'admin');
+	});
+
+	it('validates email address format when adding a user', () => {
+		ManageUserActions.navigateToManageUsers();
+		ManageUserLocators.addUserLink().click();
+		cy.url().should('include', '/add-user/user/email-address');
+
+		// Empty submission
+		CommonLocators.saveAndContinueButton().click();
+		cy.get('.govuk-error-summary').should('be.visible');
+		cy.contains('Enter an email address').should('be.visible');
+
+		// Invalid format
+		ManageUserLocators.emailInput().type('invalid-email-format');
+		CommonLocators.saveAndContinueButton().click();
+		cy.get('.govuk-error-summary').should('be.visible');
+		cy.contains('Enter an email address in the correct format').should('be.visible');
+	});
+
+	it('removes an existing user from the project', () => {
+		ManageUserActions.navigateToManageUsers();
+		ManageUserActions.inviteUser(TEST_EMAIL, 'standard');
+		ManageUserActions.removeUser(TEST_EMAIL);
 	});
 });

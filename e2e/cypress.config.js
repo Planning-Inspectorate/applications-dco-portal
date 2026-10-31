@@ -1,6 +1,11 @@
 import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
-import { clearDocumentCategory } from './cypress/support/dbUtils.js';
+import {
+	clearDocumentCategory,
+	deleteWhitelistUser,
+	setupCaseForSubmission,
+	resetCase
+} from './cypress/support/dbUtils.js';
 
 // load env from this workspace (e2e/.env)
 import { loadEnvFile } from 'node:process';
@@ -13,7 +18,10 @@ export default defineConfig({
 			on('task', {
 				DeleteDownloads: deleteDownloads,
 				ValidateDownloadedFile: validateDownloadedFile,
-				clearDocumentCategory
+				clearDocumentCategory,
+				deleteWhitelistUser,
+				setupCaseForSubmission,
+				resetCase
 			});
 
 			process.env.TZ = 'Europe/London';
