@@ -10,6 +10,8 @@ class CommonActions {
 		cy.session(
 			`auth-${email}-${ref}`,
 			() => {
+				cy.clearCookies();
+				cy.clearAllSessionStorage();
 				cy.request({
 					method: 'POST',
 					url: '/login/test/setup-case',
@@ -24,7 +26,8 @@ class CommonActions {
 
 				cy.visit('/login/sign-in');
 				loginPageActions.signInWithCredentials(email, ref);
-				loginPageLocators.otpCodeInput().type('ABCDE');
+				cy.url().should('include', '/login/enter-code');
+				loginPageLocators.otpCodeInput().should('be.visible').type('ABCDE');
 				commonLocators.saveAndContinueButton().click();
 				cy.contains('h1', ref).should('be.visible');
 			},

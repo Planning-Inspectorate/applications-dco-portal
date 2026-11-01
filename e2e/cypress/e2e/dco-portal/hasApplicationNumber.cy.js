@@ -2,6 +2,11 @@
 import HasApplicationNumberActions from '../../page_object/PageAction/hasApplicationNumberActions.js';
 
 describe('Has Application Number page', () => {
+	beforeEach(() => {
+		cy.clearCookies();
+		cy.clearAllSessionStorage();
+	});
+
 	it('Default path should redirect you to /login/application-reference-number', () => {
 		cy.visit('/');
 		cy.url().should('include', '/login/application-reference-number');
@@ -14,8 +19,10 @@ describe('Has Application Number page', () => {
 
 	it('Answering "yes" that you have an application number takes you to the sign in page', () => {
 		cy.visit('/');
+		cy.url().should('include', '/login/application-reference-number');
 		cy.get('h1').should('be.visible').contains('Do you have an application reference number?');
 		HasApplicationNumberActions.confirmHasApplicationNumber();
+		cy.url().should('include', '/login/sign-in');
 		cy.get('h1').should('be.visible').contains('Sign-in');
 		cy.get('label').should('be.visible').contains('Email address');
 		cy.get('label').should('be.visible').contains('Application reference number');

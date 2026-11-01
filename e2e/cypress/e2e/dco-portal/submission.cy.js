@@ -11,6 +11,9 @@ describe('Statutory Declaration & Submission', () => {
 
 	afterEach(() => {
 		cy.task('resetCase', { reference: Cypress.env('TEST_APPLICATION_REFERENCE') });
+		cy.visit('/sign-out', { failOnStatusCode: false });
+		cy.clearCookies();
+		cy.clearAllSessionStorage();
 		Cypress.session.clearAllSavedSessions();
 	});
 
