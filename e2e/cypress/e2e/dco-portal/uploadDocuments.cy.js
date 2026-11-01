@@ -184,6 +184,8 @@ describe('1. Your documents', () => {
 				UploadDocumentsActions.reachDocumentUploadPage(taskIndex);
 				cy.url().should('include', `${urlFragment}/upload/upload-documents`);
 				cy.get('input[type="file"]').selectFile(file, { force: true });
+				// eslint-disable-next-line cypress/no-unnecessary-waiting
+				cy.wait(500);
 				CommonLocators.saveAndContinueButton().click();
 				cy.url().should('include', `${urlFragment}/upload/regulation`);
 			});
@@ -220,6 +222,8 @@ describe('1. Your documents', () => {
 			CommonLocators.saveAndContinueButton().click();
 
 			cy.get('input[type="file"]').selectFile(DEFAULT_UPLOAD, { force: true });
+			// eslint-disable-next-line cypress/no-unnecessary-waiting
+			cy.wait(500);
 			cy.get('.govuk-summary-list__row').should('contain.text', 'uploadTest.pdf');
 			CommonLocators.saveAndContinueButton().click();
 
