@@ -1,20 +1,126 @@
+/**
+ * @file User actions for project questionnaire workflows.
+ * @module page_object/PageAction/questionnaireActions
+ *
+ * This class provides actions for applicant details, agent information, project descriptions, and GIS coordinates.
+ */
+
 import CommonActions from './commonActions.js';
 import CommonLocators from '../PageLocators/commonLocators.js';
 import QuestionnaireLocators from '../PageLocators/questionnaireLocators.js';
 
+/**
+ * Encapsulates actions for completing questionnaire steps.
+ */
 class QuestionnaireActions {
+	/**
+	 * Navigates to the applicant and agent details questionnaire section.
+	 *
+	 * @returns {void}
+	 */
 	openApplicantDetails() {
 		CommonActions.login();
 		QuestionnaireLocators.applicantDetailsLink().click();
 		cy.url().should('include', '/applicant-and-agent-details');
 	}
 
+	/**
+	 * Navigates to the about the project questionnaire section.
+	 *
+	 * @returns {void}
+	 */
 	openAboutTheProject() {
 		CommonActions.login();
 		QuestionnaireLocators.aboutTheProjectLink().click();
 		cy.url().should('include', '/about-the-project');
 	}
 
+	/**
+	 * Asserts that an error summary contains the expected validation message.
+	 *
+	 * @param {string|RegExp} message - The validation error text to verify.
+	 * @returns {void}
+	 */
+	assertValidationError(message) {
+		cy.get('.govuk-error-summary').should('be.visible');
+		cy.contains(message).should('be.visible');
+	}
+
+	/**
+	 * Completes the description, consent reason, and location steps for a project.
+	 *
+	 * @param {object} [options] - The project overview fields.
+	 * @param {string} [options.description='Test project description'] - The project description text.
+	 * @param {string} [options.consentReason='Test consent reason'] - The justification for development consent.
+	 * @param {string} [options.location='Test location description'] - The description of the project location.
+	 * @returns {void}
+	 */
+	fillProjectOverview({
+		description = 'Test project description',
+		consentReason = 'Test consent reason',
+		location = 'Test location description'
+	} = {}) {
+		QuestionnaireLocators.projectDescriptionInput().clear().type(description);
+		CommonLocators.saveAndContinueButton().click();
+
+		QuestionnaireLocators.projectConsentReasonInput().clear().type(consentReason);
+		CommonLocators.saveAndContinueButton().click();
+
+		QuestionnaireLocators.projectLocationInput().clear().type(location);
+		CommonLocators.saveAndContinueButton().click();
+	}
+
+	/**
+	 * Configures easting and northing grid coordinates for a single site.
+	 *
+	 * @param {string} [easting='123456'] - The six-digit easting coordinate.
+	 * @param {string} [northing='654321'] - The six-digit northing coordinate.
+	 * @returns {void}
+	 */
+	configureSingleSiteCoordinates(easting = '123456', northing = '654321') {
+		QuestionnaireLocators.siteTypeSingleRadio().click({ force: true });
+		CommonLocators.saveAndContinueButton().click();
+
+		QuestionnaireLocators.eastingInput().clear().type(easting);
+		QuestionnaireLocators.northingInput().clear().type(northing);
+		CommonLocators.saveAndContinueButton().click();
+	}
+
+	/**
+	 * Configures start, middle, and end coordinates for a linear site.
+	 *
+	 * @param {object} [options] - The coordinate endpoints.
+	 * @param {{ easting: string, northing: string }} [options.start] - Start coordinates.
+	 * @param {{ easting: string, northing: string }} [options.middle] - Middle coordinates.
+	 * @param {{ easting: string, northing: string }} [options.end] - End coordinates.
+	 * @returns {void}
+	 */
+	configureLinearSiteCoordinates({
+		start = { easting: '123456', northing: '654321' },
+		middle = { easting: '123456', northing: '654321' },
+		end = { easting: '123456', northing: '654321' }
+	} = {}) {
+		cy.get('.govuk-back-link').click();
+		cy.get('.govuk-back-link').click();
+
+		QuestionnaireLocators.siteTypeLinearRadio().click({ force: true });
+		CommonLocators.saveAndContinueButton().click();
+
+		QuestionnaireLocators.startEastingInput().clear().type(start.easting);
+		QuestionnaireLocators.startNorthingInput().clear().type(start.northing);
+		QuestionnaireLocators.middleEastingInput().clear().type(middle.easting);
+		QuestionnaireLocators.middleNorthingInput().clear().type(middle.northing);
+		QuestionnaireLocators.endEastingInput().clear().type(end.easting);
+		QuestionnaireLocators.endNorthingInput().clear().type(end.northing);
+		CommonLocators.saveAndContinueButton().click();
+	}
+
+	/**
+	 * Completes the applicant questionnaire journey, with or without an agent.
+	 *
+	 * @param {boolean} [isAgent=false] - Whether an agent represents the applicant.
+	 * @returns {void}
+	 */
 	fillApplicantDetails(isAgent = false) {
 		this.openApplicantDetails();
 

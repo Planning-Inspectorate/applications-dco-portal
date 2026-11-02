@@ -1,127 +1,75 @@
+/**
+ * @file Global Cypress support configuration and runtime hooks.
+ * @module support/e2e
+ *
+ * This file runs before every Cypress test suite.
+ * It registers custom commands and handles form target resolution.
+ */
+
 /// <reference types="cypress"/>
 
 import './commands';
 import * as grep from '@cypress/grep';
 
-const register = grep.register ?? grep.default;
-
-if (typeof register !== 'function') {
-	throw new Error(`@cypress/grep register function not found. Exports: ${Object.keys(grep).join(', ')}`);
+const registerGrep = grep.register ?? grep.default;
+if (typeof registerGrep === 'function') {
+	registerGrep();
 }
 
-register();
-
+/**
+ * Clears session storage and browser cookies after all tests in a spec file complete.
+ */
 after(() => {
 	cy.clearAllSessionStorage();
 	cy.clearCookies();
 });
 
-const patchFormsInWindow = (win) => {
-	if (!win || !win.document) return;
-	win.document.querySelectorAll('base').forEach((b) => b.remove());
+/**
+ * Normalizes the action attribute of the enclosing form to match the current URL.
+ *
+ * GOV.UK Frontend templates use empty action attributes to submit to the active route.
+ * Cypress injects a base tag into the test iframe.
+ * That tag forces empty action attributes to submit to the root path.
+ * This function points the form action back to the active page URL before submission.
+ *
+ * @param {HTMLElement} [element] - The DOM element that triggered the form submission.
+ * @returns {void}
+ */
+function normalizeFormAction(element) {
+	if (!element) return;
 
-	const currentUrl = win.location.href;
-	const pathname = win.location.pathname;
-	if (pathname && pathname !== '/') {
-		win.document.querySelectorAll('form').forEach((form) => {
-			const attr = form.getAttribute('action');
-			const prop = form.action;
-			const isRootOrEmpty =
-				!attr ||
-				attr === '' ||
-				attr === '/' ||
-				attr === '#' ||
-				attr === win.location.origin ||
-				attr === win.location.origin + '/' ||
-				prop === win.location.origin ||
-				prop === win.location.origin + '/';
+	const form = element.tagName === 'FORM' ? element : element.closest?.('form') || element.form;
+	const win = element.ownerDocument?.defaultView;
 
-			if (isRootOrEmpty) {
-				form.setAttribute('action', currentUrl);
-				form.action = currentUrl;
-			}
-		});
+	if (!form || !win || win.location.pathname === '/') return;
+
+	win.document.querySelector('base')?.remove();
+
+	const action = form.getAttribute('action');
+	const rootTargets = ['', '/', '#', win.location.origin, `${win.location.origin}/`];
+	const isRootOrEmpty = !action || rootTargets.includes(action) || rootTargets.includes(form.action);
+
+	if (isRootOrEmpty) {
+		form.action = win.location.href;
+		form.setAttribute('action', win.location.href);
 	}
-};
+}
 
-const setupWindow = (win) => {
-	patchFormsInWindow(win);
+// Intercept Cypress commands before DOM dispatch
+Cypress.Commands.overwrite('click', (originalClick, subject, ...args) => {
+	normalizeFormAction(subject?.[0]);
+	return originalClick(subject, ...args);
+});
 
-	if (win.MutationObserver && win.document && win.document.documentElement) {
-		const observer = new win.MutationObserver(() => {
-			patchFormsInWindow(win);
-		});
-		observer.observe(win.document.documentElement, { childList: true, subtree: true });
-	}
+Cypress.Commands.overwrite('submit', (originalSubmit, subject, ...args) => {
+	normalizeFormAction(subject?.[0]);
+	return originalSubmit(subject, ...args);
+});
 
-	win.addEventListener(
-		'click',
-		(e) => {
-			const target = e.target;
-			if (target && target instanceof win.HTMLElement) {
-				const form = target.closest('form');
-				if (form && win.location.pathname !== '/') {
-					patchFormsInWindow(win);
-					form.setAttribute('action', win.location.href);
-					form.action = win.location.href;
-				}
-			}
-		},
-		true
-	);
-
-	win.addEventListener(
-		'submit',
-		(e) => {
-			const form = e.target;
-			if (form && form instanceof win.HTMLFormElement && win.location.pathname !== '/') {
-				patchFormsInWindow(win);
-				form.setAttribute('action', win.location.href);
-				form.action = win.location.href;
-			}
-		},
-		true
-	);
-};
-
+// Capture native form submissions (for example pressing Enter in an input field)
 Cypress.on('window:before:load', (win) => {
-	setupWindow(win);
+	win.addEventListener('submit', (event) => normalizeFormAction(event.target), true);
 });
 
-Cypress.on('window:load', (win) => {
-	setupWindow(win);
-});
-
-Cypress.Commands.overwrite('click', (originalFn, subject, ...args) => {
-	if (subject && subject[0]) {
-		const el = subject[0];
-		const form = el.closest ? el.closest('form') : el.form || null;
-		if (form && el.ownerDocument && el.ownerDocument.defaultView) {
-			const win = el.ownerDocument.defaultView;
-			patchFormsInWindow(win);
-			if (win.location.pathname !== '/') {
-				form.setAttribute('action', win.location.href);
-				form.action = win.location.href;
-			}
-		}
-	}
-	return originalFn(subject, ...args);
-});
-
-Cypress.Commands.overwrite('submit', (originalFn, subject, ...args) => {
-	if (subject && subject[0]) {
-		const el = subject[0];
-		const form = el.tagName === 'FORM' ? el : el.closest ? el.closest('form') : null;
-		if (form && form.ownerDocument && form.ownerDocument.defaultView) {
-			const win = form.ownerDocument.defaultView;
-			patchFormsInWindow(win);
-			if (win.location.pathname !== '/') {
-				form.setAttribute('action', win.location.href);
-				form.action = win.location.href;
-			}
-		}
-	}
-	return originalFn(subject, ...args);
-});
-
+// Suppress unhandled exceptions from failing tests
 Cypress.on('uncaught:exception', () => false);

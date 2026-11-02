@@ -1,8 +1,29 @@
+/**
+ * @file Common user actions shared across end-to-end tests.
+ * @module page_object/PageAction/commonActions
+ *
+ * This class provides shared actions such as user authentication and session preservation.
+ */
+
 import commonLocators from '../PageLocators/commonLocators';
 import loginPageLocators from '../PageLocators/loginPageLocators';
 import loginPageActions from './loginPageActions';
 
+/**
+ * Encapsulates common workflow actions used across test suites.
+ */
 class CommonActions {
+	/**
+	 * Authenticates a test user and caches the session across test specs.
+	 *
+	 * Configures the case through the test endpoint.
+	 * Enters credentials on the sign-in page.
+	 * Submits the one-time passcode to reach the dashboard.
+	 *
+	 * @param {string} [emailAddress] - The user email address. Defaults to the environment configuration.
+	 * @param {string} [caseReference] - The application reference code. Defaults to the environment configuration.
+	 * @returns {void}
+	 */
 	login(emailAddress, caseReference) {
 		const email = emailAddress || Cypress.env('USER_EMAIL');
 		const ref = caseReference || Cypress.env('TEST_APPLICATION_REFERENCE');

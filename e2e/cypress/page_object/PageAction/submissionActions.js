@@ -1,14 +1,38 @@
+/**
+ * @file User actions for statutory declaration and application submission.
+ * @module page_object/PageAction/submissionActions
+ *
+ * This class provides actions for submitting the final statutory declaration and completing the application.
+ */
+
 import CommonActions from './commonActions.js';
 import CommonLocators from '../PageLocators/commonLocators.js';
 import SubmissionLocators from '../PageLocators/submissionLocators.js';
 
+/**
+ * Encapsulates actions for the statutory declaration and final submission.
+ */
 class SubmissionActions {
+	/**
+	 * Navigates to the statutory declaration details page after login.
+	 *
+	 * @returns {void}
+	 */
 	navigateToDeclaration() {
 		CommonActions.login();
 		cy.visit('/declaration/name');
 		cy.url().should('include', '/declaration/name');
 	}
 
+	/**
+	 * Fills all declaration information steps for the submitting representative.
+	 *
+	 * @param {string} [firstName='Test'] - First name of the declarant.
+	 * @param {string} [lastName='Submitter'] - Last name of the declarant.
+	 * @param {string} [org='Planning Authority'] - Declarant organisation name.
+	 * @param {string} [position='Director'] - Declarant role or title.
+	 * @returns {void}
+	 */
 	fillDeclarationDetails(
 		firstName = 'Test',
 		lastName = 'Submitter',
@@ -32,6 +56,11 @@ class SubmissionActions {
 		cy.url().should('include', '/declaration');
 	}
 
+	/**
+	 * Accepts the statutory declaration checkbox and submits the application.
+	 *
+	 * @returns {void}
+	 */
 	submitDeclaration() {
 		SubmissionLocators.confirmationCheckbox().check({ force: true });
 		SubmissionLocators.submitButton().click();

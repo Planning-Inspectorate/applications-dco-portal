@@ -1,3 +1,10 @@
+/**
+ * @file End-to-end tests for statutory declaration acceptance and application submission.
+ * @module e2e/dco-portal/submission
+ *
+ * This test suite validates declaration details, required checkbox enforcement, and final submission confirmation.
+ */
+
 /// <reference types="cypress" />
 import SubmissionActions from '../../page_object/PageAction/submissionActions.js';
 import SubmissionLocators from '../../page_object/PageLocators/submissionLocators.js';
@@ -17,6 +24,9 @@ describe('Statutory Declaration & Submission', () => {
 		Cypress.session.clearAllSavedSessions();
 	});
 
+	/**
+	 * Verifies that the declaration form requires checking the confirmation box before submitting.
+	 */
 	it('enforces declaration confirmation checkbox acceptance', () => {
 		SubmissionActions.fillDeclarationDetails();
 		cy.url().should('include', '/declaration');
@@ -27,6 +37,9 @@ describe('Statutory Declaration & Submission', () => {
 		cy.contains('You must confirm you understand and accept the declaration').should('be.visible');
 	});
 
+	/**
+	 * Verifies completing the full declaration journey and reaching the final application complete screen.
+	 */
 	it('completes statutory declaration and final submission to reach completion', () => {
 		SubmissionActions.fillDeclarationDetails('Jane', 'Doe', 'Infrastructure Consultants Ltd', 'Lead Planning Director');
 		SubmissionActions.submitDeclaration();

@@ -1,11 +1,24 @@
+/**
+ * @file End-to-end tests for document taxonomy, uploads, file types, and duplicate prevention.
+ * @module e2e/dco-portal/uploadDocuments
+ *
+ * This test suite validates document subcategory listings, file uploads, allowed extensions, and duplicate prevention.
+ */
+
 /// <reference types="cypress" />
 import CommonActions from '../../page_object/PageAction/commonActions.js';
 import UploadDocumentsActions from '../../page_object/PageAction/uploadDocumentsActions.js';
 import UploadDocumentsLocators from '../../page_object/PageLocators/uploadDocumentsLocators.js';
 import CommonLocators from '../../page_object/PageLocators/commonLocators.js';
 
+/**
+ * Standard test PDF file used for document upload tests.
+ */
 const DEFAULT_UPLOAD = 'cypress/fixtures/uploadTest.pdf';
 
+/**
+ * Statutory document categories defined for the DCO application.
+ */
 const TASKS = [
 	{ name: 'Application form related information', index: 0, fragment: '/application-form-related-information' },
 	{ name: 'Plans and drawings', index: 1, fragment: '/plans-and-drawings' },
@@ -18,6 +31,9 @@ const TASKS = [
 	{ name: 'Other documents', index: 8, fragment: '/other-documents' }
 ];
 
+/**
+ * Permitted file formats accepted by the document upload service.
+ */
 const ALLOWED_FILE_TYPES = [
 	{ label: 'PDF', file: 'cypress/fixtures/uploadTest.pdf' },
 	{ label: 'PNG', file: 'cypress/fixtures/uploadTest.png' },
@@ -36,6 +52,9 @@ describe('1. Your documents', () => {
 		CommonActions.login();
 	});
 
+	/**
+	 * Verifies that each document category renders all statutory subcategories from the taxonomy fixture.
+	 */
 	describe('Subcategory Taxonomy Verification', () => {
 		it('verifies all categories display their statutory subcategories', () => {
 			cy.fixture('document-taxonomy.json').then((taxonomy) => {
@@ -54,84 +73,13 @@ describe('1. Your documents', () => {
 		});
 	});
 
+	/**
+	 * Verifies successful upload flow and input validation across all nine statutory categories.
+	 */
 	describe('Document Upload Journeys', () => {
 		TASKS.forEach(({ name, index, fragment }) => {
 			describe(name, () => {
 				const categoryId = fragment.replace(/^\//, '');
-				const urlFor = (path) => `${fragment}${path}`;
-				const clickContinue = () => CommonLocators.saveAndContinueButton().click();
-
-				const assertErrorSummary = () => {
-					cy.get('.govuk-error-summary__title').should('be.visible').contains('There is a problem');
-				};
-
-				const openCategory = () => {
-					CommonActions.login();
-					cy.contains('h2', 'Your documents').should('be.visible');
-					UploadDocumentsActions.openTask(index);
-					cy.url().should('include', fragment);
-				};
-
-				const startUpload = () => {
-					UploadDocumentsLocators.uploadDocumentsButton().click();
-					cy.url().should('include', urlFor('/upload/document-type'));
-				};
-
-				const selectFirstDocumentType = () => {
-					cy.contains('h1', 'Select the document type').should('be.visible');
-					UploadDocumentsLocators.getDocumentTypeRadioButtons()
-						.eq(0)
-						.invoke('attr', 'id')
-						.then((id) => {
-							cy.get(`label[for="${id}"]`)
-								.invoke('text')
-								.then((text) => cy.wrap(text.trim()).as('selectedDocumentType'));
-						});
-					UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
-					clickContinue();
-				};
-
-				const uploadFile = (file) => {
-					cy.contains('h1', 'Upload your documents').should('be.visible');
-					cy.url().should('include', urlFor('/upload/upload-documents'));
-					cy.get('input[type="file"]').selectFile(file, { force: true });
-					// eslint-disable-next-line cypress/no-unnecessary-waiting
-					cy.wait(500);
-					clickContinue();
-				};
-
-				const selectRegulation = (value = '5') => {
-					cy.contains('h1', 'Select the relevant APFP regulation').should('be.visible');
-					cy.url().should('include', urlFor('/upload/regulation'));
-					UploadDocumentsLocators.apfpRegulationTextbox().type(value);
-					cy.get('.autocomplete__option').first().click();
-					clickContinue();
-				};
-
-				const selectCertifiedYes = () => {
-					cy.contains('h1', /Will the document be certified/i).should('be.visible');
-					cy.url().should('include', urlFor('/upload/document-certified'));
-					UploadDocumentsLocators.certifiedDocumentYesRadioButton().check();
-					clickContinue();
-				};
-
-				const assertCheckYourAnswers = () => {
-					cy.contains('h1', /Check your answers before uploading your document/i).should('be.visible');
-					cy.url().should('include', urlFor('/check-your-answers'));
-					cy.get('.govuk-summary-list').should('be.visible');
-					cy.get('@selectedDocumentType').then((type) => {
-						cy.get('.govuk-summary-list').contains(type);
-					});
-					cy.get('.govuk-summary-list').contains('uploadTest.pdf');
-					cy.get('.govuk-summary-list').contains('5');
-					cy.get('.govuk-summary-list').contains('Yes');
-				};
-
-				const continueAndAssertError = (message) => {
-					clickContinue();
-					assertErrorSummary();
-					cy.contains('a', message);
-				};
 
 				beforeEach(() => {
 					cy.task('clearDocumentCategory', {
@@ -140,41 +88,47 @@ describe('1. Your documents', () => {
 					});
 				});
 
+				/**
+				 * Verifies complete upload flow from subcategory choice to table confirmation.
+				 */
 				it('completes upload journey with document persistence', () => {
-					openCategory();
+					UploadDocumentsActions.openCategory(index, fragment);
 					cy.contains('This category contains 0 documents').should('be.visible');
-					startUpload();
-					selectFirstDocumentType();
-					uploadFile(DEFAULT_UPLOAD);
-					selectRegulation();
-					selectCertifiedYes();
-					assertCheckYourAnswers();
+					UploadDocumentsActions.startUpload(fragment);
+					UploadDocumentsActions.selectFirstDocumentType();
+					UploadDocumentsActions.uploadFile(DEFAULT_UPLOAD, fragment);
+					UploadDocumentsActions.selectRegulation('5', fragment);
+					UploadDocumentsActions.selectCertifiedYes(fragment);
+					UploadDocumentsActions.assertCheckYourAnswers(fragment);
 					UploadDocumentsActions.confirmUploadAndVerify(fragment, 'uploadTest.pdf');
 				});
 
+				/**
+				 * Verifies mandatory validation messages for all upload fields.
+				 */
 				it('validates required inputs across upload steps', () => {
-					openCategory();
-					startUpload();
+					UploadDocumentsActions.openCategory(index, fragment);
+					UploadDocumentsActions.startUpload(fragment);
 
-					continueAndAssertError('Select the document type');
+					UploadDocumentsActions.continueAndAssertError('Select the document type');
 					UploadDocumentsLocators.getDocumentTypeRadioButtons().eq(0).check();
-					clickContinue();
+					CommonLocators.saveAndContinueButton().click();
 
-					continueAndAssertError('Select a file to upload');
-					cy.get('input[type="file"]').selectFile(DEFAULT_UPLOAD, { force: true });
-					// eslint-disable-next-line cypress/no-unnecessary-waiting
-					cy.wait(500);
-					clickContinue();
+					UploadDocumentsActions.continueAndAssertError('Select a file to upload');
+					UploadDocumentsActions.uploadFile(DEFAULT_UPLOAD, fragment);
 
-					continueAndAssertError('Select the APFP regulation');
-					selectRegulation();
+					UploadDocumentsActions.continueAndAssertError('Select the APFP regulation');
+					UploadDocumentsActions.selectRegulation('5', fragment);
 
-					continueAndAssertError('Select yes if the document is certified');
+					UploadDocumentsActions.continueAndAssertError('Select yes if the document is certified');
 				});
 			});
 		});
 	});
 
+	/**
+	 * Verifies accepted document extensions and rejection of invalid file types.
+	 */
 	describe('Allowed file type coverage', () => {
 		const taskIndex = 0;
 		const urlFragment = '/application-form-related-information';
@@ -202,6 +156,9 @@ describe('1. Your documents', () => {
 		});
 	});
 
+	/**
+	 * Verifies that uploading a duplicate file name in the same subcategory displays an error.
+	 */
 	describe('Duplicate Upload Prevention', () => {
 		const taskIndex = 0;
 		const fragment = '/application-form-related-information';

@@ -1,3 +1,12 @@
+/**
+ * @file Base Cypress configuration for end-to-end tests.
+ * @module cypress.config
+ *
+ * This file configures the Cypress test runner for the DCO Portal application.
+ * It registers custom Node tasks for database cleanup and file operations.
+ * It also loads environment variables from the local environment file.
+ */
+
 import { defineConfig } from 'cypress';
 import { deleteDownloads, validateDownloadedFile } from './cypress/support/cypressUtils.js';
 import {
@@ -7,13 +16,20 @@ import {
 	resetCase
 } from './cypress/support/dbUtils.js';
 
-// load env from this workspace (e2e/.env)
+// Load environment variables from the local workspace (e2e/.env)
 import { loadEnvFile } from 'node:process';
 // prettier-ignore
-try { loadEnvFile(); } catch {/* ignore errors*/}
+try { loadEnvFile(); } catch {/* ignore errors */}
 
 export default defineConfig({
 	e2e: {
+		/**
+		 * Configures Cypress event listeners and registers custom Node tasks.
+		 *
+		 * @param {Cypress.PluginEvents} on - The Cypress event subscriber function.
+		 * @param {Cypress.PluginConfigOptions} config - The resolved Cypress test runner configuration.
+		 * @returns {Promise<Cypress.PluginConfigOptions>} The modified configuration object.
+		 */
 		async setupNodeEvents(on, config) {
 			on('task', {
 				DeleteDownloads: deleteDownloads,
