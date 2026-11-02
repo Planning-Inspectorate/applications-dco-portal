@@ -1,7 +1,18 @@
+/**
+ * @file Database and Azure Blob Storage utility functions for test setup and cleanup.
+ * @module support/dbUtils
+ *
+ * This module provides Node task functions to reset test data directly in the database.
+ * It also removes test files from Azure Blob Storage.
+ */
+
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { BlobServiceClient } from '@azure/storage-blob';
 import { getPrisma } from './utils/dbClient';
 
+/**
+ * Maps document category URL fragments to their database status column names.
+ */
 const CATEGORY_MAP: Record<string, string> = {
 	'application-form-related-information': 'applicationFormRelatedInformationStatusId',
 	'plans-and-drawings': 'plansAndDrawingsStatusId',
@@ -14,6 +25,15 @@ const CATEGORY_MAP: Record<string, string> = {
 	'other-documents': 'otherDocumentsStatusId'
 };
 
+/**
+ * Clears uploaded documents, supporting evidence, and storage blobs for a document category.
+ * Resets the status of the category on the case to NOT_STARTED.
+ *
+ * @param {object} options - The target case and category details.
+ * @param {string} options.documentTypeId - The URL fragment identifying the document category.
+ * @param {string} options.reference - The unique reference code of the case.
+ * @returns {Promise<null>} Always returns null to satisfy the Cypress task interface.
+ */
 export const clearDocumentCategory = async (options: { documentTypeId: string; reference: string }) => {
 	const prisma = getPrisma();
 	const { documentTypeId, reference } = options;
@@ -29,17 +49,17 @@ export const clearDocumentCategory = async (options: { documentTypeId: string; r
 	const caseId = caseRecord.id;
 	const statusField = CATEGORY_MAP[documentTypeId] || `${documentTypeId}StatusId`;
 
-	// restore case record to "not started"
+	// Restore category status to not started
 	await prisma.case.update({
 		where: { id: caseRecord.id },
 		data: { [statusField]: DOCUMENT_CATEGORY_STATUS_ID.NOT_STARTED }
 	});
 
-	// delete any uploaded documents for this case (first clearing supporting evidence to respect foreign keys)
+	// Delete documents and supporting evidence to satisfy foreign keys
 	await prisma.supportingEvidence.deleteMany({ where: { caseId } });
 	await prisma.document.deleteMany({ where: { caseId } });
 
-	// purge Azure blob storage files for this category
+	// Purge Azure blob storage files for this category
 	const connectionString = process.env.BLOB_STORE_CONNECTION_STRING;
 	const containerName = process.env.BLOB_STORE_CONTAINER || 'dco-portal-documents';
 
@@ -60,6 +80,14 @@ export const clearDocumentCategory = async (options: { documentTypeId: string; r
 	return null;
 };
 
+/**
+ * Deletes a whitelisted test user from the database by email and case reference.
+ *
+ * @param {object} options - The deletion options.
+ * @param {string} options.email - The email address of the user to remove.
+ * @param {string} options.reference - The case reference code.
+ * @returns {Promise<null>} Always returns null to satisfy the Cypress task interface.
+ */
 export const deleteWhitelistUser = async (options: { email: string; reference: string }) => {
 	const prisma = getPrisma();
 	const { email, reference } = options;
@@ -73,6 +101,14 @@ export const deleteWhitelistUser = async (options: { email: string; reference: s
 	return null;
 };
 
+/**
+ * Sets all document categories on a case to COMPLETED to prepare for submission testing.
+ * Sets the anticipated date of submission to today.
+ *
+ * @param {object} options - The case options.
+ * @param {string} options.reference - The case reference code.
+ * @returns {Promise<null>} Always returns null to satisfy the Cypress task interface.
+ */
 export const setupCaseForSubmission = async (options: { reference: string }) => {
 	const prisma = getPrisma();
 	const { reference } = options;
@@ -104,6 +140,14 @@ export const setupCaseForSubmission = async (options: { reference: string }) => 
 	return null;
 };
 
+/**
+ * Resets a case completely back to the unstarted initial state.
+ * Deletes all documents, clears supporting evidence, resets category statuses, and purges all storage blobs.
+ *
+ * @param {object} options - The case reset options.
+ * @param {string} options.reference - The case reference code.
+ * @returns {Promise<null>} Always returns null to satisfy the Cypress task interface.
+ */
 export const resetCase = async (options: { reference: string }) => {
 	const prisma = getPrisma();
 	const { reference } = options;
