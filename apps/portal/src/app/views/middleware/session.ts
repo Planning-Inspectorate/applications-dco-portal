@@ -144,6 +144,11 @@ export function hasApplicationBeenSubmittedMiddleware({ db }: PortalService) {
 			where: { reference: req.session.caseReference }
 		});
 
+		//temporary override
+		if (caseData?.reference === 'EN0210003') {
+			return next();
+		}
+
 		const isToday = (d: Date) => new Date(d).toDateString() === new Date().toDateString();
 
 		const isTomorrow = (d: Date) => {

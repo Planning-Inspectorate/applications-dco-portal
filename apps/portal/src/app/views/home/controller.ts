@@ -66,7 +66,7 @@ export function buildHomePage({ db }: PortalService, viewData = {}): AsyncReques
 			submissionText,
 			warningText,
 			submissionInformation,
-			enableSubmissionButton,
+			enableSubmissionButton: enableSubmissionButton || caseData.reference === 'EN0210003',
 			hasCaseBeenSubmitted: caseData.submissionDate != null,
 			...viewData
 		});
