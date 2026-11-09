@@ -15,6 +15,7 @@ services:
     volumes:
       - ./packages/database/src/configuration/mssql.conf:/var/opt/mssql/mssql.conf
       - ./tmp/mssql-data:/var/opt/mssql/data
+
   azurite:
     image: mcr.microsoft.com/azure-storage/azurite
     container_name: pins_azurite
@@ -31,8 +32,73 @@ services:
       --location /data
       --blobHost 0.0.0.0
       --skipApiVersionCheck
+
   redis:
     image: redis:7-alpine
-    container_name: dco-portal-redis
+    container_name: redis
+    command: redis-server --requirepass some_redis_password
     ports:
       - '6379:6379'
+
+  dco-portal-web:
+    image: node:22-alpine3.22
+    container_name: dco-portal-web
+    user: node
+    environment:
+      - APP_HOSTNAME=localhost
+      - BLOB_STORE_DISABLED=true
+      - ENCRYPTION_SECRET_KEY=${ENCRYPTION_SECRET_KEY}
+      - GIT_SHA=example-git-sha
+      - GOV_NOTIFY_DISABLED=true
+      - HOST_URL=http://localhost:9004/
+      - IS_APPLICATION_ENABLED=true
+      - LOGGER_LEVEL=debug
+      - NODE_ENV=development
+      - PDF_SERVICE_URL=http://dco-pdf-service-api:3000
+      - PORT=3000
+      - REDIS_URL=redis://redis:6379
+      - REDIS_CONNECTION_STRING=redis:6379,password=some_redis_password,ssl=False,abortConnect=False
+      - REDIS_CACHE_ENABLED=false
+      - SESSION_SECRET=some_secure_key_goes_here
+      - SQL_CONNECTION_STRING=sqlserver://mssql:1433;database=dco_portal_db;user=sa;password=DockerDatabaseP@22word!;trustServerCertificate=true
+      - SERVICE_BUS_PUBLISH_EVENT_DISABLED=true
+    working_dir: /opt/app
+    volumes:
+      - ./package.json:/opt/app/package.json
+      - ./node_modules:/opt/app/node_modules
+      - ./packages/lib:/opt/app/packages/lib
+      - ./apps/portal:/opt/app/apps/portal
+      - ./packages/database:/opt/app/packages/database
+    command: npm run dev --workspace=apps/portal
+    ports:
+      - 9004:3000
+
+  dco-pdf-service-api:
+    image: node:22-alpine3.22
+    container_name: dco-pdf-service-api
+    user: node
+    environment:
+      - ENCRYPTION_SECRET_KEY=${ENCRYPTION_SECRET_KEY}
+      - FILE_UPLOADS_PATH=/opt/app/uploads
+      - GIT_SHA=example-git-sha
+      - LOGGER_LEVEL=debug
+      - MYSQL_USERNAME=pins
+      - MYSQL_PASSWORD=pins
+      - MYSQL_DATABASE=ipclive
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+      - MYSQL_DIALECT=mysql
+      - NODE_ENV=local
+      - REDIS_CONNECTION_STRING=redis:6379,password=some_redis_password,ssl=False,abortConnect=False
+      - REDIS_CACHE_ENABLED=false
+      - SQL_CONNECTION_STRING=sqlserver://mssql:1433;database=dco_portal_db;user=sa;password=DockerDatabaseP@22word!;trustServerCertificate=true
+    working_dir: /opt/app
+    volumes:
+      - ./package.json:/opt/app/package.json
+      - ./node_modules:/opt/app/node_modules
+      - ./packages/lib:/opt/app/packages/lib
+      - ./apps/pdf-service-api:/opt/app/apps/pdf-service-api
+    command: npm run start --workspace=apps/pdf-service-api
+    ports:
+      - 3000:3000
+      - 9230:9229
