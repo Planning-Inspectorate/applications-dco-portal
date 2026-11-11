@@ -23,8 +23,21 @@
 	"dependencies": {
 		"nodemon": "*"
 	},
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "cypress/e2e",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".cucumber"
+    }
+  },
   "devDependencies": {
     "@cypress/grep": "*",
+    "cypress": "^15.9.0",
+    "cypress-axe": "^1.7.0",
+    "cypress-cucumber-preprocessor": "^4.0.3",
     "eslint-plugin-cypress": "*",
     "fs-extra": "*",
     "puppeteer": "*"
