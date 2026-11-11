@@ -47,6 +47,7 @@ services:
     environment:
       - APP_HOSTNAME=localhost
       - BLOB_STORE_DISABLED=true
+      - ENABLE_E2E_TEST_ENDPOINTS=true
       - ENCRYPTION_SECRET_KEY=${ENCRYPTION_SECRET_KEY}
       - GIT_SHA=example-git-sha
       - GOV_NOTIFY_DISABLED=true
@@ -62,6 +63,7 @@ services:
       - SESSION_SECRET=some_secure_key_goes_here
       - SQL_CONNECTION_STRING=sqlserver://mssql:1433;database=dco_portal_db;user=sa;password=DockerDatabaseP@22word!;trustServerCertificate=true
       - SERVICE_BUS_PUBLISH_EVENT_DISABLED=true
+      - TEST_TOOLS_TOKEN=secret
     working_dir: /opt/app
     volumes:
       - ./package.json:/opt/app/package.json
