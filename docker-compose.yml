@@ -46,7 +46,10 @@ services:
     user: node
     environment:
       - APP_HOSTNAME=localhost
-      - BLOB_STORE_DISABLED=true
+      - BLOB_STORE_DISABLED=false
+      - BLOB_STORE_HOST=http://azurite:10000
+      - BLOB_STORE_CONTAINER=dco-portal-documents
+      - BLOB_STORE_CONNECTION_STRING=DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;
       - ENABLE_E2E_TEST_ENDPOINTS=true
       - ENCRYPTION_SECRET_KEY=${ENCRYPTION_SECRET_KEY}
       - GIT_SHA=example-git-sha
