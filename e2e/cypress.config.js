@@ -17,9 +17,15 @@ import {
 } from './cypress/support/dbUtils.js';
 
 // Load environment variables from the local workspace (e2e/.env)
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
 import { loadEnvFile } from 'node:process';
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url));
 // prettier-ignore
-try { loadEnvFile(); } catch {/* ignore errors */}
+try { loadEnvFile(path.resolve(currentDir, '.env')); } catch {
+	try { loadEnvFile(); } catch {/* ignore errors */}
+}
 
 export default defineConfig({
 	e2e: {
@@ -44,13 +50,13 @@ export default defineConfig({
 			return config;
 		},
 
-		baseUrl: process.env.BASE_URL,
+		baseUrl: process.env.BASE_URL || 'http://localhost:9004/',
 
 		env: {
-			USER_EMAIL: process.env.USER_EMAIL,
-			PASSWORD: process.env.USER_PASSWORD,
-			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE,
-			TEST_TOOLS_TOKEN: process.env.TEST_TOOLS_TOKEN,
+			USER_EMAIL: process.env.USER_EMAIL || 'inspectorappeals.test@planninginspectorate.gov.uk',
+			PASSWORD: process.env.USER_PASSWORD || '******',
+			TEST_APPLICATION_REFERENCE: process.env.TEST_APPLICATION_REFERENCE || 'EN123456',
+			TEST_TOOLS_TOKEN: process.env.TEST_TOOLS_TOKEN || 'secret',
 
 			SQL_CONNECTION_STRING: process.env.SQL_CONNECTION_STRING,
 			SQL_CONNECTION_STRING_ADMIN: process.env.SQL_CONNECTION_STRING_ADMIN
