@@ -67,9 +67,11 @@ export const clearDocumentCategory = async (options: { documentTypeId: string; r
 		try {
 			const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 			const containerClient = blobServiceClient.getContainerClient(containerName);
-			const prefix = `${reference}/${documentTypeId}/`;
-			for await (const blob of containerClient.listBlobsFlat({ prefix })) {
-				await containerClient.deleteBlob(blob.name);
+			if (await containerClient.exists()) {
+				const prefix = `${reference}/${documentTypeId}/`;
+				for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+					await containerClient.deleteBlob(blob.name);
+				}
 			}
 		} catch (err) {
 			console.warn(`Could not clear blobs for prefix ${reference}/${documentTypeId}/:`, err);
@@ -187,9 +189,11 @@ export const resetCase = async (options: { reference: string }) => {
 			try {
 				const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
 				const containerClient = blobServiceClient.getContainerClient(containerName);
-				const prefix = `${reference}/`;
-				for await (const blob of containerClient.listBlobsFlat({ prefix })) {
-					await containerClient.deleteBlob(blob.name);
+				if (await containerClient.exists()) {
+					const prefix = `${reference}/`;
+					for await (const blob of containerClient.listBlobsFlat({ prefix })) {
+						await containerClient.deleteBlob(blob.name);
+					}
 				}
 			} catch (err) {
 				console.warn(`Could not clear blobs for reference ${reference}:`, err);
