@@ -131,6 +131,11 @@ export class BlobStorageClient {
 		const sourceContainer = this.blobServiceClient.getContainerClient(this.container);
 		const destContainer = this.blobServiceClient.getContainerClient(destinationContainerName);
 
+		if (!(await sourceContainer.exists())) {
+			this.logger.info(`Source container '${this.container}' does not exist, nothing to move.`);
+			return;
+		}
+
 		this.logger.info(
 			`moveFolder - moving files with prefix: ${prefix} from '${this.container}' to '${destinationContainerName}'`
 		);
