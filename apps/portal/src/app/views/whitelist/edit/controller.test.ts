@@ -4,7 +4,7 @@ import { describe, it, mock } from 'node:test';
 import { buildSaveController } from './controller.ts';
 import assert from 'node:assert';
 import { WHITELIST_USER_ROLE_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 
 describe('whitelist edit user controller', () => {
 	describe('buildSaveController', () => {

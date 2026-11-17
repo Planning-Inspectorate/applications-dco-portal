@@ -21,7 +21,7 @@ import type { PortalService } from '#service';
 import { DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { APPLICATION_SECTION_ID } from './constants.ts';
 import { buildHomePage, buildSubmitHomePageController } from './home/controller.ts';
-import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { asyncHandler } from '@planning-inspectorate/core/util';
 import { buildWhitelistMiddleware } from './middleware/whitelist-middleware.ts';
 import { buildSignOutController } from './sign-out/controller.ts';
 import {

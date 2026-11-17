@@ -20,6 +20,7 @@
             </ul>
 
             <form action="" method="post" novalidate>
+               <input type="hidden" name="_csrf" value="{{ _csrf }}">
                 {{ govukCheckboxes({
                     name: "declarationConfirmation",
                     items: [

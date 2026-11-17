@@ -1,13 +1,13 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import type { DocumentRecord } from './types.d.ts';
 import { clearDataFromSession, yesNoToBoolean } from '@planning-inspectorate/dynamic-forms';
 import type { UploadedFile } from '@pins/dco-portal-lib/forms/custom-components/file-upload/types.js';
-import { clearSessionData } from '@pins/dco-portal-lib/util/session.ts';
+import { clearSessionData } from '@planning-inspectorate/core/util';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID, SCAN_RESULT_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 
 export function buildSaveController({ db, logger }: PortalService, documentTypeId: string): AsyncRequestHandler {
 	return async (req, res) => {

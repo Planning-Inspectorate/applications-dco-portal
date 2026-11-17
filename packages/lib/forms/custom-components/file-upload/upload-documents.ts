@@ -1,7 +1,7 @@
 import { validateUploadedFile } from './document-validation-util.ts';
 import type { PortalService } from 'portal/src/app/service.ts';
 import type { Request, Response } from 'express';
-import { addSessionData } from '../../../util/session.ts';
+import { addSessionData } from '@planning-inspectorate/core/util';
 import { Readable } from 'stream';
 import type { UploadedFile } from './types.d.ts';
 import { encodeBlobNameToBase64, formatBytes } from './util.ts';

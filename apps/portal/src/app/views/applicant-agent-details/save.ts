@@ -1,5 +1,5 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
 import { BOOLEAN_OPTIONS } from '@planning-inspectorate/dynamic-forms';
 import { kebabCaseToCamelCase } from '@pins/dco-portal-lib/util/questions.ts';

@@ -9,10 +9,10 @@ import { createErrorRoutes } from './views/static/error/index.ts';
 import { isUserAuthenticated, isUserUnauthenticated } from './views/middleware/auth.ts';
 import { isApplicationCompleteMiddleware } from './views/middleware/session.ts';
 import type { PortalService } from '#service';
-import { cacheDisableAllCachingMiddleware, cacheNoCacheMiddleware } from '@pins/dco-portal-lib/middleware/cache.ts';
-import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
+import { cacheNoStoreMiddleware, cacheNoCacheMiddleware } from '@planning-inspectorate/core/middleware';
+import { createMonitoringRoutes } from '@planning-inspectorate/core/controllers';
 import { handleSessionTimeoutMiddleware, hasSessionExpired } from './views/middleware/session.ts';
-import { asyncHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import { asyncHandler } from '@planning-inspectorate/core/util';
 import { buildSessionExpiredController } from './views/session-expired/controller.ts';
 import { buildApplicationEnabledMiddleware } from './views/middleware/application-enabled.ts';
 
@@ -32,7 +32,8 @@ export function buildRouter(service: PortalService): IRouter {
 	router.use(
 		'/login',
 		applicationEnabledMiddleware,
-		cacheDisableAllCachingMiddleware,
+		// don't allow any caching for login pages
+		cacheNoStoreMiddleware,
 		isUserUnauthenticated,
 		loginRoutes(service)
 	);

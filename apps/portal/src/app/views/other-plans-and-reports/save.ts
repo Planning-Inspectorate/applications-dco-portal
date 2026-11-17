@@ -1,8 +1,8 @@
 import type { PortalService } from '#service';
-import type { AsyncRequestHandler } from '@pins/dco-portal-lib/util/async-handler.ts';
+import type { AsyncRequestHandler } from '@planning-inspectorate/core/util';
 import { clearDataFromSession } from '@planning-inspectorate/dynamic-forms';
 import { getAnswersFromRes } from '@pins/dco-portal-lib/util/answers.ts';
-import { notFoundHandler } from '@pins/dco-portal-lib/middleware/errors.ts';
+import { notFoundHandler } from '@planning-inspectorate/core/middleware';
 import type { MultipleCategoryInformation } from '../supporting-evidence/types.d.ts';
 import { DOCUMENT_CATEGORY_STATUS_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 import {

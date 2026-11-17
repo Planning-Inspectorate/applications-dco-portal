@@ -7,7 +7,7 @@ import {
 	mapCaseToDcoApplication
 } from './dco-application-mapper.ts';
 import assert from 'node:assert';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 import { DOCUMENT_SUB_CATEGORY_ID, DOCUMENT_CATEGORY_ID } from '@pins/dco-portal-database/src/seed/data-static.ts';
 
 describe('dco-application-mapper.ts', () => {

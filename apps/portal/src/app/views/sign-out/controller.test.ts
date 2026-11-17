@@ -3,7 +3,7 @@
 import { describe, it, mock } from 'node:test';
 import assert from 'node:assert';
 import { buildSignOutController } from './controller.ts';
-import { mockLogger } from '@pins/dco-portal-lib/testing/mock-logger.ts';
+import { mockLogger } from '@planning-inspectorate/core/testing';
 
 describe('sign-out controller', () => {
 	describe('buildSignOutController', () => {
@@ -33,7 +33,7 @@ describe('sign-out controller', () => {
 				redirect: mock.fn()
 			};
 
-			const controller = buildSignOutController({ logger: mockLogger(), redisClient: mockRedis });
+			const controller = buildSignOutController({ logger: mockLogger(), fullRedisClient: mockRedis });
 			await controller(mockReq, mockRes);
 
 			assert.strictEqual(mockRedis.del.mock.callCount(), 2);

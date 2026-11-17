@@ -2,7 +2,7 @@ import type { IRouter } from 'express';
 import { Router as createRouter } from 'express';
 import type { PdfService } from '#service';
 import { createRoutes as pdfRoutes } from './pdf.ts';
-import { createMonitoringRoutes } from '@pins/dco-portal-lib/controllers/monitoring.ts';
+import { createMonitoringRoutes } from '@planning-inspectorate/core/controllers';
 
 export function buildRouter(service: PdfService): IRouter {
 	const router = createRouter();

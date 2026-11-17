@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { loadBuildConfig } from '../app/config.ts';
-import { runBuild } from '@pins/dco-portal-lib/util/build.ts';
+import { runBuild } from '@planning-inspectorate/core/util';
 
 /**
  * Do all steps to run the build
@@ -18,7 +18,7 @@ async function run(): Promise<void> {
 	await runBuild({
 		staticDir: config.staticDir,
 		srcDir: config.srcDir,
-		govUkRoot,
+		repoRoot: govUkRoot,
 		localsFile,
 		accessibleAutocompleteRoot
 	});
