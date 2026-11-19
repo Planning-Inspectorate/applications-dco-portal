@@ -139,23 +139,34 @@ export class BlobStorageClient {
 
 		const schedule = async (blob: BlobItem) => {
 			const task = (async () => {
-				const sourceBlob = sourceContainer.getBlobClient(blob.name);
-				const destBlob = destContainer.getBlobClient(`application/${blob.name}`);
+				try {
+					const sourceBlob = sourceContainer.getBlobClient(blob.name);
+					const destBlob = destContainer.getBlobClient(`application/${blob.name}`);
 
-				const copyJob = await destBlob.beginCopyFromURL(sourceBlob.url);
-				const result = await copyJob.pollUntilDone();
+					const copyJob = await destBlob.beginCopyFromURL(sourceBlob.url);
+					const result = await copyJob.pollUntilDone();
 
-				if (result.copyStatus !== 'success') {
-					this.logger.info(`Blob could not be moved: ${blob.name}`);
-					throw new Error(`Blob could not be moved: ${blob.name}`);
+					if (result.copyStatus !== 'success') {
+						this.logger.error(
+							{ blobName: blob.name, destinationBlobName: `application/${blob.name}`, copyStatus: result.copyStatus },
+							`moveFolder - blob copy failed: ${blob.name}`
+						);
+						return;
+					}
+
+					await dbClient.document.updateMany({
+						where: { blobName: blob.name },
+						data: { blobName: `application/${blob.name}` }
+					});
+
+					this.logger.info(`Moved successfully: ${blob.name}`);
+				} catch (error) {
+					// log the problematic file and continue moving the remaining files
+					this.logger.error(
+						{ error, blobName: blob.name, destinationBlobName: `application/${blob.name}` },
+						`moveFolder - failed to move blob, continuing: ${blob.name}`
+					);
 				}
-
-				await dbClient.document.updateMany({
-					where: { blobName: blob.name },
-					data: { blobName: `application/${blob.name}` }
-				});
-
-				this.logger.info(`Moved successfully: ${blob.name}`);
 			})();
 
 			executing.add(task);
