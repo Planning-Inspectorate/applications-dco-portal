@@ -150,8 +150,6 @@ export class BlobStorageClient {
 					throw new Error(`Blob could not be moved: ${blob.name}`);
 				}
 
-				await sourceBlob.delete();
-
 				await dbClient.document.updateMany({
 					where: { blobName: blob.name },
 					data: { blobName: `application/${blob.name}` }
