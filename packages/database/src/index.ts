@@ -3,6 +3,9 @@ import { PrismaMssql } from '@prisma/adapter-mssql';
 import type { Prisma } from '@pins/dco-portal-database/src/client/client.ts';
 import type { Logger } from 'pino';
 
+const DEFAULT_TRANSACTION_MAX_WAIT_MS = 10000;
+const DEFAULT_TRANSACTION_TIMEOUT_MS = 30000;
+
 export function initDatabaseClient(
 	config: { database: { datasourceUrl: string }; NODE_ENV: string },
 	logger: Logger
@@ -18,8 +21,19 @@ export function initDatabaseClient(
 
 export function newDatabaseClient(connectionString: string, logger?: Logger): PrismaClient {
 	const adapter = new PrismaMssql(connectionString);
+	const maxWait = process.env.DB_TRANSACTION_MAX_WAIT_MS
+		? Number(process.env.DB_TRANSACTION_MAX_WAIT_MS)
+		: DEFAULT_TRANSACTION_MAX_WAIT_MS;
+	const timeout = process.env.DB_TRANSACTION_TIMEOUT_MS
+		? Number(process.env.DB_TRANSACTION_TIMEOUT_MS)
+		: DEFAULT_TRANSACTION_TIMEOUT_MS;
+
 	const prisma = new PrismaClient({
 		adapter,
+		transactionOptions: {
+			maxWait,
+			timeout
+		},
 		log: [
 			{
 				emit: 'event',
